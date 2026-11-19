@@ -314,6 +314,9 @@ class RedGoalContextRuntime:
     native_evolution_venue_policy: object | None = None
     # Default-off cartridge-certified support, never a learned policy feature.
     certified_evolution_helper_xp: bool = False
+    evolution_training_faint_recovery: bool = False
+    evolution_active_roster_refs: tuple[str, ...] | None = None
+    evolution_deposited_ref: str | None = None
 
     def bound_configuration_sha256(self, configuration_sha256: str) -> str:
         if self.registration_policy is None:

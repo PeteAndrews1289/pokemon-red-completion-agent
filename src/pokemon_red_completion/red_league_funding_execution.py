@@ -767,18 +767,20 @@ def execute_red_league_funding(
             raise RedLeagueFundingExecutionError(
                 "League funding lost its bound pre-entry event reset"
             )
-    league_arrival = trainer_room_arrival(
-        world.rom,
-        int(MapId.LORELEIS_ROOM),
-        expected_supply_events,
-    )
-    entry_limits = replace(
-        _ROUTE_LIMITS,
-        transition_settle_frames=max(
-            _ROUTE_LIMITS.transition_settle_frames,
-            league_arrival.steps * 24 + 120,
-        ),
-    )
+    entry_limits = _ROUTE_LIMITS
+    if not qualification.resume_at_lorelei:
+        league_arrival = trainer_room_arrival(
+            world.rom,
+            int(MapId.LORELEIS_ROOM),
+            expected_supply_events,
+        )
+        entry_limits = replace(
+            _ROUTE_LIMITS,
+            transition_settle_frames=max(
+                _ROUTE_LIMITS.transition_settle_frames,
+                league_arrival.steps * 24 + 120,
+            ),
+        )
 
     frame_limiter = WindowedFrameBudgetController(
         runtime.emulator,
@@ -816,127 +818,135 @@ def execute_red_league_funding(
             raise error
         raise error from cause
 
-    try:
-        if qualification.exit_plan is not None:
-            # Indoor departures can cross real encounter tiles. Escaping is
-            # transport support, not an income battle or a replacement goal.
-            # Any HP/PP/resource change still fails the existing supply-boundary
-            # checks below; no payout or qualification is fabricated.
-            escape = Gen1WildFleeHandler(
-                bounded_actions,
-                runtime.reader,
-                maximum_flees=16,
-                stabilization_frames=120,
-                route_name="League income indoor departure",
-            )
-            route = execute_route(
-                qualification.exit_plan,
+    if qualification.resume_at_lorelei:
+        if (
+            learned is None or development_reuse is None
+            or before.raw.map_id != MapId.LORELEIS_ROOM
+            or expected_supply_events != before.raw.event_flags
+        ):
+            fail("league_resume", "in-room income lost its learned boundary ownership")
+    else:
+        try:
+            if qualification.exit_plan is not None:
+                # Indoor departures can cross real encounter tiles. Escaping is
+                # transport support, not an income battle or a replacement goal.
+                # Any HP/PP/resource change still fails the existing supply-boundary
+                # checks below; no payout or qualification is fabricated.
+                escape = Gen1WildFleeHandler(
+                    bounded_actions,
+                    runtime.reader,
+                    maximum_flees=16,
+                    stabilization_frames=120,
+                    route_name="League income indoor departure",
+                )
+                route = execute_route(
+                    qualification.exit_plan,
+                    bounded_actions,
+                    Gen1TraversalObserver(runtime.reader),
+                    interruption_handler=escape,
+                    replanner=world.replanner(),
+                )
+                if not route.passed:
+                    fail("center_exit", "League funding exit route failed")
+        except RedLeagueFundingExecutionError as error:
+            if error.progress is not None:
+                raise
+            fail("center_exit", error.reason, error)
+        except Exception as error:
+            fail("center_exit", "League funding exit route raised", error)
+        try:
+            if qualification.fly_required:
+                port = Gen1FieldMovePort(bounded_actions, runtime.reader, runtime.emulator)
+                town = RED_FLY_TOWN_NAMES[qualification.fly_town].lower().replace(" ", "_")
+                receipt = port.execute(MacroAction(MacroActionKind.FIELD_MOVE, "fly:" + town))
+                landed = runtime.reader.read()
+                if (
+                    not isinstance(receipt, Gen1FlyReceipt)
+                    or receipt.destination_map != qualification.fly_town
+                    or (landed.player_y, landed.player_x) != qualification.fly_landing
+                ):
+                    fail("fly", "League funding Fly landing changed")
+            else:
+                walking_origin = runtime.adapter.observe()
+                if (
+                    walking_origin.raw.map_id != qualification.fly_town
+                    or (walking_origin.raw.player_y, walking_origin.raw.player_x)
+                    != qualification.fly_landing
+                    or walking_origin.raw.battle_state
+                    or not walking_origin.input_ready
+                ):
+                    fail("fly", "League funding already-at-Indigo walking origin changed")
+        except RedLeagueFundingExecutionError as error:
+            if error.progress is not None:
+                raise
+            fail("fly", error.reason, error)
+        except Exception as error:
+            fail("fly", "League funding Fly raised", error)
+        try:
+            supply_route = execute_route(
+                qualification.supply.route,
                 bounded_actions,
                 Gen1TraversalObserver(runtime.reader),
-                interruption_handler=escape,
                 replanner=world.replanner(),
             )
-            if not route.passed:
-                fail("center_exit", "League funding exit route failed")
-    except RedLeagueFundingExecutionError as error:
-        if error.progress is not None:
-            raise
-        fail("center_exit", error.reason, error)
-    except Exception as error:
-        fail("center_exit", "League funding exit route raised", error)
-    try:
-        if qualification.fly_required:
-            port = Gen1FieldMovePort(bounded_actions, runtime.reader, runtime.emulator)
-            town = RED_FLY_TOWN_NAMES[qualification.fly_town].lower().replace(" ", "_")
-            receipt = port.execute(MacroAction(MacroActionKind.FIELD_MOVE, "fly:" + town))
-            landed = runtime.reader.read()
+            if not supply_route.passed:
+                fail("supply_route", "League funding supply route failed")
+            supply_boundary = runtime.adapter.observe()
             if (
-                not isinstance(receipt, Gen1FlyReceipt)
-                or receipt.destination_map != qualification.fly_town
-                or (landed.player_y, landed.player_x) != qualification.fly_landing
+                supply_boundary.raw.map_id != MapId.INDIGO_PLATEAU_LOBBY
+                or (supply_boundary.raw.player_y, supply_boundary.raw.player_x) != (5, 2)
+                or supply_boundary.raw.battle_state
+                or not supply_boundary.input_ready
+                or supply_boundary.raw.player_money != starting_money
+                or supply_boundary.raw.bag_items != starting_bag
+                or supply_boundary.raw.party_species_ids != starting_party
+                or supply_boundary.raw.party_hp != starting_party_hp
+                or supply_boundary.raw.party_pp != starting_party_pp
+                or supply_boundary.raw.party_status != starting_party_status
+                or supply_boundary.raw.badge_bits != starting_badges
+                or supply_boundary.raw.event_flags != expected_supply_events
+                or dependency_specimen_ledger(supply_boundary.collection_observation) != starting_ledger
             ):
-                fail("fly", "League funding Fly landing changed")
-        else:
-            walking_origin = runtime.adapter.observe()
+                fail("supply_route", "League funding supply route changed its bound state")
+            _execute_supply(runtime, bounded_actions, qualification)
+            supplied = runtime.adapter.observe()
             if (
-                walking_origin.raw.map_id != qualification.fly_town
-                or (walking_origin.raw.player_y, walking_origin.raw.player_x)
-                != qualification.fly_landing
-                or walking_origin.raw.battle_state
-                or not walking_origin.input_ready
+                supplied.raw.bag_items != _bag_after_supply(starting_bag, qualification)
+                or supplied.raw.player_money
+                != starting_money
+                + qualification.supply.sale_proceeds
+                - qualification.supply.purchase_cost
+                or supplied.raw.party_species_ids != starting_party
+                or supplied.raw.party_hp != starting_party_hp
+                or supplied.raw.party_pp != starting_party_pp
+                or supplied.raw.party_status != starting_party_status
+                or supplied.raw.badge_bits != starting_badges
+                or supplied.raw.event_flags != expected_supply_events
+                or dependency_specimen_ledger(supplied.collection_observation) != starting_ledger
             ):
-                fail("fly", "League funding already-at-Indigo walking origin changed")
-    except RedLeagueFundingExecutionError as error:
-        if error.progress is not None:
-            raise
-        fail("fly", error.reason, error)
-    except Exception as error:
-        fail("fly", "League funding Fly raised", error)
-    try:
-        supply_route = execute_route(
-            qualification.supply.route,
-            bounded_actions,
-            Gen1TraversalObserver(runtime.reader),
-            replanner=world.replanner(),
-        )
-        if not supply_route.passed:
-            fail("supply_route", "League funding supply route failed")
-        supply_boundary = runtime.adapter.observe()
-        if (
-            supply_boundary.raw.map_id != MapId.INDIGO_PLATEAU_LOBBY
-            or (supply_boundary.raw.player_y, supply_boundary.raw.player_x) != (5, 2)
-            or supply_boundary.raw.battle_state
-            or not supply_boundary.input_ready
-            or supply_boundary.raw.player_money != starting_money
-            or supply_boundary.raw.bag_items != starting_bag
-            or supply_boundary.raw.party_species_ids != starting_party
-            or supply_boundary.raw.party_hp != starting_party_hp
-            or supply_boundary.raw.party_pp != starting_party_pp
-            or supply_boundary.raw.party_status != starting_party_status
-            or supply_boundary.raw.badge_bits != starting_badges
-            or supply_boundary.raw.event_flags != expected_supply_events
-            or dependency_specimen_ledger(supply_boundary.collection_observation) != starting_ledger
-        ):
-            fail("supply_route", "League funding supply route changed its bound state")
-        _execute_supply(runtime, bounded_actions, qualification)
-        supplied = runtime.adapter.observe()
-        if (
-            supplied.raw.bag_items != _bag_after_supply(starting_bag, qualification)
-            or supplied.raw.player_money
-            != starting_money
-            + qualification.supply.sale_proceeds
-            - qualification.supply.purchase_cost
-            or supplied.raw.party_species_ids != starting_party
-            or supplied.raw.party_hp != starting_party_hp
-            or supplied.raw.party_pp != starting_party_pp
-            or supplied.raw.party_status != starting_party_status
-            or supplied.raw.badge_bits != starting_badges
-            or supplied.raw.event_flags != expected_supply_events
-            or dependency_specimen_ledger(supplied.collection_observation) != starting_ledger
-        ):
-            fail("supply", "League funding supply accounting changed")
-    except RedLeagueFundingExecutionError as error:
-        if error.progress is not None:
-            raise
-        fail("supply", error.reason, error)
-    except Exception as error:
-        fail("supply", "League funding supply raised", error)
-    try:
-        entry = execute_route(
-            qualification.entry_plan,
-            bounded_actions,
-            Gen1TraversalObserver(runtime.reader),
-            limits=entry_limits,
-            replanner=world.replanner(),
-        )
-        if not entry.passed:
-            fail("league_entry", "League funding entry route failed")
-    except RedLeagueFundingExecutionError as error:
-        if error.progress is not None:
-            raise
-        fail("league_entry", error.reason, error)
-    except Exception as error:
-        fail("league_entry", "League funding entry route raised", error)
+                fail("supply", "League funding supply accounting changed")
+        except RedLeagueFundingExecutionError as error:
+            if error.progress is not None:
+                raise
+            fail("supply", error.reason, error)
+        except Exception as error:
+            fail("supply", "League funding supply raised", error)
+        try:
+            entry = execute_route(
+                qualification.entry_plan,
+                bounded_actions,
+                Gen1TraversalObserver(runtime.reader),
+                limits=entry_limits,
+                replanner=world.replanner(),
+            )
+            if not entry.passed:
+                fail("league_entry", "League funding entry route failed")
+        except RedLeagueFundingExecutionError as error:
+            if error.progress is not None:
+                raise
+            fail("league_entry", error.reason, error)
+        except Exception as error:
+            fail("league_entry", "League funding entry route raised", error)
 
     remaining_full_restores = qualification.maximum_campaign_full_restores
     for quote in qualification.battles:

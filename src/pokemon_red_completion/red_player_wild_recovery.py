@@ -44,8 +44,15 @@ def retained_native_static_target(reader, rom):
 
 def interrupted_wild_binding(
     runtime, actions, *, consumed_static_target=None, rom=None, allow_fainted_active=False,
-    pending_trainer_factory=None,
+    pending_trainer_factory=None, allow_static_party_faints=False,
 ):
+    # Explicit Route12 loss with a fainted lead/battler: the same consumed-event
+    # proof, through the existing whole-party RUN executor. Never an ordinary
+    # encounter permission, never an attack, item or capture.
+    if type(allow_static_party_faints) is not bool:
+        raise TypeError("static party-faint escape requires an explicit boolean")
+    if allow_static_party_faints and (consumed_static_target is None or allow_fainted_active):
+        raise ValueError("static party-faint escape needs only its consumed static target")
     if pending_trainer_factory is not None and not callable(pending_trainer_factory):
         raise TypeError("pending trainer recovery factory must be callable")
     if pending_trainer_factory is not None and (rom is None or consumed_static_target is not None):
@@ -80,7 +87,7 @@ def interrupted_wild_binding(
             or before.enemy_level != target.level
             or identity is None
             or identity.original_species_id != target.internal_species
-            or before.party_hp[0] <= 0
+            or (before.party_hp[0] <= 0 and not allow_static_party_faints)
         ):
             raise ValueError("static escape requires the exact live supported encounter")
         expected_events = static_escape_expected_events(before, target)
@@ -107,6 +114,14 @@ def interrupted_wild_binding(
                 allow_opponent_ko_exit=bool(rom is not None and callable(
                     getattr(runtime.reader, "read_retained_wild_identity", None)
                 )),
+            )
+        elif allow_static_party_faints:
+            from .wild_party_flee import flee_with_fainted_lead
+
+            escape = flee_with_fainted_lead
+            escape_options = dict(
+                emulator=runtime.emulator, allow_new_faints=True, allow_status_changes=True,
+                consumed_static_event_flags=bytes(expected_events),
             )
         evidence = escape(
             actions,
@@ -176,7 +191,11 @@ def interrupted_wild_binding(
         if target is not None:
             from .wild_party_flee import validate_flee_party
 
-            validate_flee_party(replace(before, event_flags=expected_events), after)
+            validate_flee_party(
+                replace(before, event_flags=expected_events), after,
+                allow_new_faints=allow_static_party_faints,
+                allow_status_changes=allow_static_party_faints,
+            )
             if runtime.reader.read_pokedex_state().owned_species != owned or any(
                 o.sprite_index == target.object_index and o.visible
                 for o in runtime.reader.read_current_map_objects()

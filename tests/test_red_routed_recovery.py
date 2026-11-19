@@ -187,7 +187,7 @@ def make_fixture(monkeypatch):
                     raw,
                     party_hp=(30, 30),
                     party_status=(0, 0),
-                    party_pp=((10, 10), (10, 10)),
+                    party_pp=state.get("nurse_party_pp", ((10, 10), (10, 10))),
                 )
                 state["party"] = make_test_party(
                     30, 30, sp1=species[0], sp2=species[1]

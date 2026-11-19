@@ -14,6 +14,7 @@ segment.
 from __future__ import annotations
 
 import heapq
+from collections import OrderedDict
 from collections.abc import Mapping
 from contextlib import contextmanager
 from contextvars import ContextVar
@@ -36,6 +37,7 @@ from pokemon_red_completion.local_router import (
     LocalRouterError,
     TraversalMode,
     _IncrementalLocalPaths,
+    LocalEdge,
     find_local_path,
     find_local_paths,
     without_coordinates,
@@ -47,16 +49,22 @@ class RoutePlanningError(RuntimeError):
 
 
 _MAX_LOCAL_INVENTORY_SEARCHES = 256
+_MAX_INVENTORY_PASSAGES = 4096
 
 
 class _FrozenLocalRouteCache:
     """Bounded query/frontier reuse, owned by one read-only inventory pass."""
 
     def __init__(self):
+        self.priced_passages = {}
+        self.passage_hits = 0
+        self.passage_misses = 0
         self.graphs = {}
         self.queries = {}
-        self.searches = {}
+        self.searches = OrderedDict()
         self.projections = {}
+        self.equivalent_graphs = {}
+        self.canonical_by_identity = {}
         self.route_macro_graphs = {}
         self.route_worlds = {}
         self.routes = {}
@@ -76,6 +84,40 @@ class _FrozenLocalRouteCache:
         if prior is None and len(self.graphs) < 2048:
             self.graphs[identity] = (graph, dict(graph.edges))
         return identity in self.graphs
+
+    def canonical_graph(self, graph):
+        """Share exact plain graph contents, retaining originals for validation.
+
+        Fresh observed worlds may rebuild equal graphs. Identity alone loses
+        their pure-search reuse. Edge tuple order remains part of equality;
+        subclasses/dynamic mappings retain the original path. Nothing survives
+        this read-only inventory or relaxes the graph mutation checks.
+        """
+        retained = self._retain_graph(graph)
+        if not retained or type(graph) is not LocalGraph or type(graph.edges) not in (
+            dict, MappingProxyType
+        ):
+            return graph
+        identity = id(graph)
+        cached = self.canonical_by_identity.get(identity)
+        if cached is not None:
+            self._retain_graph(cached)
+            return cached
+        if any(type(edge) is not LocalEdge for outgoing in graph.edges.values() for edge in outgoing):
+            return graph
+        try:
+            key = frozenset(graph.edges.items())
+        except TypeError:
+            return graph
+        canonical = self.equivalent_graphs.get(key)
+        if canonical is None:
+            canonical = graph
+            if len(self.equivalent_graphs) < 2048:
+                self.equivalent_graphs[key] = graph
+        else:
+            self._retain_graph(canonical)
+        self.canonical_by_identity[identity] = canonical
+        return canonical
 
     def route_key(
         self,
@@ -172,6 +214,7 @@ class _FrozenLocalRouteCache:
         unavailable = frozenset(blocked)
         if not unavailable:
             return graph
+        graph = self.canonical_graph(graph)
         retained = self._retain_graph(graph)
         key = (id(graph), unavailable)
         cached = self.projections.get(key)
@@ -185,16 +228,19 @@ class _FrozenLocalRouteCache:
 
     def paths(self, graph, warps, start, goals, capabilities, mode):
         warps, goals = frozenset(warps), frozenset(goals)
+        graph = self.canonical_graph(graph)
         identity = id(graph)
         retained = self._retain_graph(graph)
         key = (identity, warps, start, goals, capabilities, mode)
+        search_key = (identity, warps, start, capabilities, mode)
         if retained and key in self.queries:
             value = self.queries[key]
             self._retain_graph(value[0])
             self.hits += 1
+            if search_key in self.searches:
+                self.searches.move_to_end(search_key)
             return value
         self.misses += 1
-        search_key = (identity, warps, start, capabilities, mode)
         entry = self.searches.get(search_key)
         if entry is None:
             projected = without_warp_transit(graph, warps, start_at=start)
@@ -203,13 +249,18 @@ class _FrozenLocalRouteCache:
             if (
                 retained
                 and projected_retained
-                and len(self.searches) < _MAX_LOCAL_INVENTORY_SEARCHES
+                and _MAX_LOCAL_INVENTORY_SEARCHES > 0
             ):
+                # Evict derived frontiers only; graph mutation evidence and
+                # exact immutable query results retain their original bounds.
+                while len(self.searches) >= _MAX_LOCAL_INVENTORY_SEARCHES:
+                    self.searches.popitem(last=False)
                 search = _IncrementalLocalPaths(
                     projected, start, capabilities=capabilities, start_mode=mode
                 )
                 self.searches[search_key] = projected, search
         else:
+            self.searches.move_to_end(search_key)
             projected, search = entry
             projected_retained = self._retain_graph(projected)
         if search is None:
@@ -227,6 +278,41 @@ class _FrozenLocalRouteCache:
         if retained and projected_retained and len(self.queries) < 4096:
             self.queries[key] = value
         return value
+
+    def price_passages(self, graph, local, state, target_map, edge, capabilities,
+                       local_paths, target_local):
+        """Reuse an exact pure passage query across sibling global destinations.
+
+        Retained outside context has already resolved target_map and is not read
+        by the composer. Strong references prevent identity recycling. The owning
+        route inventory validates graph mutation and clears before execution.
+        Dynamic graph subclasses and mutable path mappings retain the old path.
+        """
+        eligible = (type(graph) is MacroGraph and type(local) is LocalGraph
+                    and (target_local is None or type(target_local) is LocalGraph)
+                    and type(local_paths) is MappingProxyType)
+        key = (id(graph), id(local), id(local_paths), id(target_local), id(edge),
+               state.map_id, state.at, state.mode, target_map, capabilities)
+        entry = self.priced_passages.get(key) if eligible else None
+        if entry is not None:
+            self.passage_hits += 1
+            return entry[-1]
+        self.passage_misses += 1
+        try:
+            composed = _compose_segment_candidates(
+                graph, local, state, target_map, edge, capabilities=capabilities,
+                local_paths=local_paths, target_local=target_local,
+            )
+        except RoutePlanningError:
+            # The original caller discards an unavailable passage. Keep the same
+            # empty result, not an exception whose chain might be flattened.
+            result = ()
+        else:
+            result = tuple((segment, sum(e.cost for e in segment.approach.edges))
+                           for segment in composed)
+        if eligible and len(self.priced_passages) < _MAX_INVENTORY_PASSAGES:
+            self.priced_passages[key] = (graph, local, local_paths, target_local, edge, result)
+        return result
 
     def verify(self):
         self.verify_routes()
@@ -259,12 +345,15 @@ def frozen_local_route_inventory():
         cache.verify()
     finally:
         _FROZEN_LOCAL_ROUTE_CACHE.reset(token)
+        cache.priced_passages.clear()
         cache.searches.clear()
         cache.routes.clear()
         cache.route_macro_graphs.clear()
         cache.route_worlds.clear()
         cache.queries.clear()
         cache.projections.clear()
+        cache.equivalent_graphs.clear()
+        cache.canonical_by_identity.clear()
         cache.graphs.clear()
 
 
@@ -756,27 +845,34 @@ def _find_composed_route(
             passage_key = edge_ordinal, target_map
             candidates = passages.get(passage_key)
             if candidates is None:
-                try:
-                    composed = _compose_segment_candidates(
-                        graph,
-                        local,
-                        state,
-                        target_map,
-                        edge,
-                        capabilities=capabilities,
-                        local_paths=local_paths,
-                        target_local=local_graphs.get(target_map),
+                inventory_cache = _FROZEN_LOCAL_ROUTE_CACHE.get()
+                if inventory_cache is not None:
+                    candidates = inventory_cache.price_passages(
+                        graph, local, state, target_map, edge, capabilities,
+                        local_paths, local_graphs.get(target_map),
                     )
-                except RoutePlanningError:
-                    passages[passage_key] = ()
-                    continue
-                candidates = tuple(
-                    (
-                        segment,
-                        sum(local_edge.cost for local_edge in segment.approach.edges),
+                else:
+                    try:
+                        composed = _compose_segment_candidates(
+                            graph,
+                            local,
+                            state,
+                            target_map,
+                            edge,
+                            capabilities=capabilities,
+                            local_paths=local_paths,
+                            target_local=local_graphs.get(target_map),
+                        )
+                    except RoutePlanningError:
+                        passages[passage_key] = ()
+                        continue
+                    candidates = tuple(
+                        (
+                            segment,
+                            sum(local_edge.cost for local_edge in segment.approach.edges),
+                        )
+                        for segment in composed
                     )
-                    for segment in composed
-                )
                 passages[passage_key] = candidates
             for segment, segment_cost in candidates:
                 candidate_cost = cost + segment_cost + edge.cost

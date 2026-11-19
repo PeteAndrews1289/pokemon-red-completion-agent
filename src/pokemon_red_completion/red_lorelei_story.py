@@ -16,7 +16,7 @@ from .red_learned_trainer import (
     DAMAGE_STORY_ADMISSION_SHA256,
     DAMAGE_STORY_SHA256,
     LANCE_STORY_ADMISSION_SHA256,
-    FrozenTrainerBattler,
+    FrozenTrainerBattler, story_whole_battle_decision_limit,
 )
 from .red_story_battle import FrozenStoryBattleController, StoryTrainerContract
 
@@ -124,6 +124,7 @@ class FrozenLoreleiStoryController:
         consume_battle_start_schedule,
         move_decision_guard,
         battle_exit_guard=None,
+        evolution_rom=None,
     ):
         self.require_objective(intent.objective_id)
         if (
@@ -141,6 +142,7 @@ class FrozenLoreleiStoryController:
             self.battler,
             (self.contract,),
             self.maximum_decisions,
+            evolution_rom=evolution_rom,
         )
         result = actor.run(
             reader,
@@ -237,7 +239,11 @@ class ScopedAssistedLoreleiController(FrozenLoreleiStoryController):
             )
             != target
             or type(self.maximum_decisions) is not int
-            or not 1 <= self.maximum_decisions <= 80
+            or not 1 <= self.maximum_decisions <= (
+                story_whole_battle_decision_limit(self.contract.trainer_identity)
+                if type(self) in {ScopedAssistedLeagueRetryController, ScopedAssistedChampionController}
+                else 80
+            )
         ):
             raise ValueError("assisted League requires its explicit source/model/work-order scope")
         self.battler.require_story_contract(self.contract)

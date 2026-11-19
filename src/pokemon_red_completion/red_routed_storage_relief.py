@@ -133,6 +133,7 @@ def bind_routed_storage_relief(
     initial_money = observation.raw.player_money
     executed: list[tuple[ExecutableGoalBinding, GoalExecutionReport]] = []
     claimed = False
+    verified_route_income = 0
 
     def replan(request):
         replacement = router._replan(request, allow_surf=allow_surf)
@@ -143,7 +144,7 @@ def bind_routed_storage_relief(
         return replacement
 
     def execute() -> GoalExecutionReport:
-        nonlocal claimed
+        nonlocal claimed, verified_route_income
         if claimed:
             raise RedRoutedStorageReliefError("routed storage binding was already consumed")
         claimed = True
@@ -182,6 +183,10 @@ def bind_routed_storage_relief(
                 runtime.reader,
                 route_name="guarded standalone storage PC access",
             )
+        # Keep the actual guarded handler: Safari wraps it for exit dialogue.
+        # Only that handler's independently checked native trainer proceeds may
+        # change cash; all stock, bag and box guards remain exact.
+        income_handler = interruption_handler
         if active_safari:
             interruption_handler = RedSafariDepartureInterruptionHandler(
                 runtime.emulator,
@@ -202,6 +207,9 @@ def bind_routed_storage_relief(
             replanner=replan,
             limits=_ROUTE_LIMITS,
         )
+        verified_route_income = getattr(income_handler, "verified_trainer_income", 0)
+        if type(verified_route_income) is not int or verified_route_income < 0:
+            raise RedRoutedStorageReliefError("storage route income lacks native verification")
         at_pc = runtime.adapter.observe()
         if (
             not transport.passed
@@ -213,7 +221,7 @@ def bind_routed_storage_relief(
             or at_pc.collection_observation.box_counts != initial_counts
             or dependency_specimen_ledger(at_pc.collection_observation) != initial_ledger
             or at_pc.raw.bag_items != initial_bag
-            or at_pc.raw.player_money != initial_money
+            or at_pc.raw.player_money != initial_money + verified_route_income
         ):
             raise RedRoutedStorageReliefError("routed storage transport changed protected state")
 
@@ -240,6 +248,11 @@ def bind_routed_storage_relief(
             runtime.emulator.frame_count - frame_start,
             {
                 **report.evidence,
+                "storage_transport_trainer_receipts": [
+                    dict(receipt.details)
+                    for receipt in transport.interruptions
+                    if receipt.kind == "trainer_engagement"
+                ],
                 "routed_storage_relief": {
                     "initial_box_index": initial_box,
                     "target_box_index": target,
@@ -247,6 +260,7 @@ def bind_routed_storage_relief(
                     "collection_preserved": True,
                     "setup_training_rows": 0,
                     "route_steps": len(route.steps),
+                    "verified_trainer_income": verified_route_income,
                 },
             },
         )
@@ -266,12 +280,14 @@ def bind_routed_storage_relief(
             or dependency_specimen_ledger(fresh.collection_observation) != initial_ledger
             or fresh.immediate_capture_slots <= 0
             or fresh.raw.bag_items != initial_bag
-            or fresh.raw.player_money != initial_money
+            or fresh.raw.player_money != initial_money + verified_route_income
             or fresh.raw.battle_state
             or not fresh.input_ready
             or report.actions_executed <= 0
             or not isinstance(relief, dict)
             or relief.get("collection_preserved") is not True
+            or type(relief.get("verified_trainer_income")) is not int
+            or relief.get("verified_trainer_income") != verified_route_income
         ):
             return GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
         return GoalVerification.succeeded()

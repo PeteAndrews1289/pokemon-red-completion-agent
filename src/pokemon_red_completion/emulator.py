@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import io
 from collections.abc import Callable
-from contextlib import suppress
+from contextlib import contextmanager, suppress
 from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 from types import TracebackType
@@ -379,6 +379,7 @@ class PyBoyAdapter:
         self._window_name = window_name
         self._speed = resolved_speed
         self._frame_observer = frame_observer
+        self._probe_native_frame = None
         self._backend: PyBoyBackend | None = None
         self._window_event_pump: WindowEventPump | None = None
         self._rom_stream: io.BytesIO | None = None
@@ -645,12 +646,33 @@ class PyBoyAdapter:
         self._pressed_buttons.clear()
         return buttons
 
+    @contextmanager
+    def observe_native_ticks(self, observe):
+        if not callable(observe) or self._probe_native_frame is not None:
+            raise ValueError("scoped native frame observer differs")
+        self._probe_native_frame = observe
+        try:
+            yield
+        finally:
+            self._probe_native_frame = None
+
     def tick(self, frames: int) -> None:
         if not isinstance(frames, int) or isinstance(frames, bool) or frames <= 0:
             raise ValueError("frames must be a positive integer")
         backend = self._require_backend()
         if not self._watch:
-            self._tick_backend(backend, frames, render=self._frame_observer is not None)
+            probe = self._probe_native_frame
+            if probe is None:
+                self._tick_backend(backend, frames, render=self._frame_observer is not None)
+            else:
+                for _ in range(frames - 1):
+                    if not backend.tick(1, render=False, sound=False):
+                        self._logical_frame += 1
+                        raise EmulatorEndedError(f"Emulator ended at frame {self._logical_frame}.")
+                    self._logical_frame += 1
+                    probe()
+                self._tick_backend(backend, 1, render=self._frame_observer is not None)
+                probe()
             return
         for _ in range(frames):
             if self._window_event_pump is None:

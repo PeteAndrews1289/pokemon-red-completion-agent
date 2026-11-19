@@ -878,6 +878,7 @@ def victory_road_story_option(
             valid=lambda r: r.map_id == int(MapId.VICTORY_ROAD_1F),
             record=record,
             objective_ref=objective_ref,
+            story_unit=OptionStoryUnit("movement", True),
         )
     if raw.map_id in CAVE_MAPS and not strength_capabilities(raw):
         lesson = _strength_lesson(runtime, route.rom)
@@ -900,6 +901,7 @@ def victory_road_story_option(
             valid=lambda r: 70 in r.party_moves[lesson.party_slot - 1],
             record=record,
             objective_ref=objective_ref,
+            story_unit=OptionStoryUnit("interaction", True),
         )
     if raw.map_id in CAVE_MAPS:
         # Preparation can return on the exit side of a floor whose transient
@@ -935,6 +937,7 @@ def victory_road_story_option(
                 valid=lambda r: (r.map_id, r.player_y, r.player_x) == (contract.map_id, 16, 22),
                 record=record,
                 objective_ref=objective_ref,
+                story_unit=OptionStoryUnit("movement", True),
             )
         # Already native-qualified staircase entry coordinates, not a walk
         # string or a strategic preparation schedule. The shared router finds

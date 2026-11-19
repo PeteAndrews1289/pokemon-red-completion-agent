@@ -46,14 +46,29 @@ _QUALIFIED_ROM = object()
 class EvolutionHelperXPExhausted(EvolutionTrainingPaused):
     """Productive safe pause at a known no-incidental-evolution boundary."""
 
-    def __init__(self, battles, healing_trips, blocked_helpers):
+    def __init__(
+        self,
+        battles,
+        healing_trips,
+        blocked_helpers,
+        *,
+        trainee_initial_xp: int | None = None,
+        trainee_terminal_xp: int | None = None,
+        trainee_xp_gained: int | None = None,
+    ):
         if (
             not isinstance(blocked_helpers, frozenset)
             or not blocked_helpers
             or any(type(s) is not int or not 1 <= s <= 255 for s in blocked_helpers)
         ):
             raise ValueError("headroom pause requires known blocked helper species")
-        super().__init__(battles, healing_trips)
+        super().__init__(
+            battles,
+            healing_trips,
+            trainee_initial_xp=trainee_initial_xp,
+            trainee_terminal_xp=trainee_terminal_xp,
+            trainee_xp_gained=trainee_xp_gained,
+        )
         self.blocked_helpers = blocked_helpers
 
 

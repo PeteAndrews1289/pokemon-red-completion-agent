@@ -17,13 +17,20 @@ from time import monotonic
 from run_configured_red_player import (
     AUTOMATIC_CONTINUATIONS,
     CHUNK_BUDGET_ERRORS,
+    paused_capture_outcome,
     chunk_continuation_reason,
     connect_declared_machine_options,
     declared_automatic_renewal,
     declared_input_recording,
+    declared_preparation_context,
+    declared_readiness_refinement,
+    declared_safe_stop_continuation,
     execute_player_chunk,
     player_wiring_declaration,
     qualified_menu_control_handoff,
+    qualified_registration_task_handoff,
+    qualified_movement_stall_setback,
+    qualified_safe_stop_setback,
     requires_compulsory_settlement,
 )
 
@@ -48,8 +55,13 @@ from pokemon_red_completion.red_player_continuation import (
     capture_player_continuation,
 )
 from pokemon_red_completion.red_player_model import load_player_goal_model_record_bytes
+from pokemon_red_completion.goal_manager import GoalKind
 from pokemon_red_completion.red_player_origins import _NoLoadController, _OpeningActions
 from pokemon_red_completion.red_player_package import bind_player_package
+from pokemon_red_completion.red_player_story_menu import (
+    NativeStoryBranchInventory,
+    SafeStopSuppression,
+)
 from pokemon_red_completion.red_spectator_feed import RunFrameFeed, declared_spectator
 
 SCHEMA = "pokemon.red.fresh-frozen-player-plan.v1"
@@ -156,6 +168,9 @@ def declared_fresh_acceptance(plan):
         raise ValueError(
             "fresh acceptance needs frozen zero-load unassisted identity and full curriculum"
         )
+    from pokemon_red_completion.red_player_curriculum import validate_full_red_curriculum_plan
+
+    validate_full_red_curriculum_plan(plan)
     return True
 
 
@@ -194,7 +209,24 @@ def validate_fresh_plan(plan, *, import_only=False):
         or not 0 <= plan["seed"] < 2**64
     ):
         raise ValueError("fresh launch declaration has a restore, teacher or undeclared start")
-    declared_fresh_acceptance(plan)
+    from pokemon_red_completion.red_collection_campaign_scope import development_campaign_scope
+    if development_campaign_scope(plan):
+        if (plan["new_campaign"] is not True or plan.get("maximum_state_loads") != 0
+                or (not import_only and plan.get("launch_authorized") is not True)):
+            raise ValueError("fresh campaign needs its normal zero-load power-on declaration")
+    elif (plan.get("diagnostic_only") is not True or plan.get("new_campaign") is not False
+          or plan.get("official_acceptance") is not False or plan.get("maximum_state_loads") != 0
+          or plan.get("training_admission", False) is not False
+          or plan.get("actual_gameplay_resume_authorized", False) is not False):
+        raise ValueError("fresh successor comparison needs a zero-load diagnostic or a normal campaign")
+    official = declared_fresh_acceptance(plan)
+    open_ended = plan.get("open_ended_campaign", False)
+    if type(open_ended) is not bool or (open_ended and (
+        plan.get("cutoff_utc") is not None or official
+        or not plan.get("development_campaign") or not plan.get("new_campaign")
+        or plan.get("diagnostic_only") or not declared_automatic_renewal(plan)
+    )):
+        raise ValueError("invalid open-ended development campaign declaration")
     NativePlayerLimits(**plan["limits"])
     if any(
         type(plan["chunk"][key]) is not int or plan["chunk"][key] <= 0
@@ -203,6 +235,8 @@ def validate_fresh_plan(plan, *, import_only=False):
         raise ValueError("fresh launch needs finite automatic chunks")
     player_wiring_declaration(plan)
     declared_automatic_renewal(plan)
+    if declared_safe_stop_continuation(plan) is not None and not declared_automatic_renewal(plan):
+        raise ValueError("safe-stop continuation requires declared automatic renewal")
     declared_input_recording(plan)
     declared_spectator(plan)
     return plan
@@ -221,6 +255,7 @@ def realized_configuration(template, *, origin_sha256, origin_id, starter_ref, t
         evolution_venue_model_sha256=template.get("evolution_venue_model_sha256"),
         evolution_venue_scope=tuple(template.get("evolution_venue_scope", ())),
         evolution_allow_direct_fights=template.get("evolution_allow_direct_fights", True),
+        evolution_recover_wild_faints=template.get("evolution_recover_wild_faints", False),
     )
     # Validate each input list before composing them. An already excluded exact
     # teacher must remain excluded once, not relax duplicate/identity checks.
@@ -238,6 +273,10 @@ def model_handoff_verified(episodes, *, recovered_control_handoffs=()):
     Only exact live-guard receipts confirmed by a later settled chunk may
     adjudicate expected control interruptions. Original failures stay recorded.
     """
+    from pokemon_red_completion.red_capture_switch_handoff import ERROR, completed_catcher_handoff
+    from pokemon_red_completion.provenance import canonical_sha256
+    recovered_catchers = {(r["state_sha256"], r["failed_outcome_sha256"]) for r in recovered_control_handoffs
+                          if completed_catcher_handoff(r)}
     recovered = {
         receipt.get("state_sha256")
         for receipt in recovered_control_handoffs
@@ -245,6 +284,7 @@ def model_handoff_verified(episodes, *, recovered_control_handoffs=()):
         and isinstance(receipt.get("state_sha256"), str)
         and len(receipt["state_sha256"]) == 64
         and all(c in "0123456789abcdef" for c in receipt["state_sha256"])
+        and receipt.get("ordinary_capture_switch_faint") is not True
         and receipt.get("qualified") is True
         and receipt.get("failed_transport_preserved") is True
         and receipt.get("strategic_substitution") is False
@@ -252,16 +292,30 @@ def model_handoff_verified(episodes, *, recovered_control_handoffs=()):
             type(receipt.get(key)) is int and receipt[key] == 0
             for key in ("inputs", "frames", "model_queries")
         )
-        and receipt.get("binding_ref")
-        in {
-            "pokemon.red:retained-engagement:" + str(receipt.get("state_sha256")),
-            "pokemon.red:interrupted-wild:" + str(receipt.get("state_sha256")),
-        }
+        and (
+            receipt.get("binding_ref") in {
+                "pokemon.red:retained-engagement:" + str(receipt.get("state_sha256")),
+                "pokemon.red:interrupted-wild:" + str(receipt.get("state_sha256")),
+            }
+            or (
+                receipt.get("binding_ref") == "pokemon.red:retained-motion:" + str(receipt.get("state_sha256"))
+                and receipt.get("retained_declared_loan") is True
+                and receipt.get("field_faint_before_pc_return") is True
+            )
+            or (
+                receipt.get("binding_ref") == "pokemon.red:retained-capture:" + str(receipt.get("state_sha256"))
+                and receipt.get("retained_capture_pause") is True
+            )
+        )
     }
 
     def unresolved_error(outcome):
         if not outcome.get("error_type") or outcome["error_type"] in CHUNK_BUDGET_ERRORS:
             return False
+        if (outcome.get("error_type") == "ProtectedRecoveryError" and outcome.get("error") == ERROR
+                and outcome.get("selected_kind") == "acquire_species"):
+            failure = outcome.get("original_outcome_sha256") or canonical_sha256(outcome)
+            return (outcome.get("terminal_state_sha256"), failure) not in recovered_catchers
         known = (
             outcome["error_type"] == "RouteExecutionError"
             and outcome.get("error")
@@ -274,12 +328,33 @@ def model_handoff_verified(episodes, *, recovered_control_handoffs=()):
             outcome["error_type"] == "RedGoalContextError"
             and outcome.get("selected_kind") == "evolve_species"
             and outcome.get("error") == "PC loan settlement requires settled field control"
-        )
+        ) or paused_capture_outcome(outcome)
         return not (known and outcome.get("terminal_state_sha256") in recovered)
 
     return any(e.get("model_decisions", 0) > 0 for e in episodes) and not any(
         unresolved_error(o) for e in episodes for o in e.get("outcomes", ())
     )
+
+
+def compact_handoff_episode(episode):
+    """Retain verification facts without keeping prior diagnostic payloads alive.
+
+    Full episode/outcome reports remain durably recorded by the chunk runner.
+    This projection preserves exactly the fields model_handoff_verified reads.
+    """
+    from pokemon_red_completion.red_capture_switch_handoff import catcher_switch_failure
+    from pokemon_red_completion.provenance import canonical_sha256
+    return {
+        "model_decisions": episode.get("model_decisions", 0),
+        "outcomes": [
+            dict(
+                {key: outcome.get(key) for key in ("error_type", "error", "selected_kind", "terminal_state_sha256")},
+                **({"original_outcome_sha256": canonical_sha256(outcome)} if catcher_switch_failure(outcome) else {}),
+            )
+            for outcome in episode.get("outcomes", ())
+            if outcome.get("error_type")
+        ],
+    }
 
 
 def run(plan_path):
@@ -298,6 +373,7 @@ def run(plan_path):
         model_bytes, expected_model_sha256=plan["configuration_template"]["goal_model_sha256"]
     ).model
     limits = NativePlayerLimits(**plan["limits"])
+    open_ended = plan.get("open_ended_campaign", False)
     _record(
         root / "CLAIM.json",
         dict(
@@ -338,6 +414,9 @@ def run(plan_path):
     )
     emulator, episodes = None, []
     pending_control_handoffs, recovered_control_handoffs = [], []
+    safe_stop = declared_safe_stop_continuation(plan)
+    suppression = SafeStopSuppression() if safe_stop is not None else None
+    safe_stop_setbacks, safe_stop_repeats = [], {}
     try:
         with (
             RunFrameFeed(plan, root) as feed,
@@ -345,8 +424,10 @@ def run(plan_path):
                 c.PyBoyAdapter(c.ROM, watch=False, speed=None, **feed.adapter_options), root, result
             ) as emulator,
         ):
-            wall = MonotonicWallTimeBudgetController(emulator, maximum_wall_seconds=limits.seconds)
-            controller = _NoLoadController(wall, maximum_frames=limits.frames)
+            opening_seconds = plan["chunk"]["seconds"] if open_ended else limits.seconds
+            opening_frames = plan["chunk"]["frames"] if open_ended else limits.frames
+            wall = MonotonicWallTimeBudgetController(emulator, maximum_wall_seconds=opening_seconds)
+            controller = _NoLoadController(wall, maximum_frames=opening_frames)
             if controller.frame_count != 0 or controller.pressed_buttons:
                 raise ValueError("fresh emulator was not at untouched power-on")
             power_on = controller.save_state_bytes()
@@ -433,11 +514,20 @@ def run(plan_path):
             )
             parent, ordinal = initial, 0
             while True:
-                left = {
-                    key: getattr(limits, key) - spent[key]
-                    for key in ("decisions", "actions", "frames", "heals")
-                }
-                left["seconds"] = int(limits.seconds - (monotonic() - started))
+                if open_ended:
+                    # Renew only the existing per-chunk safety envelope. The
+                    # same native emulator, receipts and cumulative costs persist.
+                    left = dict(plan["chunk"], heals=limits.heals)
+                    wall = MonotonicWallTimeBudgetController(
+                        emulator, maximum_wall_seconds=left["seconds"]
+                    )
+                    controller = _NoLoadController(wall, maximum_frames=left["frames"])
+                else:
+                    left = {
+                        key: getattr(limits, key) - spent[key]
+                        for key in ("decisions", "actions", "frames", "heals")
+                    }
+                    left["seconds"] = int(limits.seconds - (monotonic() - started))
                 if min(left.values()) <= 0:
                     result["terminal_reason"] = "declared_budget_exhausted"
                     break
@@ -459,6 +549,9 @@ def run(plan_path):
                         context_sha256=c.digest(parent / "CONTEXT.json"),
                         inherited_spent=spent,
                         configuration_sha256=configuration.sha256,
+                        **({"fit_allowed": plan["fit_allowed"], "copy_back": plan["copy_back"]}
+                           if plan.get("compare_evolution_recipient_yield") or
+                              plan.get("compare_successful_fishing_site_effort") else {}),
                         **player_wiring_declaration(plan),
                         source_identity=c.source_code_identity(c.REPO),
                         same_live_emulator=True,
@@ -472,10 +565,27 @@ def run(plan_path):
                     output,
                     plan_path=output / "PLAN.json",
                     model_feature_version=model.feature_version,
+                    live_party_runtime=holder["runtime"],
+                    **(
+                        {"include_preparation_party_context": True}
+                        if declared_preparation_context(plan) or getattr(
+                            declared_readiness_refinement(plan).get("consequence_head"),
+                            "context_projection",
+                            None,
+                        )
+                        == "prospective_preparation_party_context_v1"
+                        else {}
+                    ),
+                    **({"required_species": tuple(plan["required_species"])}
+                       if "required_species" in plan else {}),
                 )
                 if source_payload != controller.save_state_bytes():
                     raise ValueError("live runtime renewal changed the retained native state")
                 factory(ReadOnlyController(controller))
+                if suppression is not None:
+                    if not isinstance(menu, NativeStoryBranchInventory):
+                        raise ValueError("safe-stop continuation requires the native story menu")
+                    menu.safe_stop_suppression = suppression
                 connect_declared_machine_options(
                     menu, plan, rom=c.ROM.read_bytes(), holder=holder, configuration=configuration
                 )
@@ -509,16 +619,23 @@ def run(plan_path):
                     ordinal=ordinal,
                 )
                 episode = row.get("episode", {})
-                episodes.append(episode)
+                episodes.append(compact_handoff_episode(episode))
                 reason = chunk_continuation_reason(
                     row,
                     source_sha256=json.loads((parent / "CONTEXT.json").read_bytes())[
                         "state_sha256"
                     ],
                 )
+                if declared_automatic_renewal(plan) and reason == "declared_consequence_complete":
+                    task_handoff = qualified_registration_task_handoff(
+                        row, plan=plan, runtime=holder["runtime"], output=output)
+                    if task_handoff is not None:
+                        row["qualified_registration_task_handoff"] = task_handoff
+                        reason = "automatic_registration_task_renewal"
                 if declared_automatic_renewal(plan) and reason == "native_execution_error":
                     handoff = qualified_menu_control_handoff(
-                        row, runtime=holder["runtime"], menu=menu
+                        row, runtime=holder["runtime"], menu=menu, retained_parent=output,
+                        catcher_plan=plan, failure_reason=reason, rom=lambda: c.ROM.read_bytes(),
                     )
                     if handoff is not None:
                         row["qualified_native_control_handoff"] = handoff
@@ -529,10 +646,70 @@ def run(plan_path):
                     and row.get("error") is None
                     and episode.get("stop_reason") != "execution_failed"
                 ):
-                    recovered_control_handoffs.extend(pending_control_handoffs)
-                    pending_control_handoffs.clear()
+                    from pokemon_red_completion.red_capture_switch_handoff import confirmed_catcher_settlement
+                    outstanding = []
+                    for pending in pending_control_handoffs:
+                        if pending.get("ordinary_capture_switch_faint") is not True:
+                            recovered_control_handoffs.append(pending)
+                        else:
+                            settled = confirmed_catcher_settlement(pending, episode)
+                            if settled is None:
+                                outstanding.append(pending)
+                            else:
+                                recovered_control_handoffs.append(settled)
+                    pending_control_handoffs[:] = outstanding
+                if suppression is not None and context is not None:
+                    signature = qualified_safe_stop_setback(
+                        row, runtime=holder["runtime"], reason=reason
+                    ) or qualified_movement_stall_setback(
+                        row, runtime=holder["runtime"], reason=reason
+                    )
+                    key = json.dumps(signature)
+                    repeat = safe_stop_repeats.get(key, 0) + 1
+                    if (
+                        signature is not None
+                        and len(safe_stop_setbacks) < safe_stop["maximum_total"]
+                        and repeat <= safe_stop["maximum_repeats"]
+                    ):
+                        # A settled, custody-verified failure becomes an ordinary
+                        # setback: its kind is withheld for a few menus and the
+                        # model chooses again. No input, budget reset or retry.
+                        safe_stop_repeats[key] = repeat
+                        suppression.hold(GoalKind(signature[0]), safe_stop["hold_menus"])
+                        receipt = dict(
+                            schema="pokemon.red.safe-stop-setback.v1",
+                            segment=ordinal,
+                            original_reason=reason,
+                            selected_kind=signature[0],
+                            error_type=signature[1],
+                            error=signature[2],
+                            repeat=repeat,
+                            state_sha256=row["state_sha256"],
+                            held_kind=signature[0],
+                            hold_menus=safe_stop["hold_menus"],
+                            inputs=0,
+                            frames=0,
+                            model_queries=0,
+                            aggregate_budget_reset=False,
+                        )
+                        row["qualified_safe_stop_setback"] = receipt
+                        safe_stop_setbacks.append(receipt)
+                        reason = "automatic_safe_stop_setback"
                 row["continuation_reason"] = reason
                 _record(output / "RESULT.json", row)
+                if context is None:
+                    # A chunk that failed before capturing a continuation has no
+                    # successor state. Record a clean terminal instead of crashing;
+                    # the chunk's own RESULT.json keeps the original error.
+                    result["segments"].append(
+                        dict(segment=ordinal, native_facts=row.get("native_facts"), spent=None,
+                             continuation_reason=reason, error=row.get("error"))
+                    )
+                    result.update(
+                        ready=False, passed=False, terminal_reason="chunk_failed_without_continuation",
+                        terminal_error=row.get("error"),
+                    )
+                    break
                 spent, facts = context["spent"], row["native_facts"]
                 result["segments"].append(
                     dict(
@@ -550,6 +727,14 @@ def run(plan_path):
                     ),
                     verified_automatic_control_recoveries=recovered_control_handoffs,
                     pending_automatic_control_recoveries=pending_control_handoffs,
+                    **(
+                        dict(
+                            safe_stop_setbacks=safe_stop_setbacks,
+                            safe_stop_suppression=suppression.public_dict(),
+                        )
+                        if suppression is not None
+                        else {}
+                    ),
                 )
                 print(
                     json.dumps(
@@ -562,7 +747,10 @@ def run(plan_path):
                     ),
                     flush=True,
                 )
-                if reason not in AUTOMATIC_CONTINUATIONS:
+                if (
+                    reason not in AUTOMATIC_CONTINUATIONS
+                    and reason != "automatic_safe_stop_setback"
+                ):
                     result["terminal_reason"] = reason
                     if reason != "curriculum_complete":
                         result.update(ready=False, passed=False)

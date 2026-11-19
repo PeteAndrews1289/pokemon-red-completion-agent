@@ -16,6 +16,7 @@ from pokemon_red_completion.battle_semantics import (
 )
 from pokemon_red_completion.observation import RawGameState
 from pokemon_red_completion.provenance import canonical_sha256
+from pokemon_red_completion.gen1_field_moves import TELEPORT_MOVE_ID
 from pokemon_red_completion.red_battle_catalog import (
     PokemonRedBattleCatalog,
     pokemon_red_move_ref,
@@ -208,6 +209,34 @@ def prepare_red_battle_scenario(
             ):
                 supported_values[i] = True
                 reasons[i] = None
+    # Extend the executor's verified surface only for a mechanically forced
+    # remaining move. Normal status menus stay byte-for-byte unchanged. Count
+    # cartridge PP directly: an otherwise unsupported Counter/Teleport is still
+    # a legal alternative and must not be erased by the projector's support mask.
+    active = initial_state.active_party_index
+    raw_pp = initial_state.battler_pp
+    only_survivor = (
+        type(active) is int and initial_state.party_hp is not None
+        and 0 <= active < len(initial_state.party_hp)
+        and initial_state.party_hp[active] > 0
+        and all(hp == 0 for i, hp in enumerate(initial_state.party_hp) if i != active)
+    )
+    disabled = (initial_state.player_disabled_move_slot
+                if (initial_state.player_disable_turns or 0) > 0 else None)
+    usable = tuple(
+        i for i, (move, pp) in enumerate(zip(moves, raw_pp or (), strict=True))
+        if move and type(pp) is int and pp & 63 and i + 1 != disabled
+    ) if raw_pp is not None and len(raw_pp) == len(moves) else ()
+    if (initial_state.battle_state == 2
+            and not any(supported_values) and only_survivor and len(usable) == 1):
+        sole = usable[0]
+        # Teleport legally spends a turn in a trainer battle even when its
+        # field or wild effect cannot occur. Preserve that turn on the cartridge.
+        if ((allow_status_moves and catalog.move_effect(pokemon_red_move_ref(moves[sole])) == "FOCUS_ENERGY_EFFECT")
+                or (allow_stranded_accuracy_move and moves[sole] == TELEPORT_MOVE_ID)):
+            for i, (slot, legal) in enumerate(zip(projected.slot_indices, projected.legal_mask, strict=True)):
+                if slot == sole and legal:
+                    supported_values[i], reasons[i] = True, None
     supported = tuple(supported_values)
     features = BattleFeatureBatch(
         feature_names=projected.feature_names,

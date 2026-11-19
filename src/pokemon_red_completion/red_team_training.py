@@ -7,6 +7,7 @@ from typing import Any, Protocol, TypedDict
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_actions import BattleAction, BattleControlRequest
 from pokemon_red_completion.battle_runtime import (
+    ActiveBattlerFaintedError,
     BattleIntent,
     BattleRuntimeError,
     MoveDecisionSink,
@@ -453,6 +454,35 @@ def collection_damage_pp(
     return total
 
 
+class _PauseForTrainingHealth(_PauseForTeamTrainingRecovery):
+    """Current health needs nursing;it is not permanent attack incapability."""
+
+
+class _PauseForTrainingDisable(_PauseForTeamTrainingRecovery):
+    """A usable attack is temporarily disabled in this battle only."""
+
+
+def collection_trainee_should_fight_directly(
+    trainee: PartyMemberObservation,
+    *,
+    enemy_level: int | None,
+    enemy_species: int | None,
+    policy: BalancedTeamPolicy,
+    allow_direct_evolution: bool,
+) -> bool:
+    """Use the same immediate attacks as the collection battle executor.
+
+    Legacy roster move lists remain specific to legacy training. A collection
+    trainee can use any supported, effective attack it actually knows. The
+    existing health, status, matchup and PP reserve still bind.
+    """
+    return (
+        allow_direct_evolution
+        and red_training_matchup_acceptable(trainee, enemy_level, policy, enemy_species)
+        and collection_damage_pp(trainee, enemy_species) > policy.reserve_total_pp
+    )
+
+
 def collection_recipient_needs_recovery(
     member: PartyMemberObservation, policy: BalancedTeamPolicy
 ) -> bool:
@@ -596,10 +626,44 @@ def validate_collection_helper_exclusions(value: frozenset[int]) -> None:
 class EvolutionTrainingPaused(RuntimeError):
     """A completed-battle quantum ended safely; retain and resume its state."""
 
-    def __init__(self, battles: int, healing_trips: int) -> None:
+    def __init__(
+        self,
+        battles: int,
+        healing_trips: int,
+        *,
+        trainee_initial_xp: int | None = None,
+        trainee_terminal_xp: int | None = None,
+        trainee_xp_gained: int | None = None,
+    ) -> None:
         super().__init__("bounded evolution experience quantum completed without evolution")
         self.battles = battles
         self.healing_trips = healing_trips
+        xp_values = (trainee_initial_xp, trainee_terminal_xp, trainee_xp_gained)
+        if any(value is not None for value in xp_values):
+            if any(type(value) is not int or value < 0 for value in xp_values):  # noqa: E721
+                raise ValueError("evolution pause trainee XP counters are invalid")
+            if trainee_terminal_xp - trainee_initial_xp != trainee_xp_gained:  # type: ignore[operator]
+                raise ValueError("evolution pause trainee XP delta differs")
+        self.trainee_initial_xp = trainee_initial_xp
+        self.trainee_terminal_xp = trainee_terminal_xp
+        self.trainee_xp_gained = trainee_xp_gained
+
+    def xp_dict(self) -> dict[str, int]:
+        if (
+            self.trainee_initial_xp is None
+            or self.trainee_terminal_xp is None
+            or self.trainee_xp_gained is None
+        ):
+            return {}
+        return {
+            "trainee_initial_xp": self.trainee_initial_xp,
+            "trainee_terminal_xp": self.trainee_terminal_xp,
+            "trainee_xp_gained": self.trainee_xp_gained,
+        }
+
+
+class EvolutionMovementLimitReached(EvolutionTrainingPaused):
+    """A bounded training quantum used its step allowance at a native field boundary."""
 
 
 class EvolutionVenueExhausted(EvolutionTrainingPaused):
@@ -689,6 +753,195 @@ def require_zero_faints(party_reader: PokemonRedPartyReader, context: str) -> No
             for member in party.members
         )
         raise RuntimeError(f"Team training recorded a faint after {context}: party={state!r}.")
+
+
+def recover_completed_collection_training_faint(
+    actions, reader, emulator, *, recipient_species_id, heal_and_return
+):
+    """Nurse one faint at a completed wild boundary; infer no win or earned XP.
+
+    The opt-in caller has just returned from the existing wild battle controller.
+    A learned controller may already have settled forced replacement and victory.
+    Its actual XP stays in memory; only native nursing may restore the party.
+    Unknown control, multiple faints and identity/XP/resource drift still stop.
+    """
+    party_reader = PokemonRedPartyReader(emulator)
+    raw, party = reader.read(), party_reader.read()
+    refs = party_reader.preparation_specimen_refs()
+    if (
+        raw.battle_state != 0
+        or reader.read_input_readiness().ready is not True
+        or party.fainted_count != 1
+        or len(refs) != party.size
+        or len(set(refs)) != len(refs)
+        or any(type(m.experience) is not int for m in party.members)
+        or recipient_species_id not in party.species_ids()
+    ):
+        raise RuntimeError("completed training faint lacks one settled native party faint")
+
+    def census(value, keys):
+        return sorted(
+            (key, m.species_id, m.level, m.experience, tuple(v.move_id for v in m.moves))
+            for key, m in zip(keys, value.members, strict=True)
+        )
+
+    cash, bag, map_id = raw.player_money, raw.bag_items, raw.map_id
+    before = census(party, refs)
+    fainted = refs[next(i for i, m in enumerate(party.members) if m.is_fainted)]
+    record = getattr(actions, "record_diagnostic_event", None)
+    common = dict(
+        actor="rule_based_support", source="native_level_evolution",
+        fainted_specimen_ref=fainted, recipient_species_id=recipient_species_id,
+        observed_faints=1, training_win_inferred=False, loss_coverage_complete=False,
+    )
+    if callable(record):
+        record("wild_training_completed_faint", common)
+    execute_evolution_healing_trip(actions, reader, emulator, heal_and_return, metered=True)
+    after, final = party_reader.read(), reader.read()
+    if (
+        final.battle_state != 0
+        or reader.read_input_readiness().ready is not True
+        or after.fainted_count
+        or census(after, party_reader.preparation_specimen_refs()) != before
+        or final.player_money != cash
+        or final.bag_items != bag
+        or final.map_id != map_id
+    ):
+        raise RuntimeError("completed training faint recovery changed custody,XP,items or field safety")
+    if callable(record):
+        record("wild_training_completed_faint_recovery", dict(
+            common, healing_trips=1, field_ready=True, XP_change_during_recovery=0,
+            completed_battle_XP_preserved=True,
+        ))
+
+
+def recover_collection_training_faint(
+    actions,
+    reader,
+    emulator,
+    *,
+    recipient_species_id,
+    policy,
+    heal_and_return,
+    excluded_helper_species=frozenset(),
+):
+    """Recover one observed wild faint without a win,XP or strategic choice.
+
+    Only the existing forced switch,escape and metered nurse own inputs. A
+    whole-party loss,unknown boundary,identity/XP/item drift or failed recovery
+    still stops. The caller retains all aggregate budgets and the selected target.
+    """
+    from .battle_recovery import switch_active_battler as forced_switch
+    from .wild_party_flee import flee_with_fainted_lead
+
+    party_reader = PokemonRedPartyReader(emulator)
+    raw = reader.read()
+    party = party_reader.read()
+    refs = party_reader.preparation_specimen_refs()
+    index = raw.active_party_index
+    if (
+        raw.battle_state != 1
+        or raw.battler_hp != 0
+        or type(index) is not int
+        or not 0 <= index < party.size
+        or party.fainted_count != 1
+        or not party.members[index].is_fainted
+        or type(raw.enemy_hp) is not int
+        or raw.enemy_hp <= 0
+    ):
+        raise RuntimeError("training faint recovery lacks one native wild active faint")
+    escort = collection_escape_escort(
+        party,
+        recipient_species_id,
+        policy,
+        enemy_level=raw.enemy_level,
+        enemy_species=raw.enemy_species_id,
+        excluded_helper_species=excluded_helper_species,
+    )
+    if escort is None:
+        raise RuntimeError("training faint recovery has no qualified living escape escort")
+
+    def census(members, ids):
+        return sorted(
+            (ref, m.species_id, m.level, m.experience, tuple(v.move_id for v in m.moves))
+            for ref, m in zip(ids, members, strict=True)
+        )
+
+    before = census(party.members, refs)
+    cash, bag = raw.player_money, raw.bag_items
+    record = getattr(actions, "record_diagnostic_event", None)
+    if callable(record):
+        record(
+            "wild_training_faint",
+            dict(
+                actor="rule_based_support",
+                source="native_level_evolution",
+                fainted_specimen_ref=refs[index],
+                recipient_species_id=recipient_species_id,
+                escort_specimen_ref=refs[escort.slot - 1],
+                observed_faints=1,
+                training_win=False,
+                blackout=False,
+                loss_coverage_complete=False,
+            ),
+        )
+    forced_switch(
+        actions,
+        reader,
+        emulator,
+        escort.slot - 1,
+        expected_battle_state=1,
+        label="training faint escape escort",
+    )
+    replaced = reader.read()
+    if (
+        replaced.battle_state != 1
+        or replaced.active_party_index != escort.slot - 1
+        or (replaced.battler_hp or 0) <= 0
+    ):
+        raise RuntimeError("training faint replacement ended before verified escape")
+    evidence = flee_with_fainted_lead(
+        actions,
+        reader,
+        reader.read(),
+        expected_map_id=raw.map_id,
+        route_name="training faint escape",
+        stabilization_frames=120,
+        error_type=RuntimeError,
+        emulator=emulator,
+    )
+    if not evidence.verified:
+        raise RuntimeError("training faint escape lacks whole-party preservation proof")
+    if reader.read().battle_state != 0 or not reader.read_input_readiness().ready:
+        raise RuntimeError("training faint escape did not settle field control")
+    execute_evolution_healing_trip(actions, reader, emulator, heal_and_return, metered=True)
+    after = party_reader.read()
+    final = reader.read()
+    if (
+        final.battle_state != 0
+        or not reader.read_input_readiness().ready
+        or after.fainted_count
+        or census(after.members, party_reader.preparation_specimen_refs()) != before
+        or final.player_money != cash
+        or final.bag_items != bag
+    ):
+        raise RuntimeError("training faint recovery changed custody,XP,items or field safety")
+    if callable(record):
+        record(
+            "wild_training_faint_recovery",
+            dict(
+                actor="rule_based_support",
+                source="native_level_evolution",
+                fainted_specimen_ref=refs[index],
+                recipient_species_id=recipient_species_id,
+                observed_faints=1,
+                healing_trips=1,
+                field_ready=True,
+                target_xp_gained=0,
+                training_win=False,
+                loss_coverage_complete=False,
+            ),
+        )
 
 
 def escape_collection_battle(
@@ -1277,6 +1530,7 @@ def run_red_team_balancing(
     bootstrap_evolution_escort: bool = False,
     bootstrap_encounters: tuple[tuple[int, int], ...] = (),
     collection_shared_experience: bool = False,
+    recover_collection_faints: bool = False,
     collection_encounters: Mapping[int, Sequence[tuple[int, int]]] | None = None,
     excluded_collection_helper_species: frozenset[int] = frozenset(),
     collection_helper_xp_guard: object | None = None,
@@ -1310,6 +1564,10 @@ def run_red_team_balancing(
         raise ValueError("direct evolution mode must be boolean")
     if type(collection_shared_experience) is not bool:
         raise ValueError("collection shared-experience mode must be boolean")
+    if type(recover_collection_faints) is not bool or (
+        recover_collection_faints and (not collection_shared_experience or evolution_target is None)
+    ):
+        raise ValueError("training faint recovery requires explicit collection evolution scope")
     validate_collection_helper_exclusions(excluded_collection_helper_species)
     if collection_helper_xp_guard is not None:
         from .red_evolution_helper_xp import EvolutionHelperXPGuard
@@ -1902,6 +2160,14 @@ def run_red_team_balancing(
                 require_zero_faints(party_reader, "evolution quantum boundary")
                 raise EvolutionTrainingPaused(battles, healing_trips)
             if battles >= min(200, policy.max_battles) or steps >= policy.max_steps:
+                if (
+                    evolution_battle_quantum is not None
+                    and steps >= policy.max_steps
+                    and not reader.read().battle_state
+                    and reader.read_input_readiness().ready
+                ):
+                    require_zero_faints(party_reader, "evolution movement allowance")
+                    raise EvolutionMovementLimitReached(battles, healing_trips)
                 raise RuntimeError("Targeted evolution exhausted its bounded training budget.")
             trainee = next((m for m in party.members if m.species_id == precursor_species), None)
             if trainee is None:
@@ -2201,16 +2467,21 @@ def run_red_team_balancing(
 
             trainee_fights = (
                 trainee.species_id not in direct_fight_suppressed_species
+                and collection_trainee_should_fight_directly(
+                    trainee,
+                    enemy_level=raw.enemy_level,
+                    enemy_species=raw.enemy_species_id,
+                    policy=policy,
+                    allow_direct_evolution=allow_direct_evolution,
+                )
+                if collection_shared_experience
+                else trainee.species_id not in direct_fight_suppressed_species
                 and trainee_should_fight_directly(
                     trainee,
                     enemy_level=raw.enemy_level,
                     enemy_species=raw.enemy_species_id,
                     policy=policy,
                     participation_only=evolution_target is not None and not allow_direct_evolution,
-                )
-                and (
-                    not collection_shared_experience
-                    or collection_damage_pp(trainee, raw.enemy_species_id) > policy.reserve_total_pp
                 )
             )
 
@@ -2323,10 +2594,39 @@ def run_red_team_balancing(
                     ),
                 )
             except BattleRuntimeError as error:
+                if recover_collection_faints and isinstance(error, ActiveBattlerFaintedError):
+                    if healing_trips >= policy.max_healing_trips:
+                        raise RuntimeError(
+                            "training faint exhausted the recovery budget"
+                        ) from error
+                    recover_collection_training_faint(
+                        actions,
+                        reader,
+                        emulator,
+                        recipient_species_id=trainee.species_id,
+                        policy=policy,
+                        heal_and_return=current_venue.heal_and_return,
+                        excluded_helper_species=excluded_collection_helper_species,
+                    )
+                    healing_trips += 1
+                    required_recovery_trips += 1
+                    collection_recovery_pending = False
+                    record_flee("recovered ordinary wild training faint;no win or XP")
+                    continue
                 if not isinstance(error.__cause__, _PauseForTeamTrainingRecovery):
                     raise
-                if trainee_fights:
+                if trainee_fights and not (
+                    collection_shared_experience
+                    and isinstance(
+                        error.__cause__, _PauseForTrainingDisable | _PauseForTrainingHealth
+                    )
+                ):
                     direct_fight_suppressed_species.add(trainee.species_id)
+                # Unsupported attacks retain their suppression. Disable expires on
+                # escape; a health retreat is rechecked by the existing live HP,
+                # status,matchup and PP gates after recovery. Neither is a permanent
+                # inability to attack. Legacy noncollection behavior is unchanged.
+                health_retreat = isinstance(error.__cause__, _PauseForTrainingHealth)
                 current = reader.read()
                 if current.active_party_index != escort.slot - 1:
                     if escort_unsafe:
@@ -2335,7 +2635,11 @@ def run_red_team_balancing(
                         ) from error
                     if not switch_and_count(
                         target_index=escort.slot - 1,
-                        label="Blastoise PP-exhaustion escape escort",
+                        label=(
+                            "Blastoise health-reserve escape escort"
+                            if health_retreat
+                            else "Blastoise PP-exhaustion escape escort"
+                        ),
                     ):
                         require_zero_faints(party_reader, "terminal PP-exhaustion switch")
                         if not verify_collection_experience(trainee):
@@ -2346,7 +2650,11 @@ def run_red_team_balancing(
                         continue
                 selected = emit_decision(
                     TrainingControlAction.FLEE,
-                    "live attack PP was exhausted or disabled",
+                    (
+                        "live trainee health reached its recovery reserve"
+                        if health_retreat
+                        else "live attack PP was exhausted or disabled"
+                    ),
                     phase=TrainingControlPhase.BATTLE,
                     party=party_reader.read(),
                     progress=progress,
@@ -2354,11 +2662,27 @@ def run_red_team_balancing(
                     enemy_level=current.enemy_level,
                     fight_allowed=False,
                 )
-                require_safe_exit(selected, "live PP exhaustion or Disable")
+                require_safe_exit(
+                    selected,
+                    "live health reserve" if health_retreat else "live PP exhaustion or Disable",
+                )
                 flee_func(actions, reader, emulator, flee_run, flee_timing)
                 require_zero_faints(party_reader, "PP-exhaustion escape")
-                record_flee("live PP exhaustion or Disable")
+                record_flee(
+                    "live health reserve" if health_retreat else "live PP exhaustion or Disable"
+                )
                 continue
+            if recover_collection_faints and party_reader.read().fainted_count:
+                if healing_trips >= policy.max_healing_trips:
+                    raise RuntimeError("completed training faint exhausted the recovery budget")
+                recover_completed_collection_training_faint(
+                    actions, reader, emulator,
+                    recipient_species_id=trainee.species_id,
+                    heal_and_return=current_venue.heal_and_return,
+                )
+                healing_trips += 1
+                required_recovery_trips += 1
+                collection_recovery_pending = False
             require_zero_faints(party_reader, "completed training battle")
             if not verify_collection_experience(trainee):
                 continue

@@ -13,7 +13,7 @@ import math
 import os
 import re
 from collections.abc import Callable, Mapping
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from pathlib import Path
 from time import monotonic
 from typing import cast
@@ -39,6 +39,7 @@ from .red_integrated_play import (
     safe_route_setback,
     search_objective_key,
     settled_evolution_partial,
+    settled_evolution_zero_progress,
     settled_player_boundary,
     spending_bound,
 )
@@ -83,6 +84,9 @@ def _exception_chain(error: BaseException | None) -> list[dict[str, object]] | N
             reason_code = getattr(current, "reason", None)
         if isinstance(reason_code, str) and reason_code:
             row["reason_code"] = reason_code
+        settlement = getattr(current, "settlement_error_chain", None)
+        if type(settlement) is list:
+            row["settlement_error_chain"] = settlement[:8]
         rows.append(row)
         current = current.__cause__
     return rows
@@ -456,8 +460,21 @@ def run_autonomous_options(
     defer_unbound_preparation: bool = False,
     allow_singleton_parent_support: bool = False,
     associate_unique_combat: bool = False,
+    explore_outside_scope: bool = False,
+    explore_on_movement_recurrence: bool = False,
     initial_search_memory: GoalSearchMemory | None = None,
+    movement_revisit_saturation: bool = False,
+    collection_cost_frame_horizon: int | None = None,
     train_inference_scope=None,
+    train_selector_scope=None,
+    train_form_balanced_exploration: bool = False,
+    story_branch_head=None,
+    story_branch_exploration: float = 0.0,
+    story_branch_segment_lengths: tuple[int, int] | None = None,
+    story_milestone_commitment: bool = False,
+    story_kind_commitment: bool = False,
+    respect_combat_preparation_choice: bool = False,
+    story_kind_commitment_carrier=None,
 ) -> dict[str, object]:
     """Run up to N learned goals without a teacher action or resetting state.
 
@@ -473,6 +490,10 @@ def run_autonomous_options(
     may execute as labeled support. This does not confer training admission or
     native qualification; the environment must still enforce total input budgets.
     """
+    if type(movement_revisit_saturation) is not bool or (
+        movement_revisit_saturation and (not continuous_player or model.feature_version != 16)
+    ):
+        raise ValueError("movement saturation requires explicit V16 continuous scope")
     if type(seed) is not int or seed < 0:
         raise ValueError("autonomous seed must be a nonnegative integer")
     if initial_search_memory is not None and (
@@ -488,7 +509,54 @@ def run_autonomous_options(
         or not 0 <= exploration_mix <= 1
     ):
         raise ValueError("autonomous exploration mix must be finite within zero and one")
-    if exploration_mix != 0.25 and (
+    if type(train_form_balanced_exploration) is not bool or (
+        train_form_balanced_exploration
+        and (
+            not continuous_player
+            or source_context.get("partition") != "train"
+            or greedy_selection
+            or sequence_policy is not None
+            or consequence_head is not None
+            or allow_greedy_branch_recovery
+        )
+    ):
+        raise ValueError("form-balanced exploration requires a continuous TRAIN-only scope")
+    from .red_story_branch_value import StoryBranchHead
+    if (
+        (story_branch_head is not None and type(story_branch_head) is not StoryBranchHead)
+        or isinstance(story_branch_exploration, bool)
+        or not isinstance(story_branch_exploration, (int, float))
+        or not 0 <= story_branch_exploration <= 1
+        or ((story_branch_head is not None or story_branch_exploration > 0) and not continuous_player)
+        or (story_branch_exploration > 0 and source_context.get("partition") != "train")
+    ):
+        raise ValueError("story-branch child requires continuous scope; its exploration is TRAIN-only")
+    if story_branch_segment_lengths is not None and (
+        source_context.get("partition") != "train"
+        or not continuous_player
+        or type(story_branch_segment_lengths) is not tuple
+        or len(story_branch_segment_lengths) != 2
+        or any(type(v) is not int for v in story_branch_segment_lengths)
+        or not 1 <= story_branch_segment_lengths[0] <= story_branch_segment_lengths[1] <= 200
+    ):
+        raise ValueError("story-branch segments are TRAIN-only with an explicit length range")
+    if type(story_milestone_commitment) is not bool or (
+        story_milestone_commitment
+        and (not continuous_player or story_branch_segment_lengths is not None or story_branch_exploration > 0)
+    ):
+        raise ValueError("milestone story commitment requires continuous play without TRAIN segments or exploration")
+    if type(story_kind_commitment) is not bool or (story_kind_commitment and not story_milestone_commitment):
+        raise ValueError("kind-level story commitment requires milestone story commitment")
+    if type(respect_combat_preparation_choice) is not bool or (
+        respect_combat_preparation_choice and (not story_kind_commitment or source_context.get("partition") != "development")
+    ):
+        raise ValueError("combat preparation choice requires declared DEVELOPMENT story commitment")
+    if story_kind_commitment_carrier is not None:
+        from .red_story_kind_commitment import StoryKindCommitmentCarrier
+
+        if not story_kind_commitment or type(story_kind_commitment_carrier) is not StoryKindCommitmentCarrier:
+            raise ValueError("kind-level story commitment carrier requires the declared commitment")
+    if exploration_mix != 0.25 and not train_form_balanced_exploration and (
         not continuous_player
         or source_context.get("partition") != "development"
         or greedy_selection
@@ -537,19 +605,29 @@ def run_autonomous_options(
         defer_unbound_preparation=defer_unbound_preparation,
         allow_singleton_parent_support=allow_singleton_parent_support,
         associate_unique_combat=associate_unique_combat,
+        explore_outside_scope=explore_outside_scope,
+        explore_on_movement_recurrence=explore_on_movement_recurrence,
         source=source_context,
         model=model,
         head=consequence_head,
         objective_ref=consequence_objective_ref,
         challenge_ref=consequence_challenge_ref,
         train_inference_scope=train_inference_scope,
+        train_selector_scope=train_selector_scope,
+    )
+    if explore_on_movement_recurrence and movement_revisit_saturation is not True:
+        raise ValueError("recurrence escape requires observed movement history")
+    from .red_scoped_train_composition import validate_passive_train_sequence
+    passive_collection = train_inference and validate_passive_train_sequence(
+        train_selector_scope, getattr(sequence_collector, "horizon", None),
+        sequence_policy=sequence_policy,
     )
     if type(greedy_selection) is not bool or (
         greedy_selection
         and (
             not continuous_player
             or (source_context.get("partition") != "development" and not train_inference)
-            or sequence_collector is not None
+            or (sequence_collector is not None and not passive_collection)
             or sequence_policy is not None
             or (consequence_head is not None and not allow_greedy_branch_recovery)
         )
@@ -575,11 +653,14 @@ def run_autonomous_options(
             type(sequence_policy) is not SequencePolicy
             or sequence_collector is None
             or not continuous_player
-            or model.feature_version != 6
+            or model.feature_version != sequence_policy.head.feature_version
             or sequence_policy.baseline_sha256 != model.model_sha256
             or sequence_policy.head.horizon != sequence_collector.horizon
+            or sequence_policy.head.target_contract != sequence_collector.target_contract
         ):
             raise ValueError("sequence policy requires matching continuous model/history collector")
+    if sequence_policy is not None and sequence_policy.selection_mode in {"stable_recurrence", "stable_costly_recurrence"} and movement_revisit_saturation is not True:
+        raise ValueError("stable sequence recurrence requires observed movement history")
     if (consequence_head is None) != (consequence_challenge_ref is None):
         raise ValueError("consequence head and private context must accompany each other")
     if consequence_objective_ref is not None and (
@@ -601,7 +682,7 @@ def run_autonomous_options(
                 consequence_head.feature_version, model.feature_version
             )
             or sequence_policy is not None
-            or sequence_collector is not None
+            or (sequence_collector is not None and not passive_collection)
             or type(consequence_challenge_ref) is not str
             or not consequence_challenge_ref.strip()
         ):
@@ -627,6 +708,8 @@ def run_autonomous_options(
             defer_unbound_preparation=defer_unbound_preparation,
             allow_singleton_parent_support=allow_singleton_parent_support,
             associate_unique_combat=associate_unique_combat,
+            explore_outside_scope=explore_outside_scope,
+            explore_on_movement_recurrence=explore_on_movement_recurrence,
         )
     output.mkdir(mode=0o700, parents=False, exist_ok=False)
     _record(
@@ -671,7 +754,7 @@ def run_autonomous_options(
                     "production_train_consequence_inference": train_inference_scope.document(),
                     "production_train_consequence_inference_sha256": train_inference_scope.identity,
                 }
-                if train_inference
+                if train_inference and train_inference_scope is not None
                 else {}
             ),
             "teacher_actions_allowed": False,
@@ -679,22 +762,86 @@ def run_autonomous_options(
             "integrated_play": integrated_play,
             "continuous_player": continuous_player,
             **({"continue_safe_route_failures": True} if continue_safe_route_failures else {}),
+            **({"scoped_train_selector_inference": train_selector_scope.document(),
+                "scoped_train_selector_inference_sha256": train_selector_scope.identity}
+               if train_selector_scope is not None else {}),
             **({"greedy_selection": True} if greedy_selection else {}),
+            **(
+                {"train_form_balanced_exploration": True}
+                if train_form_balanced_exploration
+                else {}
+            ),
             **({"allow_greedy_branch_recovery": True} if allow_greedy_branch_recovery else {}),
             **({"refine_preparation": True} if refine_preparation else {}),
             **({"defer_unbound_preparation": True} if defer_unbound_preparation else {}),
             **({"allow_singleton_parent_support": True} if allow_singleton_parent_support else {}),
             **({"associate_unique_combat": True} if associate_unique_combat else {}),
+            **({"explore_outside_scope": True} if explore_outside_scope else {}),
+            **({"explore_on_movement_recurrence": True} if explore_on_movement_recurrence else {}),
+            **({"collection_cost_frame_horizon": collection_cost_frame_horizon}
+               if collection_cost_frame_horizon is not None else {}),
+            **(
+                {"story_branch_policy": dict(
+                    schema="pokemon.red.story-branch-policy.v1",
+                    head=None if story_branch_head is None else story_branch_head.document(),
+                    head_sha256=None if story_branch_head is None else story_branch_head.model_sha256,
+                    exploration_probability=float(story_branch_exploration),
+                    **({"segment_lengths": list(story_branch_segment_lengths)} if story_branch_segment_lengths is not None else {}),
+                    **({"milestone_commitment": True} if story_milestone_commitment else {}),
+                    **(
+                        {"kind_commitment": dict(
+                            schema="pokemon.red.story-kind-commitment.v1",
+                            rule="keep the story objective under way while the party is fit; release after 2 failed steps",
+                            **({"respect_combat_preparation_choice": True} if respect_combat_preparation_choice else {}),
+                        )}
+                        if story_kind_commitment
+                        else {}
+                    ),
+                    kind_level_authority=(model.model_sha256 if sequence_policy is None else sequence_policy.model_sha256),
+                    scope=(
+                        "story-vs-story, plus kind-level continuation of a fit, unfinished story objective"
+                        if story_kind_commitment
+                        else "story-vs-story only; kind-level choice unchanged"
+                    ),
+                )}
+                if story_branch_head is not None or story_branch_exploration > 0 or story_branch_segment_lengths is not None
+                or story_milestone_commitment
+                else {}
+            ),
             "maximum_cash_spent": maximum_cash_spent,
             "provenance": dict(provenance),
         },
     )
     if sequence_collector is not None:
         sequence_collector.start(output)
+    from .red_story_branch_value import (
+        StoryBranchTracker,
+        refine_story_branch,
+        segment_after_outcome,
+        tracker_after_outcome,
+    )
+    story_branch_enabled = (story_branch_head is not None or story_branch_exploration > 0
+                            or story_branch_segment_lengths is not None or story_milestone_commitment)
+    from .red_story_branch_value import STORY_MILESTONE_UNITS
+    segment_lengths_in_use = (
+        story_branch_segment_lengths if story_branch_segment_lengths is not None
+        else (STORY_MILESTONE_UNITS, STORY_MILESTONE_UNITS) if story_milestone_commitment else None
+    )
+    story_tracker = StoryBranchTracker()
+    story_segment = None
+    kind_commitment = (
+        story_kind_commitment_carrier.current
+        if story_kind_commitment and story_kind_commitment_carrier is not None
+        else None
+    )
     started = monotonic()
     outcomes: list[dict[str, object]] = []
     admission_failure = None
     stop = "decision_budget"
+    if collection_cost_frame_horizon is not None and (
+        type(collection_cost_frame_horizon) is not int or collection_cost_frame_horizon < 1 or not continuous_player
+    ):
+        raise ValueError("collection cost observation requires a positive continuous-player frame horizon")
     memory = initial_search_memory if initial_search_memory is not None else GoalSearchMemory()
     cash_spent = 0
     for ordinal in range(maximum_decisions):
@@ -783,6 +930,14 @@ def run_autonomous_options(
                 assert isinstance(options, RedLiveOptionSet)
                 objective = objective_key(before.facts)
                 options = menu_with_search_history(options, memory, objective)
+                survey = source_context.get("verified_preceding_fishing_survey") if ordinal == 0 else None
+                if survey is not None:
+                    from .red_fishing_survey_history import declared_survey_comparison, observe_rebound_effort
+                    if not continuous_player or not declared_survey_comparison(source_context):
+                        raise ValueError("same-site fishing comparison requires a continuous DEVELOPMENT copy")
+                    options, observation = observe_rebound_effort(options, before, survey)
+                    if observation is not None:
+                        _record(step / "observed-fishing-site-history.json", observation)
                 _record(
                     step / "search-memory-before.json",
                     {
@@ -795,10 +950,40 @@ def run_autonomous_options(
                         "memory": memory.private_dict(),
                     },
                 )
+            if movement_revisit_saturation and not isinstance(options, RedPlayerSupport):
+                from .red_movement_recurrence import menu_with_movement_history, movement_boundary
+                options = menu_with_movement_history(options, memory, before.facts)
+                _record(step / "movement-memory-before.json", dict(
+                    schema="pokemon.red.movement-recurrence-observation.v1",
+                    state_sha256=before.sha256, memory=memory.private_dict(),
+                    observed_boundary=movement_boundary(before.facts),
+                    binding_endpoints={b.binding_ref: b.movement_endpoint_sha256
+                                       for b in options.bindings
+                                       if b.movement_endpoint_sha256 is not None},
+                    policy="observed-endpoint-marginal-success-v1"))
+            collection_contexts = {}
+            if collection_cost_frame_horizon is not None and isinstance(options, RedLiveOptionSet):
+                from .collection_training_cost import menu_with_collection_costs
+
+                original_menu = options.menu.policy_sha256
+                options, quotes, collection_contexts = menu_with_collection_costs(
+                    options, memory, before.facts, collection_cost_frame_horizon)
+                _record(step / "collection-cost-before.json", dict(
+                    state_sha256=before.sha256, original_menu_sha256=original_menu,
+                    frame_horizon=collection_cost_frame_horizon, quotes=quotes, contexts=collection_contexts))
             if sequence_policy is not None and not isinstance(options, RedPlayerSupport):
                 sequence_context = sequence_collector.choice_context(
                     options, boundary_sha256=before.sha256
                 )
+                if sequence_policy.selection_mode == "stable_costly_recurrence":
+                    from dataclasses import replace
+                    from .red_costly_search_recurrence import search_contexts, witnesses
+                    costly_contexts = search_contexts(options, before.facts)
+                    _record(step / "costly-search-memory-before.json", dict(
+                        state_sha256=before.sha256, contexts=costly_contexts,
+                        memory=memory.private_dict()))
+                    sequence_context = replace(sequence_context, costly_search_witnesses=
+                                               witnesses(costly_contexts, memory, before.facts))
                 sequence_policy.validate_selection(
                     model,
                     options.menu,
@@ -822,6 +1007,15 @@ def run_autonomous_options(
             stop = "menu_unavailable"
             break
         decision_seed = int(canonical_sha256({"seed": seed, "ordinal": ordinal})[:16], 16)
+        parent_greedy = greedy_selection
+        child_scope_available = False
+        if explore_outside_scope and not isinstance(options, RedPlayerSupport):
+            from .red_consequence_choice import _branch_scope_available, branch_recovery_objectives
+
+            child_scope_available = _branch_scope_available(
+                options, branch_recovery_objectives(consequence_objective_ref)
+            )
+            parent_greedy = greedy_selection and child_scope_available
         _record(
             step / "intent.json",
             {
@@ -850,8 +1044,19 @@ def run_autonomous_options(
                 "private_selection_authority": record_selection_authority(
                     options,
                     allow_earning_exploration=continuous_player,
-                    greedy_selection=greedy_selection,
+                    greedy_selection=parent_greedy,
                 ),
+                **({"private_branch_sampling_policy": {
+                    "explore_outside_scope": True,
+                    "child_scope_available": child_scope_available,
+                    "declared_greedy_selection": greedy_selection,
+                    "effective_parent_greedy_selection": parent_greedy,
+                }} if explore_outside_scope else {}),
+                **({"private_recurrence_sampling_policy": {
+                    "explore_on_movement_recurrence": True,
+                    "trigger_rule": "greedy-selected-observed-unchanged-endpoint-v1",
+                    "declared_greedy_selection": greedy_selection,
+                }} if explore_on_movement_recurrence else {}),
             },
         )
         # Keep persistence adjacent to selection. No enum assertion, selected
@@ -886,6 +1091,8 @@ def run_autonomous_options(
                         defer_unbound_preparation=defer_unbound_preparation,
                         allow_singleton_parent_support=allow_singleton_parent_support,
                         associate_unique_combat=associate_unique_combat,
+                        explore_outside_scope=explore_outside_scope,
+                        explore_on_movement_recurrence=explore_on_movement_recurrence,
                         source_state_sha256=before.sha256,
                     )
                 )
@@ -911,6 +1118,11 @@ def run_autonomous_options(
                     allow_earning_exploration=True,
                     greedy_selection=greedy_selection,
                     **(
+                        {"form_balanced_exploration": True}
+                        if train_form_balanced_exploration
+                        else {}
+                    ),
+                    **(
                         dict(exploration_mix=float(exploration_mix))
                         if sequence_policy is None
                         else dict(
@@ -924,6 +1136,43 @@ def run_autonomous_options(
                 if continuous_player
                 else select_red_live_option(model, options, seed=decision_seed)
             )
+        deterministic_story_branch = False
+        if (
+            story_branch_enabled
+            and isinstance(choice, RedLiveOptionChoice)
+            and choice.mode in {RedLiveOptionSelectionMode.MODEL_GREEDY, RedLiveOptionSelectionMode.MODEL_EXPLORATION}
+            and choice.consequence_receipt_json is None
+            and (choice.branch_recovery is None
+                 or (choice.branch_recovery.child is None and choice.branch_recovery.unique_combat_witness is None))
+        ):
+            story_decision = refine_story_branch(
+                choice, head=story_branch_head, tracker=story_tracker,
+                exploration_probability=float(story_branch_exploration), seed=decision_seed,
+                **({"segment": story_segment, "segment_lengths": segment_lengths_in_use}
+                   if segment_lengths_in_use is not None else {}),
+            )
+            if story_decision is not None:
+                if segment_lengths_in_use is not None:
+                    story_segment = story_decision.segment
+                _record(step / "story-branch-private.json", dict(
+                    story_decision.document(),
+                    parent_choice=choice.public_dict(),
+                    tracker=story_tracker.document(),
+                    objective_refs=[options.binding(i).story_objective_ref for i in story_decision.story_indices],
+                ))
+                deterministic_story_branch = story_decision.deterministic_continuation
+                choice = story_decision.choice()
+        kind_receipt = None
+        if story_kind_commitment and kind_commitment is not None:
+            from .red_story_kind_commitment import commit_story_kind, commitment_after_choice
+
+            choice, kind_receipt = commit_story_kind(choice, kind_commitment,
+                **({"respect_combat_preparation_choice": True} if respect_combat_preparation_choice else {}))
+            if kind_receipt is not None:
+                _record(step / "story-kind-commitment.json", kind_receipt)
+                kind_commitment = commitment_after_choice(kind_commitment, kind_receipt)
+                if story_kind_commitment_carrier is not None:
+                    story_kind_commitment_carrier.current = kind_commitment
         if isinstance(choice, RedLiveOptionChoice):
             cash_receipt = choice.private_consequence_receipt()
             if cash_receipt is not None:
@@ -1054,11 +1303,25 @@ def run_autonomous_options(
             stop = "integrated_scope_or_spending_boundary"
             break
         if sequence_collector is not None:
-            sequence_collector.before_execution(
-                ordinal=ordinal,
-                boundary_sha256=before.sha256,
-                choice=choice,
-            )
+            try:
+                sequence_collector.before_execution(
+                    ordinal=ordinal,
+                    boundary_sha256=before.sha256,
+                    choice=choice,
+                )
+            except Exception as error:
+                # No input has started for this prepared choice. Retain every
+                # earlier closed outcome and stop; do not fabricate an executor
+                # result or let a collector error erase the episode closeout.
+                admission_failure = dict(
+                    error_type=type(error).__name__, error=str(error),
+                    error_chain=_exception_chain(error), failure_phase="sequence_collection",
+                )
+                _record(step / "admission-failure.json", admission_failure)
+                terminal = snapshot()
+                _write(step / "terminal.state", terminal.state)
+                stop = "sequence_collection_unavailable"
+                break
         _record(
             step / "execution-started.json",
             {
@@ -1152,8 +1415,11 @@ def run_autonomous_options(
                 "ordinal": ordinal,
                 "selected_kind": selected.kind.value,
                 "choice": choice.public_dict(),
-                "learning_eligible": choice.mode
-                in {
+                # A commitment may replace the model's kind choice. Its
+                # model_exploration mode is a legacy selection receipt, not
+                # evidence that the model chose the executed action.
+                "learning_eligible": not (deterministic_story_branch or (kind_receipt and kind_receipt.get("overridden") is True))
+                and choice.mode in {
                     RedLiveOptionSelectionMode.MODEL_EXPLORATION,
                     RedLiveOptionSelectionMode.MODEL_GREEDY,
                 },
@@ -1166,6 +1432,8 @@ def run_autonomous_options(
                     if deterministic_support
                     else "equivalent_goal_exploration"
                     if choice.mode is RedLiveOptionSelectionMode.EQUIVALENT_EXPLORATION
+                    else "deterministic_story_continuation"
+                    if deterministic_story_branch or (kind_receipt and kind_receipt.get("overridden") is True)
                     else None
                 ),
                 "before_state_sha256": before.sha256,
@@ -1210,6 +1478,25 @@ def run_autonomous_options(
             outcome["elapsed_seconds"] = monotonic() - execution_started
             _record(step / "outcome.json", outcome)
             outcomes.append(outcome)
+            if collection_cost_frame_horizon is not None and selected.binding_ref in collection_contexts:
+                from .collection_training_cost import measured_training_cost
+
+                context = collection_contexts[selected.binding_ref]
+                observation = measured_training_cost(outcome, context["transition"])
+                if observation is not None:
+                    memory.record_collection_training_cost(context["key"], observation)
+                    _record(step / "collection-cost-after.json", dict(
+                        state_sha256=terminal.sha256, context_sha256=context["key"],
+                        observed=asdict(observation), outcome_sha256=canonical_sha256(outcome)))
+            if story_branch_enabled:
+                story_tracker = tracker_after_outcome(story_tracker, selected, outcome)
+                story_segment = segment_after_outcome(story_segment, selected, outcome)
+            if story_kind_commitment:
+                from .red_story_kind_commitment import commitment_after_outcome
+
+                kind_commitment = commitment_after_outcome(kind_commitment, selected, outcome)
+                if story_kind_commitment_carrier is not None:
+                    story_kind_commitment_carrier.current = kind_commitment
             if sequence_collector is not None:
                 sequence_collector.after_outcome(outcome)
         if continuous_player and counters is not None:
@@ -1252,7 +1539,8 @@ def run_autonomous_options(
             if maximum_cash_spent is not None and cash_spent > maximum_cash_spent:
                 stop = "continuous_spending_exceeded"
                 break
-            if ordinary_setback and settled_evolution_partial(selected, report):
+            if ordinary_setback and (settled_evolution_partial(selected, report)
+                    or settled_evolution_zero_progress(selected, report)):
                 # Its measured dose reserved enough inputs to return the party.
                 # Renew the finite execution port before offering another goal;
                 # do not spend that return reserve starting a second PC loan.
@@ -1276,6 +1564,11 @@ def run_autonomous_options(
                 stop = "unaccounted_search_cost"
                 break
             selected_objective = search_objective_key(selected, objective_key(before.facts))
+            if sequence_policy is not None and sequence_policy.selection_mode == "stable_costly_recurrence":
+                from .red_costly_search_recurrence import record_failure, search_contexts
+                from types import SimpleNamespace
+                selected_context = search_contexts(SimpleNamespace(bindings=(selected,)), before.facts)[0]
+                record_failure(memory, selected_context, before, terminal, report, verification, execution_error)
             memory.record(
                 selected.search_memory_source,
                 selected_objective,
@@ -1293,6 +1586,26 @@ def run_autonomous_options(
                     "cumulative_cash_spent": cash_spent,
                 },
             )
+        if movement_revisit_saturation and settled_player_boundary(terminal):
+            from .player_option_story_unit import OptionStoryUnit
+            from .red_movement_recurrence import observe_movement_boundary, record_movement_return
+            recurrence = (record_movement_return(memory, before.facts, terminal.facts)
+                          if selected.story_unit == OptionStoryUnit("movement", True)
+                          else None)
+            observe_movement_boundary(memory, terminal.facts)
+            if story_kind_commitment and recurrence is not None:
+                from .red_story_kind_commitment import commitment_after_movement_return
+
+                kind_commitment = commitment_after_movement_return(kind_commitment, recurrence)
+                if story_kind_commitment_carrier is not None:
+                    story_kind_commitment_carrier.current = kind_commitment
+            if recurrence is not None:
+                _record(step / "movement-memory-after.json", dict(
+                    state_sha256=terminal.sha256, memory=memory.private_dict(),
+                    recurrence=recurrence, outcome_sha256=canonical_sha256(outcome)))
+                if recurrence["stop_required"]:
+                    stop = "repeated_movement_without_progress"
+                    break
         # A declared consequence is an administrative stop after the admitted
         # outcome. Preserve its measured feedback before closing the segment.
         if stop_after_outcome is not None and stop_after_outcome():

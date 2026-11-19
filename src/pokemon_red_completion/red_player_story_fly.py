@@ -22,7 +22,7 @@ from .red_player_field_goals import _field_ready
 from .red_player_fly import _noncombat_fly_world
 from .red_player_lesson import capture_player_lesson_snapshot
 from .red_resource_goal_router import _supported_plan
-from .red_story_map_frontier import story_frontier_target
+from .red_story_map_frontier import story_frontier_plan
 from .route_plan import RoutePlanningError
 
 # Existing collection flight compiler's conservative action allowance. This is
@@ -145,7 +145,18 @@ def story_fly_binding(
     chosen = None
     for distance, town, projected in sorted(candidates, key=lambda item: item[:2]):
         try:
-            target, at = story_frontier_target(world, projected, final_destination)
+            if projected.map_id == final_destination:
+                target, at = final_destination, projected.at
+            else:
+                onward_plan = story_frontier_plan(world, projected, final_destination)
+                # A topology shortcut can be blocked by native capabilities.
+                # The feasible relevance route must not undo the flight by
+                # returning through its departure map. Leave ordinary walking
+                # available instead; do not force or suppress any goal kind.
+                if start.map_id in onward_plan.macro_path.maps:
+                    continue
+                edge = next(s for s in onward_plan.steps if s.expected_map != projected.map_id)
+                target, at = edge.expected_map, edge.expected_at
             plan = world.plan_feasible_to_map(projected, target, goal_at=at)
         except (RoutePlanningError, GlobalRouterError):
             continue
@@ -277,6 +288,11 @@ def story_fly_binding(
         story_objective_ref=objective_id,
         story_approach_only=not completes,
         story_unit=OptionStoryUnit("movement", not completes),
+        # The existing revisit rule needs the actual quoted landing, not the
+        # state-specific binding identity or the later strategic destination.
+        movement_endpoint_sha256=(
+            canonical_sha256(dict(map=town, at=landing)) if not completes else None
+        ),
     )
 
 
@@ -294,17 +310,26 @@ def _indoor_departure_binding(
     onward_at,
 ):
     """Reuse real walking for the exit; the projected flight has no executor."""
-    from .red_player_story_travel import story_travel_binding
-
-    walking = story_travel_binding(
-        runtime,
-        actions,
-        objective_id=objective_id,
-        route=route,
-        intermediate_map=departure.terminal_map,
-        stop_at_map_boundary=False,
-        certify_cash_approach=True,
+    from .red_player_story_travel import (
+        StoryIntermediateBoundaryUnavailable,
+        story_travel_binding,
     )
+
+    try:
+        walking = story_travel_binding(
+            runtime,
+            actions,
+            objective_id=objective_id,
+            route=route,
+            intermediate_map=departure.terminal_map,
+            stop_at_map_boundary=False,
+            certify_cash_approach=True,
+        )
+    except StoryIntermediateBoundaryUnavailable:
+        # A two-exit interior can quote a flight departure outside the walking
+        # corridor. This unsupported prefix is unavailable; the caller retains
+        # its ordinary ground/frontier choices and their original checks.
+        return None
     if (
         walking is None
         or walking.maximum_cash_debit != 0

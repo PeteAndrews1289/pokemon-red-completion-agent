@@ -40,10 +40,22 @@ _NATIVE_STORAGE_MARKER = ".native-input-storage.json"
 _FLAT_NATIVE_STORAGE = "flat_sealed_v1"
 _FLAT_NATIVE_SUFFIX = ".sealed.jsonl"
 _MAX_FLAT_NATIVE_HEADER_BYTES = 4096
+# Packed storage keeps every sealed native record byte-for-byte (same manifest,
+# payload and digests) but appends them to a few hash-chained segment files
+# instead of creating one file per record.  It is prospective only: a journal
+# declares it when created, and flat or directory journals are never converted.
+_PACKED_NATIVE_STORAGE = "packed_sealed_v1"
+_NATIVE_STORAGE_MODES = (_FLAT_NATIVE_STORAGE, _PACKED_NATIVE_STORAGE)
+_PACKED_SEGMENT_NAME = re.compile(r"native-journal-[0-9a-f]{32}\.packed\.jsonl\Z")
+_PACKED_FRAME_FORMAT = "pokemon-red-completion-packed-native-frame"
+_PACKED_GENESIS = "0" * 64
+_MAX_PACKED_FRAME_HEADER_BYTES = 1024
+_MAX_PACKED_SEGMENT_BYTES = 64 * 1024 * 1024
 _NATIVE_INPUT_KINDS = {
     "rnl-action-": "red_native_lesson_action",
     "rnl-trace-": "red_native_lesson_trace",
     "rnp-diagnostic-": "red_native_player_diagnostic",
+    "rno-": "red_native_press_observation",
 }
 
 
@@ -350,6 +362,7 @@ class PrivateArtifactRoot:
         "_device_id",
         "_git_worktree_probe",
         "_native_input_storage",
+        "_packed",
         "_repository_root",
         "_root",
     )
@@ -370,9 +383,33 @@ class PrivateArtifactRoot:
         self._device_id = device_id
         self._git_worktree_probe = git_worktree_probe
         self._native_input_storage = _read_native_input_storage(root, expected=native_input_storage)
+        self._packed = (
+            _PackedNativeJournal(root)
+            if self._native_input_storage == _PACKED_NATIVE_STORAGE
+            else None
+        )
 
     def __repr__(self) -> str:
         return "PrivateArtifactRoot(validated=True)"
+
+    @property
+    def records_press_observations(self) -> bool:
+        """Per-press cartridge observations are recorded only in packed journals.
+
+        They add one record per press; packed storage makes that a line, not a file.
+        """
+
+        return self._packed is not None
+
+    @property
+    def supports_journal_backed_diagnostics(self) -> bool:
+        """Keep diagnostic payloads in authenticated flat or packed sealed storage.
+
+        This does not enable per-press observations in flat storage. Every lazy
+        read still passes through find_sealed_record and its ordinary verifier.
+        """
+
+        return self._native_input_storage in (_FLAT_NATIVE_STORAGE, _PACKED_NATIVE_STORAGE)
 
     def collection_session(self, collection_id: str) -> CollectionSession:
         """Return an exclusive collection session without exposing its lock location."""
@@ -425,6 +462,8 @@ class PrivateArtifactRoot:
             and kind in _NATIVE_INPUT_KINDS.values()
         ):
             return _publish_flat_native_record(self._root, record_id, kind=kind, payload=payload)
+        if self._packed is not None and kind in _NATIVE_INPUT_KINDS.values():
+            return self._packed.publish(record_id, kind=kind, payload=payload)
 
         temporary = self._root / (f".{record_id}.sealed-{uuid.uuid4().hex}.partial")
         final = self._root / record_id
@@ -482,6 +521,10 @@ class PrivateArtifactRoot:
             _validate_artifact_kind(expected_kind)
         self._revalidate()
         flat = self._root / (record_id + _FLAT_NATIVE_SUFFIX)
+        if self._packed is not None and self._packed.locate(record_id) is not None:
+            if _lexists(flat) or _lexists(self._root / record_id):
+                raise PrivateArtifactError("native record storage is ambiguous or undeclared")
+            return self._packed.open(record_id, expected_kind=expected_kind)
         if _lexists(flat):
             if self._native_input_storage != _FLAT_NATIVE_STORAGE or _lexists(
                 self._root / record_id
@@ -527,7 +570,13 @@ class PrivateArtifactRoot:
             for record_id in identifiers:
                 flat = _entry_metadata(descriptor, record_id + _FLAT_NATIVE_SUFFIX)
                 directory = _entry_metadata(descriptor, record_id)
-                if flat is not None:
+                if self._packed is not None and self._packed.locate(record_id) is not None:
+                    if flat is not None or directory is not None:
+                        raise PrivateArtifactError(
+                            "native record storage is ambiguous or undeclared"
+                        )
+                    record = self._packed.open(record_id, expected_kind=expected_kind)
+                elif flat is not None:
                     if self._native_input_storage != _FLAT_NATIVE_STORAGE or directory is not None:
                         raise PrivateArtifactError(
                             "native record storage is ambiguous or undeclared"
@@ -585,6 +634,10 @@ class PrivateArtifactRoot:
             _validate_artifact_kind(expected_kind)
         self._revalidate()
         flat = self._root / (record_id + _FLAT_NATIVE_SUFFIX)
+        if self._packed is not None and self._packed.locate(record_id) is not None:
+            if _lexists(flat) or _lexists(self._root / record_id):
+                raise PrivateArtifactError("native record storage is ambiguous or undeclared")
+            return self._packed.metadata(record_id, expected_kind=expected_kind)
         if _lexists(flat):
             if self._native_input_storage != _FLAT_NATIVE_STORAGE or _lexists(
                 self._root / record_id
@@ -625,7 +678,16 @@ class PrivateArtifactRoot:
             if self._native_input_storage == _FLAT_NATIVE_STORAGE
             else {}
         )
-        before = _inventory_digest_record_ids(self._root, record_id_prefix, **inventory_options)
+        def census() -> tuple[str, ...]:
+            listed = _inventory_digest_record_ids(self._root, record_id_prefix, **inventory_options)
+            if self._packed is None:
+                return listed
+            packed = self._packed.record_ids(record_id_prefix)
+            if set(packed) & set(listed):
+                raise PrivateArtifactError("sealed record storage has duplicate identities")
+            return tuple(sorted(listed + packed))
+
+        before = census()
         if len(before) > maximum_records:
             raise PrivateArtifactError("sealed record inventory exceeds its bound")
         rows = []
@@ -636,7 +698,7 @@ class PrivateArtifactRoot:
             rows.append(metadata)
         records = tuple(rows)
         self._revalidate()
-        after = _inventory_digest_record_ids(self._root, record_id_prefix, **inventory_options)
+        after = census()
         if after != before:
             raise PrivateArtifactError("sealed record inventory changed during inspection")
         return records
@@ -2023,38 +2085,35 @@ def open_private_root(
     )
 
 
-def _native_input_storage_bytes() -> bytes:
+def _native_input_storage_bytes(mode: str = _FLAT_NATIVE_STORAGE) -> bytes:
     return _canonical_json_line(
         {
             "schema": "pokemon.native-input-storage.v1",
-            "native_input_storage": _FLAT_NATIVE_STORAGE,
+            "native_input_storage": mode,
         }
     )
 
 
 def _read_native_input_storage(root: Path, *, expected: str | None = None) -> str | None:
-    if expected is not None and expected != _FLAT_NATIVE_STORAGE:
+    if expected is not None and expected not in _NATIVE_STORAGE_MODES:
         raise PrivateArtifactError("native input storage mode is unsupported")
     marker = root / _NATIVE_STORAGE_MARKER
     mode = None
     if _lexists(marker):
+        declarations = {_native_input_storage_bytes(value): value for value in _NATIVE_STORAGE_MODES}
         descriptor = os.open(root, _directory_read_flags())
         try:
-            data = _native_input_storage_bytes()
-            if (
-                _read_private_entry(
-                    descriptor,
-                    _NATIVE_STORAGE_MARKER,
-                    subject="native input storage declaration",
-                    maximum_bytes=len(data),
-                    expected_bytes=len(data),
-                )
-                != data
-            ):
-                raise PrivateArtifactError("native input storage declaration is invalid")
+            data = _read_private_entry(
+                descriptor,
+                _NATIVE_STORAGE_MARKER,
+                subject="native input storage declaration",
+                maximum_bytes=max(len(value) for value in declarations),
+            )
         finally:
             os.close(descriptor)
-        mode = _FLAT_NATIVE_STORAGE
+        mode = declarations.get(data)
+        if mode is None:
+            raise PrivateArtifactError("native input storage declaration is invalid")
     if expected is not None and mode != expected:
         raise PrivateArtifactError("native input storage declaration is missing or different")
     return mode
@@ -2064,7 +2123,7 @@ def _initialize_native_input_storage(root: Path, mode: str | None) -> None:
     if mode is None:
         _read_native_input_storage(root)
         return
-    if mode != _FLAT_NATIVE_STORAGE:
+    if mode not in _NATIVE_STORAGE_MODES:
         raise PrivateArtifactError("native input storage mode is unsupported")
     if _lexists(root / _NATIVE_STORAGE_MARKER):
         _read_native_input_storage(root, expected=mode)
@@ -2072,9 +2131,367 @@ def _initialize_native_input_storage(root: Path, mode: str | None) -> None:
     # This is prospective recording, never an in-place conversion of an old run.
     with os.scandir(root) as entries:
         if any(entry.name != PRIVATE_ROOT_SENTINEL for entry in entries):
-            raise PrivateArtifactError("flat native input recording requires a new empty journal")
-    _write_exclusive_file(root / _NATIVE_STORAGE_MARKER, _native_input_storage_bytes(), mode=0o600)
+            raise PrivateArtifactError(
+                f"{mode.split('_', 1)[0]} native input recording requires a new empty journal"
+            )
+    _write_exclusive_file(
+        root / _NATIVE_STORAGE_MARKER, _native_input_storage_bytes(mode), mode=0o600
+    )
     _fsync_directory(root)
+
+
+class _PackedNativeJournal:
+    """Append-only, hash-chained segments holding exact sealed native records.
+
+    Each frame is one canonical header line followed by the very manifest and
+    payload bytes a flat record file would contain.  The header binds the body
+    digest, a per-segment sequence and the previous frame digest, so a changed,
+    removed or reordered frame fails closed.  Publication returns only after the
+    frame is fsynced, keeping the write-ahead guarantee of flat records.  A frame
+    that is incomplete at the very end of a segment was never acknowledged (its
+    writer failed or died); it is ignored, and later frames go to a new segment.
+
+    Memory: native runs execute under a cgroup memory ceiling, so the index is
+    one small integer per record keyed by a 16-byte identity digest (every open
+    re-checks the full manifest identity), and segment bytes are dropped from the
+    page cache after each write or read, as flat records already are.
+    """
+
+    __slots__ = ("_index", "_root", "_scanned", "_segments", "_writer")
+
+    def __init__(self, root: Path) -> None:
+        self._root = root
+        self._segments: list[str] = []
+        self._index: dict[bytes, int] = {}
+        self._scanned: dict[str, tuple[int, str, int]] = {}
+        self._writer: list[object] | None = None  # [name, descriptor, offset, previous, sequence]
+
+    # -- compact index -------------------------------------------------------------
+    @staticmethod
+    def _key(record_id: str) -> bytes:
+        return hashlib.sha256(record_id.encode("ascii")).digest()[:16]
+
+    def _add(self, record_id: str, name: str, offset: int, manifest_bytes: int, payload_bytes: int) -> None:
+        key = self._key(record_id)
+        if key in self._index:
+            raise PrivateArtifactError("sealed record storage has duplicate identities")
+        if name not in self._segments:
+            self._segments.append(name)
+        number = self._segments.index(name)
+        self._index[key] = (number << 74) | (offset << 34) | (manifest_bytes << 21) | payload_bytes
+
+    def _unpack(self, location: int) -> tuple[str, int, int, int]:
+        return (
+            self._segments[location >> 74],
+            (location >> 34) & ((1 << 40) - 1),
+            (location >> 21) & ((1 << 13) - 1),
+            location & ((1 << 21) - 1),
+        )
+
+    # -- reading -----------------------------------------------------------------
+    def _segment_names(self) -> list[str]:
+        try:
+            entries = os.listdir(self._root)
+        except OSError:
+            raise PrivateArtifactError("unable to inventory packed native segments") from None
+        names = sorted(entry for entry in entries if entry.startswith("native-journal-"))
+        for name in names:
+            if _PACKED_SEGMENT_NAME.fullmatch(name) is None:
+                raise PrivateArtifactError("packed native segment name is invalid")
+        return names
+
+    def _scan(self) -> None:
+        own = None if self._writer is None else self._writer[0]
+        for name in self._segment_names():
+            if name != own:
+                self._scan_segment(name)
+
+    def _read_segment(self, name: str, offset: int, length: int | None) -> bytes:
+        descriptor = -1
+        try:
+            descriptor = os.open(self._root / name, _regular_file_read_flags())
+            metadata = os.fstat(descriptor)
+            _validate_packed_segment_metadata(metadata)
+            if length is None:
+                if metadata.st_size < offset:
+                    raise PrivateArtifactError("packed native segment shrank")
+                length = metadata.st_size - offset
+            data = os.pread(descriptor, length, offset) if length else b""
+            _drop_cached_range(descriptor, offset, length)
+            return data
+        except PrivateArtifactError:
+            raise
+        except OSError:
+            raise PrivateArtifactError("unable to read a packed native segment") from None
+        finally:
+            if descriptor >= 0:
+                with suppress(OSError):
+                    os.close(descriptor)
+
+    def _scan_segment(self, name: str) -> None:
+        offset, previous, sequence = self._scanned.get(name, (0, _PACKED_GENESIS, 0))
+        try:
+            current = os.stat(self._root / name, follow_symlinks=False)
+        except OSError:
+            raise PrivateArtifactError("unable to inspect a packed native segment") from None
+        _validate_packed_segment_metadata(current)
+        if current.st_size == offset:
+            return
+        data = self._read_segment(name, offset, None)
+        position = 0
+        while position < len(data):
+            newline = data.find(b"\n", position, position + _MAX_PACKED_FRAME_HEADER_BYTES)
+            if newline < 0:
+                if len(data) - position < _MAX_PACKED_FRAME_HEADER_BYTES:
+                    break  # unacknowledged torn tail
+                raise PrivateArtifactError("packed native frame header exceeds its bound")
+            header_bytes = data[position : newline + 1]
+            manifest_bytes, payload_bytes, digest = _packed_frame_lengths(
+                header_bytes, previous=previous, sequence=sequence
+            )
+            end = newline + 1 + manifest_bytes + payload_bytes
+            if end > len(data):
+                break  # unacknowledged torn tail
+            body = data[newline + 1 : end]
+            if hashlib.sha256(body).hexdigest() != digest:
+                raise PrivateArtifactError("packed native frame failed its integrity check")
+            record_id, _, _ = _packed_record_identity(body[:manifest_bytes], body[manifest_bytes:])
+            self._add(record_id, name, offset + newline + 1, manifest_bytes, payload_bytes)
+            previous = hashlib.sha256(header_bytes + body).hexdigest()
+            sequence += 1
+            position = end
+        self._scanned[name] = (offset + position, previous, sequence)
+
+    def locate(self, record_id: str) -> int | None:
+        key = self._key(record_id)
+        if key not in self._index:
+            self._scan()
+        return self._index.get(key)
+
+    def record_ids(self, prefix: str) -> tuple[str, ...]:
+        """Inventory reads manifests again instead of keeping every identity in memory."""
+        self._scan()
+        found = []
+        for name in list(self._segments):
+            limit = self._scanned.get(name, (0,))[0]
+            if self._writer is not None and name == self._writer[0]:
+                limit = int(self._writer[2])
+            data, position = self._read_segment(name, 0, limit), 0
+            while position < len(data):
+                newline = data.find(b"\n", position)
+                header = json.loads(data[position : newline + 1])
+                start = newline + 1
+                manifest = json.loads(data[start : start + header["manifest_bytes"]])
+                record_id = manifest["record_id"]
+                if record_id.startswith(prefix):
+                    if _SHA256.fullmatch(record_id.removeprefix(prefix)) is None:
+                        raise PrivateArtifactError("sealed record inventory family is malformed")
+                    found.append(record_id)
+                position = start + header["manifest_bytes"] + header["payload_bytes"]
+        return tuple(sorted(found))
+
+    def _verified(self, record_id: str, expected_kind: str | None):
+        location = self.locate(record_id)
+        if location is None:
+            raise PrivateArtifactError("packed native record is absent")
+        name, offset, manifest_bytes, payload_bytes = self._unpack(location)
+        body = self._read_segment(name, offset, manifest_bytes + payload_bytes)
+        if len(body) != manifest_bytes + payload_bytes:
+            raise PrivateArtifactError("packed native record changed after validation")
+        manifest, payload = body[:manifest_bytes], body[manifest_bytes:]
+        found, kind, record_sha256 = _packed_record_identity(manifest, payload)
+        if found != record_id:
+            raise PrivateArtifactError("packed native record identity changed after validation")
+        if expected_kind is not None and kind != expected_kind:
+            raise PrivateArtifactError("sealed private record kind does not match")
+        return manifest, payload, kind, record_sha256
+
+    def open(self, record_id: str, *, expected_kind: str | None) -> PrivateSealedRecord:
+        manifest, payload, kind, record_sha256 = self._verified(record_id, expected_kind)
+        return PrivateSealedRecord(
+            payload=payload,
+            summary=SealedRecordSummary(
+                record_id=record_id,
+                kind=kind,
+                record_sha256=record_sha256,
+                manifest_sha256=hashlib.sha256(manifest).hexdigest(),
+                total_bytes=len(payload),
+            ),
+        )
+
+    def metadata(self, record_id: str, *, expected_kind: str | None) -> SealedRecordManifestMetadata:
+        manifest, payload, kind, record_sha256 = self._verified(record_id, expected_kind)
+        return SealedRecordManifestMetadata(
+            record_id=record_id,
+            kind=kind,
+            declared_record_sha256=record_sha256,
+            manifest_sha256=hashlib.sha256(manifest).hexdigest(),
+            declared_total_bytes=len(payload),
+        )
+
+    # -- writing -----------------------------------------------------------------
+    def _open_writer(self, frame_bytes: int) -> list[object]:
+        writer = self._writer
+        if writer is not None and int(writer[2]) + frame_bytes <= _MAX_PACKED_SEGMENT_BYTES:
+            return writer
+        self._close_writer()
+        name = f"native-journal-{uuid.uuid4().hex}.packed.jsonl"
+        flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_APPEND
+        for option in ("O_CLOEXEC", "O_NOFOLLOW"):
+            flags |= getattr(os, option, 0)
+        try:
+            descriptor = os.open(self._root / name, flags, _PRIVATE_FILE_MODE)
+        except OSError:
+            raise PrivateArtifactError("unable to create a packed native segment") from None
+        try:
+            os.fchmod(descriptor, _PRIVATE_FILE_MODE)
+            fcntl.flock(descriptor, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            _fsync_directory(self._root)
+        except BaseException:
+            with suppress(OSError):
+                os.close(descriptor)
+            raise
+        self._writer = [name, descriptor, 0, _PACKED_GENESIS, 0]
+        if name not in self._segments:
+            self._segments.append(name)
+        return self._writer
+
+    def _close_writer(self) -> None:
+        writer, self._writer = self._writer, None
+        if writer is not None:
+            name, descriptor, offset, previous, sequence = writer
+            with suppress(OSError):
+                os.close(int(descriptor))
+            self._scanned[str(name)] = (int(offset), str(previous), int(sequence))
+
+    def publish(self, record_id: str, *, kind: str, payload: bytes) -> PrivateSealedRecord:
+        _require_native_input_identity(record_id, kind)
+        if self.locate(record_id) is not None:
+            existing = self.open(record_id, expected_kind=kind)
+            if existing.read_bytes() == payload:
+                return existing
+            raise PrivateArtifactError("packed native record already has different bytes")
+        manifest = _canonical_json_line(
+            dict(
+                bytes=len(payload),
+                format=PRIVATE_SEALED_RECORD_FORMAT,
+                kind=kind,
+                record_id=record_id,
+                record_sha256=hashlib.sha256(payload).hexdigest(),
+                schema_version=PRIVATE_ARTIFACT_SCHEMA_VERSION,
+                status="complete",
+            )
+        )
+        if len(manifest) > _MAX_FLAT_NATIVE_HEADER_BYTES:
+            raise PrivateArtifactError("packed native record manifest exceeds its bound")
+        body = manifest + payload
+        writer = self._open_writer(_MAX_PACKED_FRAME_HEADER_BYTES + len(body))
+        name, descriptor, offset, previous, sequence = writer
+        header = _canonical_json_line(
+            dict(
+                format=_PACKED_FRAME_FORMAT,
+                manifest_bytes=len(manifest),
+                payload_bytes=len(payload),
+                previous=previous,
+                sequence=sequence,
+                sha256=hashlib.sha256(body).hexdigest(),
+            )
+        )
+        frame = header + body
+        try:
+            view = memoryview(frame)
+            while view:
+                written = os.write(int(descriptor), view)
+                if written <= 0:
+                    raise OSError("short packed native write")
+                view = view[written:]
+            # Inputs, traces and diagnostics keep fsync-before-return.  A press
+            # observation is after-the-fact data, not a write-ahead intent: it is
+            # made durable by the next record's fsync (which flushes the whole
+            # segment), so a crash can lose at most that final observation.
+            if kind != "red_native_press_observation":
+                os.fsync(int(descriptor))
+        except OSError:
+            # The segment may now end in an unacknowledged torn frame; never append after it.
+            # Its scan position stays at the last acknowledged frame, so readers skip the tail.
+            self._close_writer()
+            raise PrivateArtifactError("unable to publish the packed native record") from None
+        self._add(record_id, str(name), int(offset) + len(header), len(manifest), len(payload))
+        writer[2] = int(offset) + len(frame)
+        writer[3] = hashlib.sha256(frame).hexdigest()
+        writer[4] = int(sequence) + 1
+        record = self.open(record_id, expected_kind=kind)
+        _drop_cached_range(int(descriptor), int(offset), len(frame))
+        return record
+
+
+def _drop_cached_range(descriptor: int, offset: int, length: int) -> None:
+    """Best-effort page-cache advice for durable, validated journal bytes (never fails gameplay)."""
+    advise = getattr(os, "posix_fadvise", None)
+    if advise is None or length <= 0:
+        return
+    with suppress(OSError):
+        advise(descriptor, offset, length, os.POSIX_FADV_DONTNEED)
+
+
+def _validate_packed_segment_metadata(metadata: os.stat_result) -> None:
+    _require_current_owner(metadata, subject="packed native segment")
+    if not stat.S_ISREG(metadata.st_mode):
+        raise PrivateArtifactError("packed native segment is not a regular file")
+    if stat.S_IMODE(metadata.st_mode) != _PRIVATE_FILE_MODE:
+        raise PrivateArtifactError("packed native segment permissions are unsafe")
+    if metadata.st_nlink != 1:
+        raise PrivateArtifactError("packed native segment has an unsafe link count")
+
+
+def _packed_frame_lengths(
+    header_bytes: bytes, *, previous: str, sequence: int
+) -> tuple[int, int, str]:
+    header = _decode_canonical_json_object(
+        header_bytes, subject="packed native frame header", maximum_bytes=_MAX_PACKED_FRAME_HEADER_BYTES
+    )
+    _require_exact_keys(
+        header,
+        {"format", "manifest_bytes", "payload_bytes", "previous", "sequence", "sha256"},
+        subject="packed native frame header",
+    )
+    if header["format"] != _PACKED_FRAME_FORMAT:
+        raise PrivateArtifactError("packed native frame format is unsupported")
+    if header["previous"] != previous or header["sequence"] != sequence:
+        raise PrivateArtifactError("packed native frame chain is broken")
+    if not isinstance(header["sha256"], str) or _SHA256.fullmatch(header["sha256"]) is None:
+        raise PrivateArtifactError("packed native frame digest is invalid")
+    manifest_bytes = header["manifest_bytes"]
+    payload_bytes = header["payload_bytes"]
+    for value, bound in (
+        (manifest_bytes, _MAX_FLAT_NATIVE_HEADER_BYTES),
+        (payload_bytes, _MAX_SEALED_RECORD_BYTES),
+    ):
+        if type(value) is not int or not 0 < value <= bound:  # noqa: E721
+            raise PrivateArtifactError("packed native frame length is invalid")
+    return manifest_bytes, payload_bytes, header["sha256"]
+
+
+def _packed_record_identity(manifest: bytes, payload: bytes) -> tuple[str, str, str]:
+    declared = _decode_canonical_json_object(
+        manifest, subject="sealed record manifest", maximum_bytes=_MAX_MANIFEST_BYTES
+    )
+    record_id = declared.get("record_id")
+    if not isinstance(record_id, str):
+        raise PrivateArtifactError("sealed private record identity is invalid")
+    _validate_artifact_id(record_id)
+    kind, size, record_sha256 = _sealed_record_manifest_fields(
+        manifest, record_id=record_id, expected_kind=None
+    )
+    _require_native_input_identity(record_id, kind)
+    if size != len(payload) or hashlib.sha256(payload).hexdigest() != record_sha256:
+        raise PrivateArtifactError("packed native payload failed its integrity check")
+    value = _decode_canonical_json_object(
+        payload, subject="packed native payload", maximum_bytes=_sealed_record_maximum_bytes(kind)
+    )
+    if _canonical_record(value) != payload:
+        raise PrivateArtifactError("packed native record contains unsafe values")
+    return record_id, kind, record_sha256
 
 
 def _require_native_input_identity(record_id: str, kind: str) -> None:
@@ -2118,13 +2535,43 @@ def _publish_flat_native_record(
         existing = _open_flat_native_record(root, record_id, expected_kind=kind)
         if existing.read_bytes() == payload:
             _fsync_directory(root)
+            _release_flat_record_cache(final)
             return existing
         raise PrivateArtifactError("flat native record already has different bytes") from None
     except PrivateArtifactError:
         raise
     except OSError:
         raise PrivateArtifactError("unable to publish the flat native record") from None
-    return _open_flat_native_record(root, record_id, expected_kind=kind)
+    record = _open_flat_native_record(root, record_id, expected_kind=kind)
+    _release_flat_record_cache(final)
+    return record
+
+
+def _release_flat_record_cache(path: Path) -> None:
+    """Advise against retaining already durable,validated journal bytes in RAM.
+
+    This optional hint changes neither the file nor its integrity/durability
+    contract. Missing support or an unsuccessful hint must not fail gameplay.
+    """
+    if not all(hasattr(os, name) for name in (
+        "posix_fadvise", "POSIX_FADV_DONTNEED", "O_NOFOLLOW"
+    )):
+        return
+    import stat
+    descriptor = None
+    try:
+        descriptor = os.open(path, os.O_RDONLY | os.O_NOFOLLOW
+            | getattr(os, "O_CLOEXEC", 0) | getattr(os, "O_NONBLOCK", 0))
+        if stat.S_ISREG(os.fstat(descriptor).st_mode):
+            os.posix_fadvise(descriptor, 0, 0, os.POSIX_FADV_DONTNEED)
+    except OSError:
+        pass  # Best-effort cache advice follows successful durable publication.
+    finally:
+        if descriptor is not None:
+            try:
+                os.close(descriptor)
+            except OSError:
+                pass
 
 
 def _read_flat_native_record(

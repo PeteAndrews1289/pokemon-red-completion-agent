@@ -216,3 +216,110 @@ def member_preparation_options(
         )
         result.append((binding, descriptor))
     return tuple(result)
+
+
+def learned_member_preparation_options(
+    runtime, actions, *, plan, opponent_levels, forecast_ref, route,
+    venues, battler_for_map, venue_policy, maximum_level_gains=(1, 3),
+    reference_mode="strongest", allow_above_reference=False, observed_defeat=None,
+    record, **kwargs,
+):
+    """One venue-model choice per unchanged member/target goal option.
+
+    All executable siblings are bound before inference. The outer goal model
+    still owns whether to train, the trainee and dose. No rejected venue executes.
+    With no explicit policy callers must use the unchanged legacy provider.
+    """
+    from .party import PartyObservation
+    from .observation import MapId
+    from .party_development_rank import PARTY_DEVELOPMENT_MATCHUP_FEATURE_SCHEMA_ID
+    from .red_ordinary_preparation_venue import (
+        OrdinaryPreparationVenue, OrdinaryPreparationVenuePolicy,
+        build_ordinary_preparation_venue_menu,
+    )
+    if type(venue_policy) is not OrdinaryPreparationVenuePolicy:
+        raise ValueError("ordinary preparation requires its separate typed venue policy")
+    if venue_policy.model.feature_schema_id != PARTY_DEVELOPMENT_MATCHUP_FEATURE_SCHEMA_ID:
+        raise ValueError("ordinary preparation venue policy requires matchup features")
+    fixed_ready = venue_policy.task_contract == "party-development.fixed-level-ready-task-cost.v1"
+    if fixed_ready:
+        if "restore_completed_target" in kwargs and kwargs["restore_completed_target"] is not True:
+            raise ValueError("fixed-level-ready task contract requires completed restoration")
+        # Reuse the existing metered return/nursing path after this selected dose.
+        # The goal model still chooses whether, whom and how much to train.
+        kwargs = dict(kwargs, restore_completed_target=True)
+    if type(venues) is not tuple or not venues or any(type(v) is not OrdinaryPreparationVenue for v in venues):
+        raise ValueError("ordinary preparation requires the complete typed legal inventory")
+    if len({(v.corridor.map_id, v.source_id, v.home_map) for v in venues}) != len(venues):
+        raise ValueError("ordinary preparation venue inventory repeats")
+    if type(maximum_level_gains) is not tuple or not maximum_level_gains or any(type(n) is not int or not 1 <= n <= 3 for n in maximum_level_gains):
+        raise ValueError("ordinary preparation doses require explicit bounded gains")
+    source = runtime.emulator.save_state_bytes()
+    from .red_native_venue_geometry import quote_ordinary_preparation_venue_geometry
+    geometry_quotes = quote_ordinary_preparation_venue_geometry(runtime, route, venues)
+    geometry_by_source = {v.source_id: q for v, q in zip(venues, geometry_quotes, strict=True)}
+    before_frames = runtime.emulator.frame_count
+    before_actions = actions.actions_executed
+    members = observe_preparation_members(runtime.emulator, plan)
+    observation = runtime.adapter.observe()
+    observation = replace(observation, party=PartyObservation(tuple(m.observation for m in members)))
+    dex = internal_to_dex(route.rom)
+    codes = {number: code for code, number in dex.items()}
+    levels = {codes[e.from_species]: e.requirement for edges in evolution_graph(route.rom).values()
+              for e in edges if e.method is EvolutionMethod.LEVEL}
+    choices = {}
+    for gain in maximum_level_gains:
+        for intent, descriptor in member_preparation_plans(plan, members,
+            opponent_levels=opponent_levels, forecast_ref=forecast_ref,
+            cartridge=RedPracticeCartridge(route.rom), evolutions=levels,
+            maximum_level_gain=gain, reference_mode=reference_mode,
+            allow_above_reference=allow_above_reference, observed_defeat=observed_defeat):
+            choices[intent.targets] = (intent, descriptor)
+    result = []
+    for intent, descriptor in choices.values():
+        specimen_ref, target_level = intent.targets[0]
+        trainee = next(m.observation for m in members if m.specimen_ref == specimen_ref)
+        siblings, available = [], []
+        for venue in venues:
+            battler = battler_for_map(venue.corridor.map_id)
+            partition = getattr(battler, "source_partition", None)
+            if allow_above_reference and partition not in (ScenarioPartition.TRAIN, ScenarioPartition.DEVELOPMENT):
+                raise ValueError("above-reference native preparation requires typed TRAIN or DEVELOPMENT scope")
+            binding = routed_preparation_binding(runtime, actions,
+                home_map=venue.home_map, route=route, plan=intent, battler=battler,
+                corridor=venue.corridor, record=record,
+                include_indigo_lobby=venue.home_map == int(MapId.INDIGO_PLATEAU_LOBBY), **kwargs)
+            if binding is None:
+                continue
+            # Include the venue itself, even when siblings share origin/home.
+            binding = replace(binding, binding_ref="pokemon.red:member-preparation:" + canonical_sha256(dict(
+                executor=binding.binding_ref, targets=intent.targets, facts=descriptor.public_dict(),
+                venue=dict(source=venue.source_id, map_id=venue.corridor.map_id, home=venue.home_map))))
+            siblings.append(binding)
+            available.append(venue)
+        if not siblings:
+            continue
+        menu = build_ordinary_preparation_venue_menu(observation, rom=route.rom,
+            trainee=trainee, target_level=target_level, venues=tuple(available),
+            geometry_quotes=tuple(geometry_by_source[v.source_id] for v in available))
+        model_selected = len(siblings) > 1
+        selected = venue_policy.model.predict(menu.candidate_set) if model_selected else 0
+        if type(selected) is not int or selected not in range(len(siblings)):
+            raise ValueError("ordinary preparation model selected an invalid venue binding")
+        record("ordinary-preparation-venue-choice", dict(
+            actor="learned_venue_model" if model_selected else "rule_based_support",
+            model_selected=model_selected, protocol="existing-k-member-preparation-unknown-yield-v1",
+            initializer_preference_transfer_disclosed_in_plan=True,
+            model_sha256=venue_policy.model_sha256, candidate_set=menu.candidate_set.public_dict(),
+            semantic_snapshot_sha256=menu.semantic_snapshot_sha256, selected_index=selected,
+            binding_refs=[b.binding_ref for b in siblings],
+            venues=[dict(source=v.source_id, map_id=v.corridor.map_id, home=v.home_map) for v in available],
+            member_target=intent.targets, target_xp=descriptor.remaining_xp,
+            nominal_or_expected_xp_promised=False, evolution_qualification_transferred=False,
+            optimizer_admission=False,
+            **({"task_contract": venue_policy.task_contract} if fixed_ready else {})))
+        result.append((siblings[selected], descriptor))
+    if (runtime.emulator.save_state_bytes() != source or runtime.emulator.frame_count != before_frames
+        or actions.actions_executed != before_actions or runtime.emulator.pressed_buttons):
+        raise ValueError("ordinary venue inventory changed native state or controls")
+    return tuple(result)

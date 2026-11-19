@@ -167,7 +167,14 @@ def plan_dig_recovery(
 def bind_dig_recovery(
     router: RedResourceGoalRouter, bindings: GoalBindingSet, observation: RedGoalObservation,
     start: TraversalSnapshot, *, prepare_escort: Callable[[], None], require_pp_restore: bool,
+    require_full_pp_restore: bool = False,
 ) -> GoalBindingSet:
+    from .red_goal_skills import _raw_party_fully_restored
+
+    if type(require_full_pp_restore) is not bool:
+        raise ValueError("explicit full PP recovery mode must be boolean")
+    if require_full_pp_restore and _raw_party_fully_restored(observation.raw):
+        return bindings
     plan = plan_dig_recovery(router, observation, start)
     if plan is None:
         return bindings
@@ -211,6 +218,7 @@ def bind_dig_recovery(
         rebound = bind_routed_center_recovery(
             router, bindings, after, prepare_escort=prepare_escort,
             require_pp_restore=require_pp_restore,
+            require_full_pp_restore=require_full_pp_restore,
         )
         selected = next((b for b in rebound.bindings if b.kind is GoalKind.RESTORE_TEAM), None)
         if selected is None:

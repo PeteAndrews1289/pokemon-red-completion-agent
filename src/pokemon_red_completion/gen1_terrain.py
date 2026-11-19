@@ -352,6 +352,82 @@ def _map_header(rom: bytes, map_id: int) -> tuple[int, int, int, int, int]:
     return rom[header], rom[header + 1], rom[header + 2], bank_offset(bank, blocks), bank
 
 
+def mansion_first_floor_door_blocks(
+    rom: bytes, *, switch_on: bool
+) -> tuple[tuple[tuple[int, int], int], ...]:
+    """Read the native first-floor toggle replacements, never choose a route.
+
+    The initial block map has open geometry where its entry/update script closes
+    doors. Follow that map's script/header pointers and decode the four bounded
+    block replacements in both branches. Addresses/opcodes stay at this ROM
+    boundary; callers supply only the observed semantic switch state.
+    """
+    from .observation import EventFlag, MapId, RamAddress
+
+    if type(switch_on) is not bool:
+        raise TypeError("Mansion switch phase must be boolean")
+    map_id = int(MapId.POKEMON_MANSION_1F)
+
+    def read(at, size):
+        if at < 0 or at + size > len(rom):
+            raise CartridgeReadError("Mansion door script is truncated")
+        return rom[at : at + size]
+
+    def address(at):
+        return bank_offset(bank, int.from_bytes(read(at, 2), "little"))
+
+    bank = read(MAP_HEADER_BANKS + map_id, 1)[0]
+    header = address(MAP_HEADER_POINTERS + 2 * map_id)
+    height, width = read(header + 1, 2)
+    script = address(header + 7)
+    if read(script, 1) != b"\xcd":
+        raise CartridgeReadError("Mansion entry no longer calls the door update")
+    update = address(script + 1)
+    event = int(EventFlag.MANSION_SWITCH_ON)
+    event_address = int(RamAddress.EVENT_FLAGS) + event // 8
+    # ld hl,wCurrentMapScriptFlags; bit 5,[hl]; res 5,[hl]; ret z;
+    # ld a,[semantic event byte]; bit event%8,a; jr nz,on.
+    prefix = (b"\x21\x26\xd1\xcb\x6e\xcb\xae\xc8\xfa"
+              + event_address.to_bytes(2, "little")
+              + bytes((0xCB, 0x47 + 8 * (event % 8), 0x20, 24)))
+    if read(update, len(prefix)) != prefix:
+        raise CartridgeReadError("Mansion switch update contract differs")
+
+    def replacement(helper):
+        # The script has two small block-id loaders and one shared native
+        # ReplaceTileBlock call. Decode the immediate; do not type door ids.
+        body = read(helper, 7)
+        if body[0] != 0x3E or body[2:5] != b"\xea\x9f\xd0":
+            raise CartridgeReadError("Mansion block loader differs")
+        tail = helper + 5
+        if body[5] == 0x18:
+            offset = body[6] if body[6] < 128 else body[6] - 256
+            tail = helper + 7 + offset
+        if read(tail, 6) != b"\x3e\x17\xcd\x6d\x3e\xc9":
+            raise CartridgeReadError("Mansion block replacement call differs")
+        return body[1]
+
+    phases = []
+    for start in (update + len(prefix), update + len(prefix) + 24):
+        rows = []
+        for index in range(4):
+            at = start + index * 6
+            instruction = read(at, 6)
+            # ld bc,(y<<8)|x; call loader (last entry tail-jumps).
+            if instruction[0] != 0x01 or instruction[3] != (0xC3 if index == 3 else 0xCD):
+                raise CartridgeReadError("Mansion door coordinate instruction differs")
+            coordinate = (instruction[2], instruction[1])
+            if not (0 <= coordinate[0] < height and 0 <= coordinate[1] < width):
+                raise CartridgeReadError("Mansion door block lies outside its map")
+            rows.append((coordinate, replacement(address(at + 4))))
+        if len({at for at, _ in rows}) != 4:
+            raise CartridgeReadError("Mansion door update repeats a block")
+        phases.append(tuple(rows))
+    if tuple(at for at, _ in phases[0]) != tuple(at for at, _ in phases[1]):
+        raise CartridgeReadError("Mansion switch phases address different blocks")
+    return phases[int(switch_on)]
+
+
 def terrain_for(
     rom: bytes,
     map_id: int,

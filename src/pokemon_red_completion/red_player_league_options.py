@@ -15,7 +15,7 @@ from .goal_manager_runtime import ExecutableGoalBinding, GoalExecutionReport, Go
 from .observation import EventFlag, ItemId, MapId, event_flag_is_set
 from .player_option_challenge import OptionChallenge
 from .provenance import canonical_sha256
-from .red_champion_story import RedCartridgeChampionSkill
+from .red_champion_story import RedCartridgeChampionSkill, locked_league_without_revival
 from .red_development_story_scope import DevelopmentStoryScope
 from .red_goal_context_profile import (
     RedGoalMechanic,
@@ -104,6 +104,7 @@ def bind_live_league_runtime(
     runtime, *, battler, rom, route_world, output, work_order,
     include_champion=False, development_retry_reentry=False,
     maximum_level_deficit=30, maximum_decisions=80, allow_engaged=False,
+    train_admission=None,
 ):
     """Compose the existing scoped actor for this actual native frontier.
 
@@ -117,6 +118,12 @@ def bind_live_league_runtime(
         raise ValueError("League composition requires its exact work-order bytes")
     if type(allow_engaged) is not bool:
         raise TypeError("Engaged League permission must be an explicit boolean")
+    if train_admission is not None:
+        from .red_production_train_admission import LeagueFundingTrainAdmission
+        if type(train_admission) is not LeagueFundingTrainAdmission:
+            raise ValueError("League TRAIN needs exact authenticated funding admission")
+        train_admission.require_work_order(work_order)
+
     raw = runtime.reader.read()
     if raw.battle_state == 2:
         retained = (engaged_league_contract(runtime.reader, rom, include_champion=include_champion)
@@ -142,10 +149,12 @@ def bind_live_league_runtime(
         battler.source_state_sha256, battler.root_lineage_id, battler.model_sha256,
         canonical_sha256(battler.model.to_dict()), sha256(work_order).hexdigest(),
         contract=contract, allow_learned_tactics=True, diagnostic_status_entry=True,
-        screen_capped_status_moves=True,
+        screen_capped_status_moves=True, train_admission=train_admission,
     )
     actor = replace(battler, calls=0, output=output,
-                    qualification_sha256=scope.identity, development_story_scope=scope)
+                    qualification_sha256=scope.identity, development_story_scope=scope,
+                    train_funding_diagnostic=False,
+                    **({"train_story_contract": contract} if train_admission is not None else {}))
     actor.require_story_contract(contract)
     owner_type = (ScopedAssistedChampionController if champion
                   else ScopedAssistedLeagueRetryController)
@@ -525,6 +534,15 @@ resource legality. A verified ordinary loss is a failed goal, never a victory.
                                        and target.objective_id == "defeat_lorelei"),
         )
     availability = skill.availability(runtime.adapter.observe().game_state)
+    partial_coverage = False
+    if (rematch and not train_owner and not availability.executable
+            and str(availability.reason).startswith("no qualified offensive matchup for roster positions")
+            and locked_league_without_revival(before)):
+        skill = replace(skill, allow_uncovered_later=True)
+        availability = skill.availability(runtime.adapter.observe().game_state)
+        partial_coverage = availability.executable
+        if partial_coverage:
+            combat_levels = tuple(level for level, hp in zip(before.party_levels, before.party_hp, strict=True) if hp > 0)
     if record is not None:
         record("league-availability", dict(objective=target.objective_id,
                executable=availability.executable, reason=availability.reason))
@@ -581,6 +599,8 @@ resource legality. A verified ordinary loss is a failed goal, never a victory.
                 outcome="lost" if lost else "won",
             )
         terminal = runtime.emulator.save_state_bytes()
+        if partial_coverage:
+            evidence["partial_champion_coverage" if champion else "partial_league_coverage"] = True
         if progress_objective_ref is not None:
             evidence.update(selected_objective=objective_ref,
                             native_prerequisite=target.objective_id,

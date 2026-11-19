@@ -416,7 +416,14 @@ def _execute_route(
     renewals = trace.resource_renewals
     blocked: dict[int, frozenset[Coordinate]] = {}
 
+    observed_replans = len(replans)
     while pending:
+        if len(replans) != observed_replans:
+            # A replanner may wait for a roaming object to vacate the goal.
+            # Validate its replacement against current truth before more input.
+            current = observer.observe()
+            trace.last_observation = current
+            observed_replans = len(replans)
         step = pending[0]
         _require_position(
             current,

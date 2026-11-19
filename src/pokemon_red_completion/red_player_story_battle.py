@@ -47,6 +47,62 @@ class StoryBattleDecisionBudgetReached(RuntimeError):
     reason_code = "story_battle_decision_budget"
 
 
+class RivalBattleDecisionBudgetReached(StoryBattleDecisionBudgetReached):
+    """Whole rival allowance is spent; never grant a retained-segment retry."""
+
+    reason_code = "rival_whole_battle_decision_budget"
+
+
+def raise_if_story_battle_budget_reached(
+    result, controller, runtime, contract, actions, *, whole_battle_allowance=False,
+):
+    """Preserve an authenticated unfinished battle; never auto-retry its budget."""
+    if type(whole_battle_allowance) is not bool:
+        raise TypeError("whole-battle budget scope must be boolean")
+    episode = getattr(result, "episode", None)
+    current = runtime.reader.read()
+    if (
+        result.outcome == "unresolved"
+        and result.field_ready is False
+        and episode is not None
+        and episode.stop_reason == "decision_budget"
+        and not episode.battle_won
+        and len(episode.decisions) == controller.maximum_decisions
+        and episode.final_battle_state == current.battle_state == 2
+        and current.map_id == contract.map_id
+        and runtime.reader.read_active_trainer_identity() == contract.trainer_identity
+        and current.party_hp is not None
+        and any(current.party_hp)
+    ):
+        record = getattr(actions, "record_diagnostic_event", None)
+        if callable(record):
+            record(
+                ("rival_whole_battle_decision_budget" if whole_battle_allowance
+                 else "story_battle_decision_budget"),
+                dict(
+                    stop_reason=episode.stop_reason,
+                    decisions_consumed=len(episode.decisions),
+                    maximum_decisions=controller.maximum_decisions,
+                    battle_won=False,
+                    field_ready=False,
+                    terminal_state_sha256=sha256(
+                        runtime.emulator.save_state_bytes()
+                    ).hexdigest(),
+                    outcome_and_costs_retained=True,
+                    declared_whole_battle_allowance=whole_battle_allowance,
+                    automatic_continuation_allowed=not whole_battle_allowance,
+                    new_controller_inputs=0,
+                ),
+            )
+        if whole_battle_allowance:
+            raise RivalBattleDecisionBudgetReached(
+                "rival battle exhausted its declared whole-battle decision allowance"
+            )
+        raise StoryBattleDecisionBudgetReached(
+            "story battle reached its bounded decision limit"
+        )
+
+
 def story_battle_binding(
     runtime,
     actions,
@@ -296,41 +352,7 @@ def story_battle_binding(
             or not result.field_ready
             or not _field_ready(runtime)
         ):
-            episode = getattr(result, "episode", None)
-            current = runtime.reader.read()
-            if (
-                result.outcome == "unresolved"
-                and result.field_ready is False
-                and episode is not None
-                and episode.stop_reason == "decision_budget"
-                and not episode.battle_won
-                and len(episode.decisions) == controller.maximum_decisions
-                and episode.final_battle_state == current.battle_state == 2
-                and current.map_id == contract.map_id
-                and runtime.reader.read_active_trainer_identity() == contract.trainer_identity
-                and current.party_hp is not None
-                and any(current.party_hp)
-            ):
-                record = getattr(actions, "record_diagnostic_event", None)
-                if callable(record):
-                    record(
-                        "story_battle_decision_budget",
-                        dict(
-                            stop_reason=episode.stop_reason,
-                            decisions_consumed=len(episode.decisions),
-                            maximum_decisions=controller.maximum_decisions,
-                            battle_won=False,
-                            field_ready=False,
-                            terminal_state_sha256=sha256(
-                                runtime.emulator.save_state_bytes()
-                            ).hexdigest(),
-                            outcome_and_costs_retained=True,
-                            new_controller_inputs=0,
-                        ),
-                    )
-                raise StoryBattleDecisionBudgetReached(
-                    "story battle reached its bounded decision limit"
-                )
+            raise_if_story_battle_budget_reached(result, controller, runtime, contract, actions)
             raise RuntimeError("story battle did not settle to a supported field boundary")
         raw = runtime.reader.read()
         if result.outcome == "won":

@@ -57,6 +57,20 @@ def _field_ready(runtime):
     )
 
 
+def _observed_restoration_route(runtime, route):
+    """Quote under the same active-map block projection as ground execution."""
+    from .gen1_regional_access import observed_cave_guard_world
+
+    original = route.route_world
+    world = (
+        original.with_current_blocks(runtime.reader.read_current_map_blocks())
+        if getattr(route, "observe_terrain", False)
+        else original
+    )
+    world = observed_cave_guard_world(world, runtime.reader)
+    return route if world is original else replace(route, route_world=world)
+
+
 def nearest_reachable_player_center(runtime, *, route, centers, include_indigo_lobby=False):
     """Read-only minimum-cost healing destination within an explicit inventory.
 
@@ -79,12 +93,7 @@ def nearest_reachable_player_center(runtime, *, route, centers, include_indigo_l
         raise ValueError("declared supported Center inventory required")
     if not _field_ready(runtime):
         return None
-    from .gen1_regional_access import observed_cave_guard_world
-
-    base_world = route.route_world
-    observed_world = observed_cave_guard_world(base_world, runtime.reader)
-    if observed_world is not base_world:
-        route = replace(route, route_world=observed_world)
+    route = _observed_restoration_route(runtime, route)
     start = Gen1TraversalObserver(
         runtime.reader,
         capability_projector=ground_route_capability_projector(route, runtime.emulator),
@@ -236,12 +245,7 @@ def routed_restoration_binding(
         and not runtime.reader.read_oaks_errand_state(raw).battled_rival
     ):
         return None
-    from .gen1_regional_access import observed_cave_guard_world
-
-    base_world = route.route_world
-    observed_world = observed_cave_guard_world(base_world, runtime.reader)
-    if observed_world is not base_world:
-        route = replace(route, route_world=observed_world)
+    route = _observed_restoration_route(runtime, route)
     origin = Gen1TraversalObserver(
         runtime.reader,
         capability_projector=ground_route_capability_projector(route, runtime.emulator),

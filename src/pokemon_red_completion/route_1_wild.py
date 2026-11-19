@@ -15,7 +15,7 @@ from pokemon_red_completion.observation import (
     RawGameState,
 )
 
-from .observation import NativeWildTeleportWitness
+from .observation import NativeWildRoarWitness, NativeWildTeleportWitness
 
 ROUTE_1_WALKER_APPROACH = (14, 14)
 ROUTE_1_WALKER_YIELD = (15, 14)
@@ -152,6 +152,7 @@ class Route1WildFleeEvidence:
     ordinary_opponent_ko_exit: bool = False
     native_purified_healing: object | None = None
     native_opponent_teleport_exit: NativeWildTeleportWitness | None = None
+    native_opponent_roar_exit: NativeWildRoarWitness | None = None
 
     @property
     def verified(self) -> bool:
@@ -162,9 +163,12 @@ class Route1WildFleeEvidence:
             healed = verified_purified_flee_receipt(self.native_purified_healing, self)
             if not healed:
                 return False
-        witness = self.native_opponent_teleport_exit
-        teleported = (
-            type(witness) is NativeWildTeleportWitness
+        teleport, roar = self.native_opponent_teleport_exit, self.native_opponent_roar_exit
+        if teleport is not None and roar is not None:
+            return False
+        witness = teleport if teleport is not None else roar
+        opponent_escaped = (
+            ((type(teleport) is NativeWildTeleportWitness) or (type(roar) is NativeWildRoarWitness))
             and self.hp_scope == "whole_party"
             and self.pp_preserved
             and self.status_preserved
@@ -184,7 +188,7 @@ class Route1WildFleeEvidence:
             and self.final_battle_state == 0
             and (
                 self.battle_result == 2
-                or (teleported and self.battle_result == 0)
+                or (opponent_escaped and self.battle_result == 0)
                 or (
                     self.ordinary_opponent_ko_exit
                     and self.battle_result == 0
@@ -262,6 +266,11 @@ class Route1WildFleeEvidence:
             **(
                 {"native_opponent_teleport_exit": self.native_opponent_teleport_exit.public_dict()}
                 if type(self.native_opponent_teleport_exit) is NativeWildTeleportWitness
+                else {}
+            ),
+            **(
+                {"native_opponent_roar_exit": self.native_opponent_roar_exit.public_dict()}
+                if type(self.native_opponent_roar_exit) is NativeWildRoarWitness
                 else {}
             ),
             **(

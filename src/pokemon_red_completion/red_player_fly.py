@@ -62,7 +62,7 @@ def _noncombat_fly_world(world, raw):
     return replace(world, local_graphs=graphs, object_blockers=objects)
 
 
-def fly_dependency_options(runtime, actions, *, route):
+def fly_dependency_options(runtime, actions, *, route, include_cut_lesson=False):
     """Expose legal Fly dependencies before the League, without selecting one.
 
     The existing reward and lesson ports check the real badge, native stock,
@@ -74,6 +74,7 @@ def fly_dependency_options(runtime, actions, *, route):
     lessons = owned_machine_options(
         runtime, actions, rom=route.rom,
         include_fly_lesson=True, include_attack_lessons=False,
+        **({"include_cut_lesson": include_cut_lesson} if include_cut_lesson is not False else {}),
     )
     return (() if reward is None else (reward,)) + lessons
 

@@ -25,7 +25,7 @@ a candidate to be checked rather than a plan to be executed.
 from __future__ import annotations
 
 import heapq
-from collections.abc import Mapping
+from collections.abc import Collection, Iterator, Mapping
 from dataclasses import dataclass, field
 
 Coordinate = tuple[int, int]
@@ -182,33 +182,57 @@ def find_macro_path(
     if start == goal:
         return MacroPath(maps=(start,), edges=())
 
-    start_state = (start, last_outside)
-    frontier: list[tuple[int, int, RouteState]] = [(0, 0, start_state)]
     came_from: dict[RouteState, tuple[RouteState, MacroEdge]] = {}
+    for state, _cost, _hops in _settled_routes(graph, (start, last_outside), came_from):
+        if state[0] == goal:
+            return _reconstruct_path(came_from, (start, last_outside), state)
+    raise GlobalRouterError(f"no macro route from map {start} to map {goal}")
+
+
+def macro_path_estimates(
+    graph: MacroGraph, start: int, goals: Collection[int], *, last_outside: int | None = None,
+) -> dict[int, tuple[int, int]]:
+    """Return cost and length of the same first cheapest path for each reachable goal."""
+    remaining = set(goals)
+    result: dict[int, tuple[int, int]] = {}
+    if remaining:
+        for state, cost, hops in _settled_routes(graph, (start, last_outside)):
+            map_id = state[0]
+            if map_id in remaining:
+                result[map_id] = (cost, hops)
+                remaining.remove(map_id)
+                if not remaining:
+                    break
+    return result
+
+
+def _settled_routes(
+    graph: MacroGraph, start_state: RouteState,
+    came_from: dict[RouteState, tuple[RouteState, MacroEdge]] | None = None,
+) -> Iterator[tuple[RouteState, int, int]]:
+    # Sequence precedes state and hop count so equal-cost paths retain the
+    # cartridge edge order used by the single-destination planner.
+    frontier: list[tuple[int, int, RouteState, int]] = [(0, 0, start_state, 0)]
     best_cost: dict[RouteState, int] = {start_state: 0}
     sequence = 1
 
     while frontier:
-        cost, _, state = heapq.heappop(frontier)
+        cost, _, state, hops = heapq.heappop(frontier)
         if cost != best_cost.get(state):
             continue
-        current, _ = state
-        if current == goal:
-            return _reconstruct_path(came_from, start_state, state)
-
-        for edge in graph.neighbors(current):
+        yield state, cost, hops
+        for edge in graph.neighbors(state[0]):
             next_state = advance_macro_state(graph, state, edge)
             if next_state is None:
                 continue
             candidate_cost = cost + edge.cost
             if candidate_cost >= best_cost.get(next_state, candidate_cost + 1):
                 continue
-            came_from[next_state] = (state, edge)
+            if came_from is not None:
+                came_from[next_state] = (state, edge)
             best_cost[next_state] = candidate_cost
-            heapq.heappush(frontier, (candidate_cost, sequence, next_state))
+            heapq.heappush(frontier, (candidate_cost, sequence, next_state, hops + 1))
             sequence += 1
-
-    raise GlobalRouterError(f"no macro route from map {start} to map {goal}")
 
 
 def find_macro_route(

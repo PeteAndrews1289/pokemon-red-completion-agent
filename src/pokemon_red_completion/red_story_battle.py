@@ -13,7 +13,9 @@ from .gen1_trainer_sight import static_trainer_sight_zones, trainer_headers
 from .gen1_traversal import map_object_events
 from .observation import event_flag_is_set
 from .red_eventless_trainer import eventless_battle_ready
-from .red_learned_trainer import FrozenTrainerBattler
+from .red_learned_trainer import (
+    FrozenTrainerBattler, RIVAL_TRAINER_CLASSES, RIVAL_WHOLE_BATTLE_DECISIONS, story_whole_battle_decision_limit,
+)
 from .red_trainer_battle_lifecycle import continue_learned_trainer_battle
 
 
@@ -114,6 +116,7 @@ class FrozenStoryBattleController:
     maximum_decisions: int = 80
     preparation_review: object = None
     evolution_rom: bytes | None = None
+    retained_evolution_origin: object = None
 
     def __post_init__(self):
         self.require_identity()
@@ -130,7 +133,10 @@ class FrozenStoryBattleController:
             or len({(c.objective_id, c.battle_plan_id) for c in self.contracts})
             != len(self.contracts)
             or type(self.maximum_decisions) is not int
-            or not 1 <= self.maximum_decisions <= 80
+            or not 1 <= self.maximum_decisions <= (
+                min(story_whole_battle_decision_limit(c.trainer_identity)
+                    for c in self.contracts)
+            )
         ):
             raise ValueError("invalid story battle scope or decision budget")
         for contract in self.contracts:
@@ -160,7 +166,10 @@ class FrozenStoryBattleController:
         evolution_guard = (
             None
             if self.evolution_rom is None
-            else RedTrainerEvolutionGuard.from_rom(self.evolution_rom, self.battler.session)
+            else RedTrainerEvolutionGuard.from_rom(
+                self.evolution_rom, self.battler.session,
+                retained_origin=self.retained_evolution_origin,
+            )
         )
         if (
             before.battle_state != 2

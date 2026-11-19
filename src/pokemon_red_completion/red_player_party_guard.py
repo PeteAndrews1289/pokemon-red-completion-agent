@@ -105,6 +105,9 @@ def _observed_transport_safe_capture_guard(runtime, *, helper_moves):
     guard = runtime.adapter.party_guard
     if not isinstance(guard, RedPlayerPartyGuard):
         raise ValueError("bird eligibility needs the retained individual guard")
+    if guard.field_carrier is not None:
+        guard.verify_authorized_active_roster()
+        return None
     guard.verify_active_roster_restored()
     refs = guard.reader.preparation_specimen_refs()
     moves = runtime.reader.read().party_moves
@@ -140,6 +143,8 @@ class RedPlayerPartyGuard:
     edges: frozenset[tuple[int, int, int]]
     storage_reader: PokemonRedStateReader | None = None
     loanable_refs: frozenset[str] = frozenset()
+    field_carrier: object = None
+    retained_story_origin: PartyObservation | None = None
 
     @classmethod
     def from_rom(cls, rom, emulator, *, loanable_refs=frozenset(), storage_reader=None):
@@ -160,8 +165,15 @@ class RedPlayerPartyGuard:
         # its existing continuation matcher without changing the strictly
         # one-stage per-battle guard or refreshing this original observation.
         from .red_player_continuation import _earned_evolution
+        from .red_trainer_evolution import retained_level_evolution_matches
 
         party, refs = self.reader.read(), self.reader.preparation_specimen_refs()
+        displaced = frozenset()
+        if self.field_carrier is not None:
+            from .red_field_carrier_custody import FieldCarrierCustody
+            if not isinstance(self.field_carrier, FieldCarrierCustody):
+                raise ValueError("typed field-carrier custody required")
+            displaced = frozenset({self.field_carrier.displaced_ref})
         if (
             len(set(self.refs)) != len(self.refs)
             or len(self.refs) != self.before.size
@@ -170,7 +182,7 @@ class RedPlayerPartyGuard:
             or not isinstance(self.loanable_refs, frozenset)
             or not self.loanable_refs <= set(self.refs)
             or (self.loanable_refs and self.storage_reader is None)
-            or not (set(self.refs) - self.loanable_refs) <= set(refs)
+            or not (set(self.refs) - self.loanable_refs - displaced) <= set(refs)
         ):
             raise ValueError("retained party lost or duplicated an individual")
         current = dict(zip(refs, party.members, strict=True))
@@ -193,7 +205,7 @@ class RedPlayerPartyGuard:
                     current[ref] = member
         if not set(self.refs) <= current.keys():
             raise ValueError("retained party lost or duplicated an individual")
-        for ref, old in zip(self.refs, self.before.members, strict=True):
+        for index, (ref, old) in enumerate(zip(self.refs, self.before.members, strict=True)):
             new = current[ref]
             if (
                 old.experience is None
@@ -203,9 +215,27 @@ class RedPlayerPartyGuard:
                 or (
                     new.species_id != old.species_id
                     and not _earned_evolution(old, new, self.edges)
+                    and not (
+                        isinstance(self.retained_story_origin, PartyObservation)
+                        and self.retained_story_origin.size == self.before.size
+                        and retained_level_evolution_matches(
+                            self.retained_story_origin.members[index], old, new, self.edges
+                        )
+                    )
                 )
             ):
                 raise ValueError("retained individual identity or earned progress differs")
+
+        if self.field_carrier is not None:
+            self.field_carrier.verify(self)
+
+    def verify_authorized_active_roster(self):
+        """Validate an explicit committed exchange without repaying field custody."""
+        self.verify()
+        if self.field_carrier is None:
+            self.verify_active_roster_restored()
+        elif self.field_carrier.phase != "active":
+            raise ValueError("field-carrier exchange remains pending")
 
     def verify_active_roster_restored(self):
         """Temporary loans must be repaid before a continuation is exported."""
@@ -292,6 +322,9 @@ def retained_party_slot_is_depositable(adapter, party_slot):
     refs = guard.reader.preparation_specimen_refs()
     if party_slot > len(refs):
         raise ValueError("storage slot is not observed in the retained party")
+    if guard.field_carrier is not None:
+        # No second loan or deposition of the active field capability.
+        return False
     return refs[party_slot - 1] not in guard.refs or refs[party_slot - 1] in guard.loanable_refs
 
 

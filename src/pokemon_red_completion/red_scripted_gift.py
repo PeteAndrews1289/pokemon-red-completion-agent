@@ -228,8 +228,17 @@ def scripted_gift_bindings(runtime, observation, actions, world):
         live_plan = _approach(world, observer.observe(), gift)
         if live_plan is None:
             raise RedScriptedGiftError("gift approach disappeared")
-        # No trainer/teacher fallback: an unexpected battle retains its terminal.
-        route = execute_route(live_plan, port, observer, replanner=world.replanner())
+        # Ordinary wild encounters can interrupt a legal approach. Reuse only
+        # bounded native escape; this grants no trainer battle or teaching policy.
+        from .gen1_route_runtime import Gen1WildFleeHandler
+
+        route = execute_route(
+            live_plan, port, observer, replanner=world.replanner(),
+            interruption_handler=Gen1WildFleeHandler(
+                port, reader, maximum_flees=16, stabilization_frames=180,
+                route_name="scripted gift approach",
+            ),
+        )
         if not route.passed:
             raise RedScriptedGiftError("gift route did not settle")
         objects = tuple(

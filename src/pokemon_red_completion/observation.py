@@ -72,6 +72,8 @@ class RamAddress(IntEnum):
     SHOP_QUANTITY = 0xCF96
     WALK_COUNTER = 0xCFC5
     TILE_IN_FRONT_OF_PLAYER = 0xCFC6
+    ENEMY_MOVE_NUM = 0xCFCC
+    ENEMY_MOVE_EFFECT = 0xCFCD
     ENEMY_SPECIES_2 = 0xCFD8
     ENEMY_SPECIES = 0xCFE5
     ENEMY_HP = 0xCFE6
@@ -185,6 +187,8 @@ class RamAddress(IntEnum):
     STATUS_FLAGS_6 = 0xD732
     ELITE_FOUR_FLAGS = 0xD734
     MOVEMENT_FLAGS = 0xD736
+    NUMBER_OF_WARPS = 0xD3AE
+    WARP_ENTRIES = 0xD3AF
     WALK_BIKE_SURF_STATE = 0xD700
     TOWN_VISITED_FLAGS = 0xD70B
     LAST_BLACKOUT_MAP = 0xD719
@@ -1274,6 +1278,7 @@ class RawGameState:
     player_stat_stages: tuple[int, ...] | None = None
     enemy_stat_stages: tuple[int, ...] | None = None
     enemy_using_trapping_move: bool | None = None
+    player_using_trapping_move: bool | None = None
     active_party_index: int | None = None
     active_party_species_id: int | None = None
     active_party_level: int | None = None
@@ -1557,6 +1562,15 @@ class NorthboundPhase(StrEnum):
     PEWTER_GYM_ENTERED = "pewter_gym_entered"
     BROCK_BATTLE = "brock_battle"
     BROCK_DEFEATED = "brock_defeated"
+
+
+@dataclass(frozen=True, slots=True)
+class RetainedMapWarp:
+    """One native warp row, which can still belong to a pending source room."""
+
+    at: tuple[int, int]
+    destination_warp_index: int
+    destination_map: int
 
 
 @dataclass(frozen=True, slots=True)
@@ -3885,6 +3899,10 @@ class NativeWildTeleportWitness:
     enemy_level: int
     enemy_hp: int
 
+    _species = 148
+    _move = 100
+    _schema = "pokemon.red.live-wild-teleport-witness.v1"
+
     def __post_init__(self):
         if (
             any(
@@ -3900,7 +3918,7 @@ class NativeWildTeleportWitness:
             )
             or not 0 <= self.map_id <= 255
             or min(self.player_x, self.player_y) < 0
-            or self.enemy_species_id != 148
+            or self.enemy_species_id != self._species
             or not 1 <= self.enemy_level <= 100
             or self.enemy_hp <= 0
         ):
@@ -3908,18 +3926,27 @@ class NativeWildTeleportWitness:
 
     def public_dict(self):
         return dict(
-            schema="pokemon.red.live-wild-teleport-witness.v1",
+            schema=self._schema,
             map_id=self.map_id,
             player_x=self.player_x,
             player_y=self.player_y,
             enemy_species_id=self.enemy_species_id,
             enemy_level=self.enemy_level,
             enemy_hp=self.enemy_hp,
-            enemy_move=100,
+            enemy_move=self._move,
             enemy_effect=28,
             player_move=0,
             live_escaped_flag=1,
         )
+
+
+class NativeWildRoarWitness(NativeWildTeleportWitness):
+    """One coherent live Growlithe Roar from the same native escape effect."""
+
+    __slots__ = ()
+    _species = 33
+    _move = 46
+    _schema = "pokemon.red.live-wild-roar-witness.v1"
 
 
 class PokemonRedStateReader:
@@ -3987,6 +4014,68 @@ class PokemonRedStateReader:
             and "Choose" in text
         ):
             return "party", selected
+        return None
+
+    def read_mart_input(self) -> tuple[str, int] | None:
+        """Observe a rendered clerk menu inside an already admitted Mart.
+
+        Menu-coordinate bytes survive a closed shop. Require a live rendered
+        cursor and the shop's money label; this never authorizes an interaction
+        or chooses an item, quantity, or spending target.
+        """
+        if (self._memory.read_u8(RamAddress.IS_IN_BATTLE)
+            or self._memory.read_u8(RamAddress.CURRENT_MAP)
+            not in ({int(value) for value in MapId if "_MART" in value.name}
+                    | {int(MapId.INDIGO_PLATEAU_LOBBY)})):
+            return None
+        # Field/map transitions can leave invalid stale cursor bytes behind.
+        # Validate rendered shop ownership before constructing its cursor.
+        words = " ".join(self.read_screen_text_rows()).replace(">", " ").upper().split()
+        if ("MONEY" not in words
+            or self._memory.read_u8(RamAddress.CURRENT_MENU_ITEM)
+               > self._memory.read_u8(RamAddress.MAX_MENU_ITEM)):
+            return None
+        menu = self.read_menu_cursor_state()
+        # Quantity selection uses a multiplication sign rather than the list
+        # cursor. Authenticate its rendered native box and matching count;
+        # retained menu-coordinate/quantity bytes alone never own input.
+        words = " ".join(self.read_screen_text_rows()).replace(">", " ").upper().split()
+        if "MONEY" not in words:
+            return None
+        if (menu.top_y, menu.top_x) == (4, 5) and menu.maximum_visible_index <= 3:
+            tile = lambda x, y: self._memory.read_u8(int(RamAddress.TILE_MAP) + y * 20 + x)
+            frame = ((7,9,0x79),(19,9,0x7b),(7,11,0x7d),(19,11,0x7e),
+                     (7,10,0x7c),(19,10,0x7c),(8,10,0xf1))
+            # The native total is right aligned: its currency sign moves as
+            # quantity/price gain digits. Do not mistake that for field input.
+            price = tuple(tile(x,10) for x in range(12,19))
+            currency = tuple(i for i,value in enumerate(price) if value == 0xf0)
+            price_visible = (
+                len(currency) == 1 and currency[0] < len(price) - 1
+                and all(value == 0x7f for value in price[:currency[0]])
+                and all(0xf6 <= value <= 0xff for value in price[currency[0]+1:])
+                and any(value > 0xf6 for value in price[currency[0]+1:])
+            )
+            if price_visible and all(tile(x,y) == value for x,y,value in frame):
+                selected_item, quantity = self.read_item_quantity_selection()
+                digits = (tile(9,10), tile(10,10))
+                if (0 < selected_item <= 0xff and 1 <= quantity <= 99
+                    and all(0xf6 <= value <= 0xff for value in digits)
+                    and (digits[0] - 0xf6) * 10 + digits[1] - 0xf6 == quantity):
+                    return "quantity", quantity
+        if not self._active_menu_cursor():
+            return None
+        selected = menu.selected_visible_index
+        if not 0 <= selected <= menu.maximum_visible_index:
+            return None
+        words = " ".join(self.read_screen_text_rows()).replace(">", " ").upper().split()
+        if "MONEY" not in words:
+            return None
+        if ((menu.top_y, menu.top_x, menu.maximum_visible_index) == (1, 1, 2)
+            and {"BUY", "SELL", "QUIT"} <= set(words)):
+            return "offer", selected
+        if (menu.top_y, menu.top_x) == (4, 5) and menu.maximum_visible_index <= 3:
+            return "buy", selected
         return None
 
     def read_machine_learning_input(self) -> tuple[str, int] | None:
@@ -4062,19 +4151,30 @@ class PokemonRedStateReader:
             raise ValueError("PC item inventory contains a duplicate item")
         return entries
 
-    def read_live_wild_teleport_witness(
-        self, raw: RawGameState
-    ) -> NativeWildTeleportWitness | None:
-        """Read only the supported revision's active, successful enemy effect.
+    def read_live_wild_teleport_witness(self, raw: RawGameState) -> NativeWildTeleportWitness | None:
+        """Keep the successful live Abra Teleport certificate."""
+        return self._read_live_wild_exit_witness(raw, NativeWildTeleportWitness)
 
-        Last-move bytes after a battle do not qualify. The live escape flag must
-        still be set, the ordinary wild Abra must be alive, and the complete
-        repeated read must remain coherent. No value enters policy features.
-        """
+    def read_live_wild_roar_witness(self, raw: RawGameState) -> NativeWildRoarWitness | None:
+        """Observe the cartridge’s successful live Growlithe Roar."""
+        return self._read_live_wild_exit_witness(raw, NativeWildRoarWitness)
+
+    def read_live_wild_roar_frame(self):
+        if (
+            self._memory.read_u8(RamAddress.IS_IN_BATTLE) != 1
+            or self._memory.read_u8(int(RamAddress.ENEMY_SPECIES_2) - 12) != 46
+            or self._memory.read_u8(int(RamAddress.PLAYER_DISABLED_MOVE) + 11) != 1
+        ):
+            return None
+        return self.read_live_wild_roar_witness(self.read())
+
+    def _read_live_wild_exit_witness(self, raw: RawGameState, witness_type):
+        # Only the coherent live enemy effect qualifies. No last-move byte
+        # can certify an overworld state or an unrelated battle.
         if (
             raw.battle_state != 1
             or raw.battle_result != 0
-            or raw.enemy_species_id != 148
+            or raw.enemy_species_id != witness_type._species
             or type(raw.enemy_hp) is not int
             or raw.enemy_hp <= 0
             or type(raw.enemy_level) is not int
@@ -4090,11 +4190,11 @@ class PokemonRedStateReader:
             int(RamAddress.PLAYER_DISABLED_MOVE) + 11,
         )
         values = tuple(self._memory.read_u8(at) for at in addresses)
-        if values != (100, 28, 0, 1):
+        if values != (witness_type._move, 28, 0, 1):
             return None
         if self.read() != raw or tuple(self._memory.read_u8(at) for at in addresses) != values:
             return None
-        return NativeWildTeleportWitness(
+        return witness_type(
             raw.map_id,
             raw.player_x,
             raw.player_y,
@@ -4300,6 +4400,11 @@ class PokemonRedStateReader:
             ),
             enemy_using_trapping_move=(
                 bool(self._memory.read_u8(RamAddress.ENEMY_BATTLE_STATUS_1) & (1 << 5))
+                if battle_state
+                else None
+            ),
+            player_using_trapping_move=(
+                bool(self._memory.read_u8(RamAddress.PLAYER_BATTLE_STATUS_1) & (1 << 5))
                 if battle_state
                 else None
             ),
@@ -5503,6 +5608,22 @@ class PokemonRedStateReader:
             for row in range(18)
         )
 
+    def named_field_faint_visible(self, slot: int) -> bool:
+        """Match the message's printed name against this party slot's native nickname."""
+        if type(slot) is not int or not 1 <= slot <= 6 or not self.read_bottom_dialogue_box_visible():
+            return False
+        rows = [row.strip() for row in self.read_screen_text_rows()[12:] if row.strip()]
+        if len(rows) != 2 or rows[-1] != "fainted":
+            return False
+        stride = int(RamAddress.PARTY_MON_3_NICKNAME) - int(RamAddress.PARTY_MON_2_NICKNAME)
+        start = int(RamAddress.PARTY_MON_2_NICKNAME) + (slot - 2) * stride
+        name = bytes(self._memory.read_u8(start+i) for i in range(stride)).partition(b"\x50")[0]
+        if not 1 <= len(name) < stride:
+            return False
+        line = int(RamAddress.TILE_MAP) + 14 * 20 + 1
+        return (bytes(self._memory.read_u8(line+i) for i in range(len(name))) == name
+                and self._memory.read_u8(line+len(name)) == 0x7F)
+
     def trainer_introduction_visible(self, raw: RawGameState) -> bool:
         """Recognize the pre-send-out announcement, never a replacement menu."""
         if raw.battle_state != 2 or self._active_menu_cursor():
@@ -5576,6 +5697,21 @@ class PokemonRedStateReader:
     def read_current_map_script(self) -> int:
         """Revision-local script phase; only cartridge adapters consume this."""
         return self._memory.read_u8(RamAddress.CURRENT_MAP_SCRIPT)
+
+    def read_scripted_wild_opposition(self, rom, raw, *, scope):
+        """Read a scoped ROM-script quote; private phase addresses stay in this adapter.
+
+        The binding owner supplies its immutable fresh raw snapshot and verifies
+        unchanged state/actions/frames around this optional observation.
+        """
+        from .gen1_scripted_wild import observe_scripted_wild_opposition
+
+        if (raw.map_id != self._memory.read_u8(RamAddress.CURRENT_MAP)
+                or raw.battle_state != self._memory.read_u8(RamAddress.IS_IN_BATTLE)):
+            return None
+        return observe_scripted_wild_opposition(
+            rom, raw, scope=scope, read_u8=self._memory.read_u8,
+        )
 
     def read_player_facing(self) -> str:
         """Decode the sprite's settled facing inside the revision adapter."""
@@ -5872,6 +6008,27 @@ class PokemonRedStateReader:
             raise OverworldMovementModeError(
                 f"unsupported overworld movement mode {raw}"
             ) from error
+
+    def read_retained_warp_entries(self) -> tuple[RetainedMapWarp, ...]:
+        """Read a coherent native table without claiming it is current topology.
+
+        During a warp wCurMap can change before source rows are replaced.
+        Consumers must independently authenticate their cartridge provenance.
+        """
+        count = self._memory.read_u8(RamAddress.NUMBER_OF_WARPS)
+        if not 0 <= count <= 32:
+            raise ValueError("retained native warp count is invalid")
+        start = int(RamAddress.WARP_ENTRIES)
+        payload = tuple(self._memory.read_u8(start + i) for i in range(count * 4))
+        if (
+            self._memory.read_u8(RamAddress.NUMBER_OF_WARPS) != count
+            or tuple(self._memory.read_u8(start + i) for i in range(count * 4)) != payload
+        ):
+            raise ValueError("retained native warp table changed during observation")
+        return tuple(
+            RetainedMapWarp((payload[i], payload[i+1]), payload[i+2], payload[i+3])
+            for i in range(0, len(payload), 4)
+        )
 
     def read_retained_outside_map(self) -> int:
         """Read Gen I's live ``wLastMap`` return-warp context.

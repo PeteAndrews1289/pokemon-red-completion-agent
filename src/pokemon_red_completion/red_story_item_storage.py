@@ -111,8 +111,67 @@ def completed_key_capacity_items(raw, *, reserved_slots=2, allow_spare_tm_storag
     return items[:needed]
 
 
+def _completed_key_storage_via_dig(runtime, actions, *, route, raw, items, pc,
+                                   start, escape, reserved_slots,
+                                   include_indigo_lobby, allow_spare_tm_storage):
+    """Compose an existing legal escape with fresh same-goal PC admission."""
+    from .red_dig_recovery import execute_dig_escape
+
+    projected = replace(start, map_id=escape.anchor, at=escape.landing,
+        last_outside_map=escape.anchor, occupied=frozenset(), hazards=(), mode='land')
+    plans = []
+    for center in sorted(_POKEMON_CENTER_MAPS):
+        try:
+            plans.append(route.route_world.plan_feasible_to_map(projected, int(center), goal_at=(4,13)))
+        except RoutePlanningError:
+            continue
+    if not plans:
+        return None
+    plan = min(plans, key=lambda p:(p.cost,p.terminal_map))
+    source = runtime.emulator.save_state_bytes()
+    boxes,dex=runtime.reader.read_all_box_states(),runtime.reader.read_pokedex_state()
+    used, terminal, inner = False, None, None
+
+    def execute():
+        nonlocal used, terminal, inner
+        if used or runtime.emulator.save_state_bytes()!=source or not _field_ready(runtime):
+            raise ValueError('Dig storage is stale or consumed')
+        used = True
+        a,f = actions.actions_executed,runtime.emulator.frame_count
+        receipt = execute_dig_escape(route.route_world,runtime.reader,runtime.emulator,actions,escape)
+        after = runtime.reader.read()
+        if (runtime.reader.read_all_box_states()!=boxes or runtime.reader.read_pokedex_state()!=dex
+                or dict(runtime.reader.read_pc_items())!=pc or after.bag_items!=raw.bag_items
+                or completed_key_capacity_items(after,reserved_slots=reserved_slots,
+                    allow_spare_tm_storage=allow_spare_tm_storage)!=items):
+            raise RuntimeError('Dig storage changed its reserved items')
+        # Arrival is real before another route is quoted. No projected PC
+        # endpoint is substituted for this fresh observation/executor.
+        fresh_route=replace(route,route_world=route.route_world.with_current_observation(runtime.reader))
+        inner=completed_key_storage_binding(runtime,actions,route=fresh_route,
+            reserved_slots=reserved_slots,include_indigo_lobby=include_indigo_lobby,
+            allow_spare_tm_storage=allow_spare_tm_storage,allow_dig_departure=False)
+        if inner is None:
+            raise RuntimeError('Dig storage has no fresh PC offer')
+        report=inner.execute()
+        if inner.verify(report).status.value!='succeeded':
+            raise RuntimeError('Dig storage did not verify its fresh PC deposit')
+        terminal=runtime.emulator.save_state_bytes()
+        return GoalExecutionReport(actions.actions_executed-a,runtime.emulator.frame_count-f,
+            {**report.evidence,'dig_departure':receipt,'fresh_pc_route_verified':True})
+
+    def verify(report):
+        return(GoalVerification.succeeded()if terminal is not None
+            and runtime.emulator.save_state_bytes()==terminal and _field_ready(runtime)
+            else GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED))
+
+    return ExecutableGoalBinding('pokemon.red:completed-key-storage:dig:'+sha256(source).hexdigest(),
+        GoalKind.MANAGE_STORAGE,min(1.0,0.07+plan.cost/3000),0.0,execute,verify,maximum_cash_debit=0)
+
+
 def completed_key_storage_binding(runtime, actions, *, route, reserved_slots=2,
-                                  include_indigo_lobby=False, allow_spare_tm_storage=False):
+                                  include_indigo_lobby=False, allow_spare_tm_storage=False,
+                                  allow_dig_departure=False):
     """Expose a normal, routed PC deposit as its own capacity goal.
 
     Existing callers remain unchanged. Current-party travel is guarded; the
@@ -121,6 +180,8 @@ def completed_key_storage_binding(runtime, actions, *, route, reserved_slots=2,
     """
     if type(include_indigo_lobby) is not bool:
         raise TypeError("Indigo storage permission must be an explicit boolean")
+    if type(allow_dig_departure) is not bool:
+        raise TypeError('storage Dig permission must be an explicit boolean')
     raw = runtime.reader.read()
     items = completed_key_capacity_items(raw, reserved_slots=reserved_slots,
                                         allow_spare_tm_storage=allow_spare_tm_storage)
@@ -147,6 +208,13 @@ def completed_key_storage_binding(runtime, actions, *, route, reserved_slots=2,
         ),
     )
     start = observer.observe()
+    if allow_dig_departure:
+        from .red_dig_recovery import plan_dig_escape
+        escape=plan_dig_escape(route.route_world,runtime.reader,raw,start)
+        if escape is not None:
+            return _completed_key_storage_via_dig(runtime,actions,route=route,raw=raw,
+                items=items,pc=pc,start=start,escape=escape,reserved_slots=reserved_slots,
+                include_indigo_lobby=include_indigo_lobby,allow_spare_tm_storage=allow_spare_tm_storage)
     candidates = []
     boundaries = [(int(center), (4, 13)) for center in sorted(_POKEMON_CENTER_MAPS)]
     if include_indigo_lobby:

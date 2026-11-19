@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING
 
 from pokemon_red_completion.executor import CountingExecutor
 from pokemon_red_completion.gen1_party_menu import swap_party_slots
-from pokemon_red_completion.goal_manager import GoalKind
+from pokemon_red_completion.goal_manager import GoalKind, GoalUnavailableReason
 from pokemon_red_completion.goal_manager_runtime import (
     ExecutableGoalBinding,
     GoalBindingSet,
@@ -159,7 +159,6 @@ def status_prepared_static_offer(provider, runtime, actions, observation):
     Rebind the exact source after swapping; do not activate a stale offer.
     """
     from pokemon_red_completion.capture_support import choose_capture_status
-    from pokemon_red_completion.goal_manager import GoalUnavailableReason
     from pokemon_red_completion.party import StatusCondition
     from pokemon_red_completion.red_capture_support import red_capture_status_options
     from pokemon_red_completion.red_static_capture_goal import RedStaticCaptureGoalProvider
@@ -170,7 +169,10 @@ def status_prepared_static_offer(provider, runtime, actions, observation):
     original = provider.offer(observation)
     if original.binding is None:
         return original
-    require_capture_party(observation)
+    try:
+        require_capture_party(observation)
+    except RedCaptureLeadError:
+        return RedGoalBindingOffer.unavailable(provider.kind, GoalUnavailableReason.TEMPORARILY_BLOCKED)
     option = choose_capture_status(
         observation.party,
         red_capture_status_options(
@@ -214,7 +216,10 @@ def optional_status_static_offer(provider, runtime, actions, observation):
     original = provider.offer(observation)
     if original.binding is None:
         return original
-    require_capture_party(observation)
+    try:
+        require_capture_party(observation)
+    except RedCaptureLeadError:
+        return RedGoalBindingOffer.unavailable(provider.kind, GoalUnavailableReason.TEMPORARILY_BLOCKED)
     option = choose_capture_status(
         observation.party,
         red_capture_status_options(

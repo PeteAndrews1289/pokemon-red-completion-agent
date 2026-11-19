@@ -22,6 +22,7 @@ from typing import cast
 import numpy as np
 from numpy.typing import NDArray
 
+from pokemon_red_completion.preparation_success import PreparationSuccessHead, preparation_mask
 from pokemon_red_completion.goal_manager import GoalSituation
 from pokemon_red_completion.goal_search_memory import GoalSearchHistory
 from pokemon_red_completion.player_option_capture_invocation import (
@@ -790,8 +791,11 @@ class LivingDexOptionCandidate:
     capture_invocation: OptionCaptureInvocation | None = None
     matchup: OptionMatchup | None = None
     story_unit: OptionStoryUnit | None = None
+    movement_revisit: bool | None = None
 
     def __post_init__(self) -> None:
+        if self.movement_revisit is not None and type(self.movement_revisit) is not bool:
+            raise LivingDexOptionValueError("movement recurrence must be observed boolean")
         if self.story_unit is not None and (
             type(self.story_unit) is not OptionStoryUnit
             or not isinstance(self.features, LivingDexOptionFeatures)
@@ -985,6 +989,8 @@ class LivingDexOptionCandidate:
             result["matchup"] = self.matchup.public_dict()
         if self.story_unit is not None:
             result["story_unit"] = self.story_unit.public_dict()
+        if self.movement_revisit is not None:
+            result["movement_revisit"] = self.movement_revisit
         if self.economy_offer is not None:
             result["economy_offer"] = {
                 "conditional_income": self.economy_offer.conditional_income,
@@ -1402,7 +1408,16 @@ def _score_with_income_saturation(
     removed = utility.success_weight * outcome.verified_success if saturated else 0.0
     if removed != 0.0:
         score -= removed
+    if movement_revisit_success_saturated(candidate):
+        score -= utility.success_weight * outcome.verified_success
     return score, saturated, removed
+
+
+def movement_revisit_success_saturated(candidate: LivingDexOptionCandidate) -> bool:
+    """Marginal utility only; physical success and action availability are unchanged."""
+    return (candidate.movement_revisit is True
+            and candidate.features.kind is LivingDexOptionKind.UNLOCK_ACCESS
+            and candidate.story_unit == OptionStoryUnit("movement", True))
 
 
 def _validate_numeric_vector(
@@ -2087,7 +2102,18 @@ def fit_living_dex_economy_head(
     maximum_importance_weight: float = DEFAULT_MAX_IMPORTANCE_WEIGHT,
     useful_liquidity_gain_weight: float = 1.0,
     cash_loss_weight: float = 1.0,
+    economy_features_only: bool = False,
 ) -> LivingDexEconomyHead:
+    """Fit the existing head, optionally using only its prospective economy inputs.
+
+    The opt-in projection prevents cash estimates from learning incidental party,
+    storage or goal correlations. It changes neither labels nor runtime choices.
+    The full existing serialization remains valid with zero excluded coefficients;
+    callers must record the projection in their fit provenance. Default fits retain
+    all existing features and behavior.
+    """
+    if type(economy_features_only) is not bool:
+        raise LivingDexOptionValueError("economy_features_only must be a boolean")
     ridge_value = _positive_finite(ridge, subject="ridge")
     cap = _positive_finite(
         maximum_importance_weight,
@@ -2153,6 +2179,11 @@ def fit_living_dex_economy_head(
     scale = np.sqrt(np.average(centered**2, axis=0, weights=weights))
     scale[scale == 0.0] = 1.0
     normalized = (features - mean) / scale
+    if economy_features_only:
+        # A feature projection inside the learner, never an action mask.
+        names = option_feature_names(4)
+        excluded = [i for i, name in enumerate(names) if name not in ECONOMY_FEATURE_NAMES]
+        normalized[:, excluded] = 0.0
     design = np.column_stack((np.ones(len(sorted_rows), dtype=np.float64), normalized))
     penalty = np.eye(design.shape[1], dtype=np.float64)
     penalty[0, 0] = 0.0
@@ -2558,6 +2589,44 @@ class LivingDexMovementSuccessHead:
         )
 
 
+_INTERACTION_SUCCESS_SCHEMA = "pokemon.core.certified-interaction-success-bias.v1"
+
+
+@dataclass(frozen=True, slots=True)
+class LivingDexInteractionSuccessHead(LivingDexMovementSuccessHead):
+    """The existing scalar prior calibration, separately typed for partial interactions."""
+
+    def to_dict(self):
+        result = LivingDexMovementSuccessHead.to_dict(self)
+        result.update(
+            schema=_INTERACTION_SUCCESS_SCHEMA,
+            gate="certified-noncombat-unopposed-interaction-requires-further-selected-unit",
+        )
+        return result
+
+    @classmethod
+    def from_dict(cls, value):
+        if (
+            not isinstance(value, Mapping)
+            or value.get("schema") != _INTERACTION_SUCCESS_SCHEMA
+            or value.get("gate") != "certified-noncombat-unopposed-interaction-requires-further-selected-unit"
+        ):
+            raise LivingDexOptionValueError("interaction head document differs")
+        # Preserve all existing scalar, evidence, membership and exact-key guards.
+        legacy = dict(value)
+        legacy["schema"] = _MOVEMENT_SUCCESS_SCHEMA
+        legacy["gate"] = "certified-movement-requires-further-selected-unit"
+        checked = LivingDexMovementSuccessHead.from_dict(legacy)
+        return cls(
+            checked.bias,
+            checked.parent_model_sha256,
+            checked.attestation_sha256,
+            checked.training_evidence_sha256,
+            checked.decision_sha256s,
+            checked.successful_examples,
+        )
+
+
 def _certified_movement_mask(values):
     names = option_feature_names(16)
     prefix = len(option_feature_names(15))
@@ -2586,6 +2655,41 @@ def _certified_movement_mask(values):
     return np.asarray(mask, dtype=bool).reshape(values.shape[:-1])
 
 
+def _certified_interaction_mask(values):
+    names = option_feature_names(16)
+    prefix = len(option_feature_names(15))
+    if values.ndim not in (1, 2) or values.shape[-1] != len(names):
+        raise LivingDexOptionValueError("interaction input width differs")
+    rows = values.reshape(-1, len(names))
+    mask = []
+    kind_indices = [i for i, name in enumerate(names) if name.startswith("kind.")]
+    for row in rows:
+        unit = story_unit_from_vector(
+            tuple(v.item() if hasattr(v, "item") else v for v in row[prefix:])
+        )
+        if unit is not None:
+            kinds = row[kind_indices]
+            if (
+                np.any((kinds != 0.0) & (kinds != 1.0))
+                or kinds.sum() != 1.0
+                or row[names.index("kind.unlock_access")] != 1.0
+            ):
+                raise LivingDexOptionValueError("certified interaction requires exact story kind")
+        challenge = tuple(
+            row[names.index("challenge.unlock_access_x_" + name)]
+            for name in ("present", "combat_required", "opposition_known")
+        )
+        if any(value not in (0.0, 1.0) for value in challenge):
+            raise LivingDexOptionValueError("interaction challenge flags must be semantic booleans")
+        mask.append(
+            unit is not None
+            and unit.mode == "interaction"
+            and unit.requires_further_selected_unit is True
+            and challenge == (1.0, 0.0, 0.0)
+        )
+    return np.asarray(mask, dtype=bool).reshape(values.shape[:-1])
+
+
 @dataclass(frozen=True, slots=True)
 class LivingDexOptionValueModel:
     """Multi-outcome linear value model fitted only on selected arms."""
@@ -2606,6 +2710,8 @@ class LivingDexOptionValueModel:
         LivingDexBoundedStorySuccessHead | LivingDexBoundedMatchupStorySuccessHead | None
     ) = None
     movement_success_head: LivingDexMovementSuccessHead | None = None
+    interaction_success_head: LivingDexInteractionSuccessHead | None = None
+    preparation_success_head: PreparationSuccessHead | None = None
 
     def __post_init__(self) -> None:
         if self.objective not in {
@@ -2753,6 +2859,16 @@ class LivingDexOptionValueModel:
             ):
                 raise LivingDexOptionValueError("complete-paid residual model parameters differ")
 
+        if self.interaction_success_head is not None:
+            if (
+                type(self.interaction_success_head) is not LivingDexInteractionSuccessHead
+                or self.feature_version != 16
+                or self.movement_success_head is None
+                or self.bounded_story_success_head is not None
+            ):
+                raise LivingDexOptionValueError(
+                    "interaction head requires its movement-headed V16 parent"
+                )
         if self.movement_success_head is not None:
             if (
                 type(self.movement_success_head) is not LivingDexMovementSuccessHead
@@ -2762,10 +2878,33 @@ class LivingDexOptionValueModel:
                 raise LivingDexOptionValueError("movement head requires an unheaded V16 parent")
             parent = self.to_dict()
             parent.pop("movement_success_head")
+            parent.pop("preparation_success_head", None)
+            parent.pop("interaction_success_head", None)
             if canonical_sha256(parent) != self.movement_success_head.parent_model_sha256:
                 raise LivingDexOptionValueError(
                     "movement head differs from its exact frozen parent"
                 )
+
+        if self.interaction_success_head is not None:
+            parent = self.to_dict()
+            parent.pop("interaction_success_head")
+            parent.pop("preparation_success_head", None)
+            if canonical_sha256(parent) != self.interaction_success_head.parent_model_sha256:
+                raise LivingDexOptionValueError(
+                    "interaction head differs from its exact full frozen parent"
+                )
+
+        if self.preparation_success_head is not None:
+            head = self.preparation_success_head
+            if type(head) is not PreparationSuccessHead or self.feature_version != 16 or self.movement_success_head is None or self.interaction_success_head is None:
+                raise LivingDexOptionValueError("preparation head requires exact corrected V16 parent")
+            parent = self.to_dict()
+            parent.pop("preparation_success_head")
+            names = option_feature_names(16)
+            from .player_option_preparation import preparation_feature_names
+            scales = tuple(float(self.feature_scale[names.index(n)]) for n in preparation_feature_names())
+            if canonical_sha256(parent) != head.parent_model_sha256 or scales != head.feature_scales:
+                raise LivingDexOptionValueError("preparation head differs from exact parent/scales")
 
     def movement_success_components(self, vectors, *, _validated_base_raw=None):
         """Separate physical prior and fitted scalar; original candidate is never rewritten."""
@@ -2791,6 +2930,37 @@ class LivingDexOptionValueModel:
         preclip = np.where(mask, physical + bias, original[..., 0])
         return dict(
             certified_movement_mask=mask,
+            original_raw=original[..., 0].copy(),
+            physical_raw=physical_raw,
+            bounded_physical_prior=physical,
+            learned_bias=np.where(mask, bias, 0.0),
+            preclip=preclip,
+            final=np.clip(preclip, 0.0, 1.0),
+        )
+
+    def interaction_success_components(self, vectors, *, _validated_parent_raw=None):
+        """Existing physical prior and typed scalar; preserve the full parent off-gate."""
+        if self.feature_version != 16:
+            raise LivingDexOptionValueError("interaction feasibility requires V16")
+        values = np.asarray(vectors, dtype=np.float64)
+        original = (
+            self._raw_predictions_before_interaction(values)
+            if _validated_parent_raw is None
+            else _validated_parent_raw
+        )
+        mask = _certified_interaction_mask(values)
+        # This calls the unchanged movement primitive only for its physical prior.
+        # The prior uses frozen core parameters and excludes exactly its same three
+        # strategic feature products. No movement mask or movement bias is reused.
+        physical_components = self.movement_success_components(
+            values, _validated_base_raw=original
+        )
+        physical_raw = physical_components["physical_raw"]
+        physical = physical_components["bounded_physical_prior"]
+        bias = 0.0 if self.interaction_success_head is None else self.interaction_success_head.bias
+        preclip = np.where(mask, physical + bias, original[..., 0])
+        return dict(
+            certified_interaction_mask=mask,
             original_raw=original[..., 0].copy(),
             physical_raw=physical_raw,
             bounded_physical_prior=physical,
@@ -2835,7 +3005,7 @@ class LivingDexOptionValueModel:
             correction_intercept=np.where(story, head.intercept, 0.0),
         )
 
-    def raw_predictions(self, vectors) -> NDArray[np.float64]:
+    def _raw_predictions_before_interaction(self, vectors) -> NDArray[np.float64]:
         raw = self._base_raw_predictions(vectors)
         if self.bounded_story_success_head is not None:
             components = self.story_success_components(vectors)
@@ -2845,6 +3015,33 @@ class LivingDexOptionValueModel:
         if self.movement_success_head is not None:
             components = self.movement_success_components(vectors, _validated_base_raw=raw)
             raw[..., 0] = components["preclip"]
+        return raw
+
+    def _raw_predictions_before_preparation(self, vectors) -> NDArray[np.float64]:
+        raw = self._raw_predictions_before_interaction(vectors)
+        if self.interaction_success_head is not None:
+            components = self.interaction_success_components(
+                vectors, _validated_parent_raw=raw
+            )
+            raw[..., 0] = components["preclip"]
+        return raw
+
+    def preparation_success_components(self, vectors, *, _validated_parent_raw=None):
+        if self.feature_version != 16 or self.preparation_success_head is None:
+            raise LivingDexOptionValueError("preparation correction is not active")
+        values = np.asarray(vectors, dtype=np.float64)
+        original = self._raw_predictions_before_preparation(values) if _validated_parent_raw is None else _validated_parent_raw
+        mask = preparation_mask(values)
+        physical = self.movement_success_components(values, _validated_base_raw=original)["bounded_physical_prior"]
+        delta = self.preparation_success_head.delta(values)
+        preclip = np.where(mask, physical + delta, original[..., 0])
+        return dict(preparation_mask=mask, original_raw=original[..., 0].copy(), bounded_physical_prior=physical,
+                    learned_residual=np.where(mask, delta, 0.), preclip=preclip, final=np.clip(preclip, 0., 1.))
+
+    def raw_predictions(self, vectors) -> NDArray[np.float64]:
+        raw = self._raw_predictions_before_preparation(vectors)
+        if self.preparation_success_head is not None:
+            raw[..., 0] = self.preparation_success_components(vectors, _validated_parent_raw=raw)["preclip"]
         return raw
 
     def _base_raw_predictions(self, vectors) -> NDArray[np.float64]:
@@ -3121,6 +3318,14 @@ class LivingDexOptionValueModel:
                     action_still_available=True,
                     incidental_xp_or_healing_not_newly_valued=True,
                 )
+            if movement_revisit_success_saturated(candidate):
+                utility_terms["verified_success"] = 0.0
+                row["movement_revisit_success_saturation"] = dict(
+                    schema="pokemon.core.movement-revisit-success-saturation.v1",
+                    reason="endpoint_already_observed_without_semantic_progress",
+                    removed_success_utility=utility.success_weight * float(bounded[0]),
+                    predicted_success_unchanged=float(bounded[0]),
+                    action_still_available=True, learned_discrimination=False)
             if self.bounded_story_success_head is not None:
                 components = self.story_success_components(vector)
                 story_details: dict[str, object] = {
@@ -3149,6 +3354,22 @@ class LivingDexOptionValueModel:
                 row["raw_contribution_scope"] = (
                     "frozen_parent_only_not_total_after_movement_projection"
                 )
+            if self.interaction_success_head is not None:
+                components = self.interaction_success_components(vector)
+                row["interaction_success"] = {
+                    key: value.tolist() for key, value in components.items()
+                }
+                row["interaction_success"]["excluded_features"] = list(
+                    _MOVEMENT_STRATEGIC_FEATURE_NAMES
+                )
+                row["interaction_success"]["prediction_is_calibrated_probability"] = False
+                row["raw_contribution_scope"] = (
+                    "frozen_parent_only_not_total_after_interaction_projection"
+                )
+            if self.preparation_success_head is not None:
+                components = self.preparation_success_components(vector)
+                row["preparation_success"] = {k: v.tolist() for k, v in components.items()}
+                row["raw_contribution_scope"] = "frozen_parent_only_not_total_after_preparation_correction"
             economy = self.predict_economy_candidate(menu.context, candidate)
             if economy is not None:
                 head = self.economy_head
@@ -3421,6 +3642,10 @@ class LivingDexOptionValueModel:
             result["bounded_story_success_head"] = self.bounded_story_success_head.to_dict()
         if self.movement_success_head is not None:
             result["movement_success_head"] = self.movement_success_head.to_dict()
+        if self.interaction_success_head is not None:
+            result["interaction_success_head"] = self.interaction_success_head.to_dict()
+        if self.preparation_success_head is not None:
+            result["preparation_success_head"] = self.preparation_success_head.to_dict()
         return result
 
     @classmethod
@@ -3476,6 +3701,10 @@ class LivingDexOptionValueModel:
             expected_keys = expected_keys | {"bounded_story_success_head"}
         if "movement_success_head" in value:
             expected_keys = expected_keys | {"movement_success_head"}
+        if "interaction_success_head" in value:
+            expected_keys = expected_keys | {"interaction_success_head"}
+        if "preparation_success_head" in value:
+            expected_keys = expected_keys | {"preparation_success_head"}
         if set(value) != expected_keys:
             raise LivingDexOptionValueError("living-Dex model document differs")
         feature_names = value.get("feature_names")
@@ -3555,6 +3784,13 @@ class LivingDexOptionValueModel:
                     if "movement_success_head" in value
                     else None
                 ),
+                interaction_success_head=(
+                    LivingDexInteractionSuccessHead.from_dict(value["interaction_success_head"])
+                    if "interaction_success_head" in value
+                    else None
+                ),
+                preparation_success_head=(PreparationSuccessHead.from_dict(value["preparation_success_head"])
+                    if "preparation_success_head" in value else None),
             )
         except (KeyError, TypeError, ValueError):
             raise LivingDexOptionValueError("living-Dex model document is invalid") from None
@@ -4729,6 +4965,7 @@ def fit_living_dex_option_value(
         if isinstance(parent, LivingDexOptionValueModel) and (
             parent.bounded_story_success_head is not None
             or parent.movement_success_head is not None
+            or parent.interaction_success_head is not None
         ):
             raise LivingDexOptionValueError("fitting an already corrected parent is unsupported")
     bounded_ids = None
@@ -5362,6 +5599,7 @@ __all__ = [
     "LivingDexOptionUnavailableReason",
     "LivingDexOptionUtility",
     "LivingDexOptionValueError",
+    "LivingDexInteractionSuccessHead",
     "LivingDexOptionValueEvaluation",
     "LivingDexOptionValueFit",
     "LivingDexOptionValueFitReport",
@@ -5372,6 +5610,7 @@ __all__ = [
     "evaluate_living_dex_option_value",
     "fit_living_dex_economy_head",
     "fit_living_dex_option_value",
+    "fit_certified_interaction_success_bias",
     "living_dex_option_train_dataset_sha256",
     "living_dex_option_features_from_semantic_facts",
     "living_dex_option_context_from_goal_situation",
@@ -5399,6 +5638,7 @@ def fit_certified_movement_success_bias(
         not isinstance(frozen_base, LivingDexOptionValueModel)
         or frozen_base.feature_version != 16
         or frozen_base.movement_success_head is not None
+        or frozen_base.interaction_success_head is not None
         or frozen_base.bounded_story_success_head is not None
         or type(attestation_sha256) is not str
         or _SHA256.fullmatch(attestation_sha256) is None
@@ -5505,6 +5745,158 @@ def fit_certified_movement_success_bias(
     report.update(
         fits=1,
         candidate_forward_calls=1,
+        evaluated_rows=2 * len(rows),
+        fitted_bias=bias,
+        physical_prior_mse=before_mse,
+        candidate_mse=after_mse,
+        maximum_fit_row_absolute_error=float(np.max(np.abs(after - targets))),
+        candidate_model_sha256=candidate.model_sha256,
+        parent_parameters_and_normalizer_retained=True,
+        other_outcomes_and_economy_retained=True,
+        extrapolation_scope="Sparse prior calibration, not learned failure discrimination",
+    )
+    if after_mse >= before_mse:
+        return None, dict(report, status="REJECTED_NO_TRAIN_IMPROVEMENT")
+    return candidate, dict(report, status="PROVISIONAL_NATIVE_FALSIFICATION_ONLY")
+
+
+def fit_certified_interaction_success_bias(
+    curriculum_examples: Iterable[LivingDexCurriculumOutcomeExample],
+    *,
+    frozen_base: LivingDexOptionValueModel,
+    attestation_sha256: str,
+    attested_decision_sha256s: Sequence[str],
+):
+    """Reuse the existing fixed physical-prior scalar fit on actual partial interactions.
+
+    Admission/ancestry is externally authenticated by the caller. This function
+    validates exact membership, typed V16 scope and real settled targets; it does
+    not create counterfactual examples or authorize native use.
+    Returns (optional candidate, explicit provisional/insufficient-data report).
+    """
+    if (
+        not isinstance(frozen_base, LivingDexOptionValueModel)
+        or frozen_base.feature_version != 16
+        or frozen_base.interaction_success_head is not None
+        or frozen_base.movement_success_head is None
+        or frozen_base.bounded_story_success_head is not None
+        or type(attestation_sha256) is not str
+        or _SHA256.fullmatch(attestation_sha256) is None
+        or isinstance(attested_decision_sha256s, (str, bytes))
+        or not isinstance(attested_decision_sha256s, Sequence)
+    ):
+        raise LivingDexOptionValueError(
+            "interaction fit requires exact movement-headed V16 parent and attestation"
+        )
+    rows = tuple(curriculum_examples)
+    if any(type(row) is not LivingDexCurriculumOutcomeExample for row in rows):
+        raise LivingDexOptionValueError("interaction fit needs admitted native curriculum rows")
+    for row in rows:
+        row.__post_init__()
+        if (
+            row.partition != "train"
+            or row.feature_version != 16
+            or row.outcome.status is not LivingDexOutcomeStatus.SETTLED
+        ):
+            raise LivingDexOptionValueError(
+                "interaction fit cannot coerce unknown/censored/non-TRAIN rows"
+            )
+        if row.outcome.completion_gain != 0.0 or row.outcome.dependency_unlock_gain != 0.0:
+            raise LivingDexOptionValueError(
+                "partial interaction evidence cannot claim full completion/dependency gain"
+            )
+    rows = tuple(sorted(rows, key=lambda row: row.decision_sha256))
+    ids = tuple(row.decision_sha256 for row in rows)
+    attested = tuple(attested_decision_sha256s)
+    if (
+        len(set(ids)) != len(ids)
+        or len(set(attested)) != len(attested)
+        or any(type(v) is not str or _SHA256.fullmatch(v) is None for v in attested)
+        or set(ids) != set(attested)
+    ):
+        raise LivingDexOptionValueError("interaction fit attested membership differs")
+    report = dict(
+        schema="pokemon.core.certified-interaction-success-fit.v1",
+        parent_model_sha256=frozen_base.model_sha256,
+        attestation_sha256=attestation_sha256,
+        actual_rows=len(rows),
+        decision_sha256s=list(ids),
+        fits=0,
+        baseline_forward_calls=0,
+        candidate_forward_calls=0,
+        evaluated_rows=0,
+        ridge=_MOVEMENT_SUCCESS_RIDGE,
+        bias_penalized=True,
+        prediction_is_calibrated_probability=False,
+        independent_coverage_established=False,
+        native_qualification=False,
+    )
+    if len(rows) < 2:
+        return None, dict(report, status="INSUFFICIENT_ATTESTED_TRAIN_ROWS")
+    features = np.asarray([row.features for row in rows], dtype=np.float64)
+    if not np.all(_certified_interaction_mask(features)):
+        raise LivingDexOptionValueError(
+            "interaction fit requires known noncombat unopposed partial interaction evidence"
+        )
+    success_targets: list[float] = []
+    for row in rows:
+        # The admitted settled outcome was revalidated above.
+        assert row.outcome.verified_success is not None
+        success_targets.append(float(row.outcome.verified_success))
+    targets = np.asarray(success_targets)
+    components = frozen_base.interaction_success_components(features)
+    prior = components["bounded_physical_prior"]
+    parent_bounded = np.clip(components["original_raw"], 0.0, 1.0)
+    report.update(
+        baseline_forward_calls=1,
+        parent_strategic_bounded_mse=float(np.mean((parent_bounded - targets) ** 2)),
+        fit_target="actual_success_minus_bounded_physical_prior",
+        parent_strategic_accuracy_improvement_claimed=False,
+        baseline_component_base9output_passes=5,
+        baseline_component_physical_scalar_passes=2,
+        evaluated_rows=len(rows),
+        successes=int(targets.sum()),
+        failures=int(len(rows) - targets.sum()),
+        labels_are_one_class=bool(len(set(targets.tolist())) == 1),
+    )
+    residual = targets - prior
+    direction = float(residual.sum())
+    tolerance = float(np.finfo(np.float64).eps * max(1, len(rows)) * 32)
+    evidence = canonical_sha256(
+        dict(
+            schema="pokemon.core.interaction-success-actual-target-evidence.v1",
+            parent_model_sha256=frozen_base.model_sha256,
+            attestation_sha256=attestation_sha256,
+            rows=[row.public_dict() for row in rows],
+        )
+    )
+    report.update(
+        training_evidence_sha256=evidence,
+        bounded_physical_success=list(map(float, prior)),
+        actual_success_targets=list(map(float, targets)),
+        scalar_direction=direction,
+        direction_absolute_tolerance=tolerance,
+    )
+    if abs(direction) <= tolerance:
+        return None, dict(report, status="NO_INFORMATIVE_SCALAR_DIRECTION")
+    bias = direction / (len(rows) + _MOVEMENT_SUCCESS_RIDGE)
+    head = LivingDexInteractionSuccessHead(
+        bias,
+        frozen_base.model_sha256,
+        attestation_sha256,
+        evidence,
+        ids,
+        int(targets.sum()),
+    )
+    candidate = replace(frozen_base, interaction_success_head=head)
+    after = np.clip(candidate.raw_predictions(features)[:, 0], 0.0, 1.0)
+    before_mse = float(np.mean((prior - targets) ** 2))
+    after_mse = float(np.mean((after - targets) ** 2))
+    report.update(
+        fits=1,
+        candidate_forward_calls=1,
+        candidate_base9output_passes=5,
+        candidate_physical_scalar_passes=2,
         evaluated_rows=2 * len(rows),
         fitted_bias=bias,
         physical_prior_mse=before_mse,

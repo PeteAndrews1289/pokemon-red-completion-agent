@@ -4,7 +4,7 @@ Replay authenticates recorded safety selection and binding identity. It does not
 prove native observation truth or that an arbitrary Python executor was honest.
 """
 
-from dataclasses import asdict
+from dataclasses import asdict, replace
 
 from .goal_manager import (
     GoalAvailability,
@@ -79,9 +79,52 @@ def _binding(o):
     )
 
 
+def _restore_recorded_options(intent):
+    """Reconstruct an inert menu;never reconstruct a controller or verifier."""
+    document = intent["private_selection_authority"]
+    opportunities = tuple(_restore_opportunity(o) for o in document["opportunities"])
+    refs = document["original_binding_refs"]
+    by_ref = {o.binding_ref: o for o in opportunities}
+    original = GoalBindingSet(
+        opportunities, tuple(_binding(by_ref[r]) for r in refs),
+        document["allow_resource_variants"],
+    )
+    bindings = tuple(_binding(_restore_opportunity(o)) for o in document["live_bindings"])
+    menu = intent["menu"]
+    options: RedPlayerSupport | RedLiveOptionSet
+    if menu["schema"] == "pokemon.red.player-support.v1":
+        if intent.get("sequence_context") is not None:
+            raise ValueError("forced support cannot have a sequence query context")
+        options = RedPlayerSupport(original, PlayerReadiness.from_public(menu["readiness"]))
+    else:
+        restored = restore_living_dex_policy_menu(
+            menu["menu"], binding_refs=tuple(b.binding_ref for b in bindings),
+        )
+        if any(living_dex_option_kind_for_goal(b.kind, feature_version=restored.feature_version)
+               is not c.features.kind for b, c in zip(bindings, restored.candidates, strict=True)):
+            raise ValueError("recorded executor kind differs from selected menu")
+        options = RedLiveOptionSet(
+            GoalSituation(**document["situation"]), original, restored, bindings,
+            frozenset(document["ordinary_binding_refs"]), document["ordering_seed_sha256"],
+            force_resource_safety=menu.get("resource_authority") != "model",
+        )
+    return options
+
+
 def replay_selection_authority(model, intent, decision, *, allow_earning_exploration: bool,
-                               sequence_policy: SequencePolicy | None = None):
-    """Return the exact selected private ref, without reconstructing callbacks."""
+                               sequence_policy: SequencePolicy | None = None,
+                               train_form_balanced_exploration: bool = False,
+                               exploration_mix: float = .25):
+    """Return the exact selected private ref, without reconstructing callbacks.
+
+    Defaults replay the historical sampler. A TRAIN-only form-balanced run must
+    pass its declared plan values; they are re-derived, never trusted from
+    the decision, so a mismatched sampler fails the byte-identical replay.
+    """
+    if type(train_form_balanced_exploration) is not bool or (
+        (train_form_balanced_exploration or exploration_mix != .25) and sequence_policy is not None
+    ):
+        raise ValueError("recorded form-balanced sampler scope differs")
     document = intent["private_selection_authority"]
     greedy_selection = document.get("greedy_selection", False)
     if type(greedy_selection) is not bool or (greedy_selection and sequence_policy is not None):
@@ -97,33 +140,11 @@ def replay_selection_authority(model, intent, decision, *, allow_earning_explora
     if (type(allow_earning_exploration) is not bool
         or document.get("allow_earning_exploration") is not allow_earning_exploration):
         raise ValueError("recorded earning authority differs")
-    opportunities = tuple(_restore_opportunity(o) for o in document["opportunities"])
-    refs = document["original_binding_refs"]
-    by_ref = {o.binding_ref: o for o in opportunities}
-    original = GoalBindingSet(
-        opportunities, tuple(_binding(by_ref[r]) for r in refs),
-        document["allow_resource_variants"],
-    )
-    bindings = tuple(_binding(_restore_opportunity(o)) for o in document["live_bindings"])
+    options = _restore_recorded_options(intent)
     menu = intent["menu"]
-    options: RedPlayerSupport | RedLiveOptionSet
-    choice: RedPlayerSupportChoice | RedLiveOptionChoice
-    if menu["schema"] == "pokemon.red.player-support.v1":
-        if context is not None:
-            raise ValueError("forced support cannot have a sequence query context")
-        options = RedPlayerSupport(original, PlayerReadiness.from_public(menu["readiness"]))
+    if isinstance(options, RedPlayerSupport):
         choice = RedPlayerSupportChoice(options)
     else:
-        restored = restore_living_dex_policy_menu(
-            menu["menu"], binding_refs=tuple(b.binding_ref for b in bindings),
-        )
-        if any(living_dex_option_kind_for_goal(b.kind, feature_version=restored.feature_version)
-               is not c.features.kind for b, c in zip(bindings, restored.candidates, strict=True)):
-            raise ValueError("recorded executor kind differs from selected menu")
-        options = RedLiveOptionSet(
-            GoalSituation(**document["situation"]), original, restored, bindings,
-            frozenset(document["ordinary_binding_refs"]), document["ordering_seed_sha256"],
-        )
         choice = select_red_live_option(
             model, options, seed=intent["selection_seed"],
             allow_earning_exploration=allow_earning_exploration,
@@ -131,7 +152,9 @@ def replay_selection_authority(model, intent, decision, *, allow_earning_explora
             sequence_policy=sequence_policy, sequence_context=context,
             utility=(DEFAULT_LIVING_DEX_GOAL_UTILITY if sequence_policy is None
                      else sequence_policy.immediate_utility),
-            exploration_mix=.25 if sequence_policy is None else sequence_policy.exploration_mix,
+            exploration_mix=(float(exploration_mix) if sequence_policy is None
+                             else sequence_policy.exploration_mix),
+            **({"form_balanced_exploration": True} if train_form_balanced_exploration else {}),
         )
     if (canonical_sha256(record_selection_authority(
             options, allow_earning_exploration=allow_earning_exploration,
@@ -140,4 +163,59 @@ def replay_selection_authority(model, intent, decision, *, allow_earning_explora
         or canonical_sha256(options.public_dict()) != canonical_sha256(menu)
         or canonical_sha256(choice.public_dict()) != canonical_sha256(decision)):
         raise ValueError("recorded safety/selection authority does not replay")
+    return choice.selected_binding.binding_ref
+
+
+def replay_unmodified_branch_recovery(model, head, intent, decision, *, objective_ref, flags):
+    """Audit the existing parent when no declared combat scope is available.
+
+    This grants neither source/native truth nor training admission. A refined
+    child needs its own typed association proof and is deliberately rejected.
+    """
+    from .red_consequence_choice import (
+        branch_recovery_identity, branch_recovery_objectives,
+        select_branch_recovery_live_option,
+    )
+    identity = branch_recovery_identity(model.model_sha256, head.model_sha256,
+                                        objective_ref, **flags)
+    if intent.get("model_sha256") != identity or decision.get("model_sha256") != identity:
+        raise ValueError("recorded branch selector identity differs")
+    options = _restore_recorded_options(intent)
+    if type(options) is not RedLiveOptionSet:
+        raise ValueError("recorded branch parent needs a mixed model menu")
+    contexts = intent["private_story_contexts"]
+    if (type(contexts) is not list or len(contexts) != len(options.bindings)
+            or any(set(row) != {"binding_ref", "objective_ref"}
+                   or row["binding_ref"] != binding.binding_ref
+                   or (row["objective_ref"] is not None and type(row["objective_ref"]) is not str)
+                   for row, binding in zip(contexts, options.bindings, strict=True))):
+        raise ValueError("recorded private story contexts differ")
+    bindings = tuple(replace(binding, story_objective_ref=row["objective_ref"],
+                             story_unit=candidate.story_unit,
+                             story_approach_only=(candidate.story_unit is not None
+                                 and candidate.story_unit.requires_further_selected_unit))
+                     for binding, row, candidate in zip(
+                         options.bindings, contexts, options.menu.candidates, strict=True))
+    options = replace(options, bindings=bindings)
+    scope = branch_recovery_objectives(objective_ref)
+    if any(options.binding(i).kind is GoalKind.ADVANCE_STORY
+           and options.binding(i).story_objective_ref in scope for i in options.menu.available_indices):
+        raise ValueError("in-scope combat refinement needs its separate association audit")
+    document = intent["private_selection_authority"]
+    if (document.get("greedy_selection") is not flags["greedy_selection"]
+            or canonical_sha256(record_selection_authority(
+                options, allow_earning_exploration=True,
+                greedy_selection=flags["greedy_selection"])) != canonical_sha256(document)
+            or canonical_sha256(options.public_dict()) != canonical_sha256(intent["menu"])):
+        raise ValueError("recorded branch menu authority differs")
+    expected_recurrence = dict(declared_greedy_selection=flags["greedy_selection"],
+                               explore_on_movement_recurrence=flags["explore_on_movement_recurrence"],
+                               trigger_rule="greedy-selected-observed-unchanged-endpoint-v1")
+    if intent.get("private_recurrence_sampling_policy") != expected_recurrence:
+        raise ValueError("recorded recurrence recipe differs")
+    choice = select_branch_recovery_live_option(
+        model, options, head, objective_ref=objective_ref, seed=intent["selection_seed"],
+        source_state_sha256=intent["state_sha256"], **flags)
+    if canonical_sha256(choice.public_dict()) != canonical_sha256(decision):
+        raise ValueError("recorded branch choice does not replay")
     return choice.selected_binding.binding_ref

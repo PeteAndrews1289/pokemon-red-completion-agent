@@ -2298,6 +2298,7 @@ class LiveWildEncounterExecutor:
         self.capture_weakening_reports: list[dict[str, object]] = []
         self.capture_escape_bypasses = 0
         self.capture_health_stopped = False
+        self.capture_drift_settlements = 0
         self._party_reader = PokemonRedPartyReader(emulator)
 
     def read_collection(self) -> CollectionObservation:
@@ -2355,24 +2356,42 @@ class LiveWildEncounterExecutor:
                 self._executor,
                 self._reader,
                 expected_original_species_id=raw.enemy_species_id,
+                allow_renewable_self_destruct_exit=True,
             )
             weakened = False
+            custody = (raw.map_id, raw.party_species_ids, raw.bag_items)
 
             def before_throw():
                 nonlocal weakened
                 try:
                     prepared = prepare()
                 except RedCaptureStatusError as error:
-                    if (
-                        not self._settle_unavailable_catcher
-                        or error.reason_code != CaptureStatusDrift.NO_HEALTHY_CATCHER.value
-                    ):
+                    if not self._settle_unavailable_catcher:
+                        raise
+                    if error.reason_code == CaptureStatusDrift.TARGET_HP.value:
+                        # A target-HP drift during setup is not a custody loss.
+                        # Settle it only while the same wild target is alive and
+                        # map, party species and bag are unchanged since this
+                        # capture began; every other drift still stops.
+                        live = self._reader.read()
+                        identity = self._reader.read_wild_capture_identity()
+                        if (
+                            live.battle_state != 1
+                            or not live.enemy_hp
+                            or identity is None
+                            or identity.original_species_id != raw.enemy_species_id
+                            or (live.map_id, live.party_species_ids, live.bag_items) != custody
+                        ):
+                            raise
+                        self.capture_drift_settlements += 1
+                    elif error.reason_code != CaptureStatusDrift.NO_HEALTHY_CATCHER.value:
                         raise
                     # Attrition can remove a capture prerequisite after routing
                     # or a failed throw. Settle only this typed health stop; the
                     # existing throw guard verifies unchanged census/ball costs.
                     self.flee_encounter()
-                    self.capture_health_stopped = True
+                    if error.reason_code == CaptureStatusDrift.NO_HEALTHY_CATCHER.value:
+                        self.capture_health_stopped = True
                     from .capture_survey import record_capture_diagnostic
 
                     record_capture_diagnostic(
@@ -2408,6 +2427,26 @@ class LiveWildEncounterExecutor:
                     )
                     self.capture_weakening_reports.append(asdict(result))
                     weakened = True  # One finite preparation, not three hits per ball.
+                    if result.stop_reason == "weakener_fainted":
+                        if not self._settle_unavailable_catcher:
+                            raise RedCaptureStatusError(
+                                "capture weakener fainted",
+                                reason_code=CaptureStatusDrift.NO_HEALTHY_CATCHER,
+                            )
+                        # The same bounded whole-party flee used for health
+                        # attrition owns the forced replacement, not a ball or
+                        # a second weakening attempt at a fainted boundary.
+                        self.flee_encounter()
+                        self.capture_health_stopped = True
+                        from .capture_survey import record_capture_diagnostic
+
+                        record_capture_diagnostic(
+                            self._executor, "capture_preparation_stopped",
+                            self._reader.read(), source="ordinary_wild",
+                            throw=None, ball=None, ball_quantity=None,
+                            outcome="capture_weakener_fainted",
+                        )
+                        return False
                     after = self._reader.read()
                     status = self._reader.read_enemy_capture_status()
                     # This row describes the boundary immediately before the

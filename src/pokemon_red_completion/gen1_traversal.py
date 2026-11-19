@@ -141,6 +141,11 @@ class MapObjectEvent:
         return self.y, self.x
 
     @property
+    def can_walk(self) -> bool:
+        """Cartridge WALK declaration, independent of the current animation phase."""
+        return self.movement == 0xFE
+
+    @property
     def is_boulder(self) -> bool:
         return self.sprite_id == SPRITE_BOULDER
 

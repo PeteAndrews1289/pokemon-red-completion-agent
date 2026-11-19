@@ -21,7 +21,11 @@ from .goal_manager_runtime import GoalExecutionReport
 from .observation import MAX_BAG_ITEMS, ItemId, MapId
 from .red_evolution_stones import BUYABLE_EVOLUTION_STONES, EVOLUTION_STONE_ITEMS
 from .red_goal_skills import prepare_center_departure
-from .red_native_boxed_evolution import restore_native_center_party, settle_native_evolution
+from .red_native_boxed_evolution import (
+    native_evolution_pc_replanner,
+    restore_native_center_party,
+    settle_native_evolution,
+)
 from .red_party_item_evolution import (
     RedPartyItemEvolutionExecutor,
     RedPartyItemEvolutionRequest,
@@ -91,7 +95,7 @@ def _native_item_transport(runtime, world, actions, traversal, destination, *, g
         actions,
         traversal,
         limits=_ROUTE_LIMITS,
-        replanner=current.replanner(),
+        replanner=native_evolution_pc_replanner(runtime, current, actions),
         interruption_handler=handler,
     )
 

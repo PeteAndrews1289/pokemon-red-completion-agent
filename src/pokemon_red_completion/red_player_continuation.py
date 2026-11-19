@@ -10,7 +10,7 @@ from dataclasses import asdict, dataclass, replace
 from hashlib import sha256
 from math import isfinite
 
-from .goal_search_memory import GoalSearchMemory
+from .goal_search_memory import SEARCH_MEMORY_SCHEMA, GoalSearchMemory
 from .party import MoveObservation, PartyMemberObservation, StatusCondition
 from .party_preparation import (
     PreparationBudget,
@@ -21,9 +21,121 @@ from .party_preparation import (
 from .post_battle_strategy import BattleAftermath, BattleResult
 from .provenance import canonical_sha256
 from .red_party import PokemonRedPartyReader
+from .red_player_configuration import checkpoint_quiescent, player_lifecycle_fields
 from .red_player_lesson import capture_player_lesson_snapshot
 
 SCHEMA = "pokemon.red.native-player-continuation.v1"
+
+
+def step_search_memory_dict(document, *, state_sha256=None):
+    """Extract a validated private search-memory mapping from a step or checkpoint.
+
+    Step-boundary ``search-memory-before.json`` and ``movement-memory-before.json``
+    wrap the private ``GoalSearchMemory`` mapping in an outer observation envelope,
+    whereas ``CONTEXT.json["search_memory"]`` stores the inner private mapping
+    directly. Validate either form and optionally merge movement observations
+    recorded alongside the same ``state_sha256``.
+    """
+    if document is None:
+        return None
+    if not isinstance(document, dict):
+        raise ValueError("step search memory document must be a mapping")
+    if document.get("schema") == SEARCH_MEMORY_SCHEMA:
+        return GoalSearchMemory.from_private_dict(document).private_dict()
+    inner = document.get("memory")
+    if not isinstance(inner, dict):
+        raise ValueError("step search memory envelope lacks inner memory mapping")
+    if state_sha256 is not None and document.get("state_sha256") != state_sha256:
+        raise ValueError("step search memory state_sha256 differs from boundary")
+    return GoalSearchMemory.from_private_dict(inner).private_dict()
+
+
+def build_step_diagnostic_checkpoint(
+    parent_context,
+    *,
+    state_bytes,
+    before_snapshot,
+    spent,
+    step_search_memory=None,
+    step_movement_memory=None,
+    guest_backend_closed=True,
+):
+    """Build a quiescent diagnostic parent checkpoint from a saved step boundary.
+
+    Preserves the parent segment's original ``preparation`` observations and
+    ``field_carrier`` custody while unwrapping step-boundary search/movement
+    memory envelopes and emitting the top-level ``released=True`` +
+    ``driver_terminal`` lifecycle fields required by ``authenticate_parent``
+    and ``restore_player_continuation``.
+    """
+    if not isinstance(parent_context, dict) or parent_context.get("schema") != SCHEMA:
+        raise ValueError("step diagnostic checkpoint requires a valid parent context")
+    if not isinstance(state_bytes, (bytes, bytearray)):
+        raise TypeError("step diagnostic checkpoint requires raw state bytes")
+    state_sha = sha256(state_bytes).hexdigest()
+    if not isinstance(before_snapshot, dict) or before_snapshot.get("state_sha256") != state_sha:
+        raise ValueError("step diagnostic before_snapshot state_sha256 differs")
+    facts = before_snapshot.get("facts")
+    if not isinstance(facts, dict) or not isinstance(facts.get("player_lesson"), dict):
+        raise ValueError("step diagnostic before_snapshot lacks player_lesson facts")
+    diagnostics = facts.get("diagnostics")
+    bag = (
+        diagnostics["bag_items"]
+        if isinstance(diagnostics, dict) and "bag_items" in diagnostics
+        else parent_context.get("bag")
+    )
+    if not isinstance(bag, list) or type(facts.get("cash")) is not int:
+        raise ValueError("step diagnostic before_snapshot lacks cash or bag_items")
+    memory_doc = (
+        step_search_memory_dict(step_search_memory, state_sha256=state_sha)
+        if step_search_memory is not None
+        else step_search_memory_dict(parent_context.get("search_memory"))
+    )
+    if step_movement_memory is not None:
+        move_doc = step_search_memory_dict(step_movement_memory, state_sha256=state_sha)
+        if memory_doc is None:
+            memory_doc = move_doc
+        else:
+            merged = dict(memory_doc)
+            if "movement_visits" in move_doc:
+                merged["movement_visits"] = move_doc["movement_visits"]
+            if "movement_returns" in move_doc:
+                merged["movement_returns"] = move_doc["movement_returns"]
+            memory_doc = GoalSearchMemory.from_private_dict(merged).private_dict()
+    preparation = _plan(parent_context.get("preparation"))
+    context_doc = dict(
+        schema=SCHEMA,
+        state_sha256=state_sha,
+        lesson=dict(facts["player_lesson"]),
+        cash=facts["cash"],
+        bag=list(bag),
+        preparation=None if preparation is None else asdict(preparation),
+        battle=None,
+        spent=_costs(spent),
+        grants_new_budget=False,
+        fit_allowed=False,
+        **({"search_memory": memory_doc} if memory_doc is not None else {}),
+        **(
+            {"field_carrier": dict(parent_context["field_carrier"])}
+            if "field_carrier" in parent_context
+            else {}
+        ),
+    )
+    result_doc = dict(
+        state_sha256=state_sha,
+        context_sha256=canonical_sha256(context_doc),
+        spent=dict(context_doc["spent"]),
+        field_ready=bool(facts.get("input_ready")) and facts.get("battle_state") == 0,
+        released=True,
+        **player_lifecycle_fields(
+            scope="driver_terminal",
+            released=True,
+            guest_backend_closed=guest_backend_closed,
+        ),
+    )
+    if not checkpoint_quiescent(result_doc):
+        raise ValueError("step diagnostic checkpoint result is not quiescent")
+    return context_doc, result_doc
 
 
 def extend_preparation_roster(plan, current, *, evolution_edges=frozenset()):
@@ -89,7 +201,50 @@ def _earned_evolution(old, new, edges):
     return False
 
 
-def refresh_preparation_roster(emulator, plan, *, evolution_rom=None):
+def _stored_undecided_preparation(plan, current, guard, edges):
+    """Reconcile active preparation with exact,unreserved native storage.
+
+    Undecided captures have no retained task to erase. Missing protected roles,
+    targets and named custody still fail;original active observations survive.
+    """
+    from .red_player_party_guard import RedPlayerPartyGuard
+
+    live = {member.specimen_ref for member in current}
+    missing = {member.specimen_ref for member in plan.roster} - live
+    if not missing or guard is None:
+        return plan
+    if (not isinstance(guard, RedPlayerPartyGuard) or guard.loanable_refs
+            or guard.field_carrier is not None or guard.storage_reader is None
+            or missing & set(guard.refs)
+            or guard.reader.preparation_specimen_refs()
+            != tuple(member.specimen_ref for member in current)):
+        raise ValueError("stored preparation refresh lacks restored retained custody")
+    guard.verify_active_roster_restored()
+    if guard.reader.read().members != tuple(member.observation for member in current):
+        raise ValueError("stored preparation refresh has incoherent active observations")
+    targeted = {ref for ref, _ in plan.targets}
+    boxed = guard.storage_reader.read_box_specimen_identities()
+    for old in plan.roster:
+        if old.specimen_ref not in missing:
+            continue
+        if (old.purpose is not PreparationPurpose.UNDECIDED or old.purpose_reason
+                or old.milestone_level is not None or old.specimen_ref in targeted):
+            raise ValueError("stored preparation refresh cannot discard an assigned purpose")
+        matches = [member for member in boxed
+                   if member.preparation_ref == old.specimen_ref
+                   and (member.species_id == old.observation.species_id
+                        or _earned_evolution(old.observation, member, edges))]
+        if (len(matches) != 1 or old.observation.experience is None
+                or matches[0].experience < old.observation.experience
+                or matches[0].level < old.observation.level):
+            raise ValueError("stored undecided specimen is missing,ambiguous or regressed")
+    roster = tuple(replace(member, observation=replace(member.observation, slot=i))
+                   for i, member in enumerate(
+                       (member for member in plan.roster if member.specimen_ref not in missing), 1))
+    return replace(plan, roster=roster)
+
+
+def refresh_preparation_roster(emulator, plan, *, evolution_rom=None, party_guard=None):
     """Explicit immutable menu-boundary refresh; never alter targets or costs.
 
     Use between goals, not inside a closed preparation excursion. Collision,
@@ -113,6 +268,12 @@ def refresh_preparation_roster(emulator, plan, *, evolution_rom=None):
 
         verify_rom_bytes(evolution_rom)
         edges = level_evolution_edges(evolution_rom)
+    if evolution_rom is None and party_guard is not None:
+        from .red_player_party_guard import RedPlayerPartyGuard
+
+        if isinstance(party_guard, RedPlayerPartyGuard):
+            edges = party_guard.edges
+    plan = _stored_undecided_preparation(plan, current, party_guard, edges)
     result = extend_preparation_roster(plan, current, evolution_edges=edges)
     if emulator.save_state_bytes() != state:
         raise ValueError("preparation roster refresh changed native state")
@@ -200,16 +361,45 @@ class ResumedPlayerContext:
     battle: BattleAftermath | None
     spent: dict
     search_memory: GoalSearchMemory | None = None
+    field_carrier: object = None
+    story_kind_commitment: object = None
 
 
-def capture_player_continuation(runtime, *, preparation, battle, spent, search_memory=None):
+def capture_player_continuation(
+    runtime, *, preparation, battle, spent, search_memory=None, story_kind_commitment_carrier=None, preparation_story_history=None,
+):
     if preparation is not None and not isinstance(preparation, PreparationPlan):
         raise TypeError("typed original preparation plan required")
     if battle is not None and not isinstance(battle, BattleAftermath):
         raise TypeError("observed battle history required")
     if search_memory is not None and not isinstance(search_memory, GoalSearchMemory):
         raise TypeError("typed measured search memory required")
+    if story_kind_commitment_carrier is not None:
+        from .red_story_kind_commitment import StoryKindCommitmentCarrier
+
+        if type(story_kind_commitment_carrier) is not StoryKindCommitmentCarrier:
+            raise TypeError("typed story kind commitment carrier required")
+    if preparation_story_history is not None:
+        from .red_player_preparation_history import StoryPreparationHistory
+        if type(preparation_story_history) is not StoryPreparationHistory:
+            raise TypeError("typed story preparation history required")
     state = runtime.emulator.save_state_bytes()
+    guard = getattr(runtime.adapter, "party_guard", None)
+    if preparation is not None:
+        from .red_player_party_guard import RedPlayerPartyGuard
+
+        if (isinstance(guard, RedPlayerPartyGuard) and not guard.loanable_refs
+                and guard.field_carrier is None):
+            live = set(guard.reader.preparation_specimen_refs())
+            missing = tuple(member for member in preparation.roster
+                            if member.specimen_ref not in live)
+            if (missing and not {member.specimen_ref for member in missing} & set(guard.refs)
+                    and all(member.purpose is PreparationPurpose.UNDECIDED
+                            and not member.purpose_reason and member.milestone_level is None
+                            and member.specimen_ref not in dict(preparation.targets)
+                            for member in missing)):
+                preparation = refresh_preparation_roster(
+                    runtime.emulator, preparation, party_guard=guard)
     observation, lesson = capture_player_lesson_snapshot(runtime)
     result = dict(
         schema=SCHEMA,
@@ -224,6 +414,15 @@ def capture_player_continuation(runtime, *, preparation, battle, spent, search_m
         fit_allowed=False,
         **({"search_memory": search_memory.private_dict()} if search_memory is not None else {}),
     )
+    if preparation_story_history is not None and preparation_story_history.retained is not None:
+        result["preparation_story_loss"] = preparation_story_history.private_dict()
+    if story_kind_commitment_carrier is not None and story_kind_commitment_carrier.current is not None:
+        result["story_kind_commitment"] = story_kind_commitment_carrier.document()
+    guard = getattr(runtime.adapter, "party_guard", None)
+    custody = getattr(guard, "field_carrier", None)
+    if custody is not None:
+        guard.verify()
+        result["field_carrier"] = custody.private_dict()
     if runtime.emulator.save_state_bytes() != state:
         raise ValueError("continuation capture changed native state")
     return result
@@ -235,7 +434,7 @@ def restore_player_continuation(
     """Authenticate original facts and reobserve native state before any action."""
     if (
         not isinstance(document, dict)
-        or set(document) - {"search_memory"}
+        or set(document) - {"search_memory", "field_carrier", "story_kind_commitment", "preparation_story_loss"}
         != {
             "schema",
             "state_sha256",
@@ -254,18 +453,44 @@ def restore_player_continuation(
         or document["fit_allowed"] is not False
     ):
         raise ValueError("continuation identity or scope differs")
+    if "preparation_story_loss" in document:
+        from .red_player_preparation_history import StoryPreparationHistory
+        StoryPreparationHistory.from_document(document["preparation_story_loss"])
     memory = (
         GoalSearchMemory.from_private_dict(document["search_memory"])
         if "search_memory" in document else None
     )
+    custody = None
+    if "field_carrier" in document:
+        from .red_field_carrier_custody import FieldCarrierCustody, restore_custody_guard
+        custody = FieldCarrierCustody.from_private_dict(document["field_carrier"])
+        if evolution_rom is None or custody.original_loanable_refs != loanable_refs:
+            raise ValueError("field-carrier continuation lacks its original declared guard")
     state = runtime.emulator.save_state_bytes()
     if sha256(state).hexdigest() != document["state_sha256"]:
         raise ValueError("continuation terminal differs")
+    if custody is not None:
+        restored_guard = restore_custody_guard(runtime, custody, rom=evolution_rom)
+        # The legacy inner factory has a plain slotted adapter. Its outer
+        # configured factory installs the returned custody before execution.
+        if hasattr(runtime.adapter, "party_guard"):
+            runtime.adapter.party_guard = restored_guard
     preparation, battle, spent = (
         _plan(document["preparation"]),
         _battle(document["battle"]),
         _costs(document["spent"]),
     )
+    commitment = None
+    if "story_kind_commitment" in document:
+        from .red_story_kind_commitment import StoryKindCommitmentCarrier
+
+        carrier = StoryKindCommitmentCarrier.from_document(
+            document["story_kind_commitment"],
+            completed_objectives=document["lesson"]["completed_objectives"],
+        )
+        commitment = carrier.current
+        if commitment is not None:
+            runtime.adapter.graph.objective(commitment.objective_ref)
     graph = runtime.adapter.graph
     facts = frozenset(
         f
@@ -299,9 +524,14 @@ def restore_player_continuation(
             m.specimen_ref for m in current
         }
         if missing:
+            permitted_missing = (
+                frozenset({custody.displaced_ref, custody.carrier_ref})
+                if custody is not None and custody.phase == "pending" else loanable_refs
+            )
             if (
                 not isinstance(loanable_refs, frozenset)
-                or missing != loanable_refs
+                or (missing != loanable_refs if custody is None
+                    else not missing <= permitted_missing)
                 or len(missing) != 1
             ):
                 raise ValueError("continuation lost an undeclared preparation specimen")
@@ -333,4 +563,4 @@ def restore_player_continuation(
         preparation = extend_preparation_roster(preparation, current, evolution_edges=edges)
     if runtime.emulator.save_state_bytes() != state:
         raise ValueError("continuation restoration changed native state")
-    return ResumedPlayerContext(preparation, battle, spent, memory)
+    return ResumedPlayerContext(preparation, battle, spent, memory, custody, commitment)

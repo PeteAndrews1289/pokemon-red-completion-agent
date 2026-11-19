@@ -36,6 +36,17 @@ def level_evolution_matches(old, new, edges):
     )
 
 
+def retained_level_evolution_matches(origin, entry, new, edges):
+    """The level was earned before a verified retained-combat chunk boundary."""
+    return (
+        origin.species_id == entry.species_id
+        and origin.level < entry.level <= new.level
+        and origin.experience is not None and entry.experience is not None
+        and new.experience is not None and origin.experience < entry.experience <= new.experience
+        and level_evolution_matches(origin, new, edges)
+    )
+
+
 @dataclass(frozen=True)
 class RedTrainerEvolutionGuard:
     party_reader: PokemonRedPartyReader
@@ -43,11 +54,13 @@ class RedTrainerEvolutionGuard:
     specimen_refs: tuple[str, ...]
     level_edges: frozenset[tuple[int, int, int]]
 
+    retained_origin: PartyObservation | None = None
+
     @classmethod
-    def from_rom(cls, rom, emulator):
+    def from_rom(cls, rom, emulator, *, retained_origin=None):
         edges = level_evolution_edges(rom)
         reader = PokemonRedPartyReader(emulator)
-        return cls(reader, reader.read(), reader.preparation_specimen_refs(), edges)
+        return cls(reader, reader.read(), reader.preparation_specimen_refs(), edges, retained_origin)
 
     def matches(self, initial, current):
         """Accept unchanged members or one observed level evolution per specimen."""
@@ -67,7 +80,7 @@ class RedTrainerEvolutionGuard:
             or after.levels != current.party_levels
         ):
             return False
-        for old, new in zip(self.before.members, after.members, strict=True):
+        for index, (old, new) in enumerate(zip(self.before.members, after.members, strict=True)):
             if (
                 old.experience is None
                 or new.experience is None
@@ -75,8 +88,15 @@ class RedTrainerEvolutionGuard:
                 or new.level < old.level
             ):
                 return False
-            if new.species_id != old.species_id and not level_evolution_matches(
-                old, new, self.level_edges
+            if new.species_id != old.species_id and not (
+                level_evolution_matches(old, new, self.level_edges)
+                or (
+                    isinstance(self.retained_origin, PartyObservation)
+                    and self.retained_origin.size == self.before.size
+                    and retained_level_evolution_matches(
+                        self.retained_origin.members[index], old, new, self.level_edges
+                    )
+                )
             ):
                 return False
         return True

@@ -7,6 +7,7 @@ No old private chapter assembly or actor mutation is imported here.
 """
 
 from dataclasses import replace
+from hashlib import sha256
 
 from .gen1_trainer_parties import trainer_party_quote
 from .gen1_traversal import map_object_events
@@ -14,7 +15,7 @@ from .goal_manager import GoalKind
 from .observation import SAFFRON_GUARD_ACCESS_MASK, EventFlag, ItemId, MapId, event_flag_is_set
 from .player_option_challenge import OptionChallenge
 from .red_player_captain import captain_interaction_binding
-from .red_player_cerulean_branches import cerulean_story_options
+from .red_player_cerulean_branches import cerulean_bill_story_option
 from .red_player_cerulean_rival import scripted_rival_binding
 from .red_player_field_goals import _field_ready, parcel_story_binding
 from .red_player_field_item import blocking_field_item_binding
@@ -199,13 +200,15 @@ def cerulean_arrival_story_option(runtime, actions, observation=None, *, route,
     return _row(fossil_pickup_binding(runtime, actions, route=route), objective, route=route)
 
 
-def bill_story_option(runtime, actions, observation=None, *, route, battler, combat_levels):
+def bill_story_option(runtime, actions, observation=None, *, route, battler, combat_levels,
+                      trainer_battler_for_contract=None):
     if not _legal(runtime, "help_bill"):
         return None
-    rows = cerulean_story_options(
-        runtime, actions, route=route, battler=battler, combat_levels=combat_levels
+    bill = cerulean_bill_story_option(
+        runtime, actions, route=route, battler=battler, combat_levels=combat_levels,
+        **({"trainer_battler_for_contract": trainer_battler_for_contract}
+           if trainer_battler_for_contract is not None else {}),
     )
-    bill = next((r for r in rows if r.objective_id == "help_bill"), None)
     return None if bill is None else (bill.binding, bill.challenge)
 
 
@@ -372,9 +375,54 @@ def fuji_story_option(runtime, actions, observation=None, *, route, battler, com
     if binding is not None:
         return _row(binding, objective, route=route)
     if marowak_pending(raw):
-        binding = marowak_binding(runtime, actions, route=route, battler=battler)
+        wild_witness = None
+        wild_source = runtime.emulator.save_state_bytes() if combat_levels else None
+        wild_counters = (
+            getattr(actions, "actions_executed", None), runtime.emulator.frame_count,
+        ) if combat_levels else None
+
+        def observe_wild_opposition(witness, quoted_binding):
+            nonlocal wild_witness
+            from .gen1_scripted_wild import (
+                BoundScriptedWildOpposition, ScriptedWildGateScope, validate_scripted_wild_opposition,
+            )
+
+            if (wild_witness is not None or type(witness) is not BoundScriptedWildOpposition
+                    or wild_source is None or wild_counters[0] is None
+                    or witness.source_sha256 != sha256(wild_source).hexdigest()
+                    or witness.binding_ref != quoted_binding.binding_ref
+                    or witness.opposition.map_id != raw.map_id
+                    or witness.opposition.defeated_event != int(EventFlag.BEAT_GHOST_MAROWAK)
+                    or (16, 10) not in witness.opposition.trigger_coordinates):
+                raise ValueError("scripted wild opposition witness differs from its admitted binding")
+            validate_scripted_wild_opposition(
+                witness.opposition, route.rom, scope=ScriptedWildGateScope(
+                    raw.map_id, int(EventFlag.BEAT_GHOST_MAROWAK), (16, 10), int(ItemId.SILPH_SCOPE),
+                ),
+            )
+            wild_witness = witness, quoted_binding
+
+        binding = marowak_binding(
+            runtime, actions, route=route, battler=battler,
+            **({"observe_binding": observe_wild_opposition} if combat_levels else {}),
+        )
+        if combat_levels and (
+            runtime.emulator.save_state_bytes() != wild_source
+            or wild_counters != (getattr(actions, "actions_executed", None), runtime.emulator.frame_count)
+        ):
+            raise ValueError("scripted wild challenge observation changed its native boundary")
         if binding is not None:
+            if wild_witness is not None:
+                witness, quoted_binding = wild_witness
+                if quoted_binding is not binding:
+                    raise ValueError("scripted wild opposition witness belongs to a different binding")
+                return replace(binding, story_objective_ref=objective), OptionChallenge.from_levels(
+                    combat_levels=combat_levels,
+                    opponent_levels=witness.opposition.opponent_levels,
+                )
             return _row(binding, objective, route=route, combat=True)
+        if wild_witness is not None:
+            raise ValueError("scripted wild opposition witness lacks an admitted binding")
         binding = blocking_field_item_binding(
             runtime, actions, route=route, destination_at=(16, 11), forbidden=frozenset({(16, 10)})
         )
@@ -425,17 +473,17 @@ def fuji_story_option(runtime, actions, observation=None, *, route, battler, com
             return _row(
                 binding, objective, route=route, combat_levels=combat_levels, contract=contract
             )
-    binding = obstructing_story_battle_binding(
+    return observed_story_obstruction_option(
         runtime,
         actions,
         objective_id=objective,
         route=route,
         battler=story_actor,
+        combat_levels=combat_levels,
         frontier=target is None,
         allow_sequence=True,
         destination_at=target,
     )
-    return _row(binding, objective, route=route, combat=binding is not None)
 
 
 def saffron_story_option(runtime, actions, observation=None, *, route, battler):

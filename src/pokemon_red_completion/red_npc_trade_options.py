@@ -64,7 +64,9 @@ def _approach(world, start, trade):
     return min(plans, key=lambda p: (p.cost, len(p.steps))) if plans else None
 
 
-def npc_trade_bindings(runtime, observation, actions, world, *, include_moving=False):
+def npc_trade_bindings(runtime, observation, actions, world, *, include_moving=False, allow_alternate_transport=False):
+    if type(allow_alternate_transport) is not bool:
+        raise TypeError("alternate trade transport requires explicit boolean permission")
     if type(include_moving) is not bool:
         raise TypeError("moving trade admission requires explicit opt-in")
     if not getattr(runtime, "npc_trades", False) or runtime.registration_policy is None:
@@ -103,9 +105,55 @@ def npc_trade_bindings(runtime, observation, actions, world, *, include_moving=F
         ):
             continue
         binding = _bind(runtime, observation, actions, world, observer, origin, trade, flags)
+        if binding is None and allow_alternate_transport:
+            alternative = _alternate_trade_transport(runtime, observation, world, origin, trade)
+            if alternative is not None:
+                binding = _bind(runtime, observation, actions, world, observer, origin, trade, flags,
+                    transport_town=alternative[0], preparation_center=alternative[1])
         if binding is not None:
             result.append(binding)
     return tuple(result)
+
+
+def _alternate_trade_transport(runtime, observation, world, origin, trade):
+    """Private conditional geometry; actual Fly/PC/arrival guards still execute."""
+    from .red_goal_skills import _POKEMON_CENTER_MAPS
+    raw = observation.raw
+    if (not origin.ready or origin.interruption is not None or origin.mode != "land"
+            or runtime.emulator.pressed_buttons or not int(raw.badge_bits or 0) & int(Badge.THUNDER)):
+        return None
+    try:
+        fly_menu_indices(raw)
+    except Gen1FieldMoveError:
+        return None
+    known = frozenset(runtime.reader.read_fly_destinations())
+    landings = dict(red_fly_landings(world.rom))
+    choices = []
+    for town in sorted(known & landings.keys()):
+        landed = replace(origin, map_id=town, at=landings[town], last_outside_map=town,
+                         occupied=frozenset(), hazards=())
+        for center in sorted(int(m) for m in _POKEMON_CENTER_MAPS):
+            if (town, center) == (trade.town, trade.center):
+                continue
+            try:
+                pc = world.plan_feasible_to_map(landed, center, goal_at=(4, 13))
+            except RoutePlanningError:
+                continue
+            if len(pc.steps) > 128 or not _supported_plan(pc):
+                continue
+            prepared = replace(landed, map_id=center, at=(4, 13))
+            approach = _approach(world, prepared, trade)
+            if approach is None:
+                continue
+            at_npc = replace(prepared, map_id=trade.map_id, at=approach.terminal_at)
+            try:
+                back = world.plan_feasible_to_map(at_npc, center, goal_at=(4, 13))
+            except RoutePlanningError:
+                continue
+            if len(back.steps) > 256 or not _supported_plan(back, allow_cut=True):
+                continue
+            choices.append((pc.cost+approach.cost+back.cost, town, center))
+    return min(choices)[1:] if choices else None
 
 
 def _moving_approach(actions, reader, observer, world, trade, route, *, maximum_attempts=24):
@@ -189,7 +237,9 @@ def _trade_deposit_allowed(runtime, member):
     )
 
 
-def _bind(runtime, observation, actions, world, observer, origin, trade, flags):
+def _bind(runtime, observation, actions, world, observer, origin, trade, flags, *, transport_town=None, preparation_center=None):
+    town = trade.town if transport_town is None else transport_town
+    center = trade.center if preparation_center is None else preparation_center
     reader, policy = runtime.reader, runtime.registration_policy
     source = min(
         (
@@ -246,9 +296,9 @@ def _bind(runtime, observation, actions, world, observer, origin, trade, flags):
             start = replace(
                 start, map_id=departure.terminal_map, at=departure.terminal_at, occupied=frozenset()
             )
-        flight = start.map_id != trade.town
+        flight = start.map_id != town
         if flight:
-            if trade.town not in reader.read_fly_destinations() or not int(
+            if town not in reader.read_fly_destinations() or not int(
                 observation.raw.badge_bits or 0
             ) & int(Badge.THUNDER):
                 return None
@@ -258,9 +308,9 @@ def _bind(runtime, observation, actions, world, observer, origin, trade, flags):
                 return None
             start = replace(
                 start,
-                map_id=trade.town,
-                at=dict(red_fly_landings(world.rom))[trade.town],
-                last_outside_map=trade.town,
+                map_id=town,
+                at=dict(red_fly_landings(world.rom))[town],
+                last_outside_map=town,
                 occupied=frozenset(),
             )
     else:
@@ -268,17 +318,17 @@ def _bind(runtime, observation, actions, world, observer, origin, trade, flags):
     to_pc = None
     if boxed:
         try:
-            to_pc = world.plan_feasible_to_map(start, trade.center, goal_at=(4, 13))
+            to_pc = world.plan_feasible_to_map(start, center, goal_at=(4, 13))
         except RoutePlanningError:
             return None
         if len(to_pc.steps) > 128 or not _supported_plan(to_pc):
             return None
         start = replace(
             start,
-            map_id=trade.center,
+            map_id=center,
             at=(4, 13),
             occupied=frozenset(),
-            last_outside_map=trade.town,
+            last_outside_map=town,
         )
     approach = direct if direct is not None else _approach(world, start, trade)
     if approach is None:
@@ -351,19 +401,19 @@ def _bind(runtime, observation, actions, world, observer, origin, trade, flags):
             raise RedNPCTradeError("trade origin changed before input")
         steps = route(departure) if departure else 0
         if flight:
-            name = RED_FLY_TOWN_NAMES[trade.town].lower().replace(" ", "_")
+            name = RED_FLY_TOWN_NAMES[town].lower().replace(" ", "_")
             field_port().execute(MacroAction(MacroActionKind.FIELD_MOVE, "fly:" + name))
             landed = observer.observe()
             if (
                 not landed.ready
                 or landed.mode != "land"
-                or landed.map_id != trade.town
-                or landed.at != dict(red_fly_landings(world.rom))[trade.town]
+                or landed.map_id != town
+                or landed.at != dict(red_fly_landings(world.rom))[town]
             ):
                 raise RedNPCTradeError("trade flight landing differs")
         if boxed:
             steps += route(
-                world.plan_feasible_to_map(observer.observe(), trade.center, goal_at=(4, 13))
+                world.plan_feasible_to_map(observer.observe(), center, goal_at=(4, 13))
             )
             face_pc_boundary(actions, reader, "up")
             open_bills_pc(actions, reader)
@@ -466,7 +516,7 @@ def _bind(runtime, observation, actions, world, observer, origin, trade, flags):
 
     effort = sum(len(p.steps) for p in (departure, to_pc, approach) if p is not None)
     return ExecutableGoalBinding(
-        binding_ref=f"red-npc-trade:{trade.index}",
+        binding_ref=f"red-npc-trade:{trade.index}" + (f":via:{town}:{center}" if transport_town is not None else ""),
         kind=GoalKind.ACQUIRE_SPECIES,
         estimated_effort=min(1.0, (effort + (100 if boxed else 0) + 120) / 1000),
         estimated_risk=0.1,

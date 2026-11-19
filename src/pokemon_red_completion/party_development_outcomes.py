@@ -79,6 +79,20 @@ PARTY_DEVELOPMENT_TOTAL_TASK_OBJECTIVE = OutcomeObjective(
 )
 
 
+# An explicitly bound target task completes before surplus party progress is
+# compared. Keep v2/v3 unchanged, including their historical helper-gain ranks.
+PARTY_DEVELOPMENT_TARGET_TASK_OBJECTIVE = OutcomeObjective(
+    objective_id="party-development.target-task-efficiency.v4",
+    family=ScenarioFamily.PARTY_DEVELOPMENT,
+    criteria=(
+        *PARTY_DEVELOPMENT_TOTAL_TASK_OBJECTIVE.criteria[:2],
+        *PARTY_DEVELOPMENT_TOTAL_TASK_OBJECTIVE.criteria[8:10],
+        *PARTY_DEVELOPMENT_TOTAL_TASK_OBJECTIVE.criteria[2:8],
+        *PARTY_DEVELOPMENT_TOTAL_TASK_OBJECTIVE.criteria[10:],
+    ),
+)
+
+
 @dataclass(frozen=True, slots=True)
 class PartyCompletionSnapshot:
     """Title-neutral completion counters at one bounded execution boundary."""
@@ -204,6 +218,7 @@ def adapt_party_development_outcomes_v2(
     partition: ScenarioPartition,
     prospective_binding: PartyDevelopmentProspectiveBinding,
     total_task_efficiency: bool = False,
+    target_task_efficiency: bool = False,
 ) -> ScenarioOutcomeExample:
     """Join cloned v2 candidate executions to completion-aware preferences."""
 
@@ -211,10 +226,16 @@ def adapt_party_development_outcomes_v2(
         raise TypeError("candidate_set must be a PartyDevelopmentCandidateSet")
     if type(total_task_efficiency) is not bool:
         raise ScenarioOutcomeError("total task efficiency requires an explicit boolean")
+    if type(target_task_efficiency) is not bool or (
+        target_task_efficiency and not total_task_efficiency
+    ):
+        raise ScenarioOutcomeError("target task efficiency requires explicit total task scope")
     if total_task_efficiency and candidate_set.goal is not PartyDevelopmentGoal.EVOLUTION:
         raise ScenarioOutcomeError("complete task cost requires a declared evolution goal")
     objective = (
-        PARTY_DEVELOPMENT_TOTAL_TASK_OBJECTIVE
+        PARTY_DEVELOPMENT_TARGET_TASK_OBJECTIVE
+        if target_task_efficiency
+        else PARTY_DEVELOPMENT_TOTAL_TASK_OBJECTIVE
         if total_task_efficiency
         else PARTY_DEVELOPMENT_COMPLETION_OBJECTIVE
     )
@@ -270,7 +291,10 @@ def adapt_party_development_outcomes_v2(
             CandidateOutcome(
                 status=OutcomeEvidenceStatus.MEASURED,
                 criterion_values=_criterion_values(
-                    candidate_set.goal, trial, total_task_efficiency=total_task_efficiency
+                    candidate_set.goal,
+                    trial,
+                    total_task_efficiency=total_task_efficiency,
+                    target_task_efficiency=target_task_efficiency
                 ),
                 actions_executed=_semantic_actions(trial),
                 frames_executed=trial.frames_executed,
@@ -321,6 +345,7 @@ def _criterion_values(
     trial: PartyDevelopmentOutcomeTrialV2,
     *,
     total_task_efficiency: bool = False,
+    target_task_efficiency: bool = False,
 ) -> tuple[float, ...]:
     before = trial.completion_before
     after = trial.completion_after
@@ -367,11 +392,14 @@ def _criterion_values(
     if total_task_efficiency:
         if trial.evolution_completed and evolution_reduction <= 0:
             raise ScenarioOutcomeError("completed evolution lacks measured completion progress")
-        return (
+        full_task = (
             *values[:9],
             float(trial.frames_executed) if trial.evolution_completed else 0.0,
             *values[9:],
         )
+        if target_task_efficiency:
+            return (*full_task[:2], *full_task[8:10], *full_task[2:8], *full_task[10:])
+        return full_task
     return values
 
 
@@ -483,6 +511,8 @@ def _require_same_completion_targets(
 
 __all__ = [
     "PARTY_DEVELOPMENT_COMPLETION_OBJECTIVE",
+    "PARTY_DEVELOPMENT_TARGET_TASK_OBJECTIVE",
+    "PARTY_DEVELOPMENT_TOTAL_TASK_OBJECTIVE",
     "PartyCompletionSnapshot",
     "PartyDevelopmentOutcomeTrialV2",
     "adapt_party_development_outcomes_v2",

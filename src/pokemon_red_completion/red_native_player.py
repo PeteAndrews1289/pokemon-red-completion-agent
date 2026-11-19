@@ -6,6 +6,7 @@ battle history. One guarded action port is shared across all goals and verifiers
 """
 
 import math
+import json
 import re
 import time
 from collections import Counter
@@ -172,12 +173,29 @@ class NativePlayerSession:
         defer_unbound_preparation=False,
         allow_singleton_parent_support=False,
         associate_unique_combat=False,
+        explore_outside_scope: bool = False,
+        explore_on_movement_recurrence: bool = False,
+        story_milestone_commitment: bool = False,
+        story_kind_commitment: bool = False,
+        respect_combat_preparation_choice: bool = False,
         allow_collection_restoration=False,
         force_resource_safety=True,
         include_live_pp_readiness=False,
         continue_safe_route_failures=False,
         train_inference_scope=None,
+        train_selector_authentication=None,
+        passive_sequence_horizon=None,
+        production_train_scope=None,
+        record_milestone_splits: bool = False,
+        collection_cost_frame_horizon=None,
     ):
+        if collection_cost_frame_horizon is not None and (
+            type(collection_cost_frame_horizon) is not int or collection_cost_frame_horizon < 1
+            or source.get("partition") != "development"
+        ):
+            raise ValueError("collection cost measurement requires a positive development frame horizon")
+        if type(record_milestone_splits) is not bool:
+            raise TypeError("milestone recording permission must be boolean")
         if observe_preparation_party is not None and (
             not callable(observe_preparation_party) or model_feature_version not in (15, 16)
         ):
@@ -190,7 +208,52 @@ class NativePlayerSession:
             raise TypeError("native player requires typed limits")
         if type(force_resource_safety) is not bool or type(include_live_pp_readiness) is not bool:
             raise TypeError("native player resource/readiness permissions must be boolean")
-        if not force_resource_safety and source.get("partition") != "development":
+        if production_train_scope is not None:
+            from .red_scoped_train_composition import ProductionSequenceTrainScope
+            if type(production_train_scope) is not ProductionSequenceTrainScope:
+                raise TypeError("typed production TRAIN sequence scope required")
+            production_train_scope.require_session(source=source,execution=execution,limits=limits,
+                recipe=dict(force_resource_safety=force_resource_safety,
+                    include_live_pp_readiness=include_live_pp_readiness,
+                    allow_collection_restoration=allow_collection_restoration,
+                    story_kind_commitment=story_kind_commitment,
+                    respect_combat_preparation_choice=respect_combat_preparation_choice))
+        if type(respect_combat_preparation_choice) is not bool or (
+            respect_combat_preparation_choice and (not story_kind_commitment or
+                (source.get("partition") != "development" and production_train_scope is None))
+        ):
+            raise ValueError("combat preparation choice requires declared DEVELOPMENT story commitment")
+        construction_train_inference = False
+        if train_selector_authentication is not None:
+            from .red_scoped_train_composition import validate_selector_authentication
+            construction_train_inference = validate_selector_authentication(
+                train_selector_authentication, allow=allow_greedy_branch_recovery,
+                train_inference_scope=train_inference_scope, source=source,
+                model=consequence_branch_model, head=consequence_head,
+                objective_ref=consequence_objective_ref, challenge_ref=consequence_challenge_ref,
+                flags=dict(greedy_selection=greedy_selection, refine_preparation=refine_preparation,
+                           defer_unbound_preparation=defer_unbound_preparation,
+                           allow_singleton_parent_support=allow_singleton_parent_support,
+                           associate_unique_combat=associate_unique_combat,
+                           explore_outside_scope=explore_outside_scope,
+                           explore_on_movement_recurrence=explore_on_movement_recurrence),
+                native_recipe=dict(force_resource_safety=force_resource_safety,
+                                   include_live_pp_readiness=include_live_pp_readiness,
+                                   allow_collection_restoration=allow_collection_restoration,
+                                   continue_safe_route_failures=continue_safe_route_failures,
+                                   story_milestone_commitment=story_milestone_commitment,
+                                   story_kind_commitment=story_kind_commitment),
+                limits=asdict(limits),
+            )
+        if passive_sequence_horizon is not None:
+            from .red_scoped_train_composition import validate_passive_train_sequence
+            if not construction_train_inference or not validate_passive_train_sequence(
+                train_selector_authentication, passive_sequence_horizon
+            ):
+                raise ValueError("passive sequence needs authenticated TRAIN construction")
+        elif train_selector_authentication is not None and train_selector_authentication.document().get("sequence_horizon") is not None:
+            raise ValueError("declared passive sequence was omitted from native construction")
+        if not force_resource_safety and source.get("partition") != "development" and not construction_train_inference and production_train_scope is None:
             raise ValueError("model resource authority requires declared DEVELOPMENT scope")
         self.force_resource_safety = force_resource_safety
         self.include_live_pp_readiness = include_live_pp_readiness
@@ -217,6 +280,8 @@ class NativePlayerSession:
             allow_collection_restoration
             and source.get("partition") != "development"
             and not train_collection_lesson
+            and not construction_train_inference
+            and production_train_scope is None
         ):
             raise ValueError("collection nursing requires DEVELOPMENT or authenticated TRAIN setup")
         self.allow_collection_restoration = allow_collection_restoration
@@ -236,20 +301,39 @@ class NativePlayerSession:
             raise ValueError("native branch recovery model/objective pair differs")
         from .red_consequence_choice import validate_greedy_branch_recovery_scope
 
-        train_inference = validate_greedy_branch_recovery_scope(
-            allow=allow_greedy_branch_recovery,
-            greedy_selection=greedy_selection,
-            refine_preparation=refine_preparation,
-            defer_unbound_preparation=defer_unbound_preparation,
-            allow_singleton_parent_support=allow_singleton_parent_support,
-            associate_unique_combat=associate_unique_combat,
-            source=source,
-            model=consequence_branch_model,
-            head=consequence_head,
-            objective_ref=consequence_objective_ref,
-            challenge_ref=consequence_challenge_ref,
-            train_inference_scope=train_inference_scope,
-        )
+        if train_selector_authentication is not None:
+            from .red_scoped_train_composition import validate_selector_authentication
+
+            train_inference = validate_selector_authentication(
+                train_selector_authentication, allow=allow_greedy_branch_recovery,
+                train_inference_scope=train_inference_scope, source=source,
+                model=consequence_branch_model, head=consequence_head,
+                objective_ref=consequence_objective_ref, challenge_ref=consequence_challenge_ref,
+                flags=dict(greedy_selection=greedy_selection, refine_preparation=refine_preparation,
+                           defer_unbound_preparation=defer_unbound_preparation,
+                           allow_singleton_parent_support=allow_singleton_parent_support,
+                           associate_unique_combat=associate_unique_combat,
+                           explore_outside_scope=explore_outside_scope,
+                           explore_on_movement_recurrence=explore_on_movement_recurrence),
+            )
+        else:
+            train_inference = validate_greedy_branch_recovery_scope(
+                allow=allow_greedy_branch_recovery,
+                greedy_selection=greedy_selection,
+                refine_preparation=refine_preparation,
+                defer_unbound_preparation=defer_unbound_preparation,
+                allow_singleton_parent_support=allow_singleton_parent_support,
+                associate_unique_combat=associate_unique_combat,
+                explore_outside_scope=explore_outside_scope,
+                explore_on_movement_recurrence=explore_on_movement_recurrence,
+                source=source,
+                model=consequence_branch_model,
+                head=consequence_head,
+                objective_ref=consequence_objective_ref,
+                challenge_ref=consequence_challenge_ref,
+                train_inference_scope=train_inference_scope,
+            )
+
         if type(greedy_selection) is not bool or (
             greedy_selection
             and (
@@ -279,6 +363,8 @@ class NativePlayerSession:
                 defer_unbound_preparation=defer_unbound_preparation,
                 allow_singleton_parent_support=allow_singleton_parent_support,
                 associate_unique_combat=associate_unique_combat,
+                explore_outside_scope=explore_outside_scope,
+                explore_on_movement_recurrence=explore_on_movement_recurrence,
             )
         if consequence_head is not None:
             from .player_challenge_consequence import (
@@ -330,6 +416,14 @@ class NativePlayerSession:
         self.output = Path(output)
         self.output.mkdir(mode=0o700, parents=False, exist_ok=False)
         self.limits = limits
+        self.milestone_splits = None
+        if record_milestone_splits:
+            from .red_milestone_splits import MilestoneSplits
+            self.milestone_splits = MilestoneSplits(
+                source_state_sha256=source["state_sha256"],
+                required_species=getattr(curriculum, "required_species", ()),
+                identity=dict(model_sha256=execution.model_sha256,
+                    execution_claim_id=execution.claim_id, partition=source["partition"]))
         self.wall = MonotonicWallTimeBudgetController(emulator, maximum_wall_seconds=limits.seconds)
         self.controller = NativeLessonController(self.wall, maximum_frames=limits.frames)
         self.roles, self.battle_observer, self.target_cash = (
@@ -369,6 +463,15 @@ class NativePlayerSession:
             promotion=False,
             controller_timing=asdict(DEFAULT_NEW_GAME_TIMING.controller_timing()),
         )
+        if record_milestone_splits:
+            plan["record_milestone_splits"] = True
+        if collection_cost_frame_horizon is not None:
+            plan["collection_cost_frame_horizon"] = collection_cost_frame_horizon
+        if production_train_scope is not None:
+            plan["production_train_sequence_scope"] = production_train_scope.document()
+            plan["production_train_sequence_scope_sha256"] = production_train_scope.identity
+        if passive_sequence_horizon is not None:
+            plan["passive_sequence_horizon"] = passive_sequence_horizon
         if allow_collection_restoration:
             plan["allow_collection_restoration"] = True
         if collection_teacher_setup_receipt is not None:
@@ -378,7 +481,10 @@ class NativePlayerSession:
                 force_resource_safety=force_resource_safety,
                 include_live_pp_readiness=include_live_pp_readiness,
             )
-        if train_inference:
+        if train_selector_authentication is not None:
+            plan["scoped_train_selector_authentication"] = train_selector_authentication.document()
+            plan["scoped_train_selector_authentication_sha256"] = train_selector_authentication.identity
+        elif train_inference:
             plan["production_train_consequence_inference"] = train_inference_scope.document()
             plan["production_train_consequence_inference_sha256"] = train_inference_scope.identity
         if greedy_selection:
@@ -393,6 +499,16 @@ class NativePlayerSession:
             plan["allow_singleton_parent_support"] = True
         if associate_unique_combat:
             plan["associate_unique_combat"] = True
+        if explore_outside_scope:
+            plan["explore_outside_scope"] = True
+        if explore_on_movement_recurrence:
+            plan["explore_on_movement_recurrence"] = True
+        if story_milestone_commitment:
+            plan["story_milestone_commitment"] = True
+        if story_kind_commitment:
+            plan["story_kind_commitment"] = True
+        if respect_combat_preparation_choice:
+            plan["respect_combat_preparation_choice"] = True
         if consequence_spec is not None:
             plan["consequence_spec"] = consequence_spec.document()
         if model_feature_version in (9, 10, 11, 15, 16) and (
@@ -753,9 +869,16 @@ class NativePlayerSession:
             ),
             buttons_released=not self.controller.pressed_buttons,
             player_lesson=lesson,
+            **({"movement_event_flags": raw.event_flags.hex(),
+                "movement_coins": self.runtime.reader.read_game_corner_coins()}
+               if getattr(self, "movement_revisit_saturation", False)
+               and raw.event_flags is not None else {}),
             diagnostics=player_diagnostic_state(
                 observation, registration_policy=self.runtime.registration_policy
             ),
+            **({"costly_search_session": asdict(self.runtime.reader.read_safari_session_state())}
+               if getattr(self, "costly_search_recurrence", False)
+               and callable(getattr(self.runtime.reader, "read_safari_session_state", None)) else {}),
         )
         guard = getattr(getattr(self.runtime, "adapter", None), "party_guard", None)
         if isinstance(guard, RedPlayerPartyGuard):
@@ -781,6 +904,7 @@ class NativePlayerSession:
                     before=guard.reader.read(),
                     refs=guard.reader.preparation_specimen_refs(),
                     loanable_refs=frozenset(),
+                    field_carrier=None,
                 )
                 self._decision_party_guard.verify()
                 self._decision_party_guard_pending = False
@@ -798,9 +922,21 @@ class NativePlayerSession:
             )
             if evidence is not None:
                 facts["retained_party_continuation"] = evidence
-        safe = bool(raw.battle_state == 0 and not self.controller.pressed_buttons)
+        compulsory = (
+            getattr(self, "sequence_compulsory_control", False) is True
+            and self.source.get("partition") == "development"
+            and raw.battle_state in (1, 2)
+        )
+        if compulsory:
+            facts["compulsory_battle_control"] = True
+        safe = bool((raw.battle_state == 0 or compulsory) and not self.controller.pressed_buttons)
         if self.controller.save_state_bytes() != state:
             raise ValueError("native snapshot audit changed state")
+        splits = getattr(self, "milestone_splits", None)
+        if splits is not None and splits.observe(facts, frames=facts["frames"],
+                actions=facts["actions"], wall_seconds=self.wall.elapsed_seconds,
+                state_sha256=sha256(state).hexdigest()):
+            splits.write(self.output / "milestone-splits.json")
         return AutonomousSnapshot(state, facts, safe)
 
     def observe(self, ordinal):
@@ -1003,6 +1139,45 @@ def validate_settlement_refinement_scope(
     return True
 
 
+def _ordinary_retained_capture_loss(capture, before, after, report, verdict, before_raw, after_raw):
+    """Recognize the verified consumed Route12 loss without granting a catch."""
+    from .observation import EventFlag, ItemId, MapId
+    from .red_player_wild_recovery import static_escape_expected_events
+    from .red_static_capture import RedStaticCaptureTarget
+
+    if (not capture or before_raw is None or after_raw is None
+            or verdict.status is not GoalDecisionOutcome.FAILED
+            or verdict.failure_reason is not GoalFailureReason.RESOURCE_LOST
+            or report.evidence.get("captured") is not False):
+        return False
+    loss = report.evidence.get("lost_static_target")
+    if not isinstance(loss, dict):
+        return False
+    try:
+        target = RedStaticCaptureTarget(**loss)
+        if (target.species_number != 143 or target.map_id != int(MapId.ROUTE_12)
+                or target.event_flag != int(EventFlag.BEAT_ROUTE12_SNORLAX)
+                or before_raw.map_id != target.map_id or before_raw.battle_state != 1):
+            return False
+        expected_events = static_escape_expected_events(before_raw, target)
+    except (TypeError, ValueError):
+        return False
+    if after_raw.bag_items is None:
+        return False
+    stock = dict(after_raw.bag_items)
+    return (
+        after_raw.battle_state == 0
+        and after_raw.event_flags == expected_events
+        and all(getattr(before_raw, key) == getattr(after_raw, key)
+                for key in ("map_id", "player_x", "player_y", "player_money", "badge_bits"))
+        and not any(stock.get(int(ball), 0) for ball in (
+            ItemId.POKE_BALL, ItemId.GREAT_BALL, ItemId.ULTRA_BALL, ItemId.MASTER_BALL))
+        and all(before.facts.get(key) is not None
+                and before.facts[key] == after.facts.get(key)
+                for key in ("cash", "owned_species", "specimen_counts"))
+    )
+
+
 def run_native_continuous_player(
     *,
     store,
@@ -1029,6 +1204,11 @@ def run_native_continuous_player(
     resource_setup_receipt=None,
     collection_teacher_setup_receipt=None,
     sequence_horizon=None,
+    sequence_window_stride=None,
+    sequence_target_contract=None,
+    sequence_task_sha256=None,
+    sequence_task_kind=None,
+    sequence_history_contract=None,
     sequence_policy=None,
     consequence_spec=None,
     consequence_head=None,
@@ -1041,6 +1221,12 @@ def run_native_continuous_player(
     defer_unbound_preparation=False,
     allow_singleton_parent_support=False,
     associate_unique_combat=False,
+    explore_outside_scope: bool = False,
+    explore_on_movement_recurrence: bool = False,
+    story_milestone_commitment: bool = False,
+    story_kind_commitment: bool = False,
+    respect_combat_preparation_choice: bool = False,
+    story_kind_commitment_carrier=None,
     settle_existing_blackout=False,
     settle_existing_wild=False,
     settle_existing_capture=False,
@@ -1051,9 +1237,16 @@ def run_native_continuous_player(
     force_resource_safety=True,
     include_live_pp_readiness=False,
     initial_search_memory=None,
+    movement_revisit_saturation=False,
+    collection_cost_frame_horizon=None,
     train_inference_scope=None,
+    train_selector_authentication=None,
+    production_train_scope=None,
+    record_milestone_splits: bool = False,
 ):
     """Execute one isolated, already authorized native episode; never reset it."""
+    if type(record_milestone_splits) is not bool:
+        raise TypeError("milestone recording permission must be boolean")
     if (
         isinstance(exploration_mix, bool)
         or not isinstance(exploration_mix, (int, float))
@@ -1070,6 +1263,24 @@ def run_native_continuous_player(
         or consequence_head is not None
     ):
         raise ValueError("custom exploration requires separate native DEVELOPMENT scope")
+    if production_train_scope is not None:
+        from .red_scoped_train_composition import ProductionSequenceTrainScope
+        if (type(production_train_scope) is not ProductionSequenceTrainScope
+                or consequence_head is not None or consequence_spec is not None
+                or train_selector_authentication is not None or train_inference_scope is not None
+                or greedy_selection is not False or sequence_policy is None
+                or sequence_horizon != sequence_policy.head.horizon):
+            raise ValueError("production TRAIN sequence cannot mix selectors or change its horizon")
+        production_train_scope.require_policy(source=source,model=model,policy=sequence_policy,limits=limits,
+            recipe=dict(force_resource_safety=force_resource_safety,
+                include_live_pp_readiness=include_live_pp_readiness,
+                allow_collection_restoration=allow_collection_restoration,
+                story_kind_commitment=story_kind_commitment,
+                respect_combat_preparation_choice=respect_combat_preparation_choice,
+                movement_revisit_saturation=movement_revisit_saturation))
+        production_train_scope.require_collection(
+            history_contract=sequence_history_contract or sequence_policy.head.history_contract,
+            task_kind=sequence_task_kind,task_sha256=sequence_task_sha256)
     search_memory = (
         initial_search_memory if initial_search_memory is not None else GoalSearchMemory()
     )
@@ -1123,31 +1334,57 @@ def run_native_continuous_player(
         raise ValueError("existing blackout preface requires separate continuous DEVELOPMENT scope")
     from .red_consequence_choice import validate_greedy_branch_recovery_scope
 
-    train_inference = validate_greedy_branch_recovery_scope(
-        allow=allow_greedy_branch_recovery,
-        greedy_selection=greedy_selection,
-        refine_preparation=refine_preparation,
-        defer_unbound_preparation=defer_unbound_preparation,
-        allow_singleton_parent_support=allow_singleton_parent_support,
-        associate_unique_combat=associate_unique_combat,
-        source=source,
-        model=model,
-        head=consequence_head,
-        objective_ref=consequence_objective_ref,
-        challenge_ref=consequence_challenge_ref,
-        train_inference_scope=train_inference_scope,
+    if train_selector_authentication is not None:
+        from .red_scoped_train_composition import validate_selector_authentication
+
+        train_inference = validate_selector_authentication(
+            train_selector_authentication, allow=allow_greedy_branch_recovery,
+            train_inference_scope=train_inference_scope, source=source,
+            model=model, head=consequence_head,
+            objective_ref=consequence_objective_ref, challenge_ref=consequence_challenge_ref,
+            flags=dict(greedy_selection=greedy_selection, refine_preparation=refine_preparation,
+                       defer_unbound_preparation=defer_unbound_preparation,
+                       allow_singleton_parent_support=allow_singleton_parent_support,
+                       associate_unique_combat=associate_unique_combat,
+                       explore_outside_scope=explore_outside_scope,
+                       explore_on_movement_recurrence=explore_on_movement_recurrence),
+        )
+    else:
+        train_inference = validate_greedy_branch_recovery_scope(
+            allow=allow_greedy_branch_recovery,
+            greedy_selection=greedy_selection,
+            refine_preparation=refine_preparation,
+            defer_unbound_preparation=defer_unbound_preparation,
+            allow_singleton_parent_support=allow_singleton_parent_support,
+            associate_unique_combat=associate_unique_combat,
+            explore_outside_scope=explore_outside_scope,
+            explore_on_movement_recurrence=explore_on_movement_recurrence,
+            source=source,
+            model=model,
+            head=consequence_head,
+            objective_ref=consequence_objective_ref,
+            challenge_ref=consequence_challenge_ref,
+            train_inference_scope=train_inference_scope,
+        )
+
+    from .red_scoped_train_composition import validate_passive_train_sequence
+    passive_collection = train_inference and validate_passive_train_sequence(
+        train_selector_authentication, sequence_horizon,
+        sequence_policy=sequence_policy, consequence_spec=consequence_spec,
     )
     if type(greedy_selection) is not bool or (
         greedy_selection
         and (
             (source.get("partition") != "development" and not train_inference)
             or sequence_policy is not None
-            or sequence_horizon is not None
+            or (sequence_horizon is not None and not passive_collection)
             or consequence_spec is not None
             or (consequence_head is not None and not allow_greedy_branch_recovery)
         )
     ):
         raise ValueError("highest-score selection requires separate native DEVELOPMENT scope")
+    if explore_on_movement_recurrence and movement_revisit_saturation is not True:
+        raise ValueError("recurrence escape requires observed movement history")
     collector = None
     branch_policy_sha = None
     if consequence_objective_ref is not None:
@@ -1164,9 +1401,11 @@ def run_native_continuous_player(
             defer_unbound_preparation=defer_unbound_preparation,
             allow_singleton_parent_support=allow_singleton_parent_support,
             associate_unique_combat=associate_unique_combat,
+            explore_outside_scope=explore_outside_scope,
+            explore_on_movement_recurrence=explore_on_movement_recurrence,
         )
     if consequence_head is not None and (
-        sequence_policy is not None or sequence_horizon is not None or consequence_spec is not None
+        sequence_policy is not None or (sequence_horizon is not None and not passive_collection) or consequence_spec is not None
     ):
         raise ValueError("consequence adoption cannot combine with sequence/TRAIN recording")
     if consequence_spec is not None and (
@@ -1181,9 +1420,25 @@ def run_native_continuous_player(
             or sequence_horizon is None
             or sequence_policy.head.horizon != sequence_horizon
             or sequence_policy.baseline_sha256 != model.model_sha256
-            or model.feature_version != 6
+            or model.feature_version != sequence_policy.head.feature_version
         ):
             raise ValueError("native sequence policy requires matching model and horizon")
+    if sequence_policy is not None and sequence_policy.selection_mode in {"stable_recurrence", "stable_costly_recurrence"} and movement_revisit_saturation is not True:
+        raise ValueError("stable sequence recurrence requires observed movement history")
+    if sequence_task_kind is not None and (
+        sequence_task_kind != "next_registration" or
+        (source.get("partition") != "development" and production_train_scope is None)
+        or sequence_policy is None or sequence_task_sha256 is None
+    ):
+        raise ValueError("registration task stop needs declared DEVELOPMENT sequence policy")
+    if (sequence_target_contract is not None or sequence_task_sha256 is not None) and sequence_horizon is None:
+        raise ValueError("sequence task contract requires a declared horizon")
+    if sequence_policy is not None and sequence_target_contract is not None and (
+        sequence_policy.head.target_contract != sequence_target_contract
+    ):
+        raise ValueError("native sequence target contract differs from the frozen policy")
+    if sequence_window_stride is not None and sequence_horizon is None:
+        raise ValueError("sequence window stride requires a declared horizon")
     if sequence_horizon is not None:
         from .player_sequence_collector import SequenceTraceCollector
 
@@ -1191,6 +1446,18 @@ def run_native_continuous_player(
             source_sha256=source["state_sha256"],
             partition=source["partition"],
             horizon=sequence_horizon,
+            **({"target_contract": sequence_target_contract}
+               if sequence_target_contract is not None else {}),
+            **({"task_sha256": sequence_task_sha256}
+               if sequence_task_sha256 is not None else {}),
+            **({"window_stride": sequence_window_stride} if sequence_window_stride is not None else {}),
+            feature_version=16 if model.feature_version == 16 else 6,
+            **({"history_contract": sequence_history_contract,
+                "selection_history_contract": sequence_policy.head.history_contract}
+               if sequence_history_contract is not None and sequence_policy is not None else
+               {"history_contract": sequence_history_contract} if sequence_history_contract is not None else
+               {"history_contract": sequence_policy.head.history_contract} if sequence_policy is not None else {}),
+            **({"declaration_store": store} if passive_collection else {}),
         )
     session = NativePlayerSession(
         store=store,
@@ -1222,6 +1489,9 @@ def run_native_continuous_player(
         observe_preparations=observe_preparations,
         observe_matchups=observe_matchups,
         observe_preparation_party=observe_preparation_party,
+        **({"collection_cost_frame_horizon": collection_cost_frame_horizon}
+           if collection_cost_frame_horizon is not None else {}),
+        **({"record_milestone_splits": True} if record_milestone_splits else {}),
         model_feature_version=model.feature_version,
         curriculum=curriculum,
         capture_reserve=capture_reserve,
@@ -1238,6 +1508,11 @@ def run_native_continuous_player(
         defer_unbound_preparation=defer_unbound_preparation,
         allow_singleton_parent_support=allow_singleton_parent_support,
         associate_unique_combat=associate_unique_combat,
+        explore_outside_scope=explore_outside_scope,
+        explore_on_movement_recurrence=explore_on_movement_recurrence,
+        story_milestone_commitment=story_milestone_commitment,
+        story_kind_commitment=story_kind_commitment,
+        **({"respect_combat_preparation_choice": True} if respect_combat_preparation_choice else {}),
         allow_collection_restoration=allow_collection_restoration,
         force_resource_safety=force_resource_safety,
         include_live_pp_readiness=include_live_pp_readiness,
@@ -1248,11 +1523,59 @@ def run_native_continuous_player(
             and consequence_head is None
         ),
         train_inference_scope=train_inference_scope,
+        **({"production_train_scope": production_train_scope} if production_train_scope is not None else {}),
+        **({"passive_sequence_horizon": sequence_horizon} if passive_collection else {}),
+        **({"train_selector_authentication": train_selector_authentication}
+           if train_selector_authentication is not None else {}),
     )
+    session.sequence_compulsory_control = sequence_policy is not None and (source.get("partition") == "development" or production_train_scope is not None)
+    registration_task_owned = (frozenset(session.runtime.reader.read_pokedex_state().owned_species)
+                               if sequence_task_kind == "next_registration" else None)
+
+    def finish_with_declared_task():
+        if registration_task_owned is None:
+            return session.finish_decision()
+        return finish_native_registration_task(session, collector,
+            initial_owned=registration_task_owned, task_sha256=sequence_task_sha256)
+
     try:
         blackout = None
         preface_cash_debits = 0
         preface_key = "supplied_blackout_preface"
+        if collection_cost_frame_horizon is not None:
+            native_plan_sha = canonical_sha256(json.loads((session.output / "native-plan.json").read_text()))
+            document = dict(native_plan_sha256=native_plan_sha, source_sha256=source["state_sha256"],
+                            frame_horizon=collection_cost_frame_horizon,
+                            initial_costs=search_memory.private_dict().get("collection_training", {}))
+            store.publish_sealed_record("rnp-colcost-" + native_plan_sha,
+                                        kind="red_native_collection_cost_origin", record=document)
+            _record(session.output / "collection-cost-origin.json", document)
+        if sequence_policy is not None and sequence_policy.selection_mode in {"stable_recurrence", "stable_costly_recurrence"}:
+            native_plan_sha = canonical_sha256(json.loads((session.output / "native-plan.json").read_text()))
+            document = dict(schema="pokemon.red.sequence-recurrence-origin.v1",
+                            native_plan_sha256=native_plan_sha, policy_sha256=sequence_policy.model_sha256,
+                            initial_memory=search_memory.private_dict(), source_sha256=source["state_sha256"])
+            store.publish_sealed_record("rnp-seqrec-" + native_plan_sha,
+                                        kind="red_native_sequence_recurrence_origin", record=document)
+            _record(session.output / "sequence-recurrence-origin.json", document)
+        train_selector_scope = None
+        if train_selector_authentication is not None:
+            train_selector_scope = train_selector_authentication.bind(
+                session=session, source=source, model=model, head=consequence_head,
+                objective_ref=consequence_objective_ref, challenge_ref=consequence_challenge_ref,
+                flags=dict(greedy_selection=greedy_selection, refine_preparation=refine_preparation,
+                           defer_unbound_preparation=defer_unbound_preparation,
+                           allow_singleton_parent_support=allow_singleton_parent_support,
+                           associate_unique_combat=associate_unique_combat,
+                           explore_outside_scope=explore_outside_scope,
+                           explore_on_movement_recurrence=explore_on_movement_recurrence),
+            )
+            # Companion record avoids a hash cycle with the already sealed plan.
+            document = train_selector_scope.document()
+            store.publish_sealed_record("rnp-selector-" + train_selector_scope.identity,
+                                        kind="red_native_train_selector", record=document)
+            _record(session.output / "scoped-train-selector-witness.json",
+                    dict(document=document, identity=train_selector_scope.identity))
         if (
             settle_existing_blackout
             or settle_existing_wild
@@ -1383,9 +1706,14 @@ def run_native_continuous_player(
                         supplied_control_recovery=True,
                     ),
                 )
+                capture_before = session.runtime.reader.read() if capture else None
                 report = options.binding.execute()
                 verdict = options.binding.verify(report)
                 after = session.snapshot()
+                ordinary_capture_loss = _ordinary_retained_capture_loss(
+                    capture, before, after, report, verdict, capture_before,
+                    session.runtime.reader.read() if capture else None,
+                )
                 preface_cash_debits = max(0, before.facts["cash"] - after.facts["cash"])
                 chained = report.evidence.get("chained_trainer_recovery")
                 ordinary_trainer_loss = (
@@ -1408,6 +1736,7 @@ def run_native_continuous_player(
                     (
                         verdict.status is not GoalDecisionOutcome.SUCCEEDED
                         and not ordinary_trainer_loss
+                        and not ordinary_capture_loss
                     )
                     or not settled_player_boundary(after)
                     or report.actions_executed
@@ -1427,7 +1756,7 @@ def run_native_continuous_player(
                     failure_reason=(
                         None if verdict.failure_reason is None else verdict.failure_reason.value
                     ),
-                    ordinary_setback=ordinary_trainer_loss,
+                    ordinary_setback=ordinary_trainer_loss or ordinary_capture_loss,
                     evidence=dict(report.evidence),
                     learned=False,
                     operator_relaunch=False,
@@ -1456,6 +1785,9 @@ def run_native_continuous_player(
                     new_fit=False,
                 ),
             )
+        session.movement_revisit_saturation = movement_revisit_saturation
+        session.costly_search_recurrence = (
+            sequence_policy is not None and sequence_policy.selection_mode == "stable_costly_recurrence")
         result = run_autonomous_options(
             model=model,
             output=session.output / "episode",
@@ -1470,6 +1802,9 @@ def run_native_continuous_player(
             continuous_player=True,
             continue_safe_route_failures=session.continue_safe_route_failures,
             initial_search_memory=search_memory,
+            movement_revisit_saturation=movement_revisit_saturation,
+            **({"collection_cost_frame_horizon": collection_cost_frame_horizon}
+               if collection_cost_frame_horizon is not None else {}),
             greedy_selection=greedy_selection,
             exploration_mix=float(exploration_mix),
             allow_greedy_branch_recovery=allow_greedy_branch_recovery,
@@ -1477,14 +1812,22 @@ def run_native_continuous_player(
             defer_unbound_preparation=defer_unbound_preparation,
             allow_singleton_parent_support=allow_singleton_parent_support,
             associate_unique_combat=associate_unique_combat,
+            explore_outside_scope=explore_outside_scope,
+            explore_on_movement_recurrence=explore_on_movement_recurrence,
+            story_milestone_commitment=story_milestone_commitment,
+            story_kind_commitment=story_kind_commitment,
+            **({"respect_combat_preparation_choice": True} if respect_combat_preparation_choice else {}),
+            story_kind_commitment_carrier=story_kind_commitment_carrier,
             maximum_cash_spent=remaining_cash,
             sequence_collector=collector,
             sequence_policy=sequence_policy,
             consequence_head=consequence_head,
             consequence_challenge_ref=consequence_challenge_ref,
             consequence_objective_ref=consequence_objective_ref,
-            stop_after_outcome=session.finish_decision,
+            stop_after_outcome=finish_with_declared_task,
             train_inference_scope=train_inference_scope,
+            **({"train_selector_scope": train_selector_scope}
+               if train_selector_scope is not None else {}),
         )
         if blackout is not None:
             result = dict(
@@ -1495,46 +1838,67 @@ def run_native_continuous_player(
             _record(session.output / "continuation-result.json", result)
         return result
     finally:
-        session.controller.input_enabled = False
-        session.recorder.enabled = False
-        _write(session.output / "terminal.state", session.controller.save_state_bytes())
-        _record(session.output / "search-memory.json", search_memory.private_dict())
-        _record(
-            session.output / "native-costs.json",
-            dict(
-                schema="pokemon.red.native-player-costs.v1",
-                actions_attempted=len(session.recorder.trace),
-                actions_completed=session.actions.actions_executed,
-                frames=session.controller.frames_executed,
-                seconds=session.wall.elapsed_seconds,
-                goal_attempts=session.decisions,
-                restore_attempts=session.heals,
-                nested_restore_attempts=session.support_restorations,
-                training_healing_attempts=session.training_healing_trips,
-                **(
-                    {"training_restoration_overlaps": session.training_restoration_overlaps}
-                    if getattr(session, "training_restoration_overlaps", 0)
-                    else {}
-                ),
-                control_recovery_cash_debits=preface_cash_debits,
-                **(
-                    dict(
-                        observed_cash_debits=session.actions.observed_cash_debits,
-                        observed_cash_rewards=session.actions.observed_cash_rewards,
-                        observed_cash_changes=session.actions.observed_cash_changes,
-                    )
-                    if session.actions.observe_cash is not None
-                    else {}
-                ),
-                buttons_released=not session.controller.pressed_buttons,
-                automatic_fit=False,
-                promotions=0,
-                diagnostic_events=len(session.recorder.diagnostic_events),
-                diagnostic_journal_seconds=session.recorder.diagnostic_journal_seconds,
-            ),
-        )
-        from .red_player_lesson_runtime import summarize_player_diagnostic_events
+        finalize_native_player_session(session, search_memory, preface_cash_debits=preface_cash_debits)
 
+
+def finalize_native_player_session(session, search_memory, *, preface_cash_debits=0):
+    """Seal the existing meters and terminal for a caller-owned native session.
+
+    Does not close or reload the emulator. Both the continuous runner and the
+    bounded TRAIN sequence adapter use this same accounting/cleanup path.
+    """
+    session.controller.input_enabled = False
+    session.recorder.enabled = False
+    if getattr(session, "milestone_splits", None) is not None:
+        session.milestone_splits.write(session.output / "milestone-splits.json")
+    _write(session.output / "terminal.state", session.controller.save_state_bytes())
+    _record(session.output / "search-memory.json", search_memory.private_dict())
+    _record(
+        session.output / "native-costs.json",
+        dict(
+            schema="pokemon.red.native-player-costs.v1",
+            actions_attempted=len(session.recorder.trace),
+            actions_completed=session.actions.actions_executed,
+            frames=session.controller.frames_executed,
+            seconds=session.wall.elapsed_seconds,
+            goal_attempts=session.decisions,
+            restore_attempts=session.heals,
+            nested_restore_attempts=session.support_restorations,
+            training_healing_attempts=session.training_healing_trips,
+            **(
+                {"training_restoration_overlaps": session.training_restoration_overlaps}
+                if getattr(session, "training_restoration_overlaps", 0)
+                else {}
+            ),
+            control_recovery_cash_debits=preface_cash_debits,
+            **(
+                dict(
+                    observed_cash_debits=session.actions.observed_cash_debits,
+                    observed_cash_rewards=session.actions.observed_cash_rewards,
+                    observed_cash_changes=session.actions.observed_cash_changes,
+                )
+                if session.actions.observe_cash is not None
+                else {}
+            ),
+            buttons_released=not session.controller.pressed_buttons,
+            automatic_fit=False,
+            promotions=0,
+            diagnostic_events=len(session.recorder.diagnostic_events),
+            diagnostic_journal_seconds=session.recorder.diagnostic_journal_seconds,
+        ),
+    )
+    from .red_player_lesson_runtime import (
+        JournalBackedDiagnosticEvents,
+        summarize_player_diagnostic_events,
+        write_streamed_player_diagnostic_journal,
+    )
+
+    if isinstance(session.recorder.diagnostic_events, JournalBackedDiagnosticEvents):
+        # Same bytes as the ordinary writer, one event in memory at a time.
+        write_streamed_player_diagnostic_journal(
+            session.output / "diagnostic-events.json", session.recorder.diagnostic_events
+        )
+    else:
         _record(
             session.output / "diagnostic-events.json",
             dict(
@@ -1545,5 +1909,22 @@ def run_native_continuous_player(
                 coverage=summarize_player_diagnostic_events(session.recorder.diagnostic_events),
             ),
         )
-        if session.consequence is not None:
-            session.consequence.finish()
+    if session.consequence is not None:
+        session.consequence.finish()
+
+
+def finish_native_registration_task(session, collector, *, initial_owned, task_sha256):
+    """Stop only after a real newly observed native registration at a safe boundary.
+
+    This supplies no target, choice, executor, reward or fit label. The caller
+    pins its task catalog; independent native verification remains required.
+    """
+    stop = session.finish_decision()
+    owned = frozenset(session.runtime.reader.read_pokedex_state().owned_species)
+    if owned - initial_owned:
+        snapshot = session.snapshot()
+        if not snapshot.safe:
+            raise ValueError("registration task cannot mark an unsafe terminal")
+        collector.mark_task_terminal(task_sha256=task_sha256, boundary_sha256=snapshot.sha256)
+        return True
+    return stop

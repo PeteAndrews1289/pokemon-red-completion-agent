@@ -73,12 +73,15 @@ def switch_active_battler(
     wait_frames: int = 180,
     allow_faint_outcome: bool = False,
     allow_trainer_prompt_outcome: bool = False,
+    allow_wild_field_return: bool = False,
     resume_forced_switch: bool = False,
 ) -> None:
     """Switch to one living party member through a fully observed battle-menu gate."""
 
     raw = reader.read()
     party = raw.party_hp or _party_hp(emulator)
+    if type(allow_wild_field_return) is not bool or (allow_wild_field_return and expected_battle_state != 1):
+        raise ValueError("wild field return requires an explicitly declared wild switch")
     if type(resume_forced_switch) is not bool:
         raise ValueError("forced-switch continuation must be explicit")
     if type(allow_trainer_prompt_outcome) is not bool:
@@ -141,7 +144,7 @@ def switch_active_battler(
                 return
             raise ProtectedRecoveryError(f"{label} target fainted during the switch.")
         if settled.battle_state != expected_battle_state:
-            if allow_faint_outcome and settled.battle_state == 0:
+            if (allow_faint_outcome or allow_wild_field_return) and settled.battle_state == 0:
                 return
             raise ProtectedRecoveryError(f"{label} left its active battle during the switch.")
         if (
@@ -165,13 +168,18 @@ def resolve_trainer_switch_prompt(
     target_index: int | None,
     label: str,
     wait_frames: int = 180,
+    allow_closed_outcome: bool = False,
 ) -> None:
     """Execute the actor's explicit response to a trainer replacement prompt.
 
     ``None`` declines. A zero-based living, non-active party index accepts and
     switches to that member. This operation never decides which answer to give.
+    An opted-in episode may receive a naturally closed battle for its existing
+    terminal referee to adjudicate; a field return is not declared a win here.
     """
 
+    if type(allow_closed_outcome) is not bool:
+        raise TypeError("closed trainer outcome permission must be boolean")
     before = reader.read()
     if not reader.trainer_switch_prompt_visible(before):
         raise ProtectedRecoveryError(f"{label} is not at a live trainer switch prompt.")
@@ -213,6 +221,8 @@ def resolve_trainer_switch_prompt(
             _pulse(actions, MacroActionKind.CANCEL, wait_frames=wait_frames)
             pending = reader.read()
             if pending.battle_state != 2:
+                if allow_closed_outcome and pending.battle_state == 0:
+                    return
                 raise ProtectedRecoveryError(f"{label} left its trainer battle.")
             if not reader.trainer_switch_prompt_visible(pending):
                 break
@@ -229,6 +239,8 @@ def resolve_trainer_switch_prompt(
     for _ in range(48):
         after = reader.read()
         if after.battle_state != 2:
+            if allow_closed_outcome and after.battle_state == 0:
+                return
             raise ProtectedRecoveryError(f"{label} left its trainer battle.")
         if reader.trainer_switch_prompt_visible(after):
             raise ProtectedRecoveryError(f"{label} did not resolve the switch prompt.")

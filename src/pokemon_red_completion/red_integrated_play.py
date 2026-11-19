@@ -37,7 +37,9 @@ def observable_player_boundary(snapshot):
     if (
         not snapshot.safe
         or type(facts.get("battle_state")) is not int
-        or facts["battle_state"] != 0
+        or (facts["battle_state"] != 0 and not (
+            facts.get("compulsory_battle_control") is True and facts["battle_state"] in (1, 2)
+        ))
         or facts.get("buttons_released") is not True
     ):
         return False
@@ -61,7 +63,7 @@ def observable_player_boundary(snapshot):
 
 
 def settled_player_boundary(snapshot):
-    return observable_player_boundary(snapshot) and snapshot.facts.get("input_ready") is True
+    return observable_player_boundary(snapshot) and snapshot.facts.get("battle_state") == 0 and snapshot.facts.get("input_ready") is True
 
 
 def ordinary_player_setback(binding, before, terminal, report, verification, error):
@@ -76,7 +78,15 @@ def ordinary_player_setback(binding, before, terminal, report, verification, err
         or not isinstance(report, GoalExecutionReport)
         or not isinstance(verification, GoalVerification)
         or verification.status is not GoalDecisionOutcome.FAILED
-        or not settled_player_boundary(before)
+        or not (
+            settled_player_boundary(before)
+            or (
+                binding.kind is GoalKind.RECOVER_CONTROL
+                and observable_player_boundary(before)
+                and before.facts.get("battle_state") == 2
+                and before.facts.get("compulsory_battle_control") is True
+            )
+        )
         or not settled_player_boundary(terminal)
         or measured_cost(before.facts, terminal.facts, report) is None
     ):
@@ -100,8 +110,14 @@ def ordinary_player_setback(binding, before, terminal, report, verification, err
     route_loss = _settled_route_trainer_loss(binding, terminal, report)
     route_recovery = _settled_route_trainer_recovery(
         binding, terminal, report
-    ) or _settled_route_field_recovery(binding, terminal, report)
+    ) or _settled_route_field_recovery(binding, terminal, report) or _settled_story_field_recovery(
+        binding, before, terminal, report
+    ) or _settled_native_delivery_recovery(
+        binding, before, terminal, report
+    )
     route_stop = route_loss or route_recovery
+    if "native_story_field_recovery" in report.evidence and not _settled_story_field_recovery(binding, before, terminal, report):
+        return False
     destination_unavailable = _settled_evolution_destination_unavailable(
         binding, before, terminal, report
     )
@@ -133,8 +149,30 @@ def ordinary_player_setback(binding, before, terminal, report, verification, err
         # A finite dose stopped at its declared bound with a verified PC return. It
         # remains a failed evolution, not a success or a command to retry it.
         # The next model choice may resume, heal, earn, or choose another goal.
-        if not settled_evolution_partial(binding, report):
+        zero_progress = settled_evolution_zero_progress(binding, report)
+        if not (settled_evolution_partial(binding, report) or zero_progress):
             return False
+        if zero_progress and not _zero_progress_evolution_census(before.facts, terminal.facts, report):
+            return False
+        if report.evidence.get("retained_active_roster_restored") is not True:
+            # A committed carrier is an authorized active roster, not a repaid
+            # original-party loan. Independently reconcile its exact census;
+            # the native executor alone may issue the retained-custody flag.
+            a = before.facts.get("retained_party_continuation")
+            b = terminal.facts.get("retained_party_continuation")
+            if (
+                report.evidence.get("field_carrier_custody_retained") is not True
+                or not _retained_evolution_census(
+                    before.facts, terminal.facts,
+                    require_exact_owned=True, require_progress=False,
+                )
+                or len(a["individuals"]) != 6
+                or not any(
+                    b["individuals"][ref]["experience"] > member["experience"]
+                    for ref, member in a["individuals"].items()
+                )
+            ):
+                return False
         reasons[GoalKind.EVOLVE_SPECIES] = {GoalFailureReason.OUTCOME_NOT_VERIFIED}
     if binding.kind is GoalKind.ACQUIRE_SPECIES and settled_evolution_partial(binding, report):
         reasons[GoalKind.ACQUIRE_SPECIES] = {GoalFailureReason.OUTCOME_NOT_VERIFIED}
@@ -259,6 +297,81 @@ def _settled_funding_approach_limit(binding, before, terminal, report):
     )
 
 
+
+def settled_evolution_zero_progress(binding, report):
+    """Recognize exact bounded zero progress with native custody evidence.
+
+    Legacy zero-win partials and unknown causes retain their hard stop.
+    """
+    if binding.kind is not GoalKind.EVOLVE_SPECIES:
+        return False
+    e = report.evidence
+    routed = (e.get("schema") == "pokemon.core.routed-semantic-goal-report.v1"
+        and e.get("destination_kind") == GoalKind.EVOLVE_SPECIES.value
+        and all(e.get(k) is True for k in ("budget_reconciled", "destination_bound",
+            "destination_executed", "route_verified", "within_budget")))
+    native = (e.get("schema") == "pokemon.red.native-evolution-partial.v1"
+        and e.get("bounded") is True
+        and all(type(e.get(k)) is str and e[k].startswith("pokemon:national:")
+            for k in ("source_species_ref", "target_species_ref"))
+        and e["source_species_ref"] != e["target_species_ref"])
+    boxed = e.get("boxed_no_win_venue")
+    if boxed is None:
+        allowed_cause = e.get("settlement_reserve_reached") is True
+    else:
+        from re import fullmatch
+
+        allowed_cause = (
+            (routed or native) and isinstance(boxed, Mapping)
+            and boxed.get("schema") == "pokemon.red.boxed-no-win-venue.v1"
+            and boxed.get("trainee_boxed_before_and_after") is True
+            and type(boxed.get("trainee_experience")) is int
+            and boxed["trainee_experience"] == e.get("trainee_initial_xp")
+            and isinstance(boxed.get("identical_stock_sha256"), str)
+            and fullmatch(r"[0-9a-f]{64}", boxed["identical_stock_sha256"]) is not None
+            and e.get("settlement_reserve_reached") is False
+            and e.get("training_venue_exhausted") is True
+            and e.get("no_verified_win_in_quantum") is True
+            and e.get("no_verified_win") is True
+        )
+    return (bool(routed or native) and allowed_cause
+        and e.get("zero_progress_evolution") is True
+        and type(e.get("zero_progress_trainee_ref")) is str
+        and bool(e["zero_progress_trainee_ref"])
+        and e.get("evolution_partial") is True
+        and e.get("retained_active_roster_restored") is True
+        and e.get("wall_limit_reached") is False
+        and all(type(e.get(k)) is int and e[k] >= 0 for k in
+            ("completed_training_battles", "healing_trips", "trainee_initial_xp",
+             "trainee_terminal_xp", "trainee_xp_gained"))
+        and e["completed_training_battles"] == e["trainee_xp_gained"] == 0
+        and e["trainee_initial_xp"] == e["trainee_terminal_xp"])
+
+
+def _zero_progress_evolution_census(before, after, report):
+    if not _retained_evolution_census(before, after, require_exact_owned=True,
+            require_progress=False):
+        return False
+    ref = report.evidence["zero_progress_trainee_ref"]
+    if "boxed_no_win_venue" in report.evidence:
+        first = before["retained_party_continuation"]["individuals"]
+        last = after["retained_party_continuation"]["individuals"]
+        bag_before = (before.get("diagnostics") or {}).get("bag_items")
+        return bool(
+            ref not in first and ref not in last and first == last
+            and before.get("specimen_counts") == after.get("specimen_counts")
+            and before.get("cash") == after.get("cash")
+            and bag_before is not None
+            and bag_before == (after.get("diagnostics") or {}).get("bag_items")
+        )
+    first = before["retained_party_continuation"]["individuals"].get(ref)
+    last = after["retained_party_continuation"]["individuals"].get(ref)
+    return (isinstance(first, Mapping) and isinstance(last, Mapping)
+        and first == last
+        and first["experience"] == report.evidence["trainee_initial_xp"]
+        and last["experience"] == report.evidence["trainee_terminal_xp"])
+
+
 def settled_evolution_partial(binding, report):
     """Recognize the dose receipt; callers still verify costs and native custody.
 
@@ -282,6 +395,10 @@ def settled_evolution_partial(binding, report):
     elif binding.kind is not GoalKind.EVOLVE_SPECIES:
         return False
     if not isinstance(evidence, Mapping):
+        return False
+    # A zero-progress certificate can never fall back to productive-dose credit,
+    # including a contradictory receipt claiming both zero progress and a win.
+    if "zero_progress_evolution" in evidence:
         return False
     routed = (
         evidence.get("schema") == "pokemon.core.routed-semantic-goal-report.v1"
@@ -323,15 +440,35 @@ def settled_evolution_partial(binding, report):
         and type(evidence.get("healing_trips")) is int
         and evidence["healing_trips"] >= 0
     )
+    # The native helper guard can end productive training before an incidental
+    # helper evolution. Retain that exact cause and independently paid target XP;
+    # a helper-only gain,unknown counter or generic pause remains a hard stop.
+    productive_settlement_stop = (
+        (evidence.get("helper_xp_headroom_exhausted") is True
+         or (native and evidence.get("training_movement_limit_reached") is True))
+        and all(type(evidence.get(k)) is int and evidence[k] >= 0 for k in (
+            "trainee_initial_xp", "trainee_terminal_xp", "trainee_xp_gained", "healing_trips"
+        ))
+        and evidence["trainee_xp_gained"] > 0
+        and evidence["trainee_terminal_xp"] - evidence["trainee_initial_xp"]
+        == evidence["trainee_xp_gained"]
+    )
     return not (
         not (routed or native)
         or evidence.get("evolution_partial") is not True
-        or evidence.get("retained_active_roster_restored") is not True
+        or not (
+            evidence.get("retained_active_roster_restored") is True
+            or (
+                binding.kind is GoalKind.EVOLVE_SPECIES
+                and evidence.get("field_carrier_custody_retained") is True
+            )
+        )
         or not (
             evidence.get("settlement_reserve_reached") is True
             or evidence.get("wall_limit_reached") is True
             or quantum_stop
             or productive_venue_stop
+            or productive_settlement_stop
         )
         or type(evidence.get("completed_training_battles")) is not int
         or evidence["completed_training_battles"] <= 0
@@ -523,6 +660,61 @@ def _settled_route_trainer_loss(binding, terminal, report):
 
     return _settled_route_trainer_stop(
         binding, terminal, report, settled_route_trainer_loss_evidence
+    )
+
+
+def native_delivery_trainer_recovery_evidence(evidence, *, kind, source_sha256,
+        terminal_sha256, cash, party_hp, actions, frames):
+    """Authenticate a native delivery stop without claiming a routed goal ran."""
+    from .red_player_engaged_story import settled_route_trainer_recovery_evidence
+
+    if not isinstance(evidence, Mapping):
+        return False
+    from re import fullmatch
+
+    certificate = evidence.get("native_trainer_recovery")
+    return (
+        kind in (GoalKind.ACQUIRE_SPECIES, GoalKind.RESUPPLY)
+        and isinstance(source_sha256, str) and fullmatch(r"[0-9a-f]{64}", source_sha256)
+        and evidence.get("schema") == "pokemon.red.native-delivery-recovery.v1"
+        and not any(key in evidence for key in (
+            "route_setback", "route_verified", "destination_bound", "destination_executed",
+            "budget_reconciled", "within_budget", "route_setback_destination_chain",
+        ))
+        and evidence.get("delivery") == ("dojo-gift" if kind is GoalKind.ACQUIRE_SPECIES else "super-rod")
+        and evidence.get("selected_kind") == kind.value
+        and evidence.get("source_sha256") == source_sha256
+        and evidence.get("terminal_sha256") == terminal_sha256
+        and evidence.get("objective_completed") is False
+        and "reward" in evidence and evidence["reward"] is None
+        and settled_route_trainer_recovery_evidence(certificate)
+        and type(evidence.get("source_cash")) is int
+        and 0 <= evidence["source_cash"] <= certificate["cash_before"]
+        and certificate["terminal_sha256"] == terminal_sha256
+        and type(cash) is int and certificate["cash_after"] == cash
+        and isinstance(party_hp, (tuple, list))
+        and list(party_hp) == certificate["party_hp"]
+        and type(actions) is int and actions >= certificate["actions"]
+        and type(frames) is int and frames >= certificate["frames"]
+    )
+
+
+def _settled_native_delivery_recovery(binding, before, terminal, report):
+    evidence = report.evidence
+    source = evidence.get("source_sha256")
+    prefix = {GoalKind.ACQUIRE_SPECIES: "red-native-delivery:dojo-gift:",
+              GoalKind.RESUPPLY: "pokemon.red:free-fishing-tool:"}.get(binding.kind)
+    return (
+        isinstance(source, str) and prefix is not None
+        and binding.binding_ref == prefix + before.sha256
+        and source == before.sha256
+        and evidence.get("source_cash") == before.facts.get("cash")
+        and native_delivery_trainer_recovery_evidence(
+            evidence, kind=binding.kind, source_sha256=source,
+            terminal_sha256=terminal.sha256, cash=terminal.facts.get("cash"),
+            party_hp=(terminal.facts.get("diagnostics") or {}).get("party_hp"),
+            actions=report.actions_executed, frames=report.frames_executed,
+        )
     )
 
 
@@ -1275,7 +1467,9 @@ def _settled_league_funding_loss(binding, terminal, report):
     battle = proof.get("completion")
     before, after = proof.get("money_before_battle"), proof.get("ending_money")
     return (
-        binding.binding_ref.startswith("pokemon.red:funding:repeatable-league:")
+        (binding.binding_ref.startswith("pokemon.red:funding:repeatable-league:")
+         or (type(proof.get("objective_id")) is str
+             and binding.binding_ref.startswith("pokemon.red:funding:earned-league-frontier:"+proof["objective_id"]+":")))
         and report.evidence.get("status") == "lost"
         and report.evidence.get("no_income_credit") is True
         and proof.get("schema") == "pokemon.red.league-funding-native-loss.v1"
@@ -1290,4 +1484,37 @@ def _settled_league_funding_loss(binding, terminal, report):
         and battle.get("outcome") == "lost"
         and battle.get("field_ready") is True
         and battle.get("money_delta") == after - before
+    )
+
+
+def _settled_story_field_recovery(binding, before, terminal, report):
+    from .red_routed_recovery import settled_route_field_recovery_evidence
+    e = report.evidence
+    cert = e.get("native_story_field_recovery")
+    return (
+        binding.kind is GoalKind.ADVANCE_STORY
+        and binding.binding_ref.startswith(("pokemon.red:story-travel:", "pokemon.red:quiz-gate:"))
+        and e.get("schema") == "pokemon.red.story-field-recovery.v1"
+        and e.get("support") == "native_story_field_faint"
+        and e.get("objective") == binding.story_objective_ref
+        and e.get("objective_completed") is False
+        and e.get("automatic_objectives") == []
+        and type(e.get("purchases")) is int and e["purchases"] == 0
+        and type(e.get("trainer_battles")) is int and e["trainer_battles"] == 0
+        and e.get("source_sha256") == before.sha256
+        and e.get("terminal_sha256") == terminal.sha256
+        and settled_route_field_recovery_evidence(cert)
+        and cert["terminal_sha256"] == terminal.sha256
+        and cert["cash_before"] == before.facts.get("cash") == cert["cash_after"] == terminal.facts.get("cash")
+        and report.actions_executed >= cert["actions"]
+        and report.frames_executed >= cert["frames"]
+        and isinstance((terminal.facts.get("diagnostics") or {}).get("party_hp"), (list, tuple))
+        and list(terminal.facts["diagnostics"]["party_hp"]) == cert["party_hp"]
+        and isinstance(before.facts.get("retained_party_continuation"), Mapping)
+        and before.facts["retained_party_continuation"].get("native_identity_verified") is True
+        and bool(before.facts["retained_party_continuation"].get("individuals"))
+        and before.facts.get("retained_party_continuation") == terminal.facts.get("retained_party_continuation")
+        and before.facts.get("completed_objectives") == terminal.facts.get("completed_objectives")
+        and before.facts.get("movement_event_flags") == terminal.facts.get("movement_event_flags")
+        and before.facts.get("player_lesson", {}).get("bag_items") == terminal.facts.get("player_lesson", {}).get("bag_items")
     )

@@ -166,6 +166,7 @@ def run_one_off_capture(
     budget: OneOffCaptureBudget | None = None,
     select_replacement: Callable[[RawGameState], int] | None = None,
     commit_throw: Callable[[OneOffCaptureBudget], None] | None = None,
+    status_preparer=None,
 ) -> bool:
     """Start at a settled wild MAIN menu; verify exact registration + specimen.
 
@@ -178,6 +179,17 @@ def run_one_off_capture(
 
     if type(max_throws) is not int or not 1 <= max_throws <= 99:
         raise ValueError("one-off throw budget must be between 1 and 99")
+    from .red_capture_status_runtime import RedCaptureStatusPreparer
+
+    if status_preparer is None and isinstance(before_throw, RedCaptureStatusPreparer):
+        status_preparer = before_throw
+    if status_preparer is not None and (
+        not isinstance(status_preparer, RedCaptureStatusPreparer)
+        or status_preparer.emulator is not emulator
+        or status_preparer.reader is not reader
+        or status_preparer.actions is not executor
+    ):
+        raise ValueError("capture status witness must belong to this executor and guest")
     species_number = red_internal_species_number(request.internal_species)
     start = reader.read()
     initial_owned = reader.read_pokedex_state().owned_species
@@ -310,6 +322,8 @@ def run_one_off_capture(
             moves_reader = getattr(reader, "read_enemy_capture_moves", lambda: None)
             status_reader = getattr(reader, "read_enemy_capture_status", lambda: None)
             before_moves = moves_reader()
+            marker = ((len(status_preparer.opponent_recoveries), len(status_preparer.throw_preparations))
+                      if status_preparer is not None else None)
             if not before_throw():
                 raise OneOffCapturePaused("preparation ended encounter; inspect retained state")
             live_boundary()
@@ -324,6 +338,11 @@ def run_one_off_capture(
                     before_moves,
                     moves_reader(),
                     status_reader(),
+                ) and not (
+                    status_preparer is not None
+                    and status_preparer.observed_rest_since(
+                        marker, before_preparation, after_preparation, before_moves
+                    )
                 ):
                     raise OneOffCapturePaused("preparation changed target HP")
         raw = reader.read()

@@ -37,7 +37,117 @@ from .red_pc_storage import face_pc_boundary
 from .red_resource_goal_router import collection_field_capabilities
 from .red_training_ground_route import RedVermilionGroundTransition
 from .resource_economy_observation import EconomyMode, EconomyOffer
+from .route_executor import RouteExecutionError, RouteExecutionFailureReason
 from .route_plan import RoutePlanningError
+
+
+def _occupied_prize_counter(start, at):
+    return (start.map_id == PRIZE_ROOM and start.ready and start.interruption is None
+            and at in start.occupied and sum(abs(x-y) for x,y in zip(start.at,at,strict=True)) == 1)
+
+
+def _reach_prize_counter(route, runtime, actions, observer, world, at, *, remaining):
+    from .actions import MacroAction, MacroActionKind
+    from .route_executor import RouteExecutionError, RouteExecutionFailureReason
+
+    reader = runtime.reader
+    def approach():
+        replace(route, route_world=world.with_current_observation(reader),
+                destination_map=PRIZE_ROOM, destination_at=at)(actions,reader,runtime.emulator)
+
+    start = observer.observe()
+    if not _occupied_prize_counter(start, at):
+        try:
+            approach()
+            return 0
+        except RouteExecutionError as error:
+            start = observer.observe()
+            if (error.reason is not RouteExecutionFailureReason.PLANNER_NO_ROUTE
+                    or not isinstance(error.__cause__, RoutePlanningError)
+                    or not _occupied_prize_counter(start, at)):
+                raise
+    # A moving customer can temporarily stand on the selected counter's approach.
+    # Wait on this tile until a fresh observation proves the counter is free.
+    for waits in range(1,17):
+        action_room, frame_room = remaining()
+        if action_room < 2 or frame_room < 60:
+            raise RoutePlanningError("prize counter wait reached its remaining route budget")
+        actions.execute(MacroAction(MacroActionKind.WAIT,repeat=60))
+        current=observer.observe()
+        if (current.map_id != PRIZE_ROOM or current.at != start.at or not current.ready
+                or current.interruption is not None or runtime.emulator.pressed_buttons):
+            raise RoutePlanningError("prize counter wait changed held field control")
+        if at not in current.occupied:
+            approach()
+            return waits
+    raise RoutePlanningError("prize counter remained occupied through the bounded wait")
+
+
+def _quote_corner_fly(runtime, world, start, destination, goal_at, *, allowed):
+    """Private conditional geometry only; actual Fly/arrival is verified later."""
+    if not allowed:
+        return None
+    from .gen1_field_moves import Gen1FieldMoveError, fly_menu_indices
+    from .observation import Badge, MapId
+    from .red_collection_fly import red_fly_landings
+    from .red_resource_goal_router import _supported_plan
+    raw = runtime.reader.read()
+    town = int(MapId.CELADON_CITY)
+    if (not start.ready or start.interruption is not None or start.mode != "land"
+            or not 0 <= start.map_id <= 0x24 or start.map_id == town
+            or raw.map_id != start.map_id or raw.battle_state
+            or runtime.reader.read_bottom_dialogue_box_visible()
+            or runtime.emulator.pressed_buttons
+            or not int(raw.badge_bits or 0) & int(Badge.THUNDER)
+            or town not in runtime.reader.read_fly_destinations()):
+        return None
+    try:
+        fly_menu_indices(raw)
+    except Gen1FieldMoveError:
+        return None
+    landing = dict(red_fly_landings(world.rom)).get(town)
+    if landing is None:
+        return None
+    projected = replace(start, map_id=town, at=landing, last_outside_map=town,
+                        occupied=frozenset(), hazards=())
+    try:
+        plan = world.plan_feasible_to_map(projected, destination, goal_at=goal_at)
+    except RoutePlanningError:
+        return None
+    if not _supported_plan(plan, allow_cut=True, allow_surf=False):
+        return None
+    return plan, town, landing
+
+
+def _execute_corner_fly(runtime, actions, observer, approach):
+    """Use the existing field macro and reject any unexpected resource change."""
+    from .actions import MacroAction, MacroActionKind
+    from .gen1_field_moves import Gen1FieldMovePort, Gen1FlyReceipt
+    from .observation import RED_FLY_TOWN_NAMES
+    _, town, landing = approach
+    reader = runtime.reader
+    before = reader.read()
+    dex = reader.read_pokedex_state()
+    boxes = reader.read_all_box_states()
+    name = RED_FLY_TOWN_NAMES[town].lower().replace(" ", "_")
+    receipt = Gen1FieldMovePort(actions, reader, runtime.emulator).execute(
+        MacroAction(MacroActionKind.FIELD_MOVE, "fly:" + name))
+    after = reader.read()
+    arrived = observer.observe()
+    fields = ("player_money", "bag_items", "badge_bits", "party_species_ids",
+              "party_levels", "party_moves", "party_hp", "party_status")
+    if (not isinstance(receipt, Gen1FlyReceipt) or receipt.source_map != before.map_id
+            or receipt.destination_map != town or after.map_id != town
+            or (after.player_y, after.player_x) != landing
+            or not arrived.ready or arrived.mode != "land" or arrived.interruption is not None
+            or runtime.emulator.pressed_buttons or reader.read_bottom_dialogue_box_visible()
+            or any(getattr(before,k) != getattr(after,k) for k in fields)
+            or reader.read_pokedex_state() != dex or reader.read_all_box_states() != boxes):
+        raise RuntimeError("Game Corner Fly approach changed its declared arrival/resources")
+    return dict(mechanic="native_corner_fly_approach", verified=True,
+                source_map=before.map_id, destination_map=town, landing=landing,
+                resource_party_dex_boxes_preserved=True, model_queries=0,
+                supplied_goal=False, learned_transport=False)
 
 
 def game_corner_options(
@@ -51,6 +161,7 @@ def game_corner_options(
     maximum_actions,
     maximum_frames,
     cash_reserve=0,
+    allow_fly_transport=False,
 ):
     """Observe feasibility without input; all targets remain executor-private.
 
@@ -60,6 +171,8 @@ def game_corner_options(
     """
     if type(cash_reserve) is not int or cash_reserve < 0:
         raise ValueError("Game Corner cash reserve must be a nonnegative integer")
+    if type(allow_fly_transport) is not bool:
+        raise ValueError("Game Corner Fly permission must be boolean")
     raw = observation.raw
     if (
         raw.battle_state != 0
@@ -101,7 +214,7 @@ def game_corner_options(
             plan = world.plan_feasible_to_map(start, DINER, goal_at=(1, 1))
         except RoutePlanningError:
             return ()
-        offers.append((None, plan, None))
+        offers.append((None, plan, None, None))
     else:
         boxes = reader.read_all_box_states()
         registered = reader.read_pokedex_state().owned_species
@@ -121,25 +234,34 @@ def game_corner_options(
                 continue
             if quote.cash_cost and raw.player_money - quote.cash_cost < cash_reserve:
                 continue
+            fly_approach = None
             try:
                 plan = world.plan_feasible_to_map(
                     start,
                     GAME_CORNER if quote.purchases else PRIZE_ROOM,
-                    goal_at=(8, 5) if quote.purchases else (3, 2 + 2 * (index // 3)),
+                    goal_at=((8, 5) if quote.purchases else
+                             start.at if _occupied_prize_counter(start,(3,2+2*(index//3))) else
+                             (3,2+2*(index//3))),
                 )
                 # The second leg is local Celadon access. It remains replanned
                 # from actual post-purchase truth and may not teleport/reload.
             except RoutePlanningError:
-                continue
-            estimated = 2 * len(plan.steps) + 20 + quote.purchases * 8
+                fly_approach = _quote_corner_fly(runtime, world, start,
+                    GAME_CORNER if quote.purchases else PRIZE_ROOM,
+                    (8, 5) if quote.purchases else (3, 2 + 2 * (index // 3)),
+                    allowed=allow_fly_transport)
+                if fly_approach is None:
+                    continue
+                plan = fly_approach[0]
+            estimated = 2 * len(plan.steps) + 20 + quote.purchases * 8 + (256 if fly_approach else 0)
             if estimated > maximum_actions or estimated * 200 > maximum_frames:
                 continue
-            offers.append((prize, plan, quote))
+            offers.append((prize, plan, quote, fly_approach))
     result = []
-    for prize, plan, quote in offers:
+    for prize, plan, quote, fly_approach in offers:
         source = runtime.emulator.save_state_bytes()
 
-        def bind(prize=prize, plan=plan, quote=quote, source=source):
+        def bind(prize=prize, plan=plan, quote=quote, source=source, fly_approach=fly_approach):
             used = False
             terminal = None
 
@@ -153,15 +275,38 @@ def game_corner_options(
                     runtime.emulator.frame_count,
                 )
                 before_cash = reader.read().player_money
+                transport = (_execute_corner_fly(runtime, actions, observer, fly_approach)
+                             if fly_approach is not None else None)
+                execution_route = (replace(route, route_world=world.with_current_observation(reader))
+                                   if transport is not None else route)
+                counter_waits = 0
                 if prize is None:
-                    replace(route, destination_map=DINER, destination_at=(1, 1))(
-                        actions, reader, runtime.emulator
-                    )
+                    diner_route = replace(execution_route, destination_map=DINER, destination_at=(1, 1))
+                    try:
+                        diner_route(actions, reader, runtime.emulator)
+                    except RouteExecutionError as error:
+                        if (error.reason is not RouteExecutionFailureReason.PLANNER_NO_ROUTE
+                                or not isinstance(error.__cause__, RoutePlanningError)
+                                or not allow_fly_transport or transport is not None):
+                            raise
+                        observed_world = world.with_current_observation(reader)
+                        fly = _quote_corner_fly(runtime, observed_world, observer.observe(), DINER, (1, 1), allowed=True)
+                        if fly is None:
+                            raise
+                        quoted_actions = 256 + 2 * len(fly[0].steps) + 20
+                        if (actions.actions_executed - before_actions + quoted_actions > maximum_actions
+                                or runtime.emulator.frame_count - before_frames + quoted_actions * 200 > maximum_frames):
+                            raise
+                        transport = _execute_corner_fly(runtime, actions, observer, fly)
+                        transport["prior_ground_failure"] = dict(reason=error.reason.value, cause=str(error.__cause__))
+                        replace(diner_route, route_world=world.with_current_observation(reader))(
+                            actions, reader, runtime.emulator
+                        )
                     face_pc_boundary(actions, reader, "left")
                     receipt = collect_coin_case(actions, reader, rom=world.rom)
                 else:
                     if quote.purchases:
-                        replace(route, destination_map=GAME_CORNER, destination_at=(8, 5))(
+                        replace(execution_route, destination_map=GAME_CORNER, destination_at=(8, 5))(
                             actions, reader, runtime.emulator
                         )
                         face_pc_boundary(actions, reader, "up")
@@ -172,9 +317,11 @@ def game_corner_options(
                         for i, p in enumerate(game_corner_prizes(world.rom))
                         if p.species == prize.species
                     )
-                    replace(
-                        route, destination_map=PRIZE_ROOM, destination_at=(3, 2 + 2 * (index // 3))
-                    )(actions, reader, runtime.emulator)
+                    counter_waits = _reach_prize_counter(
+                        execution_route,runtime,actions,observer,world,(3,2+2*(index//3)),
+                        remaining=lambda: (maximum_actions-(actions.actions_executed-before_actions),
+                                           maximum_frames-(runtime.emulator.frame_count-before_frames)),
+                    )
                     face_pc_boundary(actions, reader, "up")
                     receipt = receive_pokemon_prize(
                         actions, reader, rom=world.rom, species=prize.species
@@ -189,11 +336,13 @@ def game_corner_options(
                     dict(
                         mechanic="game_corner",
                         receipt=receipt,
+                        observed_occupied_counter_waits=counter_waits,
                         cash_debit=debit,
                         execution_owner="deterministic_native_support",
                         learned_tactics=False,
                         disclosed_cash_reserve=cash_reserve,
                         cash_reserve_learned=False,
+                        **({"field_transport": transport} if transport is not None else {}),
                     ),
                 )
 
@@ -212,11 +361,13 @@ def game_corner_options(
 
             return ExecutableGoalBinding(
                 binding_ref="red-game-corner:"
-                + ("coin-case" if prize is None else str(prize.species)),
+                + ("coin-case" if prize is None else str(prize.species))
+                + (":fly" if fly_approach is not None else ""),
                 kind=GoalKind.RESUPPLY if prize is None else GoalKind.ACQUIRE_SPECIES,
                 estimated_effort=min(
                     1.0,
-                    (2 * len(plan.steps) + 20 + (0 if quote is None else quote.purchases * 8))
+                    (2 * len(plan.steps) + 20 + (0 if quote is None else quote.purchases * 8)
+                     + (256 if fly_approach is not None else 0))
                     / 1000,
                 ),
                 estimated_risk=0.0,

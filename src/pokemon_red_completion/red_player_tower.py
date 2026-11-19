@@ -16,12 +16,12 @@ from .gen1_traversal import cut_capabilities, map_object_events
 from .goal_manager import GoalFailureReason, GoalKind
 from .goal_manager_runtime import ExecutableGoalBinding, GoalExecutionReport, GoalVerification
 from .local_router import without_coordinates
-from .observation import event_flag_is_set
+from .observation import EventFlag, ItemId, MapId, event_flag_is_set
 from .red_blackout_recovery import settle_red_blackout
 from .red_goal_skills import _raw_party_fully_restored
 from .red_learned_trainer import FROZEN_K_SHA256, K_QUALIFICATION_SHA256
-from .red_pc_storage import face_pc_boundary
 from .red_player_field_goals import _field_ready
+from .red_player_field_item import face_field_item_boundary
 from .red_player_lesson import capture_player_lesson_snapshot
 from .red_trainer_evolution import RedTrainerEvolutionGuard
 from .rom import verify_rom_bytes
@@ -110,8 +110,10 @@ class _MarowakEscapeExecutor:
         return result
 
 
-def marowak_binding(runtime, actions, *, route, battler, before_challenge=None):
+def marowak_binding(runtime, actions, *, route, battler, before_challenge=None, observe_binding=None):
     """Explicit opt-in of the existing K wild-knockout actor to the unique ghost."""
+    if observe_binding is not None and not callable(observe_binding):
+        raise TypeError("scripted wild binding observer must be callable")
     raw = runtime.reader.read()
     if not marowak_pending(raw):
         return None
@@ -361,7 +363,7 @@ def marowak_binding(runtime, actions, *, route, battler, before_challenge=None):
             else GoalVerification.failed(GoalFailureReason.RESOURCE_LOST)
         )
 
-    return ExecutableGoalBinding(
+    binding = ExecutableGoalBinding(
         "pokemon.red:ghost-marowak:" + sha256(source).hexdigest(),
         GoalKind.RECOVER_CONTROL if engaged else GoalKind.ADVANCE_STORY,
         0.2,
@@ -370,6 +372,30 @@ def marowak_binding(runtime, actions, *, route, battler, before_challenge=None):
         verify,
         maximum_cash_debit=(raw.player_money + 1) // 2,
     )
+    if observe_binding is not None and not engaged:
+        observer = getattr(runtime.reader, "read_scripted_wild_opposition", None)
+        if callable(observer):
+            from .gen1_scripted_wild import (
+                BoundScriptedWildOpposition, ScriptedWildGateScope, validate_scripted_wild_opposition,
+            )
+
+            counters = actions.actions_executed, runtime.emulator.frame_count
+            scope = ScriptedWildGateScope(
+                int(MapId.POKEMON_TOWER_6F), int(EventFlag.BEAT_GHOST_MAROWAK),
+                (16, 10), int(ItemId.SILPH_SCOPE),
+            )
+            proof = observer(route.rom, raw, scope=scope)
+            if proof is not None:
+                validate_scripted_wild_opposition(proof, route.rom, scope=scope)
+                witness = BoundScriptedWildOpposition(proof, sha256(source).hexdigest(), binding.binding_ref)
+                observe_binding(witness, binding)
+                record = getattr(actions, "record_diagnostic_event", None)
+                if callable(record):
+                    record("scripted_wild_opposition_quote", witness.document())
+            if (runtime.emulator.save_state_bytes() != source
+                    or counters != (actions.actions_executed, runtime.emulator.frame_count)):
+                raise ValueError("scripted wild opposition observation changed its native boundary")
+    return binding
 
 
 def fuji_phase(raw):
@@ -454,7 +480,10 @@ def fuji_binding(runtime, actions, *, route):
         )
         if not present() or fuji_phase(runtime.reader.read()) != spec:
             raise ValueError("Fuji prerequisite changed")
-        face_pc_boundary(actions, runtime.reader, facing.value)
+        # Turning on the Tower floor can start a wild encounter on this tile.
+        face_field_item_boundary(runtime, actions, facing.value)
+        if not present() or fuji_phase(runtime.reader.read()) != spec:
+            raise ValueError("Fuji prerequisite changed during facing settlement")
         for _ in range(128):
             current = runtime.reader.read()
             if current.battle_state or current.map_id not in {raw.map_id, destination}:

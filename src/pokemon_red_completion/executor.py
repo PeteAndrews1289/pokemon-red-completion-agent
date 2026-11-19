@@ -367,6 +367,31 @@ class MonotonicWallTimeBudgetController:
         return getattr(self._delegate, name)
 
 
+def shares_live_controller_guest(*ports: object) -> bool:
+    """Compare guest ownership through trusted input-restricting wrappers.
+
+    Return only a boolean; do not expose a reset, mutation or backend port to
+    observers. Identical save bytes in different guests are insufficient.
+    """
+    def owner(port):
+        seen = set()
+        for _ in range(16):
+            if id(port) in seen:
+                return None
+            seen.add(id(port))
+            if isinstance(port, (ReadOnlyController, FrameBudgetController,
+                                 MonotonicWallTimeBudgetController, CausallyMeteredEmulator)):
+                port = object.__getattribute__(port, "_delegate")
+            else:
+                return port
+        return None
+
+    owners = tuple(owner(port) for port in ports)
+    return bool(len(owners) >= 2 and owners[0] is not None
+                and all(port is owners[0] for port in owners)
+                and getattr(owners[0], "_backend", None) is not None)
+
+
 class WindowedFrameBudgetController:
     """Refuse a tick before it exceeds either a resettable window or total cap."""
 

@@ -441,3 +441,90 @@ def test_bad_model_schema_fails_before_backend_assembly(tmp_path, version):
             plan_path=tmp_path / "plan.json",
             model_feature_version=version,
         )
+
+
+@pytest.mark.parametrize("fault", [None, "other_error", "ready", "different_tile", "fuji_already_rescued"])
+def test_retained_fuji_wild_boundary_is_narrow(fault):
+    from pokemon_red_completion import red_player_configuration as cfg
+    from pokemon_red_completion.observation import MapId, RawGameState
+    from types import SimpleNamespace
+
+    flags = bytearray(320)
+    for flag in (271, 273, 274, 275) + ((279,) if fault == "fuji_already_rescued" else ()):
+        flags[flag // 8] |= 1 << (flag % 8)
+    raw = RawGameState(True, MapId.POKEMON_TOWER_7F, 4, 10, 1, 1,
+                       event_flags=bytes(flags), bag_items=((72, 1),))
+    outcome = dict(
+        before=dict(battle_state=0),
+        after=dict(battle_state=1, buttons_released=True, diagnostics=dict(
+            map_id=raw.map_id, player_y=raw.player_y, player_x=raw.player_x + (fault == "different_tile"))),
+        selected_kind="advance_story", error_type="RedPCStorageError",
+        error="other" if fault == "other_error" else "PC facing did not preserve its bound position",
+        failure_phase="execution",
+    )
+    result = dict(released=True, worker_stopped=True, field_ready=fault == "ready",
+                  continuation_reason="native_execution_error")
+    assert cfg._failed_fuji_facing_encounter(SimpleNamespace(read=lambda: raw), result, outcome) is (fault is None)
+
+
+@pytest.mark.parametrize("fault", [None, "sibling_actor", "wrong_actor_id", "wrong_mission", "stale_state", "missing_plan", "bad_roster_json", "bad_roster_shape"])
+def test_pending_loan_authenticates_registered_campaign_rollover(tmp_path, fault):
+    from hashlib import sha256
+
+    from pokemon_red_completion.red_player_configuration import authenticated_preloan_roster
+
+    def pin(path):
+        return {"path": str(path), "sha256": sha256(path.read_bytes()).hexdigest()}
+
+    root = tmp_path / "cohort"
+    here = root / "continuation-2" / "campaign-1"
+    earlier = root / "continuation-1" / ("campaign-2" if fault == "sibling_actor" else "campaign-1")
+    current = here / "runs" / "segment-003"
+    prior = earlier / "runs" / "segment-002"
+    current.mkdir(parents=True)
+    prior.mkdir(parents=True)
+    conf = config()
+    refs = [*(f"retained-{i}" for i in range(5)), "reserve-individual"]
+    members = [dict(specimen_ref=ref, species_id=i + 1, level=10, experience=1000, hp=20, max_hp=20,
+                    status="healthy", moves=[[33, 35]]) for i, ref in enumerate(refs)]
+    (prior / "terminal.state").write_bytes(b"retained save")
+    state = pin(prior / "terminal.state")["sha256"]
+    (prior / "CONTEXT.json").write_text(json.dumps(dict(state_sha256=state, spent={}, lesson={"party": members})))
+    context = pin(prior / "CONTEXT.json")["sha256"]
+    (prior / "RESULT.json").write_text(json.dumps(dict(worker_stopped=True, released=True, spent={},
+        state_sha256=state, context_sha256=context, configuration_sha256=conf.sha256)))
+    (current / "CONTEXT.json").write_text(json.dumps(dict(
+        preparation={"roster": [{"specimen_ref": ref} for ref in refs]},
+        lesson={"party": [{"specimen_ref": ref} for ref in refs[:-1] + ["guest"]]})))
+    (current / "PLAN.json").write_text(json.dumps(dict(actual_parent=str(prior), source_sha256=state,
+        context_sha256=context, configuration_sha256=conf.sha256)))
+    (root / "MISSION.json").write_text(json.dumps({"session_id": root.name}))
+    identity = dict(campaign_run_id="cohort/campaign-1", partition="development", mission=pin(root / "MISSION.json"))
+    previous = dict(identity)
+    if fault == "wrong_actor_id":
+        previous["campaign_run_id"] = "cohort/campaign-2"
+    if fault == "wrong_mission":
+        previous["mission"] = dict(identity["mission"], sha256="0" * 64)
+    (earlier / "PLAN.json").write_text(json.dumps(previous))
+    protected = {str(p): pin(p)["sha256"] for p in prior.iterdir()}
+    (here / "PLAN.json").write_text(json.dumps(dict(identity, campaign_continuation=True, parent=str(prior),
+        configuration_sha256=conf.sha256, source_segment_ordinal=2, source_sha256=state, context_sha256=context,
+        protected=protected)))
+    row = dict(campaign_run_id=identity["campaign_run_id"], live_plan=pin(earlier / "PLAN.json"),
+               continuations=[{"live_plan": pin(here / "PLAN.json")}])
+    roster = root / "CAMPAIGN-SET.json"
+    roster.write_text(json.dumps(dict(mission=identity["mission"], runs=[row])))
+    if fault == "stale_state":
+        (prior / "terminal.state").write_bytes(b"unrelated save")
+    elif fault == "missing_plan":
+        (earlier / "PLAN.json").unlink()
+    elif fault == "bad_roster_json":
+        roster.write_text("{")
+    elif fault == "bad_roster_shape":
+        roster.write_text("[]")
+    if fault:
+        with pytest.raises(ValueError, match="pending loan requires its immediate same-family source"):
+            authenticated_preloan_roster(current, conf)
+    else:
+        party, actual = authenticated_preloan_roster(current, conf)
+        assert tuple(refs) == actual and len(party.members) == 6

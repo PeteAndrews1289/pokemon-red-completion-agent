@@ -28,6 +28,7 @@ def silph_card_key_story_option(
     route,
     battler,
     battler_for_contract=None,
+    combat_levels=None,
     continuous_travel=False,
     allow_surf=False,
     record=None,
@@ -86,6 +87,14 @@ def silph_card_key_story_option(
     if not _raw_party_fully_restored(raw):
         return None  # Existing genuine nurse/preparation choices retain authority.
     contract = silph_card_key_battle_contract(route.rom, raw)
+    # Quote the same cartridge trainer the executor authenticates. Unknown
+    # callers keep unknown opposition; production supplies current combat roles.
+    challenge = OptionChallenge(True, False, 0.0, 0.0, 0.0)
+    if combat_levels is not None:
+        party = trainer_party_quote(route.rom, contract.trainer_identity[0],
+                                    contract.trainer_identity[2])
+        challenge = OptionChallenge.from_levels(
+            combat_levels=combat_levels, opponent_levels=tuple(m.level for m in party.party))
     actor = battler if battler_for_contract is None else battler_for_contract(contract)
     actor.require_story_contract(contract)
     controller = FrozenStoryBattleController(actor, (contract,), evolution_rom=route.rom)
@@ -160,7 +169,7 @@ def silph_card_key_story_option(
             verify,
             story_objective_ref="liberate_silph",
         ),
-        OptionChallenge(True, False, 0.0, 0.0, 0.0),
+        challenge,
     )
 
 

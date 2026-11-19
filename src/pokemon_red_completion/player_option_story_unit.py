@@ -32,6 +32,38 @@ class OptionStoryUnit:
         return cls(document["mode"], document["requires_further_selected_unit"])
 
 
+@dataclass(frozen=True, slots=True)
+class StoryRouteQuote:
+    """Executor-planned remaining route to its own objective endpoint.
+
+    A quoted plan, not an observed outcome or an objective/location identity.
+    Only the story-branch head reads it; legacy V16 vectors never include it.
+    """
+    remaining_cost: float
+    remaining_boundaries: int
+
+    def __post_init__(self):
+        if (type(self.remaining_cost) not in (int, float) or self.remaining_cost != self.remaining_cost
+                or self.remaining_cost < 0 or self.remaining_cost == float("inf")
+                or type(self.remaining_boundaries) is not int or self.remaining_boundaries < 0):
+            raise ValueError("story route quote requires finite non-negative planned values")
+        object.__setattr__(self, "remaining_cost", float(self.remaining_cost))
+
+
+def planned_route_quote(start_map, plan):
+    """Count planned map changes on an existing route plan; never re-plan.
+
+    A plan without an explicit step list or numeric cost yields no quote
+    (unknown remaining route), never an invented value.
+    """
+    steps, cost = getattr(plan, "steps", None), getattr(plan, "cost", None)
+    if steps is None or type(cost) not in (int, float):
+        return None
+    maps = [start_map, *(step.expected_map for step in steps)]
+    boundaries = sum(1 for a, b in zip(maps, maps[1:]) if a != b)
+    return StoryRouteQuote(float(cost), boundaries)
+
+
 def story_unit_vector(unit):
     if unit is None:
         return (0., 0., 0., 0.)

@@ -382,7 +382,9 @@ def settle_story_interaction(runtime, actions):
         or (current.player_y, current.player_x) != (before.player_y, before.player_x)
     ):
         raise RuntimeError("story interaction did not settle its actual approach")
-    return None if escaped is None else escaped.evidence
+    # The report freezes its evidence as a read-only mapping view, which the
+    # diagnostic recorder cannot copy. Hand callers an ordinary dictionary.
+    return None if escaped is None else dict(escaped.evidence)
 
 
 def blocking_field_item_binding(runtime, actions, *, route, destination_at, forbidden=frozenset()):

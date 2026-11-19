@@ -90,6 +90,49 @@ def _funding_approach_terminal_valid(runtime, current, money, bag, species, ledg
     )
 
 
+def _funding_evolution_ledger(guard, start, won, species, ledger):
+    """Return the post-battle ledger, admitting only verified level evolutions.
+
+    Unchanged party species keep the exact original ledger. A changed party is
+    accepted only through the cartridge level-evolution guard taken at battle
+    start, with every specimen outside the party unchanged. Otherwise None.
+    """
+    from collections import Counter
+
+    from .collection import CollectionLocation
+
+    after = tuple(won.raw.party_species_ids or ())
+    current = dependency_specimen_ledger(won.collection_observation)
+    if after == species:
+        return current if current == ledger else None
+    if (
+        guard is None
+        or start is None
+        or tuple(start.raw.party_species_ids or ()) != species
+        or dependency_specimen_ledger(start.collection_observation) != ledger
+        or len(after) != len(species)
+        or not guard.matches(start.raw, won.raw)
+    ):
+        return None
+
+    def outside_party(observation):
+        return Counter(
+            s.species_ref
+            for s in observation.specimens
+            if s.location is not CollectionLocation.PARTY
+        )
+
+    party_specimens = sum(
+        1 for s in won.collection_observation.specimens if s.location is CollectionLocation.PARTY
+    )
+    if (
+        outside_party(start.collection_observation) != outside_party(won.collection_observation)
+        or party_specimens != len(after)
+    ):
+        return None
+    return current
+
+
 def _restore_funding_party(router):
     """Compose legal native escape, live ground/Surf routing and the existing nurse."""
     from functools import partial
@@ -928,7 +971,7 @@ def bind_local_trainer_funding(
 
     def execute() -> GoalExecutionReport:
         nonlocal claimed, completed_receipt, completed_report, final_party_species, target
-        nonlocal recovery_receipt, approach_terminal
+        nonlocal recovery_receipt, approach_terminal, ledger
         if claimed:
             raise RedTrainerFundingError("trainer funding binding already consumed")
         claimed = True
@@ -1102,6 +1145,15 @@ def bind_local_trainer_funding(
             require_target()
         from .red_trainer_funding_battle import run_prepared_trainer_funding
 
+        evolution_guard = battle_start = None
+        if recovery:
+            # A qualified recovery win can level a member into its cartridge
+            # evolution. Admit only that observed level edge per retained
+            # specimen; strict funding without recovery stays unchanged.
+            from .red_trainer_evolution import RedTrainerEvolutionGuard
+
+            battle_start = runtime.adapter.observe()
+            evolution_guard = RedTrainerEvolutionGuard.from_rom(router.world.rom, runtime.emulator)
         receipt = run_prepared_trainer_funding(
             runtime.reader,
             actions,
@@ -1110,6 +1162,7 @@ def bind_local_trainer_funding(
             move_slot_policy=guard._safe_trainer_move,
             timing=DEFAULT_BATTLE_RUNTIME_TIMING,
             battle_runner_override=runtime.trainer_battle_runner,
+            preparation_evolution_guard=evolution_guard,
             **(
                 _StoryIncomeRecoveryOptions(story_income_recovery=True)
                 if recovery
@@ -1125,6 +1178,14 @@ def bind_local_trainer_funding(
                 raise RedTrainerFundingError("funding recovery requires its retained party guard")
             verify_party()
             won = runtime.adapter.observe()
+            won_ledger = _funding_evolution_ledger(
+                evolution_guard, battle_start, won, final_party_species, ledger
+            )
+            if won_ledger is None:
+                raise RedTrainerFundingError("earned funding battle proof changed before return")
+            evolved_species = tuple(won.raw.party_species_ids or ())
+            if evolved_species != final_party_species:
+                final_party_species, ledger = evolved_species, won_ledger
             if (
                 won.raw.battle_state
                 or won.raw.battle_result != 0

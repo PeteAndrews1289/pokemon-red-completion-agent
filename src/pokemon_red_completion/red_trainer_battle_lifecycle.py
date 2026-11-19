@@ -12,12 +12,24 @@ from typing import Literal
 from .actions import MacroAction, MacroActionKind
 from .battle_runtime import BattleActionExecutor, BattleRuntimeTiming
 from .observation import EventFlag, MapId, PokemonRedStateReader, RawGameState, event_flag_is_set
-from .red_learned_trainer import FrozenTrainerBattler, qualified_party_limit, story_party_limit
+from .red_learned_trainer import (
+    FrozenTrainerBattler, qualified_party_limit, story_party_limit,
+    RIVAL_TRAINER_CLASSES, RIVAL_WHOLE_BATTLE_DECISIONS, story_whole_battle_decision_limit,
+)
 from .red_trainer_practice_episode import RedTrainerPracticeEpisode
 
 
 class TrainerBattleLifecycleError(RuntimeError):
     """The continuing battle lost its identity or verifiable handoff."""
+
+
+def _with_event(event_flags: bytes | None, bit_index: int | None) -> bytes | None:
+    """Return the flags with exactly one additional event bit set."""
+    if event_flags is None or bit_index is None:
+        return event_flags
+    data = bytearray(event_flags)
+    data[bit_index // 8] |= 1 << (bit_index % 8)
+    return bytes(data)
 
 
 @dataclass(frozen=True)
@@ -95,7 +107,10 @@ def continue_learned_trainer_battle(
         or type(maximum_settle_pulses) is not int
         or not 1 <= maximum_settle_pulses <= 128
         or type(remaining_decisions) is not int
-        or not 1 <= remaining_decisions <= 80
+        or not 1 <= remaining_decisions <= (
+            story_whole_battle_decision_limit(trainer_identity)
+            if story_authority else 80
+        )
         or type(story_authority) is not bool
         or type(victory_badge_bits) is not int
         or not 0 <= victory_badge_bits <= 255
@@ -248,6 +263,9 @@ def continue_learned_trainer_battle(
         **({"story_authority": True} if story_authority else {}),
     )
     raw = reader.read()
+    # Unsupported moves are not permission for an unrecorded replacement actor.
+    # The battler must execute legal supported moves and retain every decision;
+    # unsupported and budget boundaries remain unresolved without extra input.
     won = episode.battle_won and episode.stop_reason == "battle_won"
     # Field scripts reuse enemy-roster RAM. An episode may truthfully retain
     # an unresolved HP-based summary after a native win. Admit only its exact
@@ -279,10 +297,20 @@ def continue_learned_trainer_battle(
     pay_day_money = reader.read_total_pay_day_money()
     if type(pay_day_money) is not int or not 0 <= pay_day_money <= 999999:
         raise TrainerBattleLifecycleError("unreadable terminal Pay Day accumulator")
+    # Gen I's first Oak's Lab rival battle may be lost without a blackout: no
+    # money penalty, no warp, a full restore, and the lab script records only
+    # BATTLED_RIVAL_IN_OAKS_LAB either way. Admit only that exact encounter.
+    lab_rival_loss = (
+        lost
+        and initial.map_id == MapId.OAKS_LAB
+        and defeated_event == int(EventFlag.BATTLED_RIVAL_IN_OAKS_LAB)
+        and len(trainer_identity) == 3
+        and trainer_identity[0] == 225
+    )
     expected_money = (
         min(999999, starting_money + ordinary_victory_money + pay_day_money)
         if won
-        else starting_money // 2
+        else starting_money if lab_rival_loss else starting_money // 2
     )
     for pulse in range(maximum_settle_pulses + 1):
         raw = reader.read()
@@ -337,10 +365,13 @@ def continue_learned_trainer_battle(
         raw.player_money != expected_money
         or not registrations <= frozenset(reader.read_pokedex_state().owned_species)
         or reader.read_last_blackout_map() != blackout_map
-        or (not champion_epilogue and raw.map_id != (initial.map_id if won else blackout_map))
+        or (
+            not champion_epilogue
+            and raw.map_id != (initial.map_id if won or lab_rival_loss else blackout_map)
+        )
         or raw.event_flags is None
         or (
-            event_flag_is_set(raw.event_flags, defeated_event) != won
+            event_flag_is_set(raw.event_flags, defeated_event) != (won or lab_rival_loss)
             if defeated_event is not None
             else not eventless_battle_finished(reader, trainer_identity, won=won)
         )
@@ -357,7 +388,11 @@ def continue_learned_trainer_battle(
         or (
             lost
             and (
-                raw.event_flags != initial.event_flags
+                (
+                    raw.event_flags != _with_event(initial.event_flags, defeated_event)
+                    if lab_rival_loss
+                    else raw.event_flags != initial.event_flags
+                )
                 or raw.party_hp != raw.party_max_hp
                 or any(raw.party_status or ())
             )

@@ -46,17 +46,24 @@ def _evolution_progress(evidence):
     result = {}
     for name, expected in (
         ("evolution_partial", bool),
+        ("zero_progress_evolution", bool),
+        ("zero_progress_trainee_ref", str),
         ("settlement_reserve_reached", bool),
         ("wall_limit_reached", bool),
         ("quantum_limit_reached", bool),
+        ("helper_xp_headroom_exhausted", bool),
         ("training_venue_exhausted", bool),
         ("no_verified_win_in_quantum", bool),
         ("no_verified_win", bool),
         ("completed_training_quanta", int),
         ("maximum_training_quanta", int),
         ("retained_active_roster_restored", bool),
+        ("field_carrier_custody_retained", bool),
         ("completed_training_battles", int),
         ("healing_trips", int),
+        ("trainee_initial_xp", int),
+        ("trainee_terminal_xp", int),
+        ("trainee_xp_gained", int),
     ):
         if name not in evidence:
             continue
@@ -64,6 +71,19 @@ def _evolution_progress(evidence):
         if type(value) is not expected or (expected is int and value < 0):
             raise RoutedSemanticGoalError("destination evolution progress has invalid typed costs")
         result[name] = value
+    boxed = evidence.get("boxed_no_win_venue")
+    if boxed is not None:
+        if (
+            not isinstance(boxed, dict)
+            or set(boxed) != {"schema", "identical_stock_sha256", "trainee_boxed_before_and_after", "trainee_experience"}
+            or not isinstance(boxed["schema"], str)
+            or not isinstance(boxed["identical_stock_sha256"], str)
+            or _SHA256.fullmatch(boxed["identical_stock_sha256"]) is None
+            or boxed["trainee_boxed_before_and_after"] is not True
+            or type(boxed["trainee_experience"]) is not int or boxed["trainee_experience"] < 0
+        ):
+            raise RoutedSemanticGoalError("destination evolution has an invalid boxed custody receipt")
+        result["boxed_no_win_venue"] = dict(boxed)
     return result
 
 
@@ -336,11 +356,17 @@ class RoutedSemanticGoalComposer:
         after_route_verification = self._checkpoint()
         route_verifier_was_action_free = after_route_verification == after_route_execution
         preliminary: GoalFailureReason | None = None
+        preliminary_cause: str | None = None
         within_budget = self._within_budget(route_actions, route_frames)
-        if not route_accounted or not route_verifier_was_action_free:
+        if not route_accounted:
             preliminary = GoalFailureReason.BINDING_FAILED
+            preliminary_cause = "route_unaccounted"
+        elif not route_verifier_was_action_free:
+            preliminary = GoalFailureReason.BINDING_FAILED
+            preliminary_cause = "route_verifier_acted"
         elif not within_budget:
             preliminary = GoalFailureReason.EXECUTION_BUDGET_EXHAUSTED
+            preliminary_cause = "route_over_budget"
         if (
             preliminary is not None
             or route_verification.status is not GoalDecisionOutcome.SUCCEEDED
@@ -352,6 +378,7 @@ class RoutedSemanticGoalComposer:
                 destination_offer=None,
                 destination_execution=None,
                 preliminary_failure=preliminary,
+                preliminary_failure_cause=preliminary_cause,
                 budget_reconciled=route_accounted and route_verifier_was_action_free,
                 within_budget=within_budget,
             )
@@ -370,6 +397,7 @@ class RoutedSemanticGoalComposer:
                 destination_offer=destination_offer,
                 destination_execution=None,
                 preliminary_failure=GoalFailureReason.BINDING_FAILED,
+                preliminary_failure_cause="fresh_destination_binder_acted",
                 budget_reconciled=False,
                 within_budget=within_budget,
             )
@@ -382,6 +410,7 @@ class RoutedSemanticGoalComposer:
                 destination_offer=destination_offer,
                 destination_execution=None,
                 preliminary_failure=GoalFailureReason.BINDING_FAILED,
+                preliminary_failure_cause="destination_unavailable",
                 budget_reconciled=True,
                 within_budget=within_budget,
             )
@@ -408,8 +437,12 @@ class RoutedSemanticGoalComposer:
         within_budget = self._within_budget(total_actions, total_frames)
         if not budget_reconciled:
             preliminary = GoalFailureReason.BINDING_FAILED
+            preliminary_cause = (
+                "destination_unaccounted" if not destination_accounted else "budget_sum_mismatch"
+            )
         elif not within_budget:
             preliminary = GoalFailureReason.EXECUTION_BUDGET_EXHAUSTED
+            preliminary_cause = "destination_over_budget"
         return self._finish(
             before=before,
             route_execution=route_execution,
@@ -417,6 +450,7 @@ class RoutedSemanticGoalComposer:
             destination_offer=destination_offer,
             destination_execution=destination_execution,
             preliminary_failure=preliminary,
+            preliminary_failure_cause=preliminary_cause,
             budget_reconciled=budget_reconciled,
             within_budget=within_budget,
         )
@@ -462,6 +496,7 @@ class RoutedSemanticGoalComposer:
         preliminary_failure: GoalFailureReason | None,
         budget_reconciled: bool,
         within_budget: bool,
+        preliminary_failure_cause: str | None = None,
     ) -> GoalExecutionReport:
         after = self._checkpoint()
         actions, frames = _checkpoint_delta(before, after)
@@ -502,12 +537,18 @@ class RoutedSemanticGoalComposer:
             if isinstance(route_setback_evidence, Mapping)
             else _destination_route_setback(destination_execution)
         )
+        nested_destination = (
+            {}
+            if "route_setback" in route_setback
+            else _nested_destination_failure(destination_execution)
+        )
+        route_verified = route_verification.status is GoalDecisionOutcome.SUCCEEDED
         report = GoalExecutionReport(
             actions_executed=actions,
             frames_executed=frames,
             evidence={
                 "schema": ROUTED_SEMANTIC_GOAL_REPORT_SCHEMA,
-                "route_verified": (route_verification.status is GoalDecisionOutcome.SUCCEEDED),
+                "route_verified": route_verified,
                 "destination_bound": (
                     destination_offer is not None and destination_offer.binding is not None
                 ),
@@ -518,7 +559,18 @@ class RoutedSemanticGoalComposer:
                 "route_is_policy_kind": False,
                 "private_binding_fields": 0,
                 "private_route_fields": 0,
+                **(
+                    {"route_failure_reason": route_verification.failure_reason.value}
+                    if not route_verified and route_verification.failure_reason is not None
+                    else {}
+                ),
+                **(
+                    {"preliminary_failure_cause": preliminary_failure_cause}
+                    if preliminary_failure_cause is not None
+                    else {}
+                ),
                 **route_setback,
+                **nested_destination,
                 **(
                     _evolution_progress(destination_execution.evidence)
                     if destination_execution is not None
@@ -604,6 +656,76 @@ class RoutedSemanticGoalComposer:
         )
 
 
+_PRELIMINARY_FAILURE_CAUSES = frozenset({
+    "route_unaccounted", "route_verifier_acted", "route_over_budget",
+    "fresh_destination_binder_acted", "destination_unavailable",
+    "destination_unaccounted", "budget_sum_mismatch", "destination_over_budget",
+})
+
+
+def _validated_nested_failure_node(node):
+    """Project only finite, typed semantic fields; never copy private extras."""
+    names = ("schema", "route_verified", "destination_bound", "destination_executed",
+             "destination_kind", "budget_reconciled", "within_budget", "actions", "frames")
+    if (not isinstance(node, Mapping) or any(k not in node for k in names)
+            or node["schema"] != ROUTED_SEMANTIC_GOAL_REPORT_SCHEMA
+            or type(node["destination_kind"]) is not str
+            or node["destination_kind"] not in {kind.value for kind in GoalKind}
+            or any(type(node[k]) is not bool for k in ("route_verified", "destination_bound",
+                    "destination_executed", "budget_reconciled", "within_budget"))
+            or any(type(node[k]) is not int or node[k] < 0 for k in ("actions", "frames"))):
+        raise RoutedSemanticGoalError("invalid nested failure node")
+    result = {k: node[k] for k in names}
+    try:
+        unavailable = DestinationUnavailableSummary.from_evidence(node)
+    except ValueError as error:
+        raise RoutedSemanticGoalError("invalid nested destination refusal") from error
+    if unavailable is not None:
+        result["destination_unavailable"] = unavailable.public_dict()
+    for key, allowed in (("preliminary_failure_cause", _PRELIMINARY_FAILURE_CAUSES),
+                         ("route_failure_reason", {r.value for r in GoalFailureReason})):
+        if key in node:
+            if type(node[key]) is not str or node[key] not in allowed:
+                raise RoutedSemanticGoalError("invalid nested failure cause")
+            result[key] = node[key]
+    return result
+
+
+def _routed_report_chain_node(
+    evidence: Mapping[str, object],
+    report: GoalExecutionReport,
+    *,
+    include_failure_details: bool = False,
+) -> dict:
+    """Extract one path-free composite node for nested diagnostic chains."""
+    node: dict[str, object] = {
+        key: evidence.get(key)
+        for key in (
+            "schema",
+            "route_verified",
+            "destination_bound",
+            "destination_executed",
+            "destination_kind",
+            "budget_reconciled",
+            "within_budget",
+        )
+    }
+    node.update(actions=report.actions_executed, frames=report.frames_executed)
+    if include_failure_details:
+        unavailable = DestinationUnavailableSummary.from_evidence(evidence)
+        if unavailable is not None:
+            node["destination_unavailable"] = unavailable.public_dict()
+        for key in ("preliminary_failure_cause", "route_failure_reason"):
+            value = evidence.get(key)
+            allowed = (_PRELIMINARY_FAILURE_CAUSES if key == "preliminary_failure_cause"
+                       else {reason.value for reason in GoalFailureReason})
+            if value is not None:
+                if type(value) is not str or value not in allowed:
+                    raise RoutedSemanticGoalError("invalid nested failure cause")
+                node[key] = value
+    return node
+
+
 def _destination_route_setback(report: GoalExecutionReport | None) -> dict:
     """Retain a nested route stop without claiming the outer transport failed.
 
@@ -640,6 +762,49 @@ def _destination_route_setback(report: GoalExecutionReport | None) -> dict:
     return {
         "route_setback": dict(stop),
         "route_setback_destination_chain": [node, *(dict(item) for item in chain)],
+    }
+
+
+def _nested_destination_failure(report: GoalExecutionReport | None) -> dict:
+    """Retain path-free child failure/refusal facts across nested composers.
+
+    Successful nested execution adds nothing, preserving existing success
+    reports unchanged.
+    """
+    if report is None:
+        return {}
+    evidence = report.evidence
+    if evidence.get("schema") != ROUTED_SEMANTIC_GOAL_REPORT_SCHEMA:
+        return {}
+    chain = evidence.get("nested_destination_chain", ())
+    if (
+        not isinstance(chain, (tuple, list))
+        or len(chain) >= 8
+        or any(not isinstance(item, Mapping) for item in chain)
+    ):
+        return {}
+    incomplete_or_refused = (
+        evidence.get("route_verified") is not True
+        or evidence.get("destination_bound") is not True
+        or evidence.get("destination_executed") is not True
+        or evidence.get("budget_reconciled") is not True
+        or evidence.get("within_budget") is not True
+        or any(
+            key in evidence
+            for key in (
+                "destination_unavailable",
+                "preliminary_failure_cause",
+                "route_failure_reason",
+                "nested_destination_chain",
+            )
+        )
+    )
+    if not incomplete_or_refused:
+        return {}
+    node = _routed_report_chain_node(evidence, report, include_failure_details=True)
+    return {
+        "nested_destination_chain": [_validated_nested_failure_node(node),
+                                     *(_validated_nested_failure_node(item) for item in chain)],
     }
 
 

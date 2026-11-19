@@ -11,7 +11,7 @@ all existing callers remain land-only unless they request it.
 from __future__ import annotations
 
 from collections.abc import Callable
-from dataclasses import dataclass, field, replace
+from dataclasses import asdict, dataclass, field, replace
 
 from pokemon_red_completion.gen1_field_moves import Gen1FieldMovePort, surf_permission
 from pokemon_red_completion.gen1_route_runtime import (
@@ -83,6 +83,7 @@ class RedVermilionGroundTransition:
     maximum_learned_trainers: int = 8
     allow_wild_faints: bool = False
     allow_field_faint_dialogue: bool = False
+    stop_on_native_field_faint: bool = False
 
     def __post_init__(self) -> None:
         if self.trainer_binding_factory is not None and not callable(self.trainer_binding_factory):
@@ -100,6 +101,10 @@ class RedVermilionGroundTransition:
             raise TypeError("Surf transport opt-in must be boolean")
         if type(self.allow_wild_faints) is not bool:
             raise TypeError("wild faint recovery opt-in must be boolean")
+        if type(self.stop_on_native_field_faint) is not bool:
+            raise TypeError("native field faint stop must be boolean")
+        if self.stop_on_native_field_faint and not self.allow_field_faint_dialogue:
+            raise ValueError("native field faint stop requires strict dialogue admission")
         if type(self.allow_field_faint_dialogue) is not bool:
             raise TypeError("field faint dialogue opt-in must be boolean")
         if self.allow_field_faint_dialogue and not self.allow_wild_faints:
@@ -248,23 +253,31 @@ class RedVermilionGroundTransition:
         )
 
         def declared_faint_warps(candidate):
-            # A faint message can interrupt an already-started native doorway.
-            # Admit only endpoints from the route being executed, as in item
-            # transport. The strict handler still verifies every resource.
-            return (
-                tuple(
-                    (
-                        segment.source_map,
-                        segment.transition.exit_at,
-                        segment.target_map,
-                        segment.transition.arrival_at,
-                    )
-                    for segment in candidate.segments
-                    if segment.passage_kind == "warp" and segment.source_map != segment.target_map
-                )
-                if self.allow_field_faint_dialogue
-                else ()
-            )
+            # Faint text may pause a doorway or the one outward step of an
+            # already-started decoded connection. Gen I can expose the source
+            # map with the coordinate one tile beyond its border until that
+            # text closes. Derive only the selected plan's exact transition;
+            # the strict handler still verifies every protected resource.
+            if not self.allow_field_faint_dialogue:
+                return ()
+            declared = []
+            offsets = {"up": (-1, 0), "down": (1, 0),
+                       "left": (0, -1), "right": (0, 1)}
+            for segment in candidate.segments:
+                if segment.passage_kind not in {"warp", "connection"}:
+                    continue
+                if segment.source_map == segment.target_map:
+                    continue
+                transition = segment.transition
+                source_at = transition.exit_at
+                if segment.passage_kind == "connection":
+                    dy, dx = offsets[transition.action]
+                    # Native Gen I coordinates are unsigned byte counters.
+                    source_at = ((source_at[0] + dy) % 256,
+                                 (source_at[1] + dx) % 256)
+                declared.append((segment.source_map, source_at,
+                                 segment.target_map, transition.arrival_at))
+            return tuple(declared)
 
         interruption_handler: InterruptionHandler
         wild_handler = Gen1WildFleeHandler(
@@ -279,6 +292,12 @@ class RedVermilionGroundTransition:
             field_faint_warps=declared_faint_warps(plan),
         )
         interruption_handler = wild_handler
+        if self.stop_on_native_field_faint:
+            from .red_story_field_recovery import NativeFieldFaintStop
+
+            interruption_handler = NativeFieldFaintStop(
+                interruption_handler, actions, reader, emulator
+            )
         if self.maximum_scripted_dialogues or self.trainer_binding_factory is not None:
             interruption_handler = Gen1RouteInterruptionHandler(
                 field_actions,
@@ -293,7 +312,7 @@ class RedVermilionGroundTransition:
                 route_name="Red observed scripted ground transition",
                 allow_wild_faints=self.allow_wild_faints,
                 emulator=emulator if self.allow_wild_faints else None,
-                wild_handler=wild_handler,
+                wild_handler=interruption_handler,
             )
 
         if self.trainer_binding_factory is not None:
@@ -362,6 +381,18 @@ class RedVermilionGroundTransition:
             or terminal.interruption is not None
         ):
             raise RouteExecutionError("Red ground transition did not prove the requested boundary")
+
+        record_verified_field_cuts(actions, field_actions)
+
+
+def record_verified_field_cuts(actions, field_actions):
+    """Forward existing native block-mutation proof;no new action or planner."""
+    record = getattr(actions, "record_diagnostic_event", None)
+    if callable(record):
+        for receipt in getattr(field_actions, "cut_receipts", ()):
+            record("native_verified_field_cut", dict(
+                source="Gen1FieldMovePort", move=15, native_block_mutation_verified=True,
+                receipt=asdict(receipt)))
 
 
 __all__ = [

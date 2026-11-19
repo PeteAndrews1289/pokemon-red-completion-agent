@@ -16,6 +16,7 @@ from .red_machine_teaching import execute_machine_lesson, plan_machine_lesson
 from .red_npc_approach import approach_npc
 from .red_paid_safari_departure import exit_paid_search, plan_paid_safari_departure
 from .red_pc_storage import face_pc_boundary
+from .red_silph_reward import reward_vitals_preserved
 from .red_player_field_goals import _field_ready
 from .red_player_story_travel import story_travel_binding
 from .red_safari_acquisition import enter_red_safari_area, red_safari_zone_offers
@@ -196,6 +197,48 @@ def expire_paid_safari(runtime, actions, world):
         )
         _pulse(actions, kind, frames=timing.wait_frames)
     raise RuntimeError("Safari time-up did not return inactive gate control")
+
+
+def safari_reward_admission_funding_budget(
+    runtime, actions, *, route, party_slot, replace_slot
+):
+    """Price one missing paid reward admission after a real Center route quote.
+
+    This uses the reward executor's supported entry, not the capture helper's
+    unsupported outdoor-Fuchsia Fly entry. The quote sends no inputs, earns no
+    cash, and does not select Surf or promise the reward will be reached.
+    """
+    from .red_safari_funding_budget import RedSafariFundingBudget
+
+    if not _field_ready(runtime):
+        return None
+    raw = runtime.reader.read()
+    if (type(raw.player_money) is not int or not 0 <= raw.player_money < 500
+            or raw.map_id not in {int(MapId.FUCHSIA_CITY), int(MapId.FUCHSIA_POKECENTER)}
+            or raw.bag_items is None or raw.event_flags is None
+            or type(party_slot) is not int or type(replace_slot) is not int
+            or not raw.party_moves or not 1 <= party_slot <= len(raw.party_moves)
+            or not 1 <= replace_slot <= 4):
+        return None
+    bag = dict(raw.bag_items)
+    surf, teeth = int(ItemId.HM03_SURF), int(ItemId.GOLD_TEETH)
+    if (bag.get(int(ItemId.HM04_STRENGTH))
+            or event_flag_is_set(raw.event_flags, int(EventFlag.GAVE_GOLD_TEETH))
+            or len(bag) + int(not bag.get(surf)) + int(not bag.get(teeth)) > 20
+            or (bag.get(surf) and bag.get(teeth) and 57 in raw.party_moves[party_slot - 1])):
+        return None
+    observation = runtime.adapter.observe()
+    if 'obtain_surf' not in {
+            o.id for o in runtime.adapter.graph.available_objectives(observation.game_state)}:
+        return None
+    local = raw.map_id == int(MapId.FUCHSIA_POKECENTER)
+    if not (local and (raw.player_y, raw.player_x) == (3, 3)):
+        approach = story_travel_binding(runtime, actions,
+            objective_id='obtain_surf', route=route,
+            **({'destination_at': (3, 3)} if local else {'route_destination_at': (3, 3)}))
+        if approach is None:
+            return None
+    return RedSafariFundingBudget(raw.player_money)
 
 
 def safari_rewards_binding(
@@ -410,6 +453,20 @@ def safari_rewards_binding(
     )
 
 
+def strength_exchange_travel_vitals_preserved(before, after):
+    """Keep exact vitals except existing nonfaint field-poison loss on the walk."""
+    if any(value is None for value in (
+        before.party_hp, after.party_hp, before.party_status, after.party_status
+    )) or not reward_vitals_preserved(before, after):
+        return False
+    # Existing fainted members may remain fainted. No newly fainted escort is
+    # silently accepted by this reward binding.
+    return all(
+        new_hp == old_hp or new_hp > 0
+        for old_hp, new_hp in zip(before.party_hp, after.party_hp, strict=True)
+    )
+
+
 def strength_reward_binding(runtime, actions, *, route):
     """Exchange earned teeth for HM04; teaching Strength is a separate lesson."""
     if not _field_ready(runtime):
@@ -468,8 +525,12 @@ def strength_reward_binding(runtime, actions, *, route):
         ):
             raise RuntimeError("Strength exchange did not preserve earned resources")
         for key in PROTECTED:
+            if key in ("party_hp", "party_status"):
+                continue
             if getattr(after, key) != getattr(raw, key):
                 raise RuntimeError("Strength exchange changed protected " + key)
+        if not strength_exchange_travel_vitals_preserved(raw, after):
+            raise RuntimeError("Strength exchange changed protected vitals beyond nonfaint native poison travel")
         runtime.observer.latch_verified_facts(
             runtime.adapter.graph.objective("obtain_strength").completion_facts
         )

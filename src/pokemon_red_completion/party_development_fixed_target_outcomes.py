@@ -25,6 +25,7 @@ from pokemon_red_completion.party_development_outcomes import (
 )
 from pokemon_red_completion.party_development_rank import (
     PARTY_DEVELOPMENT_WORKLOAD_FEATURE_SCHEMA_ID,
+    PARTY_DEVELOPMENT_MATCHUP_FEATURE_SCHEMA_ID,
     PartyDevelopmentCandidateSet,
     PartyDevelopmentGoal,
 )
@@ -155,7 +156,7 @@ def _require_menu(candidate_set, contract):
     if (
         candidate_set.goal is not PartyDevelopmentGoal.BALANCE
         or candidate_set.kind is not TrainingChoiceKind.VENUE
-        or candidate_set.feature_schema_id != PARTY_DEVELOPMENT_WORKLOAD_FEATURE_SCHEMA_ID
+        or candidate_set.feature_schema_id not in (PARTY_DEVELOPMENT_WORKLOAD_FEATURE_SCHEMA_ID, PARTY_DEVELOPMENT_MATCHUP_FEATURE_SCHEMA_ID)
         or len(candidate_set.candidates) != len(contract.home_binding_sha256_by_candidate)
     ):
         raise ScenarioOutcomeError("fixed-level ready task needs one BALANCE venue workload")

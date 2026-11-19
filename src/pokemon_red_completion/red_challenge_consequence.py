@@ -1285,6 +1285,9 @@ def load_scoped_train_challenge_consequence(
     expected_scoped_declaration_sha256,
     expected_native_plan_sha256,
     expected_story_contract,
+    expected_work_order_sha256=None,
+    expected_group_declaration_sha256=None,
+    native_plan_path=None,
 ):
     """Read one completed K/TRAIN story consequence and its exact scoped witness.
 
@@ -1314,6 +1317,13 @@ def load_scoped_train_challenge_consequence(
     def read(path):
         return json.loads(path.read_bytes())
 
+    joined = expected_work_order_sha256 is not None
+    require(joined == (expected_group_declaration_sha256 is not None)
+            == (native_plan_path is not None), 'partial group/work-order identity join')
+    if joined:
+        require_digest(expected_work_order_sha256)
+        require_digest(expected_group_declaration_sha256)
+        require(isinstance(native_plan_path, Path), 'native plan path must be typed')
     require(type(expected_story_contract) is StoryTrainerContract, "needs a typed contract")
     require_digest(expected_scoped_declaration_sha256)
     require_digest(expected_native_plan_sha256)
@@ -1331,9 +1341,49 @@ def load_scoped_train_challenge_consequence(
         expected_kind="red_challenge_consequence_result",
     ).read()
     source, target = plan["source"], plan["spec"]["challenge_target"]
+    expected_experiment = expected_native_plan_sha256
+    if joined:
+        expected_experiment = expected_work_order_sha256
+        group_root = Path(scoped_output).parent
+        group = read(group_root / 'declaration.json')
+        native_plan = read(native_plan_path)
+        from .red_native_player import NativeExecutionIdentity
+
+        execution = NativeExecutionIdentity(**plan['execution'])
+        execution_record = store.find_sealed_record(
+            execution.claim_id, expected_kind='red_native_player_execution'
+        )
+        require(execution_record is not None
+                and canonical_sha256(execution_record.read()) == expected_native_plan_sha256,
+                'sealed native execution plan differs')
+        # The configured assembler returns a source augmented after its backend
+        # factory closure has bound the exact six-field group SourceSpec.
+        backend_source_fields = ('partition', 'state_sha256', 'origin_sha256',
+                                 'source_commit', 'source_bundle_sha256',
+                                 'experiment_sha256')
+        require(set(source) == set(backend_source_fields) | {'configuration_sha256'},
+                'configured source fields differ')
+        require_digest(source['configuration_sha256'])
+        backend_source = {key: source[key] for key in backend_source_fields}
+        contract_key = (expected_story_contract.objective_id + ':'
+                        + expected_story_contract.battle_plan_id + ':map:'
+                        + str(expected_story_contract.map_id))
+        require(canonical_sha256(group) == expected_group_declaration_sha256
+                and group.get('schema') == 'pokemon.red.scoped-train-battler-group.v2'
+                and group.get('source') == backend_source
+                and group.get('source_commit') == source['source_commit']
+                and group.get('training_eligible') is False
+                and group.get('children') == {contract_key: expected_scoped_declaration_sha256}
+                and {p for p in group_root.iterdir() if p.is_dir()} == {Path(scoped_output)},
+                'one-child group/source membership differs')
+        require(canonical_sha256(native_plan) == expected_native_plan_sha256
+                and native_plan.get('execution') == plan['execution']
+                and native_plan.get('source') == source
+                and native_plan.get('consequence_spec') == plan['spec'],
+                'actual native-plan/source/consequence join differs')
     require(
         plan["partition"] == source["partition"] == "train"
-        and source["experiment_sha256"] == expected_native_plan_sha256,
+        and source["experiment_sha256"] == expected_experiment,
         "source or native plan differs",
     )
     require(
@@ -1357,13 +1407,15 @@ def load_scoped_train_challenge_consequence(
         "declaration digest differs",
     )
     require(
-        declaration["schema"] == "pokemon.red.scoped-train-battlers.v1"
+        declaration['schema'] == ('pokemon.red.scoped-train-battlers.v3' if joined else 'pokemon.red.scoped-train-battlers.v1')
+        and (not joined or (declaration.get('scoped_train_pp_reentry') is True
+                            and declaration.get('pp_depleted_switch_screen') is True))
         and declaration["source_partition"] == "train"
         and declaration["source_state_sha256"] == source["state_sha256"]
         and declaration["source_commit"] == source["source_commit"]
         and declaration["root_lineage_id"] == scoped_train_root_lineage_id(source["origin_sha256"])
         and declaration["native_plan_sha256"] == expected_native_plan_sha256
-        and declaration["experiment_sha256"] == expected_native_plan_sha256
+        and declaration["experiment_sha256"] == expected_experiment
         and declaration["fit_allowed"] is False
         and declaration["authority_promotion"] is False
         and declaration["model_sha256"] == FROZEN_K_SHA256
@@ -1372,6 +1424,13 @@ def load_scoped_train_challenge_consequence(
     )
     actors = declaration["actors"]
     require(all(a["index"] == i for i, a in enumerate(actors)), "actor indices differ")
+    if joined:
+        require([a['scope'] for a in actors] == ['story', 'wild']
+                and actors[1]['contract'] is None
+                and all(a['model_sha256'] == FROZEN_K_SHA256
+                        and a['qualification_sha256'] == K_QUALIFICATION_SHA256
+                        and a['train_risk_story_scope'] is None for a in actors),
+                'one-child actors or frozen K authority differ')
     matches = [
         a
         for a in actors
@@ -1427,6 +1486,10 @@ def load_scoped_train_challenge_consequence(
             and end["after_frame"] > start["before_frame"],
             "invocation end differs",
         )
+        if joined:
+            require(any(p['before']['frames'] <= start['before_frame'] - declaration['frame_origin']
+                        and end['after_frame'] - declaration['frame_origin'] <= p['after']['frames']
+                        for p in result['phases']), 'registered call falls outside RCC phase costs')
         calls[index] += 1
         previous_frame = end["after_frame"]
         if index == actor["index"]:
@@ -1435,6 +1498,17 @@ def load_scoped_train_challenge_consequence(
         len(target_calls) == 1 and calls[actor["index"]] == 1,
         "requires exactly one completed target call",
     )
+    if joined:
+        actor_directories = {root / f"actor-{i:03d}" for i in range(len(actors))}
+        require({p for p in root.iterdir() if p.is_dir()} <= actor_directories,
+                'undeclared actor artifact directory')
+        for i, count in enumerate(calls):
+            actor_directory = root / f"actor-{i:03d}"
+            expected_battles = {actor_directory / f"battle-{j:04d}"
+                                for j in range(1, count + 1)}
+            require(set(actor_directory.glob('battle-*')) == expected_battles
+                    and all(p.is_dir() for p in expected_battles),
+                    'actor battle artifact census differs')
     invocation = target_calls[0]
     directory = root / f"actor-{actor['index']:03d}" / "battle-0001"
     require(
@@ -1498,7 +1572,8 @@ def load_scoped_train_challenge_consequence(
         and all(identity.get(k) == v for k, v in expected.items())
         and canonical_sha256(identity.get("train_story_contract")) == canonical_sha256(contract)
         and identity.get("train_funding_diagnostic", False) is False
-        and identity.get("wild_training", False) is False,
+        and identity.get("wild_training", False) is False
+        and (not joined or identity.get('pp_depleted_switch_screen') is True),
         "native event identity differs",
     )
     require(

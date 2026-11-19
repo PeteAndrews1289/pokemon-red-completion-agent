@@ -81,15 +81,60 @@ def cinnabar_quiz_option(runtime, actions, *, route):
             reader.read_pokedex_state(),
             reader.read_pc_items(),
         )
-        replace(route, destination_map=int(MapId.CINNABAR_GYM), destination_at=at)(
-            actions, reader, em
+        from .red_routed_recovery import SettledNativeFieldRecovery
+        from .red_story_field_recovery import certify_story_field_recovery
+        from .red_training_ground_route import RedVermilionGroundTransition
+
+        selected_route = replace(route, destination_map=int(MapId.CINNABAR_GYM), destination_at=at)
+        if isinstance(selected_route, RedVermilionGroundTransition) and selected_route.allow_field_faint_dialogue:
+            selected_route = replace(selected_route, stop_on_native_field_faint=True)
+        try:
+            selected_route(actions, reader, em)
+        except SettledNativeFieldRecovery as recovery:
+            terminal = em.save_state_bytes()
+            evidence = certify_story_field_recovery(
+                recovery, raw, reader.read(), source, terminal, OBJECTIVE,
+            )
+            if (
+                not _field_ready(runtime)
+                or reader.read_all_box_states() != boxes
+                or reader.read_pokedex_state() != dex
+                or reader.read_pc_items() != pc
+            ):
+                raise RuntimeError("quiz approach faint changed protected field custody")
+            retained_report = GoalExecutionReport(
+                actions.actions_executed - a, em.frame_count - f, evidence,
+            )
+            return retained_report
+        arrival_observation, arrival_lesson = capture_player_lesson_snapshot(runtime)
+        arrival = arrival_observation.raw
+        if (
+            arrival.party_hp is None or raw.party_status is None
+            or len(arrival.party_hp) != len(raw.party_hp)
+            or len(raw.party_status) != len(raw.party_hp)
+        ):
+            raise RuntimeError("quiz approach lost its party measurements")
+        poison_ticks = tuple(old - hp for old, hp in zip(raw.party_hp, arrival.party_hp, strict=True))
+        if any(
+            damage and not (damage > 0 and hp > 0 and status & 0x08)
+            for damage, hp, status in zip(poison_ticks, arrival.party_hp, raw.party_status, strict=True)
+        ):
+            raise RuntimeError("quiz approach changed HP outside native non-fainting poison movement")
+        expected_arrival_lesson = dict(
+            lesson, party=[dict(member, hp=hp) for member, hp in zip(lesson["party"], arrival.party_hp, strict=True)]
         )
-        arrival = reader.read()
         if (
             not _field_ready(runtime)
             or arrival.map_id != raw.map_id
             or (arrival.player_y, arrival.player_x) != at
             or arrival.event_flags != raw.event_flags
+            or arrival_lesson != expected_arrival_lesson
+            or arrival.player_money != raw.player_money
+            or arrival.bag_items != raw.bag_items
+            or arrival.badge_bits != raw.badge_bits
+            or reader.read_all_box_states() != boxes
+            or reader.read_pokedex_state() != dex
+            or reader.read_pc_items() != pc
         ):
             raise RuntimeError("quiz approach changed its native boundary")
         _answer_quiz(
@@ -109,9 +154,9 @@ def cinnabar_quiz_option(runtime, actions, *, route):
             or after.raw.map_id != raw.map_id
             or (after.raw.player_y, after.raw.player_x) != at
             or after.raw.event_flags != bytes(expected_events)
-            or after_lesson != lesson
+            or after_lesson != arrival_lesson
             or any(
-                getattr(after.raw, name) != getattr(raw, name)
+                getattr(after.raw, name) != getattr(arrival, name)
                 for name in (
                     "bag_items",
                     "player_money",
@@ -139,6 +184,7 @@ def cinnabar_quiz_option(runtime, actions, *, route):
                 objective_completed=False,
                 quiz_index=index,
                 native_gate_opened=True,
+                approach_poison_damage_by_party_slot=list(poison_ticks),
                 learned_puzzle=False,
                 trainer_battles=0,
                 purchases=0,
@@ -156,6 +202,8 @@ def cinnabar_quiz_option(runtime, actions, *, route):
             or not _field_ready(runtime)
         ):
             return GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
+        if "native_story_field_recovery" in report.evidence:
+            return GoalVerification.failed(GoalFailureReason.RECOVERY_REQUIRED)
         return GoalVerification.succeeded()
 
     binding = ExecutableGoalBinding(

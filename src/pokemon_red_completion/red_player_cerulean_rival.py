@@ -29,6 +29,8 @@ from .red_player_cash_exposure import (
 from .red_player_field_goals import _field_ready
 from .red_scoped_training_battlers import resolve_story_battler
 from .red_story_battle import FrozenStoryBattleController, StoryTrainerContract
+from .red_player_story_battle import raise_if_story_battle_budget_reached
+from .red_learned_trainer import RIVAL_WHOLE_BATTLE_DECISIONS
 from .rom import verify_rom_bytes
 from .route_plan import RoutePlanningError
 
@@ -128,7 +130,11 @@ def scripted_rival_binding(
     cash_route = certified_cash_safe_transition(route, raw, plan)
     source = runtime.emulator.save_state_bytes()
     actor = resolve_story_battler(battler, contract)
-    controller = FrozenStoryBattleController(actor, (contract,), evolution_rom=route.rom)
+    # One prospective allowance for the complete battle, with one policy
+    # history and one cost record; no resetting the80-decision episode.
+    controller = FrozenStoryBattleController(
+        actor, (contract,), maximum_decisions=RIVAL_WHOLE_BATTLE_DECISIONS, evolution_rom=route.rom
+    )
     used, terminal, result = False, None, None
 
     def execute():
@@ -184,6 +190,9 @@ def scripted_rival_binding(
             or not result.field_ready
             or not _field_ready(runtime)
         ):
+            raise_if_story_battle_budget_reached(
+                result, controller, runtime, contract, actions, whole_battle_allowance=True
+            )
             raise RuntimeError("rival battle did not settle")
         terminal = runtime.emulator.save_state_bytes()
         return GoalExecutionReport(
@@ -193,6 +202,8 @@ def scripted_rival_binding(
                 objective=objective_id,
                 objective_completed=False,
                 battle=result.public_dict(),
+                declared_whole_battle_decisions=controller.maximum_decisions,
+                automatic_budget_renewal=False,
                 source_sha256=sha256(source).hexdigest(),
                 terminal_sha256=sha256(terminal).hexdigest(),
                 support="cartridge_rival_gate_and_dialogue",

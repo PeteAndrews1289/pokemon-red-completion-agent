@@ -178,6 +178,7 @@ def transport_to_observed_preparation_corridor(
     All travel uses the same guarded route/action ports; errors are not retried.
     """
     from .gen1_route_runtime import Gen1TraversalObserver
+    from .gen1_traversal import SURF_CAPABILITY
     from .gen1_trainer_sight import Gen1TrainerSightProjector
     from .red_living_dex_provider_curriculum import RedEncounterSourceTarget
     from .red_living_dex_wild_corridor import (
@@ -204,12 +205,20 @@ def transport_to_observed_preparation_corridor(
         capability_projector=ground_route_capability_projector(route, emulator),
     )
 
-    def observed_world():
+    def observed_world(*, permit_water_arrival=False):
         snapshot = observer.observe()
         if (
             not snapshot.ready
             or snapshot.interruption is not None
-            or snapshot.mode != "land"
+            or (
+                snapshot.mode != "land"
+                and not (
+                    permit_water_arrival
+                    and snapshot.mode == "water"
+                    and route.allow_surf is True
+                    and SURF_CAPABILITY in snapshot.capabilities
+                )
+            )
             or emulator.pressed_buttons
         ):
             raise ValueError("preparation corridor requires a settled land boundary")
@@ -271,11 +280,17 @@ def transport_to_observed_preparation_corridor(
             destination_map=corridor.map_id,
             destination_at=entry.terminal_at,
         )(actions, reader, emulator)
-        snapshot, world = observed_world()
+        snapshot, world = observed_world(permit_water_arrival=True)
     if snapshot.map_id != corridor.map_id:
         raise ValueError("preparation did not reach its selected venue")
 
     def observed_corridor(*, local_component, preferred):
+        if local_component and snapshot.mode != "land":
+            # A legal water-side map arrival is not a grass-search boundary.
+            # Reuse the same guarded component passage and return proof below.
+            raise RedLivingDexWildCorridorUnavailable(
+                "water arrival requires a verified passage to the selected land corridor"
+            )
         excluded = snapshot.occupied | frozenset(h.at for h in snapshot.hazards)
         return derive_red_living_dex_wild_corridor(
             RedEncounterSourceTarget(corridor.source_id),

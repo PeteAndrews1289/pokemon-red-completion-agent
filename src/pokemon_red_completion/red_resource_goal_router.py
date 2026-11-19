@@ -506,6 +506,10 @@ class RedResourceGoalRouter:
                     maximum_flees=_MAX_ROUTE_FLEES,
                     maximum_scripted_dialogues=_MAX_ROUTE_SCRIPTED_DIALOGUES,
                     allow_wild_faints=wild_recovery,
+                    # Resource recovery already owns native party losses. Reuse
+                    # its strict field-poison certificate before generic text
+                    # dismissal; the route still stops for a fresh model choice.
+                    allow_field_faints=wild_recovery,
                     emulator=self.runtime.emulator if wild_recovery else None,
                 )
             from pokemon_red_completion.red_travel_capture_runtime import (

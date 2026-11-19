@@ -12,6 +12,7 @@ from __future__ import annotations
 
 from collections.abc import Collection
 from dataclasses import dataclass, replace
+from hashlib import sha256
 from typing import Protocol, TypedDict
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
@@ -41,6 +42,8 @@ from pokemon_red_completion.living_dex_option_value import LivingDexOptionContex
 from pokemon_red_completion.local_router import find_local_paths, without_coordinates
 from pokemon_red_completion.observation import (
     RED_FLY_TOWN_NAMES,
+    EventFlag,
+    event_flag_is_set,
     Badge,
     MapId,
     PokemonRedStateReader,
@@ -69,7 +72,21 @@ from pokemon_red_completion.red_live_option_menu import (
 )
 from pokemon_red_completion.red_resource_goal_router import _supported_plan
 from pokemon_red_completion.red_safari_fishing import run_safari_fishing, safari_route_supported
-from pokemon_red_completion.route_executor import TraversalSnapshot, execute_route
+from pokemon_red_completion.red_player_engaged_story import (
+    SettledNativeTrainerRecovery,
+    settled_route_trainer_recovery_evidence,
+)
+from pokemon_red_completion.red_routed_recovery import (
+    RecoveryRouteInterruptionHandler,
+    SettledNativeWildRecovery,
+    settled_route_field_recovery_evidence,
+)
+from pokemon_red_completion.route_executor import (
+    RouteExecutionFailureReason,
+    RouteExecutionFailureReport,
+    TraversalSnapshot,
+    execute_route,
+)
 from pokemon_red_completion.route_plan import RoutePlanningError
 from pokemon_red_completion.strategic_navigation_scenario_runtime import (
     StrategicScenarioRouteWorld,
@@ -203,6 +220,11 @@ class RedLiveFishingInventory:
         }
 
 
+def _crosses_departed_ship_entrance(plan):
+    return any(step.source_map == int(MapId.VERMILION_CITY)
+               and step.expected_map == int(MapId.VERMILION_DOCK) for step in plan.steps)
+
+
 def discover_reachable_red_fishing_destinations(
     rom: bytes,
     registered_species_numbers: Collection[int],
@@ -211,6 +233,7 @@ def discover_reachable_red_fishing_destinations(
     traversal: TraversalSnapshot,
     maximum_candidates: int = 4,
     stop_when_full: bool = False,
+    ship_departed: bool = False,
     safari_session_steps: int | None = None,
     dig_escape: DigEscapePlan | None = None,
     flight_origins: tuple[TraversalSnapshot, ...] = (),
@@ -297,6 +320,8 @@ def discover_reachable_red_fishing_destinations(
                 candidate_route = world.plan_feasible_to_map(candidate, offer.map_id)
             except RoutePlanningError:
                 continue
+            if ship_departed and _crosses_departed_ship_entrance(candidate_route):
+                continue
             if candidate_route.steps and not _supported_plan(
                 candidate_route, allow_cut=True, allow_surf=True
             ):
@@ -347,6 +372,8 @@ def discover_reachable_red_fishing_destinations(
                     goal_at=stance.at,
                 )
             except RoutePlanningError:
+                continue
+            if ship_departed and _crosses_departed_ship_entrance(terminal_route):
                 continue
             if not _supported_plan(terminal_route, allow_cut=True, allow_surf=True):
                 continue
@@ -479,8 +506,11 @@ def build_red_live_fishing_inventory(
     flight_origins: tuple[TraversalSnapshot, ...] = ()
     departure = None
     departure_steps = departure_cost = 0
+    read_snapshot = getattr(reader, "read", None)
+    raw = read_snapshot() if read_snapshot is not None else None
+    flags = getattr(raw, "event_flags", None)
+    ship_departed = flags is not None and event_flag_is_set(flags, int(EventFlag.SS_ANNE_LEFT))
     if allow_fast_transport and safari_session_steps is None:
-        raw = reader.read()
         escape = plan_dig_escape(world, reader, raw, traversal)
         outside = (
             traversal
@@ -564,6 +594,7 @@ def build_red_live_fishing_inventory(
         world=world,
         traversal=traversal,
         maximum_candidates=maximum_candidates,
+        **({"ship_departed": True} if ship_departed else {}),
         safari_session_steps=safari_session_steps,
         **(
             _PhysicalDemandOptions(physical_demand=physical_demand)
@@ -619,6 +650,8 @@ def _live_fishing_binding(
     attempt: dict[str, object] = {}
     claimed = False
 
+    guarded = isinstance(reader, PokemonRedStateReader)
+
     def route_interruptions(label):
         inner = Gen1RouteInterruptionHandler(
             actions,
@@ -628,7 +661,25 @@ def _live_fishing_binding(
             stabilization_frames=180,
             route_name=label,
             maximum_scripted_dialogues=4,
+            allow_wild_faints=guarded,
+            emulator=emulator if guarded else None,
         )
+        if guarded:
+            raw = reader.read()
+            inner = RecoveryRouteInterruptionHandler(
+                actions,
+                reader,
+                post_prep_species=tuple(raw.party_species_ids or ()),
+                post_prep_living_slots=tuple(i for i, hp in enumerate(raw.party_hp or ()) if hp > 0),
+                maximum_flees=_MAX_ROUTE_FLEES,
+                maximum_trainer_battles=0,
+                maximum_scripted_dialogues=4,
+                stabilization_frames=180,
+                route_name=label,
+                allow_wild_faints=True,
+                emulator=emulator,
+                inner=inner,
+            )
         return (
             inner if interruption_handler_wrapper is None else interruption_handler_wrapper(inner)
         )
@@ -659,6 +710,73 @@ def _live_fishing_binding(
             )
         else:
             transport = {}
+            before = reader.read() if guarded else None
+
+            def walk(plan, label):
+                try:
+                    return execute_route(
+                        plan, field, observer,
+                        interruption_handler=route_interruptions(label),
+                        replanner=world.replanner(), limits=_ROUTE_LIMITS,
+                    )
+                except (SettledNativeWildRecovery, SettledNativeTrainerRecovery) as recovery:
+                    failure, proof = recovery.failure, recovery.evidence
+                    validate = (
+                        settled_route_trainer_recovery_evidence
+                        if isinstance(recovery, SettledNativeTrainerRecovery)
+                        else settled_route_field_recovery_evidence
+                    )
+                    raw = reader.read()
+                    terminal = emulator.save_state_bytes()
+                    count = actions.actions_executed - before_actions
+                    frames = emulator.frame_count - before_frames
+                    certified = validate(proof)
+                    failed = [name for name, passed in (
+                        ("native_reader", before is not None),
+                        ("same_route", isinstance(failure, RouteExecutionFailureReport)
+                         and failure.initial_plan is plan
+                         and failure.reason is RouteExecutionFailureReason.INTERRUPTION_UNRECOVERED),
+                        ("native_certificate", certified),
+                        ("same_terminal", sha256(terminal).hexdigest() == proof.get("terminal_sha256")),
+                        ("settled_controls", not emulator.pressed_buttons and not raw.battle_state
+                         and reader.read_input_readiness().ready and not reader.read_bottom_dialogue_box_visible()),
+                        ("bag_stock", before is not None and before.bag_items == raw.bag_items),
+                        ("starting_cash", before is not None and before.player_money == proof.get("cash_before")),
+                        ("ending_cash", raw.player_money == proof.get("cash_after")),
+                        ("party_hp", list(raw.party_hp or ()) == proof.get("party_hp")),
+                        ("registrations", frozenset(reader.read_pokedex_state().owned_species) == before_registered),
+                        ("metered_inputs", count >= recovery.report.actions_executed and frames >= recovery.report.frames_executed),
+                    ) if not passed]
+                    if failed:
+                        record = getattr(actions, "record_diagnostic_event", None)
+                        if callable(record):
+                            record("fishing_route_recovery_refused", dict(
+                                checks=failed, native_certificate_valid=certified,
+                                cash_before=None if before is None else before.player_money,
+                                certified_cash_before=proof.get("cash_before"),
+                                cash_after=raw.player_money, certified_cash_after=proof.get("cash_after"),
+                            ))
+                        raise
+                    report = GoalExecutionReport(count, frames, dict(
+                        schema="pokemon.core.routed-semantic-goal-report.v1",
+                        destination_kind=GoalKind.ACQUIRE_SPECIES.value,
+                        route_verified=False,
+                        destination_bound=False,
+                        destination_executed=False,
+                        budget_reconciled=True,
+                        within_budget=True,
+                        route_is_policy_kind=False,
+                        private_binding_fields=0,
+                        private_route_fields=0,
+                        route_setback=dict(proof),
+                        acknowledged_steps=len(failure.executed_steps),
+                        movement_requests=failure.movement_requests,
+                        wait_actions=failure.wait_actions,
+                        fishing_cast_started=False,
+                    ))
+                    attempt.update(settled_route_report=report, settled_route_state=terminal)
+                    return report
+
             if destination.dig_escape is not None:
                 transport["dig"] = execute_dig_escape(
                     world, reader, emulator, actions, destination.dig_escape
@@ -696,16 +814,9 @@ def _live_fishing_binding(
                     raise RedLiveFishingError(
                         "selected fishing departure needs unsupported transport"
                     )
-                departed = execute_route(
-                    departure_plan,
-                    field,
-                    observer,
-                    interruption_handler=route_interruptions(
-                        "model-directed fishing indoor departure"
-                    ),
-                    replanner=world.replanner(),
-                    limits=_ROUTE_LIMITS,
-                )
+                departed = walk(departure_plan, "model-directed fishing indoor departure")
+                if departed is attempt.get("settled_route_report"):
+                    return departed
                 origin = observer.observe()
                 if not departed.passed or (
                     origin.map_id,
@@ -768,15 +879,9 @@ def _live_fishing_binding(
                 ) from error
             if not _supported_plan(plan, allow_cut=True, allow_surf=True):
                 raise RedLiveFishingError("selected fishing route needs unsupported transport")
-            interruptions = route_interruptions("model-directed fishing destination")
-            route = execute_route(
-                plan,
-                field,
-                observer,
-                interruption_handler=interruptions,
-                replanner=world.replanner(),
-                limits=_ROUTE_LIMITS,
-            )
+            route = walk(plan, "model-directed fishing destination")
+            if route is attempt.get("settled_route_report"):
+                return route
             if not route.passed:
                 raise RedLiveFishingError("selected fishing route missed its shoreline")
             encounters = LiveWildEncounterExecutor(
@@ -845,6 +950,17 @@ def _live_fishing_binding(
         )
 
     def verify(_report: GoalExecutionReport) -> GoalVerification:
+        if "settled_route_report" in attempt:
+            if (
+                _report is attempt["settled_route_report"]
+                and emulator.save_state_bytes() == attempt["settled_route_state"]
+                and not emulator.pressed_buttons
+                and not reader.read().battle_state
+                and reader.read_input_readiness().ready
+                and not reader.read_bottom_dialogue_box_visible()
+            ):
+                return GoalVerification.failed(GoalFailureReason.RECOVERY_REQUIRED)
+            return GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
         result = attempt.get("result")
         before = attempt.get("before_registered")
         after = attempt.get("after_registered")

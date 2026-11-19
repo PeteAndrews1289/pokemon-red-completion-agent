@@ -48,9 +48,14 @@ class SequencePreview:
         result = [len(self.stages) / MAX_SEQUENCE_STEPS, float(self.tail_unknown)]
         for stage in self.stages:
             result.extend(
-                (0.0,) * len(CHALLENGE_NAMES) if stage is None else (
-                    1.0, float(stage.combat_required), float(stage.opposition_known),
-                    stage.opponent_fraction, stage.maximum_level_deficit,
+                (0.0,) * len(CHALLENGE_NAMES)
+                if stage is None
+                else (
+                    1.0,
+                    float(stage.combat_required),
+                    float(stage.opposition_known),
+                    stage.opponent_fraction,
+                    stage.maximum_level_deficit,
                     stage.median_level_deficit,
                 )
             )
@@ -92,13 +97,19 @@ class MeasuredSequenceStep:
 
     def __post_init__(self) -> None:
         for digest in (
-            self.decision_sha256, self.behavior_model_sha256,
-            self.before_sha256, self.after_sha256,
+            self.decision_sha256,
+            self.behavior_model_sha256,
+            self.before_sha256,
+            self.after_sha256,
         ):
             if type(digest) is not str or _SHA.fullmatch(digest) is None:
                 raise ValueError("invalid sequence evidence identity")
         for count in (
-            self.actions, self.frames, self.cash_debits, self.cash_credits, self.blackouts,
+            self.actions,
+            self.frames,
+            self.cash_debits,
+            self.cash_credits,
+            self.blackouts,
         ):
             if type(count) is not int or count < 0:
                 raise ValueError("invalid measured sequence cost")
@@ -111,6 +122,7 @@ class MeasuredSequenceStep:
 class SequenceEnd(StrEnum):
     HORIZON = "horizon"
     INTERRUPTED = "interrupted"
+    TASK_TERMINAL = "task_terminal"
 
 
 @dataclass(frozen=True)
@@ -135,22 +147,39 @@ class SequenceMeasurement:
     cash_credits: int
 
     def __post_init__(self) -> None:
-        if any(type(value) is not str or _SHA.fullmatch(value) is None for value in (
-            self.first_decision_sha256, self.behavior_model_sha256,
-        )):
+        if any(
+            type(value) is not str or _SHA.fullmatch(value) is None
+            for value in (
+                self.first_decision_sha256,
+                self.behavior_model_sha256,
+            )
+        ):
             raise ValueError("invalid measured sequence identity")
         if (
-            type(self.horizon) is not int or not 1 <= self.horizon <= MAX_SEQUENCE_STEPS
+            type(self.horizon) is not int
+            or not 1 <= self.horizon <= MAX_SEQUENCE_STEPS
             or type(self.observed_steps) is not int
             or not 1 <= self.observed_steps <= self.horizon
             or not isinstance(self.end, SequenceEnd)
-            or self.end is SequenceEnd.HORIZON and self.observed_steps != self.horizon
+            or self.end is SequenceEnd.HORIZON
+            and self.observed_steps != self.horizon
         ):
             raise ValueError("invalid measured sequence horizon")
-        if any(type(value) is not int or value < 0 for value in (
-            self.new_progress, self.completed_quests, self.actions, self.frames,
-            self.cash_debits, self.cash_credits, self.blackouts,
-        )) or self.frames < self.actions:
+        if (
+            any(
+                type(value) is not int or value < 0
+                for value in (
+                    self.new_progress,
+                    self.completed_quests,
+                    self.actions,
+                    self.frames,
+                    self.cash_debits,
+                    self.cash_credits,
+                    self.blackouts,
+                )
+            )
+            or self.frames < self.actions
+        ):
             raise ValueError("invalid measured sequence totals")
 
     @property
@@ -160,6 +189,15 @@ class SequenceMeasurement:
     @property
     def complete_window(self) -> bool:
         return self.end is SequenceEnd.HORIZON and self.observed_steps == self.horizon
+
+    @property
+    def complete_observation(self) -> bool:
+        """A fixed horizon or an explicitly declared task-terminal observation.
+
+        A task-terminal prefix never claims unexecuted fixed-horizon choices.
+        Native proof and the versioned target contract remain separate gates.
+        """
+        return self.complete_window or self.end is SequenceEnd.TASK_TERMINAL
 
 
 def measure_sequence(
@@ -177,8 +215,10 @@ def measure_sequence(
     independence, and does not admit data into the existing training pipeline.
     """
     if (
-        type(horizon) is not int or not 1 <= horizon <= MAX_SEQUENCE_STEPS
-        or type(steps) is not tuple or not 1 <= len(steps) <= horizon
+        type(horizon) is not int
+        or not 1 <= horizon <= MAX_SEQUENCE_STEPS
+        or type(steps) is not tuple
+        or not 1 <= len(steps) <= horizon
         or any(not isinstance(s, MeasuredSequenceStep) for s in steps)
         or not isinstance(end, SequenceEnd)
     ):
@@ -198,9 +238,14 @@ def measure_sequence(
     return SequenceMeasurement(
         first_decision_sha256=steps[0].decision_sha256,
         behavior_model_sha256=steps[0].behavior_model_sha256,
-        observed_steps=len(steps), horizon=horizon, end=end,
-        new_progress=len(progress), completed_quests=len(quests),
-        actions=sum(s.actions for s in steps), frames=sum(s.frames for s in steps),
-        cash_debits=sum(s.cash_debits for s in steps), blackouts=sum(s.blackouts for s in steps),
+        observed_steps=len(steps),
+        horizon=horizon,
+        end=end,
+        new_progress=len(progress),
+        completed_quests=len(quests),
+        actions=sum(s.actions for s in steps),
+        frames=sum(s.frames for s in steps),
+        cash_debits=sum(s.cash_debits for s in steps),
+        blackouts=sum(s.blackouts for s in steps),
         cash_credits=sum(s.cash_credits for s in steps),
     )

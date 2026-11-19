@@ -19,6 +19,7 @@ from pokemon_red_completion.party_development_rank import (
     PARTY_DEVELOPMENT_FEATURE_NAMES,
     PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID,
     PARTY_DEVELOPMENT_WORKLOAD_FEATURE_SCHEMA_ID,
+    PARTY_DEVELOPMENT_MATCHUP_FEATURE_SCHEMA_ID,
     PartyDevelopmentCandidateSet,
     PartyDevelopmentGoal,
     VenueOperationalPrior,
@@ -148,6 +149,7 @@ class PartyDevelopmentProspectiveBinding:
         if self.feature_schema_id not in (
             PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID,
             PARTY_DEVELOPMENT_WORKLOAD_FEATURE_SCHEMA_ID,
+            PARTY_DEVELOPMENT_MATCHUP_FEATURE_SCHEMA_ID,
         ) or (
             self.contract_schema == _LEGACY_PROSPECTIVE_BINDING_SCHEMA
             and self.feature_schema_id != PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID
@@ -480,6 +482,7 @@ class PartyDevelopmentProspectiveBinding:
             not in (
                 PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID,
                 PARTY_DEVELOPMENT_WORKLOAD_FEATURE_SCHEMA_ID,
+                PARTY_DEVELOPMENT_MATCHUP_FEATURE_SCHEMA_ID,
             )
             or value["private_path_fields"] != 0
             or not isinstance(venue_prior_feature_mode_value, str)

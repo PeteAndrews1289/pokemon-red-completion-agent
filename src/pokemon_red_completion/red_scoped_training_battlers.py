@@ -44,6 +44,36 @@ def scoped_train_root_lineage_id(origin_sha256: str) -> str:
 class _ScopedActor(FrozenTrainerBattler):
     _pool: "ScopedTrainingBattlers"
 
+    def pp_reentry_screen_active(self, authority):
+        if not self._pool._allow_train_pp_reentry:
+            return super().pp_reentry_screen_active(authority)
+        # Explicit pool-only reuse of K's existing PP protection. This does not
+        # relabel the actor or grant an arbitrary TRAIN model story authority.
+        index = next((i for i, actor in enumerate(self._pool._actors) if actor is self), None)
+        if (
+            index is None
+            or self._pool._identity(self) != self._pool._identities[index]
+            or type(self.pp_depleted_switch_screen) is not bool
+            or self.source_partition is not ScenarioPartition.TRAIN
+            or (self.model_sha256, self.qualification_sha256)
+            != (FROZEN_K_SHA256, K_QUALIFICATION_SHA256)
+            or self.development_story_scope is not None
+            or self.development_preparation_scope is not None
+            or self.train_risk_story_scope is not None
+            or self.evaluation_story_scope is not None
+        ):
+            raise ValueError("scoped TRAIN PP screen identity differs")
+        if not self.pp_depleted_switch_screen:
+            return False
+        if self.train_story_contract is None:
+            if authority != self.wild_authority():
+                raise ValueError("scoped TRAIN wild PP authority differs")
+            return False  # The existing screen is story-only,also in DEVELOPMENT.
+        self.require_train_story_scope()
+        if authority != self.story_authority():
+            raise ValueError("scoped TRAIN story PP authority differs")
+        return True
+
     def _play(self, *args: Any, **kwargs: Any) -> Any:
         if self._pool._production_admission is not None:
             reader = args[0] if args else kwargs.get("reader")
@@ -74,6 +104,7 @@ class ScopedTrainingBattlers:
         experiment_sha256: str,
         initial: BattleAftermath | None = None,
         native_plan_sha256: str | None = None,
+        allow_train_pp_reentry: bool = False,
     ) -> "ScopedTrainingBattlers":
         """Bind a fresh ordinary K prototype to caller-authenticated source metadata.
 
@@ -124,6 +155,7 @@ class ScopedTrainingBattlers:
             experiment_sha256=experiment_sha256,
             initial=initial,
             native_plan_sha256=native_plan_sha256,
+            allow_train_pp_reentry=allow_train_pp_reentry,
         )
 
     @classmethod
@@ -179,7 +211,13 @@ class ScopedTrainingBattlers:
         story_overrides: tuple[FrozenTrainerBattler, ...] = (),
         production_admission=None,
         production_reader=None,
+        allow_train_pp_reentry: bool = False,
     ) -> None:
+        if type(allow_train_pp_reentry) is not bool or (
+            allow_train_pp_reentry and production_admission is not None
+        ):
+            raise ValueError("scoped TRAIN PP screen requires separate explicit pool authority")
+        self._allow_train_pp_reentry = allow_train_pp_reentry
         self._production_admission = production_admission
         self._production_reader = production_reader
         if production_admission is not None:
@@ -335,6 +373,10 @@ class ScopedTrainingBattlers:
             native_plan_sha256=native_plan_sha256,
             frame_origin=self._frame_origin,
         )
+        if allow_train_pp_reentry:
+            declaration["schema"] = "pokemon.red.scoped-train-battlers.v3"
+            declaration["scoped_train_pp_reentry"] = True
+            declaration["pp_depleted_switch_screen"] = prototype.pp_depleted_switch_screen
         if production_admission is not None:
             declaration["production_admission"] = production_admission.document()
             for record, actor in zip(actor_records, self._actors, strict=True):
@@ -357,8 +399,7 @@ class ScopedTrainingBattlers:
             raise ValueError("scoped TRAIN actor requires a measured session frame counter")
         return frame
 
-    @staticmethod
-    def _identity(actor: FrozenTrainerBattler) -> tuple[Any, ...]:
+    def _identity(self, actor: FrozenTrainerBattler) -> tuple[Any, ...]:
         contract = actor.train_story_contract
         if contract is not None and not isinstance(contract, StoryTrainerContract):
             raise ValueError("scoped TRAIN actor contract type changed")
@@ -371,6 +412,9 @@ class ScopedTrainingBattlers:
             actor.model_sha256,
             actor.qualification_sha256,
             actor.train_funding_diagnostic,
+            self._allow_train_pp_reentry,
+            actor.pp_depleted_switch_screen,
+            actor.mechanics_aware_tower_choices,
             actor.story_chain_scope,
             canonical_sha256(None if contract is None else asdict(contract)),
             canonical_sha256(

@@ -295,6 +295,7 @@ class RedStaticCaptureGoalProvider:
                     rom=self.rom,
                     budget=budget,
                     before_throw=before_throw if self.prepare_status else None,
+                    status_preparer=prepare if self.prepare_status else None,
                     select_replacement=replacement,
                     record_decision=decisions.append,
                     commit_throw=lambda _: checkpoint("throw_intent"),

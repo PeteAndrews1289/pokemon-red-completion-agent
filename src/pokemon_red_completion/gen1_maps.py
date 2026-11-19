@@ -792,7 +792,10 @@ def _assemble(
 
             kind = PassageKind.WARP if destination in headers else PassageKind.SCRIPTED
             arrival_at: tuple[int, int] | None = None
-            exit_action: str | None = None
+            # Script-mutated destinations still use the source door's native
+            # boundary/automatic-trigger rules. Keep that mechanic metadata
+            # while withholding an unobserved destination from the macro graph.
+            exit_action = _boundary_warp_action(headers[map_id], door.at)
             if kind is PassageKind.WARP:
                 destination_warps = warps.get(destination, ())
                 if door.destination_warp_index >= len(destination_warps):

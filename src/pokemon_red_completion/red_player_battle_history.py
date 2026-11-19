@@ -192,6 +192,14 @@ class NativeBattlerHistory:
         last = json.loads((directory / "events/event-00002.json").read_bytes())["payload"]
         identity = first.get("identity", {})
         diagnostic = last.get("battle_runtime_diagnostic") or {}
+        # An asynchronous interruption can arrive after run_identity but before
+        # the runtime has installed an entry diagnostic or made a decision.
+        # The exact closed two-event/no-capture/terminal proof below still owns
+        # admission; this exception is not a battle result or fresh inference.
+        interrupted_before_entry = (
+            error_type == "KeyboardInterrupt"
+            and last.get("battle_runtime_diagnostic") is None
+        )
         if (
             any((directory / name).exists() for name in (
                 "initial.state", "initial.state.json", "outcome.json",
@@ -210,10 +218,12 @@ class NativeBattlerHistory:
             or last.get("error_type") != error_type
             or last.get("completed_events_before_failure") != 1
             or last.get("failure_after_event") != "run_identity"
-            or diagnostic.get("phase") != "entry"
-            or diagnostic.get("schema") != "pokemon.battle-runtime-diagnostic.v1"
-            or diagnostic.get("recording_failures") != 0
-            or diagnostic.get("selection") is not None
+            or (not interrupted_before_entry and (
+                diagnostic.get("phase") != "entry"
+                or diagnostic.get("schema") != "pokemon.battle-runtime-diagnostic.v1"
+                or diagnostic.get("recording_failures") != 0
+                or diagnostic.get("selection") is not None
+            ))
             or any(identity.get(k) != v for k, v in {
                 "model_sha256": b.model_sha256,
                 "qualification_sha256": b.qualification_sha256,
@@ -251,6 +261,9 @@ class NativeBattlerHistory:
             raise ValueError("live battle artifact census differs")
         for ordinal in range(1, completed_calls + 1):
             directory = b.output / f"battle-{ordinal:04d}"
+            # Missing completion is the existing incomplete-history signal.
+            # Check it before parsing a capture that may not exist at entry.
+            payload = (directory / "outcome.json").read_bytes()
             capture = open_battle_scenario_capture(
                 directory / "initial.state", directory / "initial.state.json"
             )
@@ -262,7 +275,6 @@ class NativeBattlerHistory:
                 b.source_state_sha256,
             ) or m.partition is not b.source_partition:
                 raise ValueError("live battle capture identity differs")
-            payload = (directory / "outcome.json").read_bytes()
             episode = json.loads(payload)
             endpoint = json.loads((directory / "endpoint.json").read_bytes())
             if (

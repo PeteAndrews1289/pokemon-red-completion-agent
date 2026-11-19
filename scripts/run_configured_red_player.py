@@ -50,6 +50,7 @@ from pokemon_red_completion.red_player_configuration import (
     RedPlayerConfiguration,
     assemble_configured_player,
     checkpoint_quiescent,
+    declared_evolution_recipient_yield,
     declared_native_evolution_venue_model,
     player_lifecycle_fields,
 )
@@ -192,6 +193,97 @@ def declared_goal_model(plan, configuration, backend):
             raise ValueError("goal observation compatibility target differs from zero extension")
     return model
 
+
+
+def declared_sequence_options(plan, model=None):
+    """Load one pinned DEVELOPMENT policy with its explicit inference task contract.
+
+    This path never invents task-terminal markers or changes training admission.
+    Full horizons remain observed; unfinished tails remain censored.
+    """
+    spec = plan.get("sequence_policy")
+    if spec is None:
+        return {}
+    from pokemon_red_completion.player_sequence_policy import SequencePolicy
+    from pokemon_red_completion.player_sequence_targets import TASK_TERMINAL_TARGET_CONTRACT, RESOURCE_TASK_TARGET_CONTRACT, registration_task_catalog
+    required = {"path", "content_sha256", "policy_sha256", "target_contract",
+                "task_sha256", "task_catalog", "window_stride", "reason"}
+    if (plan.get("partition") != "development" or type(spec) is not dict
+        or set(spec) != required or any(type(spec[k]) is not str or not spec[k].strip()
+            for k in ("path", "reason"))
+        or any(type(spec[k]) is not str or len(spec[k]) != 64
+               or any(c not in "0123456789abcdef" for c in spec[k])
+               for k in ("content_sha256", "policy_sha256", "task_sha256"))
+        or spec["target_contract"] not in (TASK_TERMINAL_TARGET_CONTRACT, RESOURCE_TASK_TARGET_CONTRACT)
+        or declared_greedy_selection(plan) or plan.get("readiness_refinement") is not None):
+        raise ValueError("sequence policy requires pinned exploratory DEVELOPMENT task wiring")
+    catalog = spec["task_catalog"]
+    if (type(catalog) is not dict or set(catalog) != {"path", "content_sha256"}
+        or type(catalog["path"]) is not str or not catalog["path"].strip()
+        or type(catalog["content_sha256"]) is not str or len(catalog["content_sha256"]) != 64
+        or any(c not in "0123456789abcdef" for c in catalog["content_sha256"])):
+        raise ValueError("sequence task requires a pinned catalog")
+    catalog_payload = Path(catalog["path"]).read_bytes()
+    if sha256(catalog_payload).hexdigest() != catalog["content_sha256"]:
+        raise ValueError("sequence task catalog content differs")
+    task = json.loads(catalog_payload)
+    from pokemon_red_completion.constants import POKEMON_RED_US_REV_0
+    registration_task = task.get("schema") == "pokemon.red.next-native-registration-task.v1"
+    if ((registration_task and task != registration_task_catalog(POKEMON_RED_US_REV_0.sha256))
+        or (not registration_task and task.get("schema") != "pokemon.red.pure-parent-prospective-state-catalog.v1")
+        or task.get("task_sha256") != spec["task_sha256"]):
+        raise ValueError("sequence task identity differs from pinned catalog")
+    payload = Path(spec["path"]).read_bytes()
+    if sha256(payload).hexdigest() != spec["content_sha256"]:
+        raise ValueError("sequence policy content differs")
+    policy = SequencePolicy.from_document(json.loads(payload), expected_sha256=spec["policy_sha256"])
+    if (policy.task_return_scope is not None and not registration_task
+        or policy.head.target_contract != spec["target_contract"]
+        or policy.exploration_mix != declared_exploration_mix(plan)
+        or policy.selection_mode in {"stable_recurrence", "stable_costly_recurrence"} and plan.get("movement_revisit_saturation") is not True
+        or policy.head.feature_version == 16 and plan.get("include_preparation_party_context") is not True
+        or type(spec["window_stride"]) is not int
+        or not 1 <= spec["window_stride"] <= policy.head.horizon
+        or model is not None and (policy.baseline_sha256 != model.model_sha256
+                                  or policy.head.feature_version != model.feature_version)):
+        raise ValueError("sequence policy model, target contract or sampler differs")
+    return dict(sequence_policy=policy, sequence_horizon=policy.head.horizon,
+                sequence_window_stride=spec["window_stride"],
+                sequence_target_contract=spec["target_contract"],
+                sequence_task_sha256=spec["task_sha256"],
+                **({"sequence_task_kind": "next_registration"} if registration_task else {}))
+
+
+def declared_preparation_context(plan):
+    for key in ("include_preparation_party_context", "retain_story_preparation_opposition"):
+        if key in plan and (type(plan[key]) is not bool or plan.get("partition") != "development"):
+            raise ValueError("preparation observations require explicit DEVELOPMENT booleans")
+    return plan.get("include_preparation_party_context", False)
+
+
+def declared_resource_safety(plan):
+    value = plan.get("force_resource_safety", False)
+    if type(value) is not bool or "force_resource_safety" in plan and plan.get("partition") != "development":
+        raise ValueError("resource safety requires an explicit DEVELOPMENT boolean")
+    return value
+
+
+def validate_sequence_runner_mode(plan, args):
+    """Unsupported diagnostic selectors fail before backend or emulator creation."""
+    if plan.get("sequence_policy") is not None and any(
+        getattr(args, name, False) for name in
+        ("inspect", "loan_copy_source", "evolution_copy", "boxed_machine_copy", "prepared_evolution_copy")
+    ):
+        raise ValueError("sequence policy requires the ordinary shared execution path; diagnostic selector unsupported")
+
+
+def validate_continued_sequence_wiring(plan, previous):
+    if plan.get("compare_evolution_recipient_yield", False) != previous.get("compare_evolution_recipient_yield", False):
+        raise ValueError("continued evolution venue comparison differs")
+    if plan.get("collection_cost_frame_horizon") != previous.get("collection_cost_frame_horizon"):
+        raise ValueError("continued collection cost horizon differs")
+    if any(plan.get(key) != previous.get(key) for key in ("sequence_policy", "force_resource_safety", "include_preparation_party_context", "retain_story_preparation_opposition", "native_owned_stock_income", "registration_task_continuation")):
+        raise ValueError("cannot silently change sequence policy/task or resource safety across a continuation")
 
 def connect_owned_machine_options(
     menu,
@@ -466,6 +558,10 @@ def configured_renewal_stop_reason(args, left, wall_left, *, compulsory_settleme
         raise TypeError("renewal settlement state must be boolean")
     if wall_left < 1:
         return "declared_cutoff_reached"
+    # Native limits use whole positive units; a floating remainder must stop,
+    # never be rounded up or converted into an invalid zero-second recovery.
+    if any(int(left[axis]) < 1 for axis in ("decisions", "actions", "frames", "seconds")):
+        return "declared_budget_exhausted"
     limits = configured_execution_limits(args, left, wall_left)
     if compulsory_settlement:
         return "insufficient_settlement_allowance" if limits.decisions < 2 else None
@@ -505,6 +601,35 @@ def diagnostic_spending(root):
                 raise ValueError("diagnostic copy has invalid retained costs")
             totals[key] += value
     return totals
+
+
+def _paired_context_authenticated(exported, saved_export, result, spent):
+    """Compare capture/export facts; full native/custody validation stays in restore.
+
+    Optional fields match the already supported continuation reader contract.
+    They remain part of canonical equality, never fields to discard or trust.
+    """
+    required_export = {
+        "schema", "state_sha256", "lesson", "cash", "bag", "preparation",
+        "battle", "spent", "grants_new_budget", "fit_allowed",
+    }
+    optional_export = {
+        "search_memory", "field_carrier", "story_kind_commitment", "preparation_story_loss",
+    }
+    return bool(
+        type(exported) is dict
+        and type(saved_export) is dict
+        and set(exported) - optional_export == required_export
+        and set(saved_export) - optional_export == required_export
+        and exported.get("schema") == PLAYER_CONTINUATION_SCHEMA
+        and canonical_sha256(exported) == canonical_sha256(saved_export)
+        and exported.get("state_sha256") == result["state_sha256"]
+        and exported.get("spent") == spent
+        and exported.get("grants_new_budget") is False
+        and exported.get("fit_allowed") is False
+        and result["context_sha256"]
+        and not result.get("checkpoint_export_error")
+    )
 
 
 def native_checkpoint_facts(runtime):
@@ -553,7 +678,8 @@ def declared_greedy_selection(plan):
         return True
     if (
         not isinstance(spec, dict)
-        or not {"mode", "reason"} <= set(spec) <= {"mode", "reason", "exploration_mix"}
+        or not {"mode", "reason"} <= set(spec)
+        <= {"mode", "reason", "exploration_mix", "story_milestone_commitment", "story_kind_commitment", "respect_combat_preparation_choice"}
         or type(spec["mode"]) is not str
         or spec["mode"] not in {"greedy", "exploration"}
         or type(spec["reason"]) is not str
@@ -571,7 +697,49 @@ def declared_greedy_selection(plan):
             or plan.get("readiness_refinement") is not None
         ):
             raise ValueError("custom exploration requires separate ordinary DEVELOPMENT selection")
+    respect = spec.get("respect_combat_preparation_choice", False)
+    if type(respect) is not bool or (respect and (
+        spec.get("story_kind_commitment") is not True or spec.get("story_milestone_commitment") is not True
+    )):
+        raise ValueError("combat preparation choice requires declared story commitment")
     return spec["mode"] == "greedy"
+
+
+def declared_story_milestone_commitment(plan):
+    """M0 opt-in: keep a selected story objective until it completes or is no longer offered.
+
+    Declared inside the existing DEVELOPMENT goal_selection block; kind-level choices
+    (heal, train, catch, evolve, resupply) stay with the goal model.
+    """
+    declared_greedy_selection(plan)
+    value = (plan.get("goal_selection") or {}).get("story_milestone_commitment", False)
+    if type(value) is not bool:
+        raise ValueError("milestone story commitment must be an explicit boolean")
+    return value
+
+
+def declared_story_kind_commitment(plan):
+    """Session-32 opt-in: while a story objective is under way and the party is fit, keep advancing it
+    instead of a detour of another goal kind (see red_story_kind_commitment). Requires milestone commitment.
+    """
+    declared_greedy_selection(plan)
+    spec = plan.get("goal_selection") or {}
+    value = spec.get("story_kind_commitment", False)
+    if type(value) is not bool:
+        raise ValueError("kind-level story commitment must be an explicit boolean")
+    if value and spec.get("story_milestone_commitment") is not True:
+        raise ValueError("kind-level story commitment requires milestone story commitment")
+    return value
+
+
+def _story_kind_commitment_carrier(holder):
+    """One carrier per chunk, restored from its authenticated parent continuation."""
+    from pokemon_red_completion.red_story_kind_commitment import StoryKindCommitmentCarrier
+
+    carrier = holder.get("story_kind_commitment_carrier")
+    if carrier is None:
+        carrier = holder["story_kind_commitment_carrier"] = StoryKindCommitmentCarrier()
+    return carrier
 
 
 def declared_exploration_mix(plan):
@@ -581,7 +749,11 @@ def declared_exploration_mix(plan):
 
 
 def declared_input_recording(plan):
-    """Declare existing isolation and lossless recording representation, not less evidence."""
+    """Declare existing isolation and lossless recording representation, not less evidence.
+
+    ``packed_sealed_v1`` keeps every sealed native record byte-for-byte in
+    hash-chained append-only segments and adds per-press cartridge observations.
+    """
     spec = plan.get("input_recording")
     if spec is None:
         return {}
@@ -594,7 +766,10 @@ def declared_input_recording(plan):
         or type(spec["reason"]) is not str
         or not spec["reason"].strip()
         or plan.get("partition") != "development"
-        or ("native_input_storage" in spec and spec["native_input_storage"] != "flat_sealed_v1")
+        or (
+            "native_input_storage" in spec
+            and spec["native_input_storage"] not in ("flat_sealed_v1", "packed_sealed_v1")
+        )
         or ("isolation_report" in spec and spec["isolation_report"] != "gzip_json_v1")
     ):
         raise ValueError("input recording requires an explicit ordinary DEVELOPMENT declaration")
@@ -636,6 +811,8 @@ def declared_readiness_refinement(plan):
             "defer_unbound_preparation",
             "allow_singleton_parent_support",
             "associate_unique_combat",
+            "explore_outside_scope",
+            "explore_on_movement_recurrence",
         }
         or any(ref not in plan["objectives"] for ref in scope)
         or not isinstance(spec["reason"], str)
@@ -675,6 +852,26 @@ def declared_readiness_refinement(plan):
         raise ValueError(
             "unique combat association requires unmasked DEVELOPMENT preparation refinement"
         )
+    explore_outside_scope = spec.get("explore_outside_scope", False)
+    if (
+        type(explore_outside_scope) is not bool
+        or explore_outside_scope and (
+            not refine_preparation or defer_unbound_preparation
+            or allow_singleton_parent_support
+            or plan.get("partition") != "development"
+            or not declared_greedy_selection(plan)
+        )
+    ):
+        raise ValueError("out-of-scope exploration requires unmasked DEVELOPMENT refinement")
+    explore_on_movement_recurrence = spec.get("explore_on_movement_recurrence", False)
+    if (type(explore_on_movement_recurrence) is not bool
+            or explore_on_movement_recurrence and (
+                not refine_preparation or defer_unbound_preparation
+                or allow_singleton_parent_support or explore_outside_scope
+                or plan.get("partition") != "development"
+                or not declared_greedy_selection(plan)
+                or plan.get("movement_revisit_saturation") is not True)):
+        raise ValueError("recurrence escape requires observed movement history and greedy DEVELOPMENT refinement")
     payload = Path(spec["head_path"]).read_bytes()
     if sha256(payload).hexdigest() != spec["content_sha256"]:
         raise ValueError("readiness refinement head bytes differ")
@@ -692,6 +889,8 @@ def declared_readiness_refinement(plan):
         **({"defer_unbound_preparation": True} if defer_unbound_preparation else {}),
         **({"allow_singleton_parent_support": True} if allow_singleton_parent_support else {}),
         **({"associate_unique_combat": True} if associate_unique_combat else {}),
+        **({"explore_outside_scope": True} if explore_outside_scope else {}),
+        **({"explore_on_movement_recurrence": True} if explore_on_movement_recurrence else {}),
     )
 
 
@@ -726,6 +925,8 @@ PLAYER_WIRING_FIELDS = (
     "league_first_collection_scope",
     "owned_stock_income_bootstrap",
     "conserved_owned_medicine_income",
+    "movement_revisit_saturation",
+    "owned_field_carrier_exchange",
 )
 CHECKPOINT_ERRORS = {
     "ControllerWallTimeBudgetExhausted",
@@ -745,6 +946,32 @@ CHUNK_BUDGET_ERRORS = CHECKPOINT_ERRORS - {
 }
 
 
+def checkpoint_error_for_export(error_type, error_message, error_chain):
+    """Keep the primary failure; pass only an authenticated budget cause to export.
+
+    League funding wraps the controller stop. The history provider separately
+    checks the actual failed battle log and terminal; this does not label a win,
+    admit fresh inference, erase the wrapper, or authorize another runtime.
+    """
+    kind, message = error_type, error_message
+    if kind == "RedLeagueFundingExecutionError":
+        if (
+            type(error_chain) is not list or len(error_chain) != 2
+            or any(type(row) is not dict for row in error_chain)
+            or error_chain[0].get("error_type") != error_type
+            or error_chain[0].get("error") != error_message
+            or error_chain[1].get("error_type") not in CHUNK_BUDGET_ERRORS
+        ):
+            return None, None
+        kind, message = error_chain[1]["error_type"], error_chain[1].get("error")
+    if kind not in CHECKPOINT_ERRORS or (
+        kind == "ControllerFrameBudgetError"
+        and message != "controller exhausted its hard frame budget"
+    ):
+        return None, None
+    return kind, message
+
+
 def declared_automatic_renewal(plan):
     spec = plan.get("automatic_runtime_renewal")
     if spec is None:
@@ -759,6 +986,247 @@ def declared_automatic_renewal(plan):
     ):
         raise ValueError("automatic renewal requires a declared DEVELOPMENT live loop")
     return True
+
+
+def declared_registration_task_continuation(plan):
+    """Opt in to the existing live loop across completed collection tasks."""
+    spec = plan.get("registration_task_continuation")
+    if spec is None:
+        return False
+    if spec != "live_next_registration_v1" or not declared_automatic_renewal(plan):
+        raise ValueError("registration task continuation needs its declared live loop")
+    from pokemon_red_completion.red_player_curriculum import validate_full_red_curriculum_plan
+    validate_full_red_curriculum_plan(plan)
+    if declared_sequence_options(plan).get("sequence_task_kind") != "next_registration":
+        raise ValueError("registration task continuation needs the matching numerical task")
+    return True
+
+
+def qualified_registration_task_handoff(result, *, plan, runtime, output):
+    """Continue only an authenticated successful task; never retry a failure.
+
+    Native target admission stays with the independent referee. This read-only
+    guard grants no inputs, choice, fit label or budget. Existing live renewal
+    carries the exact context, costs, memory and guest to the next ordinary menu.
+    """
+    if not declared_registration_task_continuation(plan):
+        return None
+    try:
+        episode, meter = result.get("episode") or {}, result.get("chunk_costs") or {}
+        rows = episode.get("outcomes") or ()
+        if (episode.get("stop_reason") != "declared_consequence_complete"
+                or not rows or result.get("passed") is not True
+                or result.get("released") is not True
+                or result.get("field_ready") is not True
+                or result.get("paired_context_authenticated") is not True
+                or result.get("error_type") or result.get("error")
+                or result.get("checkpoint_export_error") or result.get("admission_failure")
+                or episode.get("admission_failure") or result.get("cost_lower_bound")
+                or result.get("context_costs_complete") is False
+                or result.get("unknown_cost_fields")
+                or any(row.get("error_type") or row.get("error") for row in rows)
+                or rows[-1].get("verification") != "succeeded"
+                or rows[-1].get("safe_terminal") is not True
+                or any(type(meter.get(k)) is not int or meter[k] <= 0
+                       for k in ("actions_attempted", "frames"))
+                or runtime.emulator.pressed_buttons):
+            return None
+        root = Path(output) / "native" / "episode"
+        actor_plan, actor_result = doc(root / "plan.json"), doc(root / "result.json")
+        claim = doc(root / "sequence" / "task-terminal.json")
+        receipts = sorted((root / "sequence").glob("receipt-*.json"))
+        source = sha256((Path(output) / "native" / "source.state").read_bytes()).hexdigest()
+        from pokemon_red_completion.provenance import canonical_sha256
+        if (canonical_sha256(actor_result) != canonical_sha256(episode) or not receipts
+                or claim != dict(schema="pokemon.player.task-terminal-claim.v1",
+                    task_sha256=plan["sequence_policy"]["task_sha256"],
+                    source_sha256=source,
+                    behavior_plan_sha256=canonical_sha256(actor_plan),
+                    terminal_sha256=result["state_sha256"],
+                    last_outcome_sha256=canonical_sha256(rows[-1]),
+                    native_verification_required=True, training_eligible=False)
+                or doc(receipts[-1]).get("outcome_sha256") != claim["last_outcome_sha256"]
+                or rows[0].get("before_state_sha256") != source
+                or rows[-1].get("terminal_state_sha256") != result["state_sha256"]
+                or any(canonical_sha256(doc(root / f"step-{i:03d}" / "outcome.json"))
+                       != canonical_sha256(row)
+                       for i, row in enumerate(rows))):
+            return None
+        emulator = runtime.emulator
+        frame, state = emulator.frame_count, emulator.save_state_bytes()
+        if sha256(state).hexdigest() != result["state_sha256"]:
+            return None
+        owned = frozenset(f"pokemon:national:{n:03d}"
+                          for n in runtime.reader.read_pokedex_state().owned_species)
+        before = frozenset(rows[0]["before"]["owned_species"])
+        after = frozenset(rows[-1]["after"]["owned_species"])
+        gained = owned - before
+        if (owned != after or not before <= owned
+                or not gained.intersection(plan["required_species"])
+                or emulator.frame_count != frame or emulator.save_state_bytes() != state
+                or emulator.pressed_buttons):
+            return None
+        return dict(schema="pokemon.red.registration-task-handoff.v1",
+                    task_sha256=claim["task_sha256"], source_sha256=source,
+                    terminal_sha256=result["state_sha256"],
+                    task_terminal_sha256=canonical_sha256(claim),
+                    new_registrations=sorted(gained), raw_stop_reason=episode["stop_reason"],
+                    inputs=0, frames=0, model_queries=0, fit_calls=0,
+                    aggregate_budget_reset=False, same_live_guest=True)
+    except (OSError, ValueError, KeyError, TypeError, AttributeError):
+        return None
+
+
+SAFE_STOP_CONTINUATION_SCHEMA = "pokemon.red.safe-stop-continuation.v1"
+
+
+def declared_safe_stop_continuation(plan):
+    """Explicit DEVELOPMENT opt-in: a qualified safe failure is a setback, not a stop.
+
+    Returns None when absent. Bounds are finite and declared up front; they never
+    reset aggregate budgets and never apply to an official acceptance attempt.
+    """
+    spec = plan.get("safe_stop_continuation")
+    if spec is None:
+        return None
+    if (
+        plan.get("partition") != "development"
+        or plan.get("official_acceptance", False) is not False
+        or type(spec) is not dict
+        or set(spec) != {"schema", "reason", "maximum_total", "maximum_repeats", "hold_menus"}
+        or spec["schema"] != SAFE_STOP_CONTINUATION_SCHEMA
+        or type(spec["reason"]) is not str
+        or not spec["reason"].strip()
+        or any(type(spec[k]) is not int for k in ("maximum_total", "maximum_repeats", "hold_menus"))
+        or not 1 <= spec["maximum_total"] <= 64
+        or not 1 <= spec["maximum_repeats"] <= spec["maximum_total"]
+        or not 1 <= spec["hold_menus"] <= 16
+    ):
+        raise ValueError("safe-stop continuation requires a bounded DEVELOPMENT declaration")
+    return dict(spec)
+
+
+def safe_stop_signature(outcome):
+    """Coarse repeat key: goal kind plus the observed failure, never a binding."""
+    return (
+        outcome.get("selected_kind"),
+        outcome.get("error_type") or "verification",
+        outcome.get("error") or outcome.get("failure_reason"),
+    )
+
+
+def qualified_safe_stop_setback(result, *, runtime, reason):
+    """Recognize a goal failure that left a settled, custody-verified field state.
+
+    Only the last outcome may have failed; it must be a typed Exception or failed
+    verification, end on the exact retained terminal, and leave released input,
+    no battle, field control and the retained party guard intact. Budget, unsafe,
+    admission, checkpoint and top-level runner errors stay terminal. Returns the
+    failed outcome's signature, or None.
+    """
+    episode = result.get("episode", {})
+    outcomes = episode.get("outcomes") or ()
+    if (
+        reason not in {"native_execution_error", "verification_failed"}
+        or not outcomes
+        or result.get("error_type")
+        or result.get("checkpoint_export_error")
+        or episode.get("admission_failure")
+        or not result.get("released")
+        or result.get("field_ready") is not True
+        or episode.get("stop_reason") not in {"execution_failed", "verification_failed"}
+    ):
+        return None
+    last = outcomes[-1]
+    kinds = {kind.value for kind in GoalKind} - {GoalKind.RECOVER_CONTROL.value}
+    if (
+        last.get("selected_kind") not in kinds
+        or last.get("safe_terminal") is not True
+        or last.get("terminal_state_sha256") != result.get("state_sha256")
+        or last.get("error_type") in CHUNK_BUDGET_ERRORS
+        or any(
+            outcome.get("error_type") and not qualified_route_setback_receipt(outcome)
+            for outcome in outcomes[:-1]
+        )
+    ):
+        return None
+    if episode["stop_reason"] == "execution_failed":
+        if not last.get("error_type") or last.get("failure_phase") not in {
+            "execution",
+            "verification",
+        }:
+            return None
+    elif last.get("error_type") or last.get("verification") != "failed":
+        return None
+    if runtime.emulator.pressed_buttons or not _field_ready(runtime):
+        return None
+    if sha256(runtime.emulator.save_state_bytes()).hexdigest() != result.get("state_sha256"):
+        return None
+    raw = runtime.reader.read()
+    if raw.battle_state != 0 or not raw.party_hp or not any(raw.party_hp):
+        return None
+    guard = getattr(runtime.adapter, "party_guard", None)
+    if isinstance(guard, RedPlayerPartyGuard):
+        if guard.field_carrier is not None:
+            return None
+        try:
+            guard.verify_active_roster_restored()
+        except ValueError:
+            return None
+    return safe_stop_signature(last)
+
+
+def qualified_movement_stall_setback(result, *, runtime, reason):
+    """Recognize the movement-recurrence stop at a settled, custody-verified field state.
+
+    Two equivalent unchanged returns end a chunk with every outcome verified and
+    no error. That is circling, not damage: the caller may withhold the circling
+    goal kind for a few menus (the same bounded safe-stop hold) so the model
+    chooses something else. Returns the coarse repeat signature, or None.
+    """
+    episode = result.get("episode", {})
+    outcomes = episode.get("outcomes") or ()
+    if (
+        reason != "repeated_movement_without_progress"
+        or episode.get("stop_reason") != reason
+        or not outcomes
+        or result.get("error_type")
+        or result.get("checkpoint_export_error")
+        or episode.get("admission_failure")
+        or not result.get("released")
+        or result.get("field_ready") is not True
+    ):
+        return None
+    last = outcomes[-1]
+    kinds = {kind.value for kind in GoalKind} - {GoalKind.RECOVER_CONTROL.value}
+    if (
+        last.get("selected_kind") not in kinds
+        or last.get("safe_terminal") is not True
+        or last.get("error_type")
+        or last.get("verification") != "succeeded"
+        or last.get("terminal_state_sha256") != result.get("state_sha256")
+        or any(
+            outcome.get("error_type") and not qualified_route_setback_receipt(outcome)
+            for outcome in outcomes[:-1]
+        )
+    ):
+        return None
+    if runtime.emulator.pressed_buttons or not _field_ready(runtime):
+        return None
+    if sha256(runtime.emulator.save_state_bytes()).hexdigest() != result.get("state_sha256"):
+        return None
+    raw = runtime.reader.read()
+    if raw.battle_state != 0 or not raw.party_hp or not any(raw.party_hp):
+        return None
+    guard = getattr(runtime.adapter, "party_guard", None)
+    if isinstance(guard, RedPlayerPartyGuard):
+        if guard.field_carrier is not None:
+            return None
+        try:
+            guard.verify_active_roster_restored()
+        except ValueError:
+            return None
+    return (last.get("selected_kind"), "movement_recurrence", reason)
 
 
 def declared_league_first_collection_scope(plan):
@@ -788,15 +1256,23 @@ def player_wiring_declaration(plan):
     )
 
     declared_greedy_selection(plan)
+    sequence_options = declared_sequence_options(plan)
+    declared_resource_safety(plan)
+    declared_preparation_context(plan)
     compatibility = declared_goal_model_observation_compatibility(plan)
     declared_readiness_refinement(plan)
     declared_preparation_component(plan)
     venue_model = declared_native_evolution_venue_model(plan)
+    compare_yield = declared_evolution_recipient_yield(plan, venue_model)
+    from pokemon_red_completion.red_player_configuration import declared_ordinary_preparation_venue_policy
+    ordinary_venue_policy = declared_ordinary_preparation_venue_policy(plan)
     declared_input_recording(plan)
     declared_owned_machine_options(plan)
     validate_bird_capture_loan_declaration(plan.get("bird_capture_loan"))
     validate_snorlax_capture_loan_declaration(plan.get("snorlax_capture_loan"))
     declared_league_first_collection_scope(plan)
+    from pokemon_red_completion.red_income_preparation import declared_native_owned_stock_income
+    declared_native_owned_stock_income(plan)
     bootstrap = plan.get("owned_stock_income_bootstrap", False)
     if type(bootstrap) is not bool or bootstrap and plan.get("partition") != "development":
         raise ValueError("owned-stock income bootstrap requires explicit DEVELOPMENT permission")
@@ -807,36 +1283,82 @@ def player_wiring_declaration(plan):
         and (plan.get("partition") != "development" or not bootstrap)
     ):
         raise ValueError("conserved income requires explicit DEVELOPMENT owned-stock permission")
+    carrier = plan.get("owned_field_carrier_exchange", False)
+    if type(carrier) is not bool or (carrier and plan.get("partition") != "development"):
+        raise ValueError("owned field-carrier exchange requires explicit DEVELOPMENT boolean")
+    recurrence = plan.get("movement_revisit_saturation", False)
+    if type(recurrence) is not bool or (recurrence and plan.get("partition") != "development"):
+        raise ValueError("movement recurrence requires explicit DEVELOPMENT boolean")
+    if "collection_cost_frame_horizon" in plan:
+        horizon = plan["collection_cost_frame_horizon"]
+        if type(horizon) is not int or horizon < 1 or plan.get("partition") != "development":
+            raise ValueError("collection cost quote requires a positive DEVELOPMENT frame horizon")
     wiring = {
-        key: bootstrap
+        key: carrier
+        if key == "owned_field_carrier_exchange"
+        else recurrence
+        if key == "movement_revisit_saturation"
+        else bootstrap
         if key == "owned_stock_income_bootstrap"
         else conserved
         if key == "conserved_owned_medicine_income"
         else plan.get(key)
         for key in PLAYER_WIRING_FIELDS
     }
+    from pokemon_red_completion.red_fishing_survey_history import declared_survey_comparison
+    survey = declared_survey_comparison(plan) if "compare_successful_fishing_site_effort" in plan else False
+    if compare_yield or survey:
+        from pokemon_red_completion.red_collection_campaign_scope import collection_observation_wiring
+        wiring.update(collection_observation_wiring(plan))
+        if compare_yield:
+            wiring["compare_evolution_recipient_yield"] = True
+        if survey:
+            wiring["compare_successful_fishing_site_effort"] = True
     if venue_model is not None:
         wiring["native_evolution_venue_model"] = dict(plan["native_evolution_venue_model"])
+    if ordinary_venue_policy is not None:
+        wiring["ordinary_preparation_venue_model"] = dict(plan["ordinary_preparation_venue_model"])
     if compatibility is not None:
         wiring["goal_model_observation_compatibility"] = compatibility
+    if "collection_cost_frame_horizon" in plan:
+        wiring["collection_cost_frame_horizon"] = plan["collection_cost_frame_horizon"]
+    for key in ("sequence_policy", "force_resource_safety", "include_preparation_party_context", "retain_story_preparation_opposition", "native_owned_stock_income"):
+        if key in plan:
+            wiring[key] = plan[key]
+    if sequence_options and sequence_options["sequence_policy"].selection_mode != "sample":
+        wiring["effective_sequence_selection_mode"] = sequence_options["sequence_policy"].selection_mode
+    from pokemon_red_completion.red_observed_component_binding import declared_observed_league_components
+    component_recipe=declared_observed_league_components(plan)
+    if component_recipe is not None:wiring['observed_league_components']=component_recipe
+    if declared_registration_task_continuation(plan):
+        wiring["registration_task_continuation"] = plan["registration_task_continuation"]
     return wiring
 
 
 def native_player_options(plan, runtime, roles, menu, *, refinement=None):
     """Keep strategy learned; settle only already-engaged compulsory control."""
     unsettled = requires_compulsory_settlement(runtime)
+    # Keep compulsory entry in the ordinary recorded sequence chain. Its
+    # existing inventory supplies only engaged-trainer/wild/control support
+    # while unsettled; separate unrecorded prefaces remain forbidden by the
+    # native sequence scope guard. No new goal or battle policy is supplied.
+    sequence_control = unsettled and plan.get("sequence_policy") is not None
+    preface = unsettled and not sequence_control
     refinement = declared_readiness_refinement(plan) if refinement is None else refinement
     return dict(
         greedy_selection=declared_greedy_selection(plan),
         exploration_mix=declared_exploration_mix(plan),
-        force_resource_safety=False,
+        **({"story_milestone_commitment": True} if declared_story_milestone_commitment(plan) else {}),
+        **({"story_kind_commitment": True} if declared_story_kind_commitment(plan) else {}),
+        **({"respect_combat_preparation_choice": True} if (plan.get("goal_selection") or {}).get("respect_combat_preparation_choice", False) else {}),
+        force_resource_safety=declared_resource_safety(plan),
         include_live_pp_readiness=True,
         allow_collection_restoration=True,
-        settle_existing_trainer=unsettled,
-        settle_existing_wild=unsettled,
-        settle_existing_blackout=unsettled,
-        settle_existing_motion=unsettled,
-        resume_branch_refinement_after_settlement=bool(refinement) and unsettled,
+        settle_existing_trainer=preface,
+        settle_existing_wild=preface,
+        settle_existing_blackout=preface,
+        settle_existing_motion=preface,
+        resume_branch_refinement_after_settlement=bool(refinement) and preface,
         curriculum=declared_player_curriculum(plan, roles[0]),
         **refinement,
         **menu.native_callbacks(),
@@ -859,10 +1381,16 @@ def execute_player_chunk(
     memory,
     store,
     ordinal,
+    train_selector_authentication=None,
+    sequence_horizon=None,
+    sequence_window_stride=None,
 ):
     """One shared native call and durable export, with no state restoration."""
     roles = tuple(m.specimen_ref for m in holder["plan"].roster if m.purpose.value == "combat")
     options = native_player_options(plan, holder["runtime"], roles, menu)
+    sequence_options = declared_sequence_options(plan, model)
+    if sequence_options and (sequence_horizon is not None or sequence_window_stride is not None):
+        raise ValueError("configured sequence policy cannot override its declared collection recipe")
     _record(
         output / "EXECUTION.json",
         dict(
@@ -879,6 +1407,12 @@ def execute_player_chunk(
             ],
         ),
     )
+    carried_commitment = holder.get("story_kind_commitment_carrier")
+    if carried_commitment is not None and not options.get("story_kind_commitment"):
+        _record(output / "story-kind-commitment-continuation.json", dict(
+            restored=carried_commitment.document(), applied=False,
+            reason="story_kind_commitment_not_declared", automatic_fit=False,
+        ))
     frame_start = emulator.frame_count
     result = dict(
         passed=False,
@@ -890,6 +1424,7 @@ def execute_player_chunk(
     )
     try:
         result["episode"] = run_native_continuous_player(
+            **({"record_milestone_splits": True} if plan.get("record_milestone_splits") is True else {}),
             store=store,
             emulator=emulator,
             runtime_factory=factory,
@@ -904,7 +1439,22 @@ def execute_player_chunk(
             battle_observer=holder["observe_history"],
             target_cash=0,
             initial_search_memory=memory,
+            **({"movement_revisit_saturation": plan["movement_revisit_saturation"]}
+               if "movement_revisit_saturation" in plan else {}),
+            **({"collection_cost_frame_horizon": plan["collection_cost_frame_horizon"]}
+               if "collection_cost_frame_horizon" in plan else {}),
             **options,
+            **sequence_options,
+            **({"train_selector_authentication": train_selector_authentication}
+               if train_selector_authentication is not None else {}),
+            **({"sequence_horizon": sequence_horizon} if sequence_horizon is not None else {}),
+            **({"sequence_window_stride": sequence_window_stride}
+               if sequence_window_stride is not None else {}),
+            **(
+                {"story_kind_commitment_carrier": _story_kind_commitment_carrier(holder)}
+                if options.get("story_kind_commitment")
+                else {}
+            ),
         )
         admission = result["episode"].get("admission_failure")
         if admission:
@@ -930,6 +1480,20 @@ def execute_player_chunk(
             outcomes = [
                 doc(p) for p in sorted((output / "native/episode").glob("step-*/outcome.json"))
             ]
+        if not result.get("episode") and outcomes:
+            # A BaseException can leave fully closed native rows while the
+            # episode call never returns. Retain them in the aggregate without
+            # inventing a completed run or suppressing the original error chain.
+            result["episode"] = dict(
+                schema="pokemon.red.interrupted-closed-outcome-prefix.v1",
+                stop_reason="interrupted_closed_outcome_prefix",
+                executed_decisions=len(outcomes),
+                outcomes=outcomes,
+                closed_outcome_prefix_reconstructed=True,
+                complete_episode=False,
+                raw_exception_retained=True,
+                automatic_fit=False,
+            )
         spent = accumulate_player_costs(
             holder["prior_spent"],
             decisions=meter.get("goal_attempts", 0),
@@ -954,15 +1518,11 @@ def execute_player_chunk(
         )
         if primary_error_chain is not None:
             result["error_chain"] = primary_error_chain
-        checkpoint_type = error_type if error_type in CHECKPOINT_ERRORS else None
-        if error_type == "ControllerFrameBudgetError":
-            checkpoint_type = (
-                error_type
-                if error_message == "controller exhausted its hard frame budget"
-                else None
-            )
+        checkpoint_type, checkpoint_message = checkpoint_error_for_export(
+            error_type, error_message, primary_error_chain
+        )
         checkpoint_kwargs = (
-            {"checkpoint_error": error_message}
+            {"checkpoint_error": checkpoint_message}
             if checkpoint_type == "ControllerFrameBudgetError"
             else {}
         )
@@ -973,12 +1533,22 @@ def execute_player_chunk(
                 **checkpoint_kwargs,
             )
             censored = holder.get("censored_battle_checkpoint")
+            preparation_story_history = holder.get("preparation_story_history")
+            if preparation_story_history is not None:
+                preparation_story_history.refresh(holder)
             exported = capture_player_continuation(
                 holder["runtime"],
+                **({"preparation_story_history": preparation_story_history}
+                   if preparation_story_history is not None else {}),
                 preparation=holder["plan"],
                 battle=None if censored is not None else history,
                 spent=spent,
                 search_memory=memory,
+                **(
+                    {"story_kind_commitment_carrier": _story_kind_commitment_carrier(holder)}
+                    if options.get("story_kind_commitment")
+                    else {}
+                ),
             )
             _record(output / "CONTEXT.json", exported)
         except Exception as export_error:
@@ -1034,31 +1604,8 @@ def execute_player_chunk(
             chunk_costs=meter,
         )
     saved_export = doc(output / "CONTEXT.json") if exported is not None else None
-    required_export = {
-        "schema",
-        "state_sha256",
-        "lesson",
-        "cash",
-        "bag",
-        "preparation",
-        "battle",
-        "spent",
-        "grants_new_budget",
-        "fit_allowed",
-    }
-    result["paired_context_authenticated"] = bool(
-        type(exported) is dict
-        and type(saved_export) is dict
-        and set(exported) - {"search_memory"} == required_export
-        and set(saved_export) - {"search_memory"} == required_export
-        and exported.get("schema") == PLAYER_CONTINUATION_SCHEMA
-        and canonical_sha256(exported) == canonical_sha256(saved_export)
-        and exported.get("state_sha256") == result["state_sha256"]
-        and exported.get("spent") == spent
-        and exported.get("grants_new_budget") is False
-        and exported.get("fit_allowed") is False
-        and result["context_sha256"]
-        and not result.get("checkpoint_export_error")
+    result["paired_context_authenticated"] = _paired_context_authenticated(
+        exported, saved_export, result, spent,
     )
     result["native_status"] = native_result_status(result, limits=limits)
     return result, exported
@@ -1270,6 +1817,70 @@ def qualified_restoration_budget_censor(result, *, limits=None):
     )
 
 
+def qualified_zero_input_wall_budget_censor(result, *, limits=None):
+    """Report an unchanged field boundary at the real wall cutoff,not a win.
+
+    The failed attempt,error and costs stay in the raw result. This reporting
+    certificate does not authenticate a paired continuation or renew a budget.
+    """
+    from math import isfinite
+
+    if type(limits) is not NativePlayerLimits:
+        return False
+    episode,meter=result.get("episode")or{},result.get("chunk_costs")or{}
+    rows=episode.get("outcomes")or()
+    if (episode.get("stop_reason")!="execution_failed" or not rows
+        or any(result.get(k)for k in("error_type","error","checkpoint_export_error","admission_failure","unknown_cost_fields"))
+        or episode.get("admission_failure") or result.get("released")is not True
+        or result.get("field_ready")is not True or not checkpoint_quiescent(result)
+        or result.get("cost_lower_bound")is True or result.get("context_costs_complete")is False):
+        return False
+    row=rows[-1];message="controller reached its hard monotonic wall-time admission deadline"
+    chain=[dict(error_type="ControllerWallTimeBudgetExhausted",error=message)]
+    if (row.get("error_type")!="ControllerWallTimeBudgetExhausted" or row.get("error")!=message
+        or row.get("error_chain")!=chain or result.get("error_chain")not in(None,chain)
+        or row.get("failure_phase")!="execution" or row.get("verification")is not None
+        or row.get("ordinary_setback")is not False or row.get("safe_terminal")is not True
+        or row.get("before_state_sha256")!=row.get("terminal_state_sha256")
+        or row.get("terminal_state_sha256")!=result.get("state_sha256")
+        or any(r.get("error_type")or r.get("error")or r.get("error_chain")for r in rows[:-1])
+        or any(r.get("verification")=="failed"and r.get("ordinary_setback")is not True for r in rows[:-1])):
+        return False
+    for key in("state_sha256","context_sha256"):
+        h=result.get(key)
+        if type(h)is not str or len(h)!=64 or any(c not in "0123456789abcdef"for c in h):return False
+    before,after,cost=row.get("before"),row.get("after"),row.get("observed_cost")
+    if not all(type(x)is dict for x in(before,after,cost)):return False
+    if cost!={"actions":1,"completed_actions":0,"frames":0,"cash_spent":0} or any(type(v)is not int for v in cost.values()):return False
+    if (canonical_sha256({k:v for k,v in before.items()if k!="actions"})
+        !=canonical_sha256({k:v for k,v in after.items()if k!="actions"})):
+        return False
+    for key in("actions","completed_actions","frames","restoration_attempts","nested_restoration_attempts","training_healing_attempts","cash","battle_state"):
+        if type(before.get(key))is not int or type(after.get(key))is not int or before[key]<0:return False
+    if (after["actions"]!=before["actions"]+1 or after["battle_state"]!=0
+        or after.get("input_ready")is not True or after.get("buttons_released")is not True
+        or before.get("input_ready")is not True or before.get("buttons_released")is not True):return False
+    integers=("actions_attempted","actions_completed","frames","goal_attempts","restore_attempts",
+              "nested_restore_attempts","training_healing_attempts","observed_cash_debits","observed_cash_rewards","observed_cash_changes","control_recovery_cash_debits")
+    if (meter.get("schema")!="pokemon.red.native-player-costs.v1" or meter.get("automatic_fit")is not False
+        or meter.get("buttons_released")is not True
+        or any(type(meter.get(k))is not int or meter[k]<0 for k in integers)
+        or type(meter.get("seconds"))not in(int,float) or not isfinite(meter["seconds"])
+        or meter["seconds"]<limits.seconds
+        or meter["actions_attempted"]!=after["actions"] or meter["actions_completed"]!=after["completed_actions"]
+        or meter["actions_attempted"]!=meter["actions_completed"]+1 or meter["frames"]!=after["frames"]
+        or meter["goal_attempts"]!=len(rows) or meter["goal_attempts"]!=episode.get("executed_decisions")
+        or meter["actions_attempted"]>limits.actions or meter["frames"]>limits.frames or len(rows)>limits.decisions
+        or meter["restore_attempts"]>limits.heals
+        or (limits.cash_debits is not None and meter["observed_cash_debits"]>limits.cash_debits)):
+        return False
+    for k,m in(("restoration_attempts","restore_attempts"),("nested_restoration_attempts","nested_restore_attempts"),("training_healing_attempts","training_healing_attempts")):
+        if after[k]!=meter[m]:return False
+    try:spent=continuation_costs(result.get("spent"))
+    except(TypeError,ValueError):return False
+    return all(spent[k]>=meter[m]for k,m in(("decisions","goal_attempts"),("actions","actions_attempted"),("frames","frames"),("heals","restore_attempts"),("cash_debits","observed_cash_debits"),("seconds","seconds")))
+
+
 def native_result_status(result, *, limits=None):
     """Separate a returned/exported chunk from its native gameplay outcome.
 
@@ -1290,14 +1901,18 @@ def native_result_status(result, *, limits=None):
         row.get("verification") == "failed" and row.get("ordinary_setback") is not True
         for row in outcomes
     )
-    budget_censors = int(qualified_restoration_budget_censor(result, limits=limits))
+    restoration_censors = int(qualified_restoration_budget_censor(result, limits=limits))
+    zero_input_wall_censors = int(qualified_zero_input_wall_budget_censor(result, limits=limits))
+    budget_censors = restoration_censors + zero_input_wall_censors
     if admission:
         status = "admission_error"
     elif root_error or errors > recovered_routes + budget_censors:
         status = "execution_error"
     elif verification_failures > budget_censors:
         status = "verification_failure"
-    elif budget_censors:
+    elif zero_input_wall_censors:
+        status = "zero_input_wall_budget_censor"
+    elif restoration_censors:
         status = "restoration_budget_censor"
     elif result.get("released") is not True:
         status = "controls_unreleased_or_unknown"
@@ -1323,9 +1938,10 @@ def native_result_status(result, *, limits=None):
         recovered_route_error_count=recovered_routes,
         unrecovered_native_error_count=errors - recovered_routes,
         qualified_budget_censor_count=budget_censors,
+        qualified_zero_input_wall_budget_censor_count=zero_input_wall_censors,
         finite_censor=bool(budget_censors),
         effective_unrecovered_native_error_count=errors - recovered_routes - budget_censors,
-        effective_nonordinary_verification_failures=verification_failures - budget_censors,
+        effective_nonordinary_verification_failures=verification_failures - restoration_censors,
         admission_error=admission,
         ordinary_setbacks=setbacks,
         nonordinary_verification_failures=verification_failures,
@@ -1384,7 +2000,187 @@ def chunk_continuation_reason(result, *, source_sha256, limits=None):
     return episode.get("stop_reason") or "native_execution_error"
 
 
-def qualified_native_control_handoff(result, *, runtime, inspect_bindings):
+def _qualified_retained_budget_handoff(result, *, runtime, inspect_bindings):
+    """Authenticate the exact retained preface OR single compulsory outcome.
+
+    A typed row is still a raw failed in-battle outcome. Qualification only
+    permits its unique unchanged compulsory successor; it grants no new budget.
+    """
+    error_type = "RetainedTrainerBattleDecisionBudgetReached"
+    message = "retained trainer battle reached its bounded decision limit"
+    episode = result.get("episode") or {}
+    outcomes = episode.get("outcomes") or ()
+    row = None
+    if outcomes:
+        if (len(outcomes) != 1 or type(outcomes[0]) is not dict
+                or result.get("error_type") or result.get("error")
+                or result.get("checkpoint_export_error")
+                or episode.get("admission_failure") or result.get("admission_failure")
+                or episode.get("stop_reason") != "execution_failed"
+                or result.get("passed") is not True
+                or result.get("paired_context_authenticated") is not True
+                or result.get("released") is not True
+                or result.get("cost_lower_bound") is True
+                or result.get("context_costs_complete") is False
+                or result.get("unknown_cost_fields")):
+            return None
+        row = outcomes[0]
+        if (row.get("selected_kind") != GoalKind.RECOVER_CONTROL.value
+                or row.get("failure_phase") != "execution"
+                or row.get("verification") is not None
+                or row.get("ordinary_setback") is True
+                or row.get("terminal_state_sha256") != result.get("state_sha256")):
+            return None
+        for name, value in (("source", row.get("before_state_sha256")),
+                            ("context", result.get("context_sha256"))):
+            if (type(value) is not str or len(value) != 64
+                    or any(c not in "0123456789abcdef" for c in value)):
+                return None
+        if row["before_state_sha256"] == result.get("state_sha256"):
+            return None
+        cost, meter = row.get("observed_cost"), result.get("chunk_costs")
+        before_facts, after_facts = row.get("before"), row.get("after")
+        if not all(type(value) is dict for value in (cost, meter, before_facts, after_facts)):
+            return None
+        for key, delta_key, meter_key in (("actions", "actions", "actions_attempted"),
+                                         ("frames", "frames", "frames"),
+                                         ("completed_actions", "completed_actions", "actions_completed")):
+            if (type(cost.get(key)) is not int or cost[key] <= 0
+                    or type(before_facts.get(delta_key)) is not int
+                    or type(after_facts.get(delta_key)) is not int
+                    or after_facts[delta_key] - before_facts[delta_key] != cost[key]
+                    or type(meter.get(meter_key)) is not int
+                    or meter[meter_key] != cost[key]):
+                return None
+        if cost["completed_actions"] != cost["actions"]:
+            return None
+        # The new row shape must not hide an unrelated cause in either chain.
+        for chain in (row.get("error_chain"), result.get("error_chain")):
+            if (not isinstance(chain, (list, tuple)) or not chain
+                    or any(type(item) is not dict or item.get("error_type") != error_type
+                           or item.get("reason_code") != "retained_trainer_battle_decision_budget"
+                           for item in chain)):
+                return None
+    error = result if row is None else row
+    if (
+        error.get("error_type") != error_type or error.get("error") != message
+        or not any(
+            isinstance(item, dict) and item.get("error_type") == error_type
+            and item.get("reason_code") == "retained_trainer_battle_decision_budget"
+            for item in (error.get("error_chain") or ())
+        )
+        or not result.get("released") or result.get("field_ready") is not False
+        or runtime.emulator.pressed_buttons or _field_ready(runtime)
+    ):
+        return None
+    raw = runtime.reader.read()
+    if raw.battle_state != 2 or not raw.party_hp or not any(raw.party_hp):
+        return None
+    before, frames = runtime.emulator.save_state_bytes(), runtime.emulator.frame_count
+    if sha256(before).hexdigest() != result.get("state_sha256"):
+        return None
+    bindings = inspect_bindings()
+    if (runtime.emulator.save_state_bytes() != before or runtime.emulator.frame_count != frames
+            or runtime.emulator.pressed_buttons):
+        raise ValueError("native control handoff inspection changed state")
+    expected = "pokemon.red:retained-engagement:" + result["state_sha256"]
+    if (
+        type(bindings) is not GoalBindingSet or len(bindings.bindings) != 1
+        or bindings.bindings[0].kind is not GoalKind.RECOVER_CONTROL
+        or bindings.bindings[0].binding_ref != expected
+    ):
+        return None
+    return dict(
+        schema="pokemon.red.qualified-native-control-handoff.v1",
+        state_sha256=result["state_sha256"], binding_ref=expected, qualified=True,
+        inputs=0, frames=0, model_queries=0, failed_transport_preserved=True,
+        strategic_substitution=False, censored_story_battle=True,
+        compulsory_preface_censor=row is None, retained_outcome_censor=row is not None,
+        finite_in_battle_censor=True, original_terminal_safe=False,
+        local_decision_limit_unchanged=True, aggregate_budget_reset=False,
+        **({"source_state_sha256": row["before_state_sha256"],
+            "context_sha256": result["context_sha256"],
+            "observed_actions": row["observed_cost"]["actions"],
+            "observed_frames": row["observed_cost"]["frames"],
+            "raw_error_type": error_type,
+            "raw_reason_code": "retained_trainer_battle_decision_budget"} if row is not None else {}),
+    )
+
+
+PAUSED_CAPTURE_EXHAUSTIONS = frozenset({
+    "throw budget exhausted; live encounter retained without Run",
+    "throw budget exhausted at catcher faint",
+})
+
+
+def paused_capture_outcome(outcome):
+    """A one-off catch that stopped inside its live battle with a known, resumable reason.
+
+    Either the declared throws are spent, or status preparation found nobody
+    above half health to act as catcher. Both leave the encounter and its
+    journal intact for the retained-capture executor; nothing else qualifies.
+    """
+    return outcome.get("selected_kind") == GoalKind.ACQUIRE_SPECIES.value and (
+        (
+            outcome.get("error_type") == "OneOffCapturePaused"
+            and outcome.get("error") in PAUSED_CAPTURE_EXHAUSTIONS
+        )
+        or (
+            outcome.get("error_type") == "RedCaptureStatusError"
+            and outcome.get("error") == "capture preparation has no healthy catcher"
+        )
+    )
+
+
+def qualified_league_income_budget(result, parent):
+    """Verify the spent rematch segment against its frozen actor's battle endpoint."""
+    if parent is None or result.get("paired_context_authenticated") is not True:
+        return False
+    outcomes = result.get("episode", {}).get("outcomes") or ()
+    if not outcomes:
+        return False
+    last = outcomes[-1]
+    if last.get("selected_kind") != "resupply" or last.get("error_type") != "RedLeagueFundingExecutionError":
+        return False
+    chain = last.get("error_chain") or ()
+    if len(chain) != 3 or not all(isinstance(row, dict) for row in chain):
+        return False
+    stage = last.get("error", "").removesuffix(" failed")
+    if (
+        stage not in {"defeat_lorelei", "defeat_bruno", "defeat_agatha", "defeat_lance", "defeat_champion"}
+        or chain[0].get("error_type") != "RedLeagueFundingExecutionError"
+        or chain[0].get("reason_code") != stage + " failed"
+        or chain[1].get("error_type") != "StoryBattleDecisionBudgetReached"
+        or chain[1].get("reason_code") != "story_battle_decision_budget"
+        or chain[2].get("error_type") != "LoreleiStoryBattleStopped"
+        or (last.get("after") or {}).get("battle_state") != 2
+        or "enter_hall_of_fame" not in (last.get("before") or {}).get("completed_objectives", ())
+    ):
+        return False
+    state = result.get("state_sha256")
+    if last.get("terminal_state_sha256") != state or not state:
+        return False
+    parent = Path(parent)
+    matches = []
+    for path in parent.glob(f"income-{stage}-offer-*/battle-*/endpoint.json"):
+        endpoint = json.loads(path.read_bytes())
+        if endpoint.get("final_state_sha256") != state:
+            continue
+        battle = json.loads(path.with_name("outcome.json").read_bytes())
+        matches.append(
+            endpoint.get("actor_returned_win") is False
+            and endpoint.get("outer_goal_verification_required") is True
+            and sha256(path.with_name("final.state").read_bytes()).hexdigest() == state
+            and canonical_sha256(battle) == endpoint.get("outcome_sha256")
+            and battle.get("battle_won") is False
+            and battle.get("stop_reason") == "decision_budget"
+            and battle.get("final_battle_state") == 2
+            and battle.get("decision_count") == len(battle.get("decisions", ())) > 0
+        )
+    return matches == [True]
+
+
+def qualified_native_control_handoff(result, *, runtime, inspect_bindings, retained_parent=None, catcher_plan=None):
     """Recognize one retained native introduction, never waive an unknown error.
 
     The trusted live inventory must contain one exact retained recovery and no
@@ -1394,9 +2190,19 @@ def qualified_native_control_handoff(result, *, runtime, inspect_bindings):
     """
     episode = result.get("episode", {})
     outcomes = episode.get("outcomes", ())
+    retained = _qualified_retained_budget_handoff(
+        result, runtime=runtime, inspect_bindings=inspect_bindings
+    )
+    if retained is not None:
+        return retained
     if not outcomes:
         return None
     last = outcomes[-1]
+    from pokemon_red_completion.red_capture_switch_handoff import catcher_switch_failure, development_recovery
+    from pokemon_red_completion.red_player_configuration import _failed_wild_acquisition_faint
+    known_catcher = (catcher_switch_failure(last) and result.get("paired_context_authenticated") is True
+                     and development_recovery(catcher_plan)
+                     and _failed_wild_acquisition_faint(runtime.reader, result, last))
     known_trainer_error = last.get("error_type") == "RouteExecutionError" and last.get("error") in {
         "field dialogue lacks a newly poisoned member faint",
         "field dialogue is not an admitted native faint",
@@ -1423,6 +2229,11 @@ def qualified_native_control_handoff(result, *, runtime, inspect_bindings):
             for item in (last.get("error_chain") or ())
         )
     )
+    # A one-off catch that spent its declared throws pauses inside the live
+    # wild battle. Its own retained-capture executor (remaining carried balls,
+    # then the exact consumed loss) is the only admissible successor.
+    known_capture_pause = paused_capture_outcome(last)
+    known_league_income_budget = qualified_league_income_budget(result, retained_parent)
     if (
         result.get("error_type")
         or not result.get("released")
@@ -1433,7 +2244,7 @@ def qualified_native_control_handoff(result, *, runtime, inspect_bindings):
         or (
             last.get("safe_terminal") is not True
             and not (
-                (known_loan_wild_error or known_story_decision_budget)
+                (known_loan_wild_error or known_story_decision_budget or known_capture_pause or known_catcher)
                 and last.get("safe_terminal") is False
             )
         )
@@ -1442,9 +2253,16 @@ def qualified_native_control_handoff(result, *, runtime, inspect_bindings):
             or known_loan_wild_error
             or known_static_settlement
             or known_story_decision_budget
+            or known_league_income_budget
+            or known_capture_pause
+            or known_catcher
         )
         or last.get("terminal_state_sha256") != result.get("state_sha256")
-        or any(outcome.get("error_type") for outcome in outcomes[:-1])
+        or any(
+            outcome.get("error_type")
+            and not (known_capture_pause and qualified_route_setback_receipt(outcome))
+            for outcome in outcomes[:-1]
+        )
         or runtime.emulator.pressed_buttons
         or _field_ready(runtime)
     ):
@@ -1452,6 +2270,10 @@ def qualified_native_control_handoff(result, *, runtime, inspect_bindings):
     before, frames = runtime.emulator.save_state_bytes(), runtime.emulator.frame_count
     if sha256(before).hexdigest() != result["state_sha256"]:
         return None
+    if known_capture_pause:
+        raw = runtime.reader.read()
+        if raw.battle_state != 1 or not raw.party_hp or not any(raw.party_hp):
+            return None
     if known_static_settlement:
         from pokemon_red_completion.red_player_party_guard import RedPlayerPartyGuard
 
@@ -1474,7 +2296,7 @@ def qualified_native_control_handoff(result, *, runtime, inspect_bindings):
         if (
             not isinstance(guard, RedPlayerPartyGuard)
             or len(guard.loanable_refs) != 1
-            or runtime.reader.read().battle_state != 1
+            or runtime.reader.read().battle_state not in (0, 1)
         ):
             return None
         guard.verify()
@@ -1487,7 +2309,11 @@ def qualified_native_control_handoff(result, *, runtime, inspect_bindings):
         raise ValueError("native control handoff inspection changed state")
     expected_ref = (
         "pokemon.red:interrupted-wild:"
+        if known_catcher or known_loan_wild_error and runtime.reader.read().battle_state == 1
+        else "pokemon.red:retained-motion:"
         if known_loan_wild_error
+        else "pokemon.red:retained-capture:"
+        if known_capture_pause
         else "pokemon.red:retained-engagement:"
     ) + result["state_sha256"]
     if (
@@ -1507,8 +2333,16 @@ def qualified_native_control_handoff(result, *, runtime, inspect_bindings):
         model_queries=0,
         failed_transport_preserved=True,
         strategic_substitution=False,
+        **({"ordinary_capture_switch_faint": True, "original_failure_reason": "native_execution_error",
+            "failed_outcome_sha256": canonical_sha256(last), "original_terminal_safe": last["safe_terminal"],
+            "compulsory_settlement_required": True} if known_catcher else {}),
+        **({"retained_league_income_budget": True, "funding_attempt_failed": True,
+            "local_decision_limit_unchanged": True, "aggregate_budget_reset": False}
+           if known_league_income_budget else {}),
         **(
-            {"retained_declared_loan": True, "wild_exit_before_pc_return": True}
+            {"retained_declared_loan": True,
+             "wild_exit_before_pc_return": runtime.reader.read().battle_state == 1,
+             "field_faint_before_pc_return": runtime.reader.read().battle_state == 0}
             if known_loan_wild_error
             else {}
         ),
@@ -1520,6 +2354,12 @@ def qualified_native_control_handoff(result, *, runtime, inspect_bindings):
         **(
             {"retained_native_introduction": True, "retained_roster_restored": True}
             if known_static_settlement
+            else {}
+        ),
+        **(
+            {"retained_capture_pause": True, "original_terminal_safe": False,
+             "compulsory_settlement_required": True}
+            if known_capture_pause
             else {}
         ),
         **(
@@ -1539,22 +2379,348 @@ AUTOMATIC_CONTINUATIONS = {
     "automatic_budget_recovery",
     "automatic_chunk_renewal",
     "automatic_control_recovery",
+    "automatic_registration_task_renewal",
 }
 
 
-def qualified_menu_control_handoff(result, *, runtime, menu):
+def _qualified_zero_input_carrier_abort_handoff(
+    result, *, plan, runtime, inspect_bindings, source_context_bytes,
+    exported_context_bytes, expected_source_context_sha256,
+):
+    """Authenticate one metadata abort; the generic physical-progress guard stays."""
+    from math import isfinite, isclose
+    try:
+        if not declared_automatic_renewal(plan):
+            return None
+        before_context = json.loads(source_context_bytes)
+        after_context = json.loads(exported_context_bytes)
+        old_sha = sha256(source_context_bytes).hexdigest()
+        new_sha = sha256(exported_context_bytes).hexdigest()
+        episode = result["episode"]
+        rows = episode["outcomes"]
+        if len(rows) != 1:
+            return None
+        row, meter = rows[0], result["chunk_costs"]
+        evidence = row["evidence"]
+        state = runtime.emulator.save_state_bytes()
+        state_sha = sha256(state).hexdigest()
+        if (old_sha != expected_source_context_sha256 or old_sha == new_sha
+                or result.get("passed") is not True or result.get("released") is not True
+                or result.get("field_ready") is not True or result.get("paired_context_authenticated") is not True
+                or episode.get("stop_reason") != "no_state_progress" or episode.get("admission_failure")
+                or any(result.get(k) for k in ("error", "error_type", "error_chain", "context_error", "checkpoint_export_error"))
+                or any(row.get(k) for k in ("error", "error_type", "error_chain", "failure_phase"))
+                or row.get("selected_kind") != GoalKind.RECOVER_CONTROL.value
+                or row.get("verification") != "succeeded" or row.get("safe_terminal") is not True
+                or row.get("ordinary_setback") is not False
+                or evidence.get("support") != "authenticated_zero_input_field_carrier_return_abort"
+                or evidence.get("model_queries") != 0 or type(evidence.get("model_queries")) is not int
+                or evidence.get("original_source_pending_preserved") is not True
+                or evidence.get("retained_active_field_carrier") is not True
+                or evidence.get("original_roster_restored") is not False
+                or evidence.get("objective_completed") is not False
+                or evidence.get("no_controller_input") is not True
+                or evidence.get("historical_costs_retained") is not True
+                or result.get("state_sha256") != state_sha or result.get("context_sha256") != new_sha
+                or before_context.get("state_sha256") != state_sha or after_context.get("state_sha256") != state_sha
+                or row.get("before_state_sha256") != state_sha or row.get("terminal_state_sha256") != state_sha
+                or evidence.get("source_sha256") != state_sha or evidence.get("terminal_sha256") != state_sha
+                or any(c.get("grants_new_budget") is not False or c.get("fit_allowed") is not False
+                       for c in (before_context, after_context))
+                or any(before_context.get(k) != after_context.get(k) for k in ("schema", "lesson", "cash", "bag", "battle", "search_memory"))
+                or result.get("spent") != after_context.get("spent")
+                or row.get("observed_cost") != dict(actions=0, completed_actions=0, frames=0, cash_spent=0)
+                or not _field_ready(runtime) or runtime.emulator.pressed_buttons):
+            return None
+        for key in ("actions", "completed_actions", "frames", "cash"):
+            if (type(row["before"].get(key)) is not int or row["before"][key] < 0
+                    or row["after"].get(key) != row["before"][key]):
+                return None
+        if any(type(row["observed_cost"].get(k)) is not int for k in ("actions", "completed_actions", "frames", "cash_spent")):
+            return None
+        old_cost = continuation_costs(before_context["spent"])
+        new_cost = continuation_costs(after_context["spent"])
+        for key in ("actions", "frames", "heals", "cash_debits"):
+            if new_cost[key] != old_cost[key]:
+                return None
+        seconds = meter.get("seconds")
+        if (type(seconds) not in (int, float) or not isfinite(seconds) or seconds < 0
+                or new_cost["decisions"] != old_cost["decisions"] + 1
+                or not isclose(new_cost["seconds"] - old_cost["seconds"], seconds, abs_tol=1e-6)
+                or type(meter.get("goal_attempts")) is not int or meter["goal_attempts"] != 1
+                or any(type(meter.get(k)) is not int or meter[k] != 0
+                       for k in ("actions_attempted", "actions_completed", "frames", "restore_attempts", "nested_restore_attempts", "training_healing_attempts"))):
+            return None
+        old_custody, new_custody = before_context["field_carrier"], after_context["field_carrier"]
+        if old_custody.get("phase") != "pending" or new_custody.get("phase") != "active":
+            return None
+        unchanged = dict(new_custody, phase="pending")
+        if (canonical_sha256(unchanged) != canonical_sha256(old_custody)
+                or evidence.get("original_guard_sha256") != old_custody.get("original_guard_sha256")):
+            return None
+        guard = runtime.adapter.party_guard
+        if (not isinstance(guard, RedPlayerPartyGuard) or guard.field_carrier is None
+                or canonical_sha256(guard.field_carrier.private_dict()) != canonical_sha256(new_custody)):
+            return None
+        guard.verify_authorized_active_roster()
+        original_plan = old_custody["preparation_before"]
+        before_plan, after_plan = before_context["preparation"], after_context["preparation"]
+        if (not all(type(p) is dict for p in (original_plan, before_plan, after_plan))
+                or canonical_sha256({k:v for k,v in before_plan.items() if k not in {"roster", "targets"}})
+                   != canonical_sha256({k:v for k,v in after_plan.items() if k not in {"roster", "targets"}})
+                or evidence.get("active_preparation_projection_sha256") != canonical_sha256(after_plan)):
+            return None
+        refs, party = guard.reader.preparation_specimen_refs(), guard.reader.read()
+        observed = dict(zip(refs, party.members, strict=True))
+        archived_targets = original_plan["targets"]
+        if canonical_sha256(before_plan["targets"]) != canonical_sha256(archived_targets):
+            return None
+        expected_targets = tuple((ref, level) for ref, level in archived_targets
+                                 if ref in observed and observed[ref].level < level)
+        if (any(ref not in observed for ref, _ in archived_targets)
+                or canonical_sha256(after_plan["targets"]) != canonical_sha256(expected_targets)):
+            return None
+        original = {m["specimen_ref"]:m for m in original_plan["roster"]}
+        prior = {m["specimen_ref"]:m for m in before_plan["roster"]}
+        projected = {m["specimen_ref"]:m for m in after_plan["roster"]}
+        if (len(projected) != len(after_plan["roster"]) or set(projected) != set(observed)
+                or set(prior) != set(observed)):
+            return None
+        carrier = old_custody["carrier_ref"]
+        for ref, member in projected.items():
+            role = {k:v for k,v in member.items() if k != "observation"}
+            old_role = {k:v for k,v in prior[ref].items() if k != "observation"}
+            if role != old_role or canonical_sha256(member["observation"]) != canonical_sha256(asdict(observed[ref])):
+                return None
+            if ref == carrier:
+                if member.get("purpose") != "field_utility" or member.get("milestone_level") is not None:
+                    return None
+            elif role != {k:v for k,v in original[ref].items() if k != "observation"}:
+                return None
+        frames = runtime.emulator.frame_count
+        buttons = tuple(runtime.emulator.pressed_buttons)
+        inventory = inspect_bindings()
+        bindings = getattr(inventory, "bindings", ())
+        if (not isinstance(inventory, GoalBindingSet) or not bindings
+                or any(b.binding_ref.startswith("pokemon.red:aborted-field-carrier-return:") for b in bindings)
+                or runtime.emulator.save_state_bytes() != state or runtime.emulator.frame_count != frames
+                or tuple(runtime.emulator.pressed_buttons) != buttons
+                or runtime.adapter.party_guard is not guard):
+            return None
+        guard.verify_authorized_active_roster()
+        return dict(schema="pokemon.red.zero-input-carrier-abort-handoff.v1",
+                    source_state_sha256=state_sha, source_context_sha256=old_sha,
+                    exported_context_sha256=new_sha, original_guard_sha256=old_custody["original_guard_sha256"],
+                    active_preparation_projection_sha256=canonical_sha256(after_plan),
+                    pending_to_active=True, raw_no_state_progress_preserved=True,
+                    archived_targets_preserved=True,
+                    active_targets_reconciled_from_native_levels=True,
+                    physically_achieved_target_count=len(archived_targets) - len(expected_targets),
+                    native_progress=False, quest_progress=False, new_controller_inputs=0,
+                    successor_inventory_verified_no_repeat_abort=True,
+                    decision_debit=1, seconds_debit=seconds, aggregate_reset=False)
+    except (KeyError, IndexError, TypeError, ValueError, AttributeError):
+        return None
+
+
+def qualified_zero_input_carrier_abort_handoff(
+    result, *, plan, runtime, menu, source_context_bytes,
+    exported_context_bytes, expected_source_context_sha256,
+):
+    def inspect():
+        actions = InspectionExecutor(FrameSafeExecutor(ReadOnlyController(runtime.emulator)))
+        return menu.enumerate_base(runtime, actions, runtime.adapter.observe())
+    return _qualified_zero_input_carrier_abort_handoff(
+        result, plan=plan, runtime=runtime, inspect_bindings=inspect,
+        source_context_bytes=source_context_bytes, exported_context_bytes=exported_context_bytes,
+        expected_source_context_sha256=expected_source_context_sha256,
+    )
+
+def qualified_collection_field_handoff(result, *, runtime, menu, parent):
+    """Inspect the already selected PC loan or the interrupted trainer-funding route."""
+    from pokemon_red_completion.red_player_configuration import (
+        _interrupted_bird_loan_refs, _retained_field_faint_inventory,
+    )
+    from pokemon_red_completion.red_player_party_guard import RedPlayerPartyGuard
+
+    episode = result.get("episode", {})
+    outcomes = episode.get("outcomes") or ()
+    if (not outcomes or result.get("error_type") or result.get("released") is not True
+            or result.get("paired_context_authenticated") is not True
+            or episode.get("stop_reason") != "execution_failed"
+            or any(row.get("error_type") for row in outcomes[:-1])):
+        return None
+    last = outcomes[-1]
+    signature = (last.get("selected_kind"), last.get("error_type"), last.get("error"))
+    bird = signature == ("acquire_species", "SettledNativeTrainerRecovery",
+                         "verified trainer exit needs native faint recovery")
+    funding = signature == ("resupply", "RouteExecutionError", "Gen I route cannot dismiss 'scripted_dialogue'")
+    if not (bird or funding):
+        return None
+    expected_error = dict(error_type=last["error_type"], error=last["error"],
+                          reason_code="interruption_unrecovered" if bird else "world_state_diverged")
+    if (last.get("error_chain") != [expected_error] or last.get("failure_phase") != "execution"
+            or last.get("safe_terminal") is not True or runtime.emulator.pressed_buttons
+            or result.get("field_ready") is not bird or bool(_field_ready(runtime)) != bird):
+        return None
+    raw = runtime.reader.read()
+    if raw.battle_state != 0 or not raw.party_hp or not any(raw.party_hp) or 0 not in raw.party_hp:
+        return None
+    state, frame = runtime.emulator.save_state_bytes(), runtime.emulator.frame_count
+    digest = sha256(state).hexdigest()
+    if (result.get("state_sha256") != digest or last.get("terminal_state_sha256") != digest
+            or set(last["before"]["owned_species"]) != set(last["after"]["owned_species"])):
+        return None
+    actions = InspectionExecutor(FrameSafeExecutor(ReadOnlyController(runtime.emulator)))
+    if bird:
+        plan = json.loads((Path(parent) / "PLAN.json").read_bytes())
+        configuration = RedPlayerConfiguration.from_dict(plan["configuration"])
+        refs = _interrupted_bird_loan_refs(parent, configuration, failed_result=result)
+        guard = getattr(runtime.adapter, "party_guard", None)
+        if not refs or not isinstance(guard, RedPlayerPartyGuard) or set(guard.loanable_refs) != set(refs):
+            return None
+        guard.verify()
+        inventory = menu.enumerate_base(runtime, actions, runtime.adapter.observe())
+        expected = "pokemon.red:retained-loan-return:" + digest
+    else:
+        started = Path(parent)/"native"/"episode"/f"step-{last['ordinal']:03d}"/"execution-started.json"
+        if not started.is_file():
+            return None
+        chosen = json.loads(started.read_bytes())
+        if (chosen.get("state_sha256") != last["before_state_sha256"]
+                or chosen.get("selected_kind") != "resupply"
+                or not str(chosen.get("selected_binding_ref", "")).startswith("red-trainer-funding:")):
+            return None
+        inventory = _retained_field_faint_inventory(runtime, actions, parent=parent, failed_result=result)
+        expected = "pokemon.red:retained-motion:" + digest
+    if state != runtime.emulator.save_state_bytes() or frame != runtime.emulator.frame_count:
+        raise ValueError("collection handoff inspection changed the held state")
+    if (type(inventory) is not GoalBindingSet or len(inventory.bindings) != 1
+            or inventory.bindings[0].kind is not GoalKind.RECOVER_CONTROL
+            or inventory.bindings[0].binding_ref != expected):
+        return None
+    return dict(schema="pokemon.red.qualified-native-control-handoff.v1", state_sha256=digest,
+                binding_ref=expected, qualified=True, inputs=0, frames=0, model_queries=0,
+                failed_transport_preserved=True, strategic_substitution=False, original_terminal_safe=True,
+                failed_outcome_sha256=canonical_sha256(last), retained_bird_loan=bird,
+                retained_funding_faint=funding, captured=False)
+
+
+def qualified_menu_control_handoff(result, *, runtime, menu, retained_parent=None,
+                                   catcher_plan=None, failure_reason=None, rom=None):
     """One action-free qualification shared by fresh and continuation entry.
 
     This delegates to the existing exact retained-source/unique-recovery guard;
     it neither supplies a strategic goal nor turns an unknown error into success.
     """
 
+    from pokemon_red_completion.red_capture_switch_handoff import catcher_switch_failure, development_recovery
+    outcomes = result.get("episode", {}).get("outcomes") or ()
+    if (outcomes and outcomes[-1].get("error_type") == "Gen1FieldBlackoutPending"
+            and retained_parent is not None and failure_reason == "native_execution_error"
+            and development_recovery(catcher_plan)):
+        from pokemon_red_completion.red_player_configuration import _retained_field_blackout_inventory
+        last = outcomes[-1]
+        error = "observed all-party field poison faint requires native blackout"
+        if (result.get("error_type") or result.get("paired_context_authenticated") is not True
+                or result.get("episode", {}).get("stop_reason") != "execution_failed"
+                or any(row.get("error_type") for row in outcomes[:-1])
+                or last.get("failure_phase") != "execution" or last.get("safe_terminal") is not True
+                or last.get("error_chain") != [dict(error_type="Gen1FieldBlackoutPending",
+                                                    error=error, reason_code="world_state_diverged")]
+                or runtime.emulator.pressed_buttons or _field_ready(runtime)):
+            return None
+        started = Path(retained_parent)/"native"/"episode"/f"step-{last['ordinal']:03d}"/"execution-started.json"
+        if not started.is_file():
+            return None
+        choice = json.loads(started.read_bytes())
+        if (choice.get("selected_kind") != "restore_team"
+                or choice.get("state_sha256") != last.get("before_state_sha256")
+                or not str(choice.get("selected_binding_ref", "")).startswith("pokemon.red:routed-restoration:")):
+            return None
+        state, frame = runtime.emulator.save_state_bytes(), runtime.emulator.frame_count
+        inspection = InspectionExecutor(FrameSafeExecutor(ReadOnlyController(runtime.emulator)))
+        inventory = _retained_field_blackout_inventory(runtime, inspection, parent=retained_parent, failed_result=result)
+        if runtime.emulator.save_state_bytes() != state or runtime.emulator.frame_count != frame:
+            raise ValueError("field blackout inspection changed the held checkpoint")
+        digest = sha256(state).hexdigest()
+        expected = "pokemon.red:field-blackout:" + digest
+        if (type(inventory) is not GoalBindingSet or len(inventory.bindings) != 1
+                or inventory.bindings[0].kind is not GoalKind.RECOVER_CONTROL
+                or inventory.bindings[0].binding_ref != expected):
+            return None
+        return dict(schema="pokemon.red.qualified-native-control-handoff.v1", state_sha256=digest,
+                    binding_ref=expected, qualified=True, inputs=0, frames=0, model_queries=0,
+                    failed_transport_preserved=True, strategic_substitution=False, original_terminal_safe=True,
+                    failed_outcome_sha256=canonical_sha256(last), retained_field_blackout=True)
+    if (outcomes and retained_parent is not None and failure_reason == "native_execution_error"
+            and development_recovery(catcher_plan)
+            and outcomes[-1].get("error_type") in ("SettledNativeTrainerRecovery", "RouteExecutionError")):
+        handoff = qualified_collection_field_handoff(result, runtime=runtime, menu=menu, parent=retained_parent)
+        if handoff is not None:
+            return handoff
+    if (outcomes and outcomes[-1].get("error_type") in ("RedCaptureStatusError", "RouteExecutionError")
+            and failure_reason == "native_execution_error" and retained_parent is not None
+            and rom is not None and development_recovery(catcher_plan)):
+        from pokemon_red_completion.red_survey_faint_settlement import retained_survey_faint_inventory
+
+        state, frame = runtime.emulator.save_state_bytes(), runtime.emulator.frame_count
+        inspection = InspectionExecutor(FrameSafeExecutor(ReadOnlyController(runtime.emulator)))
+        inventory = retained_survey_faint_inventory(runtime, inspection, parent=retained_parent,
+                                                    rom=rom, failed_result=result)
+        if runtime.emulator.save_state_bytes() != state or runtime.emulator.frame_count != frame:
+            raise ValueError("survey faint inspection changed the held state")
+        expected = "pokemon.red:retained-survey-faint:" + sha256(state).hexdigest()
+        if (inventory is not None and len(inventory.bindings) == 1
+                and inventory.bindings[0].kind is GoalKind.RECOVER_CONTROL
+                and inventory.bindings[0].binding_ref == expected):
+            return dict(schema="pokemon.red.qualified-native-control-handoff.v1",
+                        state_sha256=sha256(state).hexdigest(), binding_ref=expected, qualified=True,
+                        inputs=0, frames=0, model_queries=0, failed_transport_preserved=True,
+                        strategic_substitution=False, retained_survey_faint=True,
+                        original_terminal_safe=outcomes[-1]["safe_terminal"], captured=False)
+    is_catcher = bool(outcomes and catcher_switch_failure(outcomes[-1]))
+    if is_catcher:
+        if (failure_reason != "native_execution_error" or retained_parent is None or rom is None
+                or not development_recovery(catcher_plan)):
+            return None
+        # The normal runner has just computed the failure reason. RESULT is
+        # finalized after this no-input inspection; terminal and CONTEXT exist.
+        result = dict(result, continuation_reason=failure_reason)
+
     def inspect_control_bindings():
         actions = InspectionExecutor(FrameSafeExecutor(ReadOnlyController(runtime.emulator)))
+        if is_catcher:
+            from pokemon_red_completion.red_player_configuration import _retained_wild_faint_inventory
+            return _retained_wild_faint_inventory(
+                runtime, actions, parent=retained_parent, rom=rom, failed_result=result)
+        outcomes = result.get("episode", {}).get("outcomes", ())
+        last = outcomes[-1] if outcomes else {}
+        if (retained_parent is not None and runtime.reader.read().battle_state == 0
+                and last.get("selected_kind") == "evolve_species"
+                and last.get("error_type") == "RedGoalContextError"
+                and last.get("error") == "PC loan settlement requires settled field control"):
+            from pokemon_red_completion.red_player_configuration import _retained_field_faint_inventory
+            retained = _retained_field_faint_inventory(
+                runtime, actions, parent=retained_parent, failed_result=result)
+            if retained is not None:
+                return retained
+        if retained_parent is not None and paused_capture_outcome(last):
+            # The live menu is still bound to the previous segment. Inspect the
+            # exact successor this failed segment would be offered; the journal
+            # verifier writes nothing until its binding executes.
+            from pokemon_red_completion.red_player_configuration import _retained_capture_inventory
+            try:
+                return _retained_capture_inventory(
+                    runtime, actions, parent=retained_parent,
+                    output=Path(retained_parent) / "capture-handoff-inspection")
+            except (ValueError, AssertionError):
+                return None
         return menu.enumerate_base(runtime, actions, runtime.adapter.observe())
 
     return qualified_native_control_handoff(
-        result, runtime=runtime, inspect_bindings=inspect_control_bindings
+        result, runtime=runtime, inspect_bindings=inspect_control_bindings, retained_parent=retained_parent,
+        **({"catcher_plan": catcher_plan} if is_catcher else {})
     )
 
 
@@ -1600,6 +2766,8 @@ def verify_loan_copy(args, plan, root, backend, configuration):
     _record(output / "PLAN.json", declaration)
     payload, factory, _, _, _ = assemble_configured_player(
         backend, configuration, guard_parent, output, plan_path=output / "PLAN.json"
+        **({"required_species": tuple(plan["required_species"])}
+           if "required_species" in plan else {}),
     )
     with c.PyBoyAdapter(c.ROM) as em:
         em.load_state_bytes(payload)
@@ -1793,8 +2961,7 @@ def verify_evolution_copy(args, plan, root, backend, configuration, parent, cont
         copy_back=False,
         goal_model_queries=0,
         operator_diagnostic_choice=True,
-        **player_wiring_declaration(plan),
-        diagnostic_only=True,
+        **dict(player_wiring_declaration(plan), diagnostic_only=True),
         actual_gameplay_resume_authorized=False,
         evolution_copy_experiment=experiment,
         fit_allowed=False,
@@ -1807,9 +2974,11 @@ def verify_evolution_copy(args, plan, root, backend, configuration, parent, cont
         launcher_sha256=c.digest(Path(__file__)),
     )
     _record(output / "PLAN.json", declaration)
-    _write(output / "executed-launcher.py", Path(__file__).read_bytes())
+    _write(output / "executed-launcher.py", Path(globals().get("__execution_source_path__", __file__)).read_bytes())
     payload, factory, _, holder, source = assemble_configured_player(
-        backend, configuration, parent, output, plan_path=output / "PLAN.json"
+        backend, configuration, parent, output, plan_path=output / "PLAN.json",
+        **({"required_species": tuple(plan["required_species"])}
+           if "required_species" in plan else {}),
     )
     result = dict(passed=False, error=None, copy_back=False, model_queries=0, fits=0)
     with c.PyBoyAdapter(c.ROM) as em:
@@ -2129,8 +3298,7 @@ def verify_boxed_machine_copy(
         copy_back=False,
         operator_diagnostic_choice=True,
         goal_model_queries=0,
-        **player_wiring_declaration(plan),
-        diagnostic_only=True,
+        **dict(player_wiring_declaration(plan), diagnostic_only=True),
         actual_gameplay_resume_authorized=False,
         fit_allowed=False,
         source=str(parent),
@@ -2142,9 +3310,11 @@ def verify_boxed_machine_copy(
         launcher_sha256=c.digest(Path(__file__)),
     )
     _record(output / "PLAN.json", declaration)
-    _write(output / "executed-launcher.py", Path(__file__).read_bytes())
+    _write(output / "executed-launcher.py", Path(globals().get("__execution_source_path__", __file__)).read_bytes())
     payload, factory, menu, holder, source = assemble_configured_player(
-        backend, configuration, parent, output, plan_path=output / "PLAN.json"
+        backend, configuration, parent, output, plan_path=output / "PLAN.json",
+        **({"required_species": tuple(plan["required_species"])}
+           if "required_species" in plan else {}),
     )
     if prepared_evolution:
         connect_declared_machine_options(
@@ -2335,9 +3505,48 @@ def verify_boxed_machine_copy(
     print(json.dumps(dict(result, output=str(output)), default=str), flush=True)
 
 
+def require_collection_comparison_copy(plan):
+    """This private runner accepts version-one diagnostic copies or explicit normal campaigns."""
+    from pokemon_red_completion.red_collection_campaign_scope import development_campaign_scope
+    if development_campaign_scope(plan):
+        if (plan["new_campaign"] or plan.get("launch_authorized") is not True
+                or plan.get("readiness_only") is not False or plan.get("maximum_state_loads") != 1):
+            raise ValueError("loaded campaign requires its declared one-load continuation")
+        return
+    if (plan.get("partition") != "development" or plan.get("qualification_only") is not True
+            or plan.get("diagnostic_only") is not True or plan.get("new_campaign") is not False
+            or plan.get("open_ended_campaign", False) is not False
+            or plan.get("actual_gameplay_resume_authorized") is not False
+            or plan.get("official_acceptance") is not False or plan.get("fit_allowed") is not False
+            or plan.get("copy_back") is not False
+            or any(k in plan for k in ("matched_collection_order", "collection_transfer_capture",
+                "collection_menu_probe", "matched_preparation", "evolution_copy_experiment"))):
+        raise ValueError("collection successor requires an unallocated, isolated DEVELOPMENT copy")
+
+
 def run(args):
     path = Path(args.plan).resolve()
     plan, root = doc(path), path.parent
+    require_collection_comparison_copy(plan)
+    validate_sequence_runner_mode(plan, args)
+    open_ended = plan.get("open_ended_campaign", False)
+    if type(open_ended) is not bool or (open_ended and (
+        not plan.get("campaign_continuation") or plan.get("cutoff_utc") is not None
+        or plan.get("qualification_only") or not declared_automatic_renewal(plan)
+    )):
+        raise ValueError("invalid open-ended campaign continuation declaration")
+
+    def wall_seconds():
+        if open_ended:
+            return args.seconds
+        return int((datetime.fromisoformat(plan["cutoff_utc"]) - datetime.now(UTC)).total_seconds())
+
+    def chunk_allowance(current, *, inspection=False):
+        if not open_ended:
+            return remaining_allowance(current, plan["inherited_spent"], plan["allowance"], inspection=inspection)
+        if any(current[k] < plan["inherited_spent"][k] for k in plan["allowance"]):
+            raise ValueError("open-ended continuation lost cumulative native costs")
+        return dict(plan["allowance"])
     declared_spectator(plan)
     if plan["partition"] != "development" or plan["fit_allowed"] or plan["copy_back"]:
         raise ValueError("configured launcher currently supports ordinary DEVELOPMENT only")
@@ -2373,6 +3582,13 @@ def run(args):
         verify_loan_copy(args, plan, root, backend, configuration)
         return
     nodes, ordinal = configured_run_nodes(root)
+    if plan.get("campaign_continuation") and "source_segment_ordinal" in plan:
+        source_ordinal = plan["source_segment_ordinal"]
+        if (type(source_ordinal) is not int or source_ordinal < 1
+                or origin.name != f"segment-{source_ordinal:03d}"):
+            raise ValueError("campaign source segment ordinal differs from its authenticated parent")
+        if not nodes:
+            ordinal = source_ordinal + 1
     parent = nodes[-1] if nodes else origin
     context = authenticate_parent(parent, c.digest)
     search_memory = (
@@ -2380,11 +3596,12 @@ def run(args):
         if "search_memory" in context
         else GoalSearchMemory()
     )
-    if nodes and doc(parent / "PLAN.json")["configuration_sha256"] != configuration.sha256:
-        raise ValueError("cannot silently change configuration across a continuation")
-    left = remaining_allowance(
-        context["spent"], plan["inherited_spent"], plan["allowance"], inspection=args.inspect
-    )
+    if nodes:
+        previous = doc(parent / "PLAN.json")
+        if previous["configuration_sha256"] != configuration.sha256:
+            raise ValueError("cannot silently change configuration across a continuation")
+        validate_continued_sequence_wiring(plan, previous)
+    left = chunk_allowance(context["spent"], inspection=args.inspect)
     copies = diagnostic_spending(root)
     left = {key: value - copies[key] for key, value in left.items()}
     if min(left.values()) <= 0 and not args.inspect:
@@ -2412,6 +3629,7 @@ def run(args):
         verify_evolution_copy(args, plan, root, backend, configuration, parent, context, left)
         return
     model = declared_goal_model(plan, configuration, backend)
+    declared_sequence_options(plan, model)
     refinement = declared_readiness_refinement(plan)
     greedy = declared_greedy_selection(plan)
     _preparation_component = declared_preparation_component(plan)
@@ -2466,12 +3684,14 @@ def run(args):
             parent,
             output,
             plan_path=output / "PLAN.json",
+            **({"required_species": tuple(plan["required_species"])}
+               if "required_species" in plan else {}),
             model_feature_version=model.feature_version,
             **(
                 {"include_preparation_party_context": True}
-                if refinement.get("consequence_head") is not None
+                if declared_preparation_context(plan) or (refinement.get("consequence_head") is not None
                 and refinement["consequence_head"].context_projection
-                == "prospective_preparation_party_context_v1"
+                == "prospective_preparation_party_context_v1")
                 else {}
             ),
         )
@@ -2675,13 +3895,11 @@ def run(args):
         renewed = 0
         driver_terminal_reason = None
         while True:
-            wall_left = int(
-                (datetime.fromisoformat(plan["cutoff_utc"]) - datetime.now(UTC)).total_seconds()
-            )
+            wall_left = wall_seconds()
             if wall_left <= 0:
                 raise ValueError("configured work block ended; no inputs authorized by this plan")
             limits = configured_execution_limits(args, left, wall_left)
-            _write(output / "executed-launcher.py", Path(__file__).read_bytes())
+            _write(output / "executed-launcher.py", Path(globals().get("__execution_source_path__", __file__)).read_bytes())
             _write(output / "executed-backend.py", Path(backend.__file__).read_bytes())
             result, exported = execute_player_chunk(
                 plan=plan,
@@ -2702,14 +3920,32 @@ def run(args):
             reason = chunk_continuation_reason(
                 result, source_sha256=context["state_sha256"], limits=limits
             )
+            if automatic and reason == "declared_consequence_complete":
+                task_handoff = qualified_registration_task_handoff(
+                    result, plan=plan, runtime=holder["runtime"], output=output)
+                if task_handoff is not None:
+                    result["qualified_registration_task_handoff"] = task_handoff
+                    reason = "automatic_registration_task_renewal"
             if automatic and reason == "native_execution_error":
                 handoff = qualified_menu_control_handoff(
                     result,
                     runtime=holder["runtime"],
                     menu=menu,
+                    retained_parent=output, catcher_plan=plan, failure_reason=reason,
+                    rom=lambda: c.ROM.read_bytes(),
                 )
                 if handoff is not None:
                     result["qualified_native_control_handoff"] = handoff
+                    reason = "automatic_control_recovery"
+            if automatic and reason == "no_executable_progress":
+                handoff = qualified_zero_input_carrier_abort_handoff(
+                    result, plan=plan, runtime=holder["runtime"], menu=menu,
+                    source_context_bytes=(parent / "CONTEXT.json").read_bytes(),
+                    exported_context_bytes=(output / "CONTEXT.json").read_bytes(),
+                    expected_source_context_sha256=declaration["context_sha256"],
+                )
+                if handoff is not None:
+                    result["qualified_zero_input_carrier_abort_handoff"] = handoff
                     reason = "automatic_control_recovery"
             result.update(continuation_reason=reason, automatic_renewals=renewed)
             _record(output / "RESULT.json", result)
@@ -2728,9 +3964,7 @@ def run(args):
                 driver_terminal_reason = reason
                 break
             try:
-                left = remaining_allowance(
-                    exported["spent"], plan["inherited_spent"], plan["allowance"]
-                )
+                left = chunk_allowance(exported["spent"])
                 left = {key: value - copies[key] for key, value in left.items()}
                 if min(left.values()) <= 0:
                     driver_terminal_reason = "declared_budget_exhausted"
@@ -2741,9 +3975,7 @@ def run(args):
             driver_terminal_reason = configured_renewal_stop_reason(
                 args,
                 left,
-                int(
-                    (datetime.fromisoformat(plan["cutoff_utc"]) - datetime.now(UTC)).total_seconds()
-                ),
+                wall_seconds(),
                 compulsory_settlement=requires_compulsory_settlement(holder["runtime"]),
             )
             if driver_terminal_reason is not None:
@@ -2769,12 +4001,15 @@ def run(args):
                 parent,
                 output,
                 plan_path=output / "PLAN.json",
+                **({"required_species": tuple(plan["required_species"])}
+                   if "required_species" in plan else {}),
                 model_feature_version=model.feature_version,
+                live_party_runtime=holder["runtime"],
                 **(
                     {"include_preparation_party_context": True}
-                    if refinement.get("consequence_head") is not None
+                    if declared_preparation_context(plan) or (refinement.get("consequence_head") is not None
                     and refinement["consequence_head"].context_projection
-                    == "prospective_preparation_party_context_v1"
+                    == "prospective_preparation_party_context_v1")
                     else {}
                 ),
             )

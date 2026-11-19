@@ -69,6 +69,17 @@ def story_frontier_target(world, start, destination):
     """
     if start.map_id == destination:
         return destination, start.at
+    plan = story_frontier_plan(world, start, destination)
+    edge = next(s for s in plan.steps if s.expected_map != start.map_id)
+    return edge.expected_map, edge.expected_at
+
+
+def story_frontier_plan(world, start, destination):
+    """Share the non-executable relevance route with composition checks.
+
+    This is the same geometry/capability query used to find a frontier. It
+    grants no execution authority; the first boundary still needs a real quote.
+    """
     preview, probe = story_object_preview(world, start)
     try:
         plan = preview.plan_feasible_to_map(probe, destination)
@@ -81,5 +92,4 @@ def story_frontier_target(world, start, destination):
         # Preserve nontrainer hazards in that representation as well.
         guarded = replace(probe, occupied=frozenset(h.at for h in probe.hazards))
         plan = preview.plan_to_map(guarded, destination)
-    edge = next(s for s in plan.steps if s.expected_map != start.map_id)
-    return edge.expected_map, edge.expected_at
+    return plan

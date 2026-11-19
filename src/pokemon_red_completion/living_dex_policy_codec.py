@@ -263,7 +263,8 @@ def _restore_candidate(
         | ({"move_change"} if "move_change" in document else set())
         | ({"capture_invocation"} if "capture_invocation" in document else set())
         | ({"matchup"} if "matchup" in document else set())
-        | ({"story_unit"} if "story_unit" in document else set()),
+        | ({"story_unit"} if "story_unit" in document else set())
+        | ({"movement_revisit"} if "movement_revisit" in document else set()),
         subject="policy candidate",
     )
     feature_document = _mapping(document["features"], subject="candidate features")
@@ -389,6 +390,7 @@ def _restore_candidate(
                 if "story_unit" in document
                 else None
             ),
+            movement_revisit=document.get("movement_revisit"),
             preparation=(
                 OptionPreparation.from_public(document["preparation"])
                 if "preparation" in document

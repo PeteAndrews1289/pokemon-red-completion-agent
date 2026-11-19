@@ -42,6 +42,7 @@ from pokemon_red_completion.red_goal_skills import (
     _POKEMON_CENTER_MAPS,
     RedCenterRestoreGoalProvider,
     _raw_party_restored,
+    _raw_party_fully_restored,
     prepare_center_departure,
 )
 from pokemon_red_completion.red_pc_storage import face_pc_boundary
@@ -258,6 +259,23 @@ def settled_route_field_recovery_evidence(evidence):
     )
 
 
+def _verified_native_purified_route_heal(receipt, owner):
+    """Match the native custody certificate to this owner's actual escape."""
+    from .route_1_wild import Route1WildFleeEvidence
+    from .wild_party_flee import verified_purified_flee_receipt
+
+    evidence = getattr(owner, "wild_evidence", ())
+    if receipt.kind != "wild_battle" or not evidence:
+        return False
+    latest = evidence[-1]
+    return (
+        isinstance(latest, Route1WildFleeEvidence)
+        and latest.verified
+        and all(receipt.details.get(key) == value for key, value in latest.public_dict().items())
+        and verified_purified_flee_receipt(receipt.details.get("native_field_event"), latest)
+    )
+
+
 def guarded_collection_route_handler(
     actions: RouteActionPort,
     reader: PokemonRedStateReader,
@@ -335,6 +353,22 @@ class RecoveryRouteInterruptionHandler:
                 stabilization_frames=self.stabilization_frames,
                 route_name=self.route_name,
                 move_slot_policy=self._safe_trainer_move,
+                # Reuse the existing exact Tower purification certificate without
+                # granting generic scripted- or poison-faint-dialogue handling.
+                wild_handler=(
+                    Gen1WildFleeHandler(
+                        self.executor,
+                        self.reader,
+                        maximum_flees=self.maximum_flees,
+                        stabilization_frames=self.stabilization_frames,
+                        route_name=self.route_name,
+                        allow_party_faints=True,
+                        allow_native_purification=True,
+                        emulator=self.emulator,
+                    )
+                    if self.allow_wild_faints
+                    else None
+                ),
                 allow_wild_faints=self.allow_wild_faints,
                 emulator=self.emulator if self.allow_wild_faints else None,
             )
@@ -513,6 +547,7 @@ class RecoveryRouteInterruptionHandler:
             self.allow_wild_faints
             and receipt.kind == "wild_battle"
             and (receipt.details.get("native_status_changes"))
+            and not _verified_native_purified_route_heal(receipt, self.inner)
         ):
             report = self._wild_recovery_report(current, raw, receipt, wild_source)
             if report is not None:
@@ -684,6 +719,7 @@ def bind_routed_center_recovery(
     *,
     prepare_escort: Callable[[], None],
     require_pp_restore: bool = False,
+    require_full_pp_restore: bool = False,
 ) -> GoalBindingSet:
     """Action-free route offer to a Pokémon Center nurse boundary.
 
@@ -692,13 +728,18 @@ def bind_routed_center_recovery(
     """
     if type(require_pp_restore) is not bool:
         raise ValueError("explicit PP recovery mode must be boolean")
-    if not require_pp_restore and any(b.kind is GoalKind.RESTORE_TEAM for b in bindings.bindings):
+    if type(require_full_pp_restore) is not bool:
+        raise ValueError("explicit full PP recovery mode must be boolean")
+    restored = _raw_party_fully_restored if require_full_pp_restore else _raw_party_restored
+    if not (require_pp_restore or require_full_pp_restore) and any(
+        b.kind is GoalKind.RESTORE_TEAM for b in bindings.bindings
+    ):
         return bindings
 
     if not observation.input_ready or bool(observation.raw.battle_state):
         return bindings
     if not _party_needs_recovery(observation) and not (
-        require_pp_restore and not _raw_party_restored(observation.raw)
+        (require_pp_restore or require_full_pp_restore) and not restored(observation.raw)
     ):
         return bindings
 
@@ -738,6 +779,7 @@ def bind_routed_center_recovery(
                 start,
                 prepare_escort=prepare_escort,
                 require_pp_restore=require_pp_restore,
+                require_full_pp_restore=require_full_pp_restore,
             )
         route = min(routes, key=lambda r: (len(r.steps), r.terminal_map))
         if len(route.steps) == 0 and not at_boundary:
@@ -883,8 +925,11 @@ def bind_routed_center_recovery(
             face_pc_boundary(router.actions, router.runtime.reader, "up")
 
         center_provider = _make_center_provider(router)
-        if require_pp_restore:
-            center_provider = replace(center_provider, require_pp_restore=True)
+        if require_pp_restore or require_full_pp_restore:
+            center_provider = replace(
+                center_provider, require_pp_restore=require_pp_restore,
+                require_full_pp_restore=require_full_pp_restore,
+            )
         center_offer = center_provider.offer(at_nurse_obs)
         if center_offer.binding is None:
             raise RedRoutedRecoveryError("Center restore offer unavailable at nurse boundary")
@@ -948,7 +993,7 @@ def bind_routed_center_recovery(
         if final_raw.player_money != expected_money:
             return GoalVerification.failed(GoalFailureReason.RESOURCE_LOST)
 
-        if not _raw_party_restored(final_raw):
+        if not restored(final_raw):
             return GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
 
         final_hp = tuple(final_raw.party_hp or ())

@@ -226,6 +226,7 @@ class RedTrainerPartyPlan:
     allow_fainted_reserves: bool = False
     maximum_level_deficit: int = 5
     allow_status: bool = False
+    allow_uncovered_later: bool = False
 
     @property
     def lead(self) -> RedCaptureLeadPlan:
@@ -240,6 +241,7 @@ class RedTrainerPartyPlan:
             allow_fainted_reserves=self.allow_fainted_reserves,
             maximum_level_deficit=self.maximum_level_deficit,
             allow_status=self.allow_status,
+            allow_uncovered_later=self.allow_uncovered_later,
         ):
             raise RedTrainerPartyError("trainer party, roster or preparation plan changed")
 
@@ -250,13 +252,15 @@ class RedTrainerPartyPlan:
             "opponent_count": len(self.matchups),
             "candidate_counts": [len(candidates) for candidates in self.matchups],
             "opening_party_slot": self.lead.target_index + 1,
-            "preferred_party_slots": [candidates[0].party_slot for candidates in self.matchups],
+            "preferred_party_slots": [candidates[0].party_slot if candidates else None for candidates in self.matchups],
             "requires_lead_swap": self.lead.requires_swap,
             "minimum_hp_ratio": self.minimum_hp_ratio,
             "allow_fainted_reserves": self.allow_fainted_reserves,
             "victory_predicted": False,
             "battle_execution_qualified": False,
             "training_examples": 0,
+            **({"uncovered_roster_positions": [i for i, candidates in enumerate(self.matchups, 1) if not candidates]}
+               if self.allow_uncovered_later else {}),
             **(
                 {"maximum_level_deficit": self.maximum_level_deficit}
                 if self.maximum_level_deficit != 5
@@ -274,6 +278,7 @@ def plan_trainer_party(
     allow_fainted_reserves: bool = False,
     maximum_level_deficit: int = 5,
     allow_status: bool = False,
+    allow_uncovered_later: bool = False,
 ) -> RedTrainerPartyPlan:
     """Require at least one observed matchup per quoted opponent, then plan the lead.
 
@@ -302,7 +307,9 @@ def plan_trainer_party(
         for member in quote.party
     )
     uncovered = tuple(index + 1 for index, candidates in enumerate(matchups) if not candidates)
-    if uncovered:
+    if type(allow_uncovered_later) is not bool:
+        raise RedTrainerPartyError("uncovered-later-matchup allowance must be boolean")
+    if uncovered and (not allow_uncovered_later or not matchups[0]):
         raise RedTrainerPartyError(
             f"no qualified offensive matchup for roster positions {uncovered}"
         )
@@ -314,6 +321,7 @@ def plan_trainer_party(
         allow_fainted_reserves,
         maximum_level_deficit,
         allow_status,
+        allow_uncovered_later,
     )
 
 

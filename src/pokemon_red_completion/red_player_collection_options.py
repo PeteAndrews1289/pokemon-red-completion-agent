@@ -345,7 +345,7 @@ def player_collection_supplements(
             maximum_frames if maximum_evolution_frames is None else maximum_evolution_frames
         ),
         maximum_quanta=maximum_evolution_quanta,
-        **({"include_level_workload": True} if include_level_workload else {}),
+        **({"include_level_workload": True, "bind_collection_cost": True} if include_level_workload else {}),
         **(
             {"maximum_wall_seconds": maximum_evolution_seconds}
             if maximum_evolution_seconds is not None

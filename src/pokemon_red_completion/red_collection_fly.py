@@ -229,7 +229,9 @@ def bind_collection_fly(
     chosen = None
     for _, town, target, goal_at, projected in sorted(possibilities, key=lambda p: p[:3]):
         try:
-            plan = router.world.plan_feasible_to_map(projected, target, goal_at=goal_at)
+            # Share the existing per-inventory lookup with ordinary walking.
+            # The owning enumerator clears it before execution or re-observation.
+            plan = router.plan_feasible_to_map(projected, target, goal_at=goal_at)
         except RoutePlanningError:
             continue
         if plan.steps and _supported_plan(
@@ -304,6 +306,7 @@ def bind_collection_fly(
                 # Ordinary route scripts (including Tower purification text)
                 # must restore real field control before the destination runs.
                 maximum_scripted_dialogues=4,
+                allow_wild_faints=True,
                 allow_field_faints=True,
                 emulator=runtime.emulator,
             ),
@@ -363,6 +366,11 @@ def bind_collection_fly(
                 "field_moves": fields.public_dict(),
                 "cartridge_landing_verified": True,
                 "onward_walk": dict(result.evidence),
+                **(
+                    {"route_failure_reason": route_failure_reason.value}
+                    if not passed and route_failure_reason is not None and not isinstance(route_setback, Mapping)
+                    else {}
+                ),
                 **(
                     {"route_setback": dict(route_setback)}
                     if isinstance(route_setback, Mapping)

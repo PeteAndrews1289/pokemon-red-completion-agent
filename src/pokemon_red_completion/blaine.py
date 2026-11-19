@@ -2861,12 +2861,17 @@ def _route_11_heal_and_return(
                 ("left",) * (raw.player_x - 23),
                 "team training Vermilion east-boundary normalization",
             )
-            _move(
-                actions,
-                reader,
-                VERMILION_ROUTE_11_TO_CENTER_EXTERIOR,
-                "team training Vermilion Center return",
-            )
+            if ground_transition is not None:
+                # The selected recovery already owns a live, bounded route to
+                # this same service. Static steps can meet a roaming town NPC.
+                ground_transition(actions, reader, emulator)
+            else:
+                _move(
+                    actions,
+                    reader,
+                    VERMILION_ROUTE_11_TO_CENTER_EXTERIOR,
+                    "team training Vermilion Center return",
+                )
             _require(reader.read(), MapId.VERMILION_CITY, (11, 4), "training Center exterior")
         elif (
             ground_transition is not None

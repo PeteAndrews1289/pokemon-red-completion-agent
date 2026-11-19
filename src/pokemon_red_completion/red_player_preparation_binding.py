@@ -370,6 +370,9 @@ def preparation_binding(
             retry_zero_progress = (
                 repeat_health_limited_zero_progress
                 and recoverable_return
+                and result.get("stop_reason") in (
+                    *HEALTH_LIMITED_RETURNS, "trainee_received_no_xp"
+                )
                 and consecutive_no_progress < no_progress_limit
             )
             dose_result = dict(
@@ -399,7 +402,10 @@ def preparation_binding(
                 reached
                 or dose == maximum_recoveries
                 or remaining == 0
-                or result.get("stop_reason") not in HEALTH_LIMITED_RETURNS
+                or (
+                    result.get("stop_reason") not in HEALTH_LIMITED_RETURNS
+                    and not retry_zero_progress
+                )
                 or spent == 0
                 or (not earned_xp and not retry_zero_progress)
                 or _raw_party_fully_restored(runtime.reader.read())
@@ -471,6 +477,28 @@ def preparation_binding(
                 )
                 - sum(m.observation.experience for m in members),
             )
+        if loss is not None and not doses:
+            result = dict(
+                result,
+                original_target=dict(specimen_ref=trainee.specimen_ref, level=target),
+                party_xp_gained_across_doses=0,
+                trainee_xp_gained_across_doses=0,
+            )
+        elif loss is not None and doses:
+            current = observe_preparation_members(runtime.emulator, plan)
+            old = {m.specimen_ref: m.observation for m in members}
+            new = {m.specimen_ref: m.observation for m in current}
+            if old.keys() == new.keys():
+                result = dict(
+                    result,
+                    party_xp_gained_across_doses=sum(
+                        new[k].experience - old[k].experience for k in old
+                    ),
+                    trainee_xp_gained_across_doses=(
+                        new[trainee.specimen_ref].experience
+                        - old[trainee.specimen_ref].experience
+                    ),
+                )
         if loss is None:
             valid, current = retained_boundary(members)
             if valid:
@@ -777,3 +805,4 @@ def preparation_binding(
         execute,
         verify,
     )
+

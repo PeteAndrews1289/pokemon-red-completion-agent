@@ -366,6 +366,7 @@ class RedFaintAwareFieldRestoreGoalProvider:
                         prioritize_status_cure=prioritize_status_cure,
                     )
                     _close_menus(self.actions, self.reader, timing)
+                    _close_observed_recovery_start(self.actions, self.reader, timing)
                     after = self.adapter.observe()
                     verify_field_recovery(
                         choice,
@@ -421,3 +422,88 @@ class RedFaintAwareFieldRestoreGoalProvider:
                 verify=verify,
             )
         )
+
+
+
+def _close_observed_recovery_start(actions, reader, timing):
+    if not getattr(reader, "read_overworld_start_menu_visible", lambda: False)():
+        return False
+    cursor = reader.read_menu_cursor_state()
+    if cursor.selected_visible_index != field_bag_row(cursor):
+        raise RedFaintRecoveryError("recovery START cursor differs from ITEM")
+    _pulse(actions, MacroActionKind.CANCEL, frames=timing.wait_frames)
+    if reader.read_overworld_start_menu_visible():
+        raise RedFaintRecoveryError("recovery START remained open after cancellation")
+    return True
+
+
+def retained_field_item_menu(runtime, actions, parent):
+    from hashlib import sha256
+    import json
+    from pathlib import Path
+    from .goal_manager import GoalOpportunity, GoalAvailability
+    from .goal_manager_runtime import GoalBindingSet
+    from .red_player_field_goals import _field_ready
+
+    reader = getattr(runtime, "reader", None)
+    if not getattr(reader, "read_overworld_start_menu_visible", lambda: False)():
+        return None
+    emulator = runtime.emulator
+    cursor=reader.read_menu_cursor_state()
+    if cursor.selected_visible_index != field_bag_row(cursor) or emulator.pressed_buttons:
+        return None
+    parent=Path(parent)
+    if not (parent/'RESULT.json').is_file():
+        return None
+    result=json.loads((parent/'RESULT.json').read_bytes())
+    source=emulator.save_state_bytes()
+    state=sha256(source).hexdigest()
+    ctx=(parent/'CONTEXT.json').read_bytes()
+    if (not result.get('released') or not result.get('paired_context_authenticated') or result.get('field_ready') is not False
+            or (parent/'terminal.state').read_bytes()!=source or result.get('state_sha256')!=state
+            or result.get('context_sha256')!=sha256(ctx).hexdigest() or json.loads(ctx)['state_sha256']!=state):
+        return None
+    outcomes=result.get('episode',{}).get('outcomes') or ()
+    if not outcomes:
+        return None
+    outcome=outcomes[-1]
+    chain=outcome.get('error_chain') or ()
+    if (len(chain)!=2 or chain[0].get('error_type')!='RedLeagueFundingExecutionError'
+            or chain[1].get('error_type')!='RedFaintRecoveryError'
+            or chain[1].get('error')!='field recovery controls did not settle'
+            or outcome.get('selected_kind')!='resupply' or outcome.get('failure_phase')!='execution'
+            or outcome.get('terminal_state_sha256')!=state):
+        return None
+    raw=reader.read()
+    baseline=outcome['after']['diagnostics']
+    if (raw.battle_state!=0 or raw.battle_state!=baseline['battle_state']
+            or raw.player_money!=baseline['player_money'] or tuple(baseline['party_hp'])!=raw.party_hp
+            or (raw.map_id,raw.player_y,raw.player_x)!=(baseline['map_id'],baseline['player_y'],baseline['player_x'])):
+        return None
+    dex=reader.read_pokedex_state().owned_species
+    terminal=None
+    def execute():
+        nonlocal terminal
+        if terminal is not None or emulator.save_state_bytes()!=source:
+            raise RedFaintRecoveryError('held recovery ITEM cursor changed')
+        a,f=actions.actions_executed,emulator.frame_count
+        if not _close_observed_recovery_start(actions,reader,DEFAULT_LAVENDER_TIMING):
+            raise RedFaintRecoveryError('held recovery START is no longer rendered')
+        after=reader.read()
+        protected=('map_id','player_y','player_x','party_species_ids','party_hp','party_max_hp','party_levels',
+                   'party_status','party_moves','party_pp','bag_items','player_money','badge_bits','event_flags','battle_state')
+        if (not _field_ready(runtime) or any(getattr(after,k)!=getattr(raw,k) for k in protected)
+                or reader.read_pokedex_state().owned_species!=dex):
+            raise RedFaintRecoveryError('closing recovery START changed protected state')
+        terminal=emulator.save_state_bytes()
+        return GoalExecutionReport(actions.actions_executed-a,emulator.frame_count-f,
+            dict(support='close_observed_field_item_menu',additional_items_consumed=0,model_queries=0))
+    def verify_result(report):
+        if terminal is not None and emulator.save_state_bytes()==terminal and _field_ready(runtime):
+            return GoalVerification.succeeded()
+        return GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
+    binding=ExecutableGoalBinding('pokemon.red:retained-field-item-menu:'+state,GoalKind.RECOVER_CONTROL,
+                                  0,0,execute,verify_result)
+    unavailable=GoalOpportunity(binding.binding_ref+':settlement-only',GoalKind.ADVANCE_STORY,GoalAvailability.UNAVAILABLE,
+                                unavailable_reason=GoalUnavailableReason.TEMPORARILY_BLOCKED)
+    return GoalBindingSet((binding.opportunity,unavailable),(binding,))

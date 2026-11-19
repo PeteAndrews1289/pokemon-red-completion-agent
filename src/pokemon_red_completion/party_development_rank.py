@@ -130,11 +130,50 @@ PARTY_DEVELOPMENT_WORKLOAD_FEATURE_NAMES = (
 )
 
 
+PARTY_DEVELOPMENT_MATCHUP_FEATURE_SCHEMA_ID = "pokemon.core.party-development.completion-candidate.v4"
+VENUE_MATCHUP_FEATURE_NAMES = (
+    "venue.matchup_observed", "venue.attack_power", "venue.attack_type_margin",
+    "venue.defensive_resistance", "venue.usable_attack_fraction", "trainee.max_hp",
+    "trainee.stats_known", "trainee.attack", "trainee.defense", "trainee.speed", "trainee.special",
+)
+PARTY_DEVELOPMENT_MATCHUP_FEATURE_NAMES = (*PARTY_DEVELOPMENT_WORKLOAD_FEATURE_NAMES, *VENUE_MATCHUP_FEATURE_NAMES)
+
+
+@dataclass(frozen=True, slots=True)
+class VenueMatchupContext:
+    """Observed mechanics, not a forecast of outcomes or an operational prior."""
+    attack_power: float
+    attack_type_margin: float
+    defensive_resistance: float
+    usable_attack_fraction: float
+    max_hp: int
+    stats: tuple[int, int, int, int] | None = None
+
+    def __post_init__(self):
+        for name, low in (("attack_power", 0), ("attack_type_margin", -1),
+                          ("defensive_resistance", -1), ("usable_attack_fraction", 0)):
+            v = getattr(self, name)
+            if isinstance(v, bool) or not isinstance(v, (int, float)) or not math.isfinite(v) or not low <= v <= 1:
+                raise PartyDevelopmentFeatureError("venue matchup must be finite and normalized")
+        if type(self.max_hp) is not int or not 1 <= self.max_hp <= 999:
+            raise PartyDevelopmentFeatureError("venue matchup needs observed maximum HP")
+        if self.stats is not None and (type(self.stats) is not tuple or len(self.stats) != 4
+                or any(type(v) is not int or not 1 <= v <= 999 for v in self.stats)):
+            raise PartyDevelopmentFeatureError("venue matchup needs four aligned observed stats")
+
+    def vector(self):
+        return (1.0, float(self.attack_power), float(self.attack_type_margin),
+                float(self.defensive_resistance), float(self.usable_attack_fraction), self.max_hp / 999,
+                float(self.stats is not None), *(v / 999 for v in (self.stats or (0, 0, 0, 0))))
+
+
 def party_development_feature_names(schema_id: str) -> tuple[str, ...]:
     if schema_id == PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID:
         return PARTY_DEVELOPMENT_FEATURE_NAMES
     if schema_id == PARTY_DEVELOPMENT_WORKLOAD_FEATURE_SCHEMA_ID:
         return PARTY_DEVELOPMENT_WORKLOAD_FEATURE_NAMES
+    if schema_id == PARTY_DEVELOPMENT_MATCHUP_FEATURE_SCHEMA_ID:
+        return PARTY_DEVELOPMENT_MATCHUP_FEATURE_NAMES
     raise PartyDevelopmentFeatureError("party-development feature schema is unsupported")
 
 
@@ -512,6 +551,8 @@ class PartyDevelopmentCandidateSet:
             "schema": (
                 "pokemon-party-development-candidate-set-v2"
                 if self.feature_schema_id == PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID
+                else "pokemon-party-development-candidate-set-v4"
+                if self.feature_schema_id == PARTY_DEVELOPMENT_MATCHUP_FEATURE_SCHEMA_ID
                 else "pokemon-party-development-candidate-set-v3"
             ),
             "kind": self.kind.value,
@@ -531,6 +572,7 @@ class PartyDevelopmentCandidateSet:
             not in (
                 "pokemon-party-development-candidate-set-v2",
                 "pokemon-party-development-candidate-set-v3",
+                "pokemon-party-development-candidate-set-v4",
             )
             or not isinstance(value["kind"], str)
             or not isinstance(value["goal"], str)
@@ -542,6 +584,8 @@ class PartyDevelopmentCandidateSet:
         schema_id = (
             PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID
             if value["schema"] == "pokemon-party-development-candidate-set-v2"
+            else PARTY_DEVELOPMENT_MATCHUP_FEATURE_SCHEMA_ID
+            if value["schema"] == "pokemon-party-development-candidate-set-v4"
             else PARTY_DEVELOPMENT_WORKLOAD_FEATURE_SCHEMA_ID
         )
         feature_names = party_development_feature_names(schema_id)
@@ -592,6 +636,8 @@ def augment_training_candidate_set(
     level_workloads: tuple[OptionLevelWorkload | None, ...] | None = None,
     venue_workloads: tuple[VenueTrainingWorkload | None, ...] | None = None,
     fixed_level_target: OptionLevelWorkload | None = None,
+    include_matchup_context: bool = False,
+    venue_matchups: tuple[VenueMatchupContext | None, ...] | None = None,
 ) -> PartyDevelopmentCandidateSet:
     """Add prospective completion semantics while preserving the exact v1 prefix."""
 
@@ -628,7 +674,16 @@ def augment_training_candidate_set(
         raise PartyDevelopmentFeatureError("workload projection requires an explicit boolean")
     if not include_workload and (level_workloads is not None or venue_workloads is not None):
         raise PartyDevelopmentFeatureError("workload inputs require workload feature opt-in")
+    if type(include_matchup_context) is not bool or (include_matchup_context and not include_workload):
+        raise PartyDevelopmentFeatureError("venue matchup requires explicit workload scope")
+    if not include_matchup_context and venue_matchups is not None:
+        raise PartyDevelopmentFeatureError("venue matchup inputs require opt-in")
     count = len(base.candidates)
+    matchups = venue_matchups if venue_matchups is not None else (None,) * count
+    if type(matchups) is not tuple or len(matchups) != count or any(
+        x is not None and type(x) is not VenueMatchupContext for x in matchups
+    ):
+        raise PartyDevelopmentFeatureError("venue matchup inventory differs")
     levels = level_workloads if level_workloads is not None else (None,) * count
     venues = venue_workloads if venue_workloads is not None else (None,) * count
     for values, cls in ((levels, OptionLevelWorkload), (venues, VenueTrainingWorkload)):
@@ -680,7 +735,9 @@ def augment_training_candidate_set(
         for level, venue in zip(levels, venues, strict=True)
     )
     schema_id = (
-        PARTY_DEVELOPMENT_WORKLOAD_FEATURE_SCHEMA_ID
+        PARTY_DEVELOPMENT_MATCHUP_FEATURE_SCHEMA_ID
+        if include_matchup_context
+        else PARTY_DEVELOPMENT_WORKLOAD_FEATURE_SCHEMA_ID
         if include_workload
         else PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID
     )
@@ -691,6 +748,8 @@ def augment_training_candidate_set(
                 *base_candidate.features,
                 *_completion_features(context, candidate_semantics, prior),
                 *suffixes[index],
+                *((((0.0,) * len(VENUE_MATCHUP_FEATURE_NAMES)) if matchups[index] is None
+                    else matchups[index].vector()) if include_matchup_context else ()),
             ),
             feature_schema_id=schema_id,
         )
@@ -758,6 +817,10 @@ __all__ = [
     "PartyDevelopmentContext",
     "PartyDevelopmentFeatureError",
     "PartyDevelopmentGoal",
+    "VenueMatchupContext",
+    "VENUE_MATCHUP_FEATURE_NAMES",
+    "PARTY_DEVELOPMENT_MATCHUP_FEATURE_SCHEMA_ID",
+    "PARTY_DEVELOPMENT_MATCHUP_FEATURE_NAMES",
     "VenuePriorFeatureMode",
     "VenueOperationalPrior",
     "augment_training_candidate_set",

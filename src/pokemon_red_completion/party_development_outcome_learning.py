@@ -27,6 +27,9 @@ from pokemon_red_completion.party_development_rank import (
     PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID,
     PARTY_DEVELOPMENT_WORKLOAD_FEATURE_NAMES,
     PARTY_DEVELOPMENT_WORKLOAD_FEATURE_SCHEMA_ID,
+    PARTY_DEVELOPMENT_MATCHUP_FEATURE_SCHEMA_ID,
+    PARTY_DEVELOPMENT_MATCHUP_FEATURE_NAMES,
+    VENUE_MATCHUP_FEATURE_NAMES,
     PartyDevelopmentCandidateSet,
     party_development_feature_names,
 )
@@ -316,10 +319,8 @@ class PartyDevelopmentOutcomeModel:
     def scores(self, candidates: PartyDevelopmentCandidateSet) -> NDArray[np.float64]:
         if not isinstance(candidates, PartyDevelopmentCandidateSet):
             raise TypeError("candidates must be a PartyDevelopmentCandidateSet")
-        if candidates.feature_schema_id != self.feature_schema_id:
-            raise PartyDevelopmentOutcomeLearningError("candidate and model feature schemas differ")
         features = np.asarray([item.features for item in candidates.candidates], dtype=np.float64)
-        return self._scores(features)
+        return self._scores(_aligned_features(features, candidates.feature_schema_id, self.feature_schema_id))
 
     def probabilities(self, candidates: PartyDevelopmentCandidateSet) -> NDArray[np.float64]:
         scores = self.scores(candidates)
@@ -337,7 +338,7 @@ class PartyDevelopmentOutcomeModel:
                 "party-development inference feature shape is invalid"
             )
         normalized = (features - self.feature_mean) / self.feature_scale
-        hidden = np.tanh(normalized @ self.weights1 + self.bias1)
+        hidden = _hidden_activations(normalized, self.weights1, self.bias1, self.feature_schema_id)
         scores = hidden @ self.weights2
         if scores.shape != (features.shape[0],) or not np.all(np.isfinite(scores)):
             raise PartyDevelopmentOutcomeLearningError(
@@ -443,9 +444,12 @@ class PartyDevelopmentOutcomeUpdateReport:
     epochs: int
     learning_rate: float
     prior_l2: float
+    route_geometry_fit: dict[str, object] | None = None
+    rehearsal_training: dict[str, object] | None = None
+    workload_fit: dict[str, object] | None = None
 
     def public_dict(self) -> dict[str, object]:
-        return {
+        result: dict[str, object] = {
             "schema": "pokemon.core.party-development-outcome-update.v2",
             "base_model_sha256": self.base_model_sha256,
             "updated_model_sha256": self.updated_model_sha256,
@@ -461,6 +465,17 @@ class PartyDevelopmentOutcomeUpdateReport:
             "teacher_choice_targets": 0,
             "authority_promoted": False,
         }
+
+        if self.route_geometry_fit is not None:
+            result["schema"] = "pokemon.core.party-development-outcome-update.v3"
+            result["route_geometry_fit"] = dict(self.route_geometry_fit)
+        if self.rehearsal_training is not None:
+            result["schema"] = "pokemon.core.party-development-outcome-update.v4"
+            result["rehearsal_training"] = dict(self.rehearsal_training)
+        if self.workload_fit is not None:
+            result["schema"] = "pokemon.core.party-development-outcome-update.v5"
+            result["workload_fit"] = dict(self.workload_fit)
+        return result
 
 
 @dataclass(frozen=True, slots=True)
@@ -654,7 +669,7 @@ def upgrade_party_development_model_for_workload(
     """
     if not isinstance(model, PartyDevelopmentOutcomeModel):
         raise TypeError("model must be a PartyDevelopmentOutcomeModel")
-    if model.feature_schema_id == PARTY_DEVELOPMENT_WORKLOAD_FEATURE_SCHEMA_ID:
+    if model.feature_schema_id in (PARTY_DEVELOPMENT_WORKLOAD_FEATURE_SCHEMA_ID, PARTY_DEVELOPMENT_MATCHUP_FEATURE_SCHEMA_ID):
         return model
     extra = len(PARTY_DEVELOPMENT_WORKLOAD_FEATURE_NAMES) - len(model.feature_names)
     return PartyDevelopmentOutcomeModel(
@@ -671,6 +686,44 @@ def upgrade_party_development_model_for_workload(
         model_id=PARTY_DEVELOPMENT_WORKLOAD_MODEL_ID,
         feature_schema_id=PARTY_DEVELOPMENT_WORKLOAD_FEATURE_SCHEMA_ID,
     )
+
+
+def upgrade_party_development_model_for_matchups(model: PartyDevelopmentOutcomeModel) -> PartyDevelopmentOutcomeModel:
+    """Explicitly append zero-influence observed mechanics; no fitting or new ancestry."""
+    from dataclasses import replace
+    model = upgrade_party_development_model_for_workload(model)
+    if model.feature_schema_id == PARTY_DEVELOPMENT_MATCHUP_FEATURE_SCHEMA_ID:
+        return model
+    extra = len(VENUE_MATCHUP_FEATURE_NAMES)
+    return replace(model, weights1=np.vstack((model.weights1, np.zeros((extra, model.weights1.shape[1])))),
+                   feature_mean=np.concatenate((model.feature_mean, np.zeros(extra))),
+                   feature_scale=np.concatenate((model.feature_scale, np.ones(extra))),
+                   feature_schema_id=PARTY_DEVELOPMENT_MATCHUP_FEATURE_SCHEMA_ID)
+
+
+def _hidden_activations(normalized, weights, bias, schema_id):
+    if schema_id == PARTY_DEVELOPMENT_MATCHUP_FEATURE_SCHEMA_ID:
+        prefix = len(PARTY_DEVELOPMENT_WORKLOAD_FEATURE_NAMES)
+        # Keep the existing scorer's accumulation order when the appended
+        # observations have zero influence (including legacy unknown inputs).
+        return np.tanh((normalized[:, :prefix] @ weights[:prefix] + bias)
+                       + normalized[:, prefix:] @ weights[prefix:])
+    return np.tanh(normalized @ weights + bias)
+
+
+def _aligned_features(features, source_schema, target_schema):
+    if source_schema == target_schema:
+        return features
+    # An old document contains no observations of the new fields. Preserve it
+    # verbatim and supply unknown zeros only at this explicit new-model seam.
+    if target_schema == PARTY_DEVELOPMENT_MATCHUP_FEATURE_SCHEMA_ID and source_schema in (
+        PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID, PARTY_DEVELOPMENT_WORKLOAD_FEATURE_SCHEMA_ID
+    ):
+        old_names = party_development_feature_names(source_schema)
+        if features.ndim != 2 or features.shape[1] != len(old_names):
+            raise PartyDevelopmentOutcomeLearningError("legacy feature width differs")
+        return np.pad(features, ((0, 0), (0, len(PARTY_DEVELOPMENT_MATCHUP_FEATURE_NAMES) - len(old_names))))
+    raise PartyDevelopmentOutcomeLearningError("candidate and model feature schemas differ")
 
 
 def bind_teacher_prior_from_offline_evidence(
@@ -756,6 +809,187 @@ def bind_teacher_prior_from_offline_evidence(
     )
 
 
+def _route_geometry_fit_projection(base_model, choices):
+    """Condition only newly activated route columns, using TRAIN inputs only.
+
+    Unknown geometry is all-zero and keeps its old output exactly. Requiring
+    zero prior weights makes the pre-fit rescaling a score-preserving change.
+    No label, development menu or desired winner chooses a normalization scale.
+    """
+    from .party_development_rank import PARTY_DEVELOPMENT_WORKLOAD_FEATURE_SCHEMA_ID
+
+    names = (
+        "venue.travel_steps_known",
+        "venue.travel_steps",
+        "venue.recovery_steps_known",
+        "venue.recovery_steps",
+    )
+    if base_model.feature_schema_id != PARTY_DEVELOPMENT_WORKLOAD_FEATURE_SCHEMA_ID:
+        raise PartyDevelopmentOutcomeLearningError("geometry activation requires workload schema")
+    columns = tuple(base_model.feature_names.index(n) for n in names)
+    if np.any(base_model.weights1[list(columns)] != 0) or np.any(
+        base_model.feature_mean[list(columns)] != 0
+    ):
+        raise PartyDevelopmentOutcomeLearningError(
+            "geometry activation requires zero-influence parent"
+        )
+    matrices = [_example_features(example) for example in choices]
+    numeric = (columns[1], columns[3])
+    if not any(len(np.unique(x[:, numeric], axis=0)) > 1 for x in matrices):
+        raise PartyDevelopmentOutcomeLearningError(
+            "geometry activation needs comparative numeric variation"
+        )
+    features = np.concatenate(matrices, axis=0)
+    if (
+        np.any(features[:, columns[0]] != 1)
+        or np.any(features[:, columns[2]] != 1)
+        or np.any(features[:, numeric] < 0)
+        or np.any(features[:, 0] != 0)
+    ):
+        raise PartyDevelopmentOutcomeLearningError(
+            "geometry fit needs known nonnegative venue quotes"
+        )
+    scales = base_model.feature_scale.copy()
+    for column in numeric:
+        scale = float(np.sqrt(np.mean(features[:, column] ** 2)))
+        if not math.isfinite(scale) or scale <= 0:
+            raise PartyDevelopmentOutcomeLearningError("geometry value has no finite TRAIN support")
+        scales[column] = scale
+    return (
+        scales,
+        columns,
+        dict(
+            trainable_feature_names=list(names),
+            parameter_scope="weights1_geometry_rows_only",
+            scale_rule="zero_mean_TRAIN_candidate_RMS_numeric_steps_only",
+            feature_scale_before=[float(base_model.feature_scale[c]) for c in columns],
+            feature_scale_after=[float(scales[c]) for c in columns],
+            labels_used_for_scaling=False,
+            retained_unknown_geometry_algebra=True,
+            other_parameters_frozen=True,
+        ),
+    )
+
+
+def _workload_fit_projection(base_model, choices):
+    """Condition newly introduced zero-influence inputs from TRAIN features.
+
+    Fixed public unit divisors are not useful optimizer scales for small XP
+    values. Zero means and zero initial weights preserve the entire prior
+    function, including old menus with no workload, before learning starts.
+    """
+    names = tuple(PARTY_DEVELOPMENT_WORKLOAD_FEATURE_NAMES[len(PARTY_DEVELOPMENT_FEATURE_NAMES) :])
+    if not all(name in base_model.feature_names for name in names):
+        raise PartyDevelopmentOutcomeLearningError("workload activation requires workload schema")
+    columns = tuple(base_model.feature_names.index(name) for name in names)
+    if np.any(base_model.weights1[list(columns)] != 0) or np.any(
+        base_model.feature_mean[list(columns)] != 0
+    ):
+        raise PartyDevelopmentOutcomeLearningError(
+            "workload activation requires zero-influence prior"
+        )
+    if any(not item.fully_measured for item in choices):
+        raise PartyDevelopmentOutcomeLearningError("workload activation requires measured TRAIN")
+    features = np.concatenate(
+        [_example_features(item)[list(item.available_candidate_indices)] for item in choices]
+    )
+    yield_column = base_model.feature_names.index("venue.expected_recipient_xp_per_encounter")
+    if np.ptp(features[:, yield_column]) <= 0:
+        raise PartyDevelopmentOutcomeLearningError(
+            "workload activation needs comparative yield variation"
+        )
+    numeric = {
+        "level_workload.current_level",
+        "level_workload.target_level",
+        "level_workload.level_gain",
+        "level_workload.remaining_xp",
+        "venue.expected_recipient_xp_per_encounter",
+        "venue.travel_steps",
+        "venue.recovery_steps",
+    }
+    scales = base_model.feature_scale.copy()
+    for name in numeric:
+        column = base_model.feature_names.index(name)
+        rms = float(np.sqrt(np.mean(features[:, column] ** 2)))
+        if not math.isfinite(rms):
+            raise PartyDevelopmentOutcomeLearningError("workload TRAIN scale is not finite")
+        scales[column] = rms if rms > 0 else 1.0
+    return (
+        scales,
+        columns,
+        dict(
+            trainable_feature_names=list(names),
+            parameter_scope="weights1_workload_rows_only",
+            normalization="fixed_available_TRAIN_candidate_RMS_zero_mean",
+            labels_used_for_scaling=False,
+            retained_zero_workload_algebra=True,
+            teacher_choice_targets=0,
+        ),
+    )
+
+
+def recondition_party_development_workload(
+    base_model: PartyDevelopmentOutcomeModel,
+    examples: Iterable[ScenarioOutcomeExample],
+) -> tuple[PartyDevelopmentOutcomeModel, dict[str, object]]:
+    """Change optimizer units while preserving an already learned scorer.
+
+    Only new, fully measured TRAIN candidate inputs determine RMS scales. Labels
+    do not enter this operation. Rescaling each corresponding first-layer row
+    preserves its coefficient divided by scale, including nonzero means and
+    unknown-workload menus. No fit, ancestry consumption or policy adoption occurs.
+    """
+    from dataclasses import replace
+
+    choices = tuple(examples)
+    if base_model.feature_schema_id != PARTY_DEVELOPMENT_WORKLOAD_FEATURE_SCHEMA_ID:
+        raise PartyDevelopmentOutcomeLearningError("reconditioning requires workload schema")
+    _require_examples(
+        choices,
+        partition=ScenarioPartition.TRAIN,
+        feature_schema_id=base_model.feature_schema_id,
+    )
+    _require_disjoint_from_teacher_prior(base_model, choices)
+    _require_disjoint_from_outcome_training(base_model, choices)
+    if any(not item.fully_measured for item in choices):
+        raise PartyDevelopmentOutcomeLearningError("reconditioning requires measured TRAIN")
+    features = np.concatenate(
+        [_example_features(item)[list(item.available_candidate_indices)] for item in choices]
+    )
+    numeric = (
+        "level_workload.current_level",
+        "level_workload.target_level",
+        "level_workload.level_gain",
+        "level_workload.remaining_xp",
+        "venue.expected_recipient_xp_per_encounter",
+        "venue.travel_steps",
+        "venue.recovery_steps",
+    )
+    yield_column = base_model.feature_names.index(numeric[4])
+    if np.ptp(features[:, yield_column]) <= 0:
+        raise PartyDevelopmentOutcomeLearningError("reconditioning needs yield variation")
+    scales = base_model.feature_scale.copy()
+    weights = base_model.weights1.copy()
+    for name in numeric:
+        column = base_model.feature_names.index(name)
+        rms = float(np.sqrt(np.mean(features[:, column] ** 2)))
+        if not math.isfinite(rms):
+            raise PartyDevelopmentOutcomeLearningError("nonfinite TRAIN reconditioning scale")
+        scales[column] = rms if rms > 0 else 1.0
+        weights[column] *= scales[column] / base_model.feature_scale[column]
+    model = replace(base_model, weights1=weights, feature_scale=scales)
+    return model, dict(
+        normalization="available_new_TRAIN_candidate_RMS_function_preserving",
+        numeric_feature_names=list(numeric),
+        labels_used_for_scaling=False,
+        optimizer_calls=0,
+        new_training_examples=0,
+        ancestry_consumed=False,
+        original_model_sha256=canonical_party_development_outcome_model_sha256(base_model),
+        reconditioned_model_sha256=canonical_party_development_outcome_model_sha256(model),
+    )
+
+
 def adapt_party_development_model_from_outcomes(
     base_model: PartyDevelopmentOutcomeModel,
     examples: Iterable[ScenarioOutcomeExample],
@@ -763,14 +997,73 @@ def adapt_party_development_model_from_outcomes(
     epochs: int = 200,
     learning_rate: float = 0.01,
     prior_l2: float = 0.1,
+    restrict_route_geometry: bool = False,
+    freeze_route_geometry: bool = False,
+    restrict_workload: bool = False,
+    condition_workload: bool = False,
+    refine_workload: bool = False,
+    refine_suitability: bool = False,
+    include_observed_stats: bool = False,
+    mix_completed_task_costs: bool = False,
+    rehearsal_examples: Iterable[ScenarioOutcomeExample] = (),
+    rehearsal_attestation_sha256: str | None = None,
+    related_task_rehearsal: bool = False,
 ) -> PartyDevelopmentOutcomeUpdate:
-    """Fit all scorer weights to train-only soft preferences with a prior anchor."""
+    """Fit TRAIN soft preferences; optionally activate only fresh route-cost rows.
 
+    The default preserves the existing unrestricted update exactly. Restricted
+    activation freezes all other parameters and retains unknown-geometry outputs.
+    """
+
+    if type(restrict_route_geometry) is not bool:
+        raise PartyDevelopmentOutcomeLearningError("route geometry restriction must be boolean")
+    if type(restrict_workload) is not bool or (
+        restrict_workload and (restrict_route_geometry or freeze_route_geometry)
+    ):
+        raise PartyDevelopmentOutcomeLearningError("incompatible workload fitting mode")
+    if type(condition_workload) is not bool or (
+        condition_workload and (restrict_workload or restrict_route_geometry)
+    ):
+        raise PartyDevelopmentOutcomeLearningError("incompatible workload conditioning mode")
+    if type(refine_workload) is not bool or (
+        refine_workload
+        and (
+            restrict_route_geometry
+            or restrict_workload
+            or condition_workload
+            or freeze_route_geometry
+        )
+    ):
+        raise PartyDevelopmentOutcomeLearningError("incompatible workload refinement mode")
+    if type(refine_suitability) is not bool or (refine_suitability and (
+        restrict_route_geometry or restrict_workload or condition_workload or freeze_route_geometry or refine_workload
+    )):
+        raise PartyDevelopmentOutcomeLearningError("incompatible suitability refinement mode")
+    if type(include_observed_stats) is not bool or (include_observed_stats and not refine_suitability):
+        raise PartyDevelopmentOutcomeLearningError("observed-stat refinement requires explicit suitability scope")
+    if type(mix_completed_task_costs) is not bool or (
+        mix_completed_task_costs and not (refine_suitability and include_observed_stats)
+    ):
+        raise PartyDevelopmentOutcomeLearningError(
+            "mixed complete-task cost fitting requires explicit observed-stat scope"
+        )
+    if type(related_task_rehearsal) is not bool or (
+        related_task_rehearsal and not mix_completed_task_costs
+    ):
+        raise PartyDevelopmentOutcomeLearningError(
+            "related-task rehearsal requires explicit mixed completed-task scope"
+        )
+    replay = tuple(rehearsal_examples)
+    if mix_completed_task_costs and replay and not related_task_rehearsal:
+        raise PartyDevelopmentOutcomeLearningError(
+            "mixed complete-task cost fitting has no rehearsal scope"
+        )
     choices = tuple(examples)
     _require_examples(
         choices,
         partition=ScenarioPartition.TRAIN,
         feature_schema_id=base_model.feature_schema_id,
+        mix_completed_task_costs=mix_completed_task_costs,
     )
     choice_roots = {item.root_lineage_id for item in choices}
     choice_states = {item.initial_state_sha256 for item in choices}
@@ -788,7 +1081,180 @@ def adapt_party_development_model_from_outcomes(
             "party-development outcomes contain no preference signal"
         )
     _require_hyperparameters(epochs, learning_rate, prior_l2)
+    if type(freeze_route_geometry) is not bool or (
+        freeze_route_geometry and restrict_route_geometry
+    ):
+        raise PartyDevelopmentOutcomeLearningError("incompatible route geometry fitting modes")
+    rehearsal = None
+    if replay:
+        if (
+            restrict_route_geometry
+            or restrict_workload
+            or condition_workload
+            or not isinstance(rehearsal_attestation_sha256, str)
+            or _SHA256.fullmatch(rehearsal_attestation_sha256) is None
+        ):
+            raise PartyDevelopmentOutcomeLearningError(
+                "rehearsal needs its authenticated TRAIN attestation"
+            )
+        _require_examples(
+            replay,
+            partition=ScenarioPartition.TRAIN,
+            feature_schema_id=(replay[0].feature_schema_id if refine_suitability else base_model.feature_schema_id),
+            mix_completed_task_costs=related_task_rehearsal,
+        )
+        if refine_suitability:
+            for example in replay:
+                _aligned_features(_example_features(example), example.feature_schema_id, base_model.feature_schema_id)
+        _require_disjoint_from_teacher_prior(base_model, replay)
+        if related_task_rehearsal:
+            _require_related_task_rehearsal(choices, replay)
+        elif (
+            any(not x.fully_measured or not x.learner_update_eligible for x in replay)
+            or not {x.root_lineage_id for x in replay}
+            <= set(base_model.outcome_training_root_lineage_ids)
+            or not {x.initial_state_sha256 for x in replay}
+            <= set(base_model.outcome_training_state_sha256)
+        ):
+            raise PartyDevelopmentOutcomeLearningError(
+                "rehearsal is not a previously fitted measured TRAIN source"
+            )
+        rehearsal = dict(
+            attestation_sha256=rehearsal_attestation_sha256,
+            replay_example_sha256s=[x.example_sha256 for x in replay],
+            replay_example_count=len(replay),
+            new_example_count=len(choices),
+            replay_counted_as_new=False,
+            geometry_frozen=freeze_route_geometry,
+        )
+        if related_task_rehearsal:
+            rehearsal.update(
+                related_current_source_tasks=True,
+                independent_origins_added=0,
+                one_extra_distinct_task_per_primary_origin=True,
+                source_authority="caller-authenticated TRAIN task bindings;not admission here",
+            )
+    elif related_task_rehearsal:
+        raise PartyDevelopmentOutcomeLearningError("related-task rehearsal needs measured tasks")
+    elif rehearsal_attestation_sha256 is not None:
+        raise PartyDevelopmentOutcomeLearningError("unused rehearsal attestation")
+    training_choices = (*choices, *replay)
+    example_weights = None
+    if related_task_rehearsal:
+        counts = {x.root_lineage_id: 1 for x in choices}
+        for example in replay:
+            counts[example.root_lineage_id] += 1
+        example_weights = tuple(
+            1.0 / (len(choices) * counts[x.root_lineage_id]) for x in training_choices
+        )
+        rehearsal.update(
+            normalization="equal-origin-mean-of-distinct-task-losses",
+            primary_origin_count=len(choices),
+            total_task_questions=len(training_choices),
+            task_loss_weights=list(example_weights),
+        )
+    frozen_geometry_columns = None
+    if freeze_route_geometry:
+        names = (
+            "venue.travel_steps_known",
+            "venue.travel_steps",
+            "venue.recovery_steps_known",
+            "venue.recovery_steps",
+        )
+        if not all(n in base_model.feature_names for n in names):
+            raise PartyDevelopmentOutcomeLearningError("geometry freeze requires workload schema")
+        frozen_geometry_columns = tuple(base_model.feature_names.index(n) for n in names)
+        if np.any(base_model.weights1[list(frozen_geometry_columns)] != 0):
+            raise PartyDevelopmentOutcomeLearningError(
+                "geometry freeze requires the unchanged zero-weight parent"
+            )
+    feature_scale = base_model.feature_scale
+    geometry_fit = None
+    workload_fit = None
+    geometry_columns = None
+    if restrict_route_geometry:
+        feature_scale, geometry_columns, geometry_fit = _route_geometry_fit_projection(
+            base_model, choices
+        )
+    if restrict_workload:
+        feature_scale, geometry_columns, workload_fit = _workload_fit_projection(
+            base_model, choices
+        )
+    if condition_workload:
+        feature_scale, _, workload_fit = _workload_fit_projection(base_model, choices)
+        workload_fit["parameter_scope"] = "existing_full_update_with_workload_conditioning"
+        workload_fit["retained_zero_workload_algebra"] = False
+    if refine_workload:
+        names = tuple(
+            name
+            for name in PARTY_DEVELOPMENT_WORKLOAD_FEATURE_NAMES
+            if name.startswith("level_workload.")
+        )
+        if base_model.feature_schema_id != PARTY_DEVELOPMENT_WORKLOAD_FEATURE_SCHEMA_ID:
+            raise PartyDevelopmentOutcomeLearningError(
+                "workload refinement requires workload schema"
+            )
+        geometry_columns = tuple(base_model.feature_names.index(name) for name in names)
+        if np.any(base_model.feature_mean[list(geometry_columns)] != 0):
+            raise PartyDevelopmentOutcomeLearningError(
+                "workload refinement requires zero workload means"
+            )
+        workload_fit = dict(
+            parameter_scope="existing_level_workload_first_layer_rows_only",
+            feature_names=list(names),
+            retained_zero_workload_algebra=True,
+            venue_covariates_frozen=True,
+            feature_scale_changed=False,
+            activation_of_zero_weights_required=False,
+        )
+    if refine_suitability:
+        if base_model.feature_schema_id != PARTY_DEVELOPMENT_MATCHUP_FEATURE_SCHEMA_ID:
+            raise PartyDevelopmentOutcomeLearningError("suitability refinement needs the observed matchup schema")
+        # Default scope retains the first six rows. Explicit observed-stat scope
+        # uses the existing transferable numeric stats, never species/slot identity.
+        names = (VENUE_MATCHUP_FEATURE_NAMES if include_observed_stats else VENUE_MATCHUP_FEATURE_NAMES[:6])
+        geometry_columns = tuple(base_model.feature_names.index(n) for n in names)
+        all_matchup_columns = tuple(base_model.feature_names.index(n) for n in VENUE_MATCHUP_FEATURE_NAMES)
+        if np.any(base_model.feature_mean[list(all_matchup_columns)] != 0):
+            raise PartyDevelopmentOutcomeLearningError("suitability unknown zeros require zero means")
+        normalization_choices = training_choices if related_task_rehearsal else choices
+        input_blocks = tuple(
+            _example_features(e)[list(e.available_candidate_indices)]
+            for e in normalization_choices
+        )
+        inputs = np.concatenate(input_blocks)
+        if not np.all(inputs[:, geometry_columns[0]] == 1):
+            raise PartyDevelopmentOutcomeLearningError("fresh suitability fit requires observed matchups on every available candidate")
+        if include_observed_stats and not np.all(inputs[:, base_model.feature_names.index("trainee.stats_known")] == 1):
+            raise PartyDevelopmentOutcomeLearningError("observed-stat refinement requires native stats on every fresh candidate")
+        feature_scale = base_model.feature_scale.copy()
+        for col in geometry_columns:
+            if related_task_rehearsal:
+                rms = float(np.sqrt(sum(
+                    weight * float(np.mean(block[:, col] ** 2))
+                    for weight, block in zip(example_weights, input_blocks, strict=True)
+                )))
+            else:
+                rms = float(np.sqrt(np.mean(inputs[:, col] ** 2)))
+            feature_scale[col] = rms if rms > 0 else 1.0
+        workload_fit = dict(parameter_scope=("venue_matchup_and_observed_stats_first_layer_rows_only" if include_observed_stats else "venue_matchup_and_max_hp_first_layer_rows_only"),
+                            feature_names=list(names),
+                            diagnostic_stat_rows_frozen=[] if include_observed_stats else list(VENUE_MATCHUP_FEATURE_NAMES[6:]),
+                            normalization="available_fresh_TRAIN_input_RMS_zero_mean",
+                            labels_used_for_scaling=False, retained_unknown_matchup_algebra=True,
+                            legacy_parameters_frozen=True)
+        if related_task_rehearsal:
+            workload_fit["normalization"] = "equal-origin-task-candidate-RMS-zero-mean"
+    if mix_completed_task_costs:
+        workload_fit["mixed_completed_task_costs"] = dict(
+            objective_sha256s=sorted({e.objective.objective_sha256 for e in training_choices}),
+            targets_and_prospective_bindings_unchanged=True,
+            unique_fastest_complete_task_required=True,
+            native_admission_granted_here=False,
+        )
     prior_weights1 = base_model.weights1.copy()
+    if refine_suitability:
+        prior_weights1[list(geometry_columns)] *= (feature_scale / base_model.feature_scale)[list(geometry_columns), None]
     prior_bias1 = base_model.bias1.copy()
     prior_weights2 = base_model.weights2.copy()
     weights1 = prior_weights1.copy()
@@ -798,24 +1264,36 @@ def adapt_party_development_model_from_outcomes(
     priors = (prior_weights1, prior_bias1, prior_weights2)
     first = [np.zeros_like(value) for value in parameters]
     second = [np.zeros_like(value) for value in parameters]
-    loss_before = _outcome_loss(base_model, choices)
+    loss_before = _outcome_loss(base_model, training_choices, example_weights)
 
     for step in range(1, epochs + 1):
         gradients = [np.zeros_like(value) for value in parameters]
-        for example in choices:
-            features = _example_features(example)
-            normalized = (features - base_model.feature_mean) / base_model.feature_scale
-            hidden = np.tanh(normalized @ weights1 + bias1)
+        for example_index, example in enumerate(training_choices):
+            features = _aligned_features(_example_features(example), example.feature_schema_id, base_model.feature_schema_id)
+            normalized = (features - base_model.feature_mean) / feature_scale
+            hidden = _hidden_activations(normalized, weights1, bias1, base_model.feature_schema_id)
             probabilities = _masked_probabilities(hidden @ weights2, example)
             delta = probabilities - example.target_distribution
+            if example_weights is not None:
+                delta = delta * example_weights[example_index]
             gradients[2] += hidden.T @ delta
             hidden_delta = delta[:, None] * weights2[None, :]
             hidden_delta *= 1.0 - hidden * hidden
             gradients[0] += normalized.T @ hidden_delta
             gradients[1] += np.sum(hidden_delta, axis=0)
         for index in range(len(gradients)):
-            gradients[index] /= len(choices)
+            if example_weights is None:
+                gradients[index] /= len(training_choices)
             gradients[index] += prior_l2 * (parameters[index] - priors[index])
+            if frozen_geometry_columns is not None and index == 0:
+                gradients[index][list(frozen_geometry_columns)] = 0.0
+            if geometry_columns is not None:
+                if index == 0:
+                    frozen = np.ones(gradients[index].shape[0], dtype=bool)
+                    frozen[list(geometry_columns)] = False
+                    gradients[index][frozen] = 0.0
+                else:
+                    gradients[index].fill(0.0)
             first[index] = 0.9 * first[index] + 0.1 * gradients[index]
             second[index] = 0.999 * second[index] + 0.001 * gradients[index] ** 2
             corrected_first = first[index] / (1.0 - 0.9**step)
@@ -829,7 +1307,7 @@ def adapt_party_development_model_from_outcomes(
         bias1=bias1,
         weights2=weights2,
         feature_mean=base_model.feature_mean,
-        feature_scale=base_model.feature_scale,
+        feature_scale=feature_scale,
         training_seed=base_model.training_seed,
         teacher_prior=base_model.teacher_prior,
         outcome_training_examples=base_model.outcome_training_examples + len(choices),
@@ -842,7 +1320,19 @@ def adapt_party_development_model_from_outcomes(
             sorted((*base_model.outcome_training_state_sha256, *choice_states))
         ),
     )
-    loss_after = _outcome_loss(updated, choices)
+    if geometry_columns is not None:
+        frozen = np.ones(base_model.weights1.shape[0], dtype=bool)
+        frozen[list(geometry_columns)] = False
+        if (
+            not np.array_equal(updated.weights1[frozen], base_model.weights1[frozen])
+            or not np.array_equal(updated.bias1, base_model.bias1)
+            or not np.array_equal(updated.weights2, base_model.weights2)
+            or not np.array_equal(updated.feature_mean, base_model.feature_mean)
+        ):
+            raise PartyDevelopmentOutcomeLearningError(
+                "restricted geometry changed retained parameters"
+            )
+    loss_after = _outcome_loss(updated, training_choices, example_weights)
     if not loss_after < loss_before:
         raise PartyDevelopmentOutcomeLearningError(
             "bounded party-development update did not reduce training loss"
@@ -867,6 +1357,9 @@ def adapt_party_development_model_from_outcomes(
             epochs=epochs,
             learning_rate=float(learning_rate),
             prior_l2=float(prior_l2),
+            route_geometry_fit=geometry_fit,
+            rehearsal_training=rehearsal,
+            workload_fit=workload_fit,
         ),
     )
 
@@ -1088,6 +1581,7 @@ def _require_examples(
     *,
     partition: ScenarioPartition,
     feature_schema_id: str = PARTY_DEVELOPMENT_FEATURE_SCHEMA_ID,
+    mix_completed_task_costs: bool = False,
 ) -> None:
     expected_names = party_development_feature_names(feature_schema_id)
     if not choices:
@@ -1111,7 +1605,7 @@ def _require_examples(
             raise PartyDevelopmentOutcomeLearningError(
                 "party-development outcome feature schema is incompatible"
             )
-        if item.objective != choices[0].objective:
+        if not mix_completed_task_costs and item.objective != choices[0].objective:
             raise PartyDevelopmentOutcomeLearningError(
                 "party-development outcome objectives differ"
             )
@@ -1119,6 +1613,8 @@ def _require_examples(
             raise PartyDevelopmentOutcomeLearningError(
                 "censored party-development evidence cannot become a target"
             )
+    if mix_completed_task_costs:
+        _require_completed_task_cost_compatibility(choices)
     for attribute, subject in (
         ("scenario_id", "scenario identity"),
         ("root_lineage_id", "root lineage"),
@@ -1130,6 +1626,87 @@ def _require_examples(
                 f"party-development {subject} repeats inside a partition"
             )
 
+
+
+def _require_related_task_rehearsal(choices, replay):
+    """One additional distinct TRAIN question per fresh primary source.
+
+    Native eligibility and distinct private recipient/task contracts remain the
+    caller's authenticated responsibility. This check grants no new origin,
+    partition change, duplicate-input lesson or previously consumed source.
+    """
+    primary = {x.root_lineage_id: x for x in choices}
+    seen = set()
+    for example in replay:
+        source = primary.get(example.root_lineage_id)
+        if (
+            source is None
+            or example.root_lineage_id in seen
+            or example.initial_state_sha256 != source.initial_state_sha256
+            or example.partition is not ScenarioPartition.TRAIN
+            or source.partition is not ScenarioPartition.TRAIN
+            or not example.fully_measured
+            or not example.learner_update_eligible
+            or example.scenario_id == source.scenario_id
+            or example.prospective_binding_sha256 == source.prospective_binding_sha256
+            or tuple(c.features for c in example.candidates)
+            == tuple(c.features for c in source.candidates)
+        ):
+            raise PartyDevelopmentOutcomeLearningError(
+                "related rehearsal needs one distinct measured TRAIN task on an exact primary source"
+            )
+        seen.add(example.root_lineage_id)
+
+
+def _require_completed_task_cost_compatibility(choices):
+    """Validate canonical completed task contracts; never rewrite outcomes.
+
+    The optional loss uses each example's existing winner distribution. Its
+    conservative initial scope requires a unique completed cost winner before either
+    objective's differing tail can decide a preference. Native admission remains
+    the caller's independently authenticated responsibility.
+    """
+    from .party_development_outcomes import PARTY_DEVELOPMENT_TARGET_TASK_OBJECTIVE
+    from .party_development_fixed_target_outcomes import FIXED_LEVEL_READY_OBJECTIVE
+    from .party_development_fixed_target_repeats import FIXED_LEVEL_READY_REPEATED_OBJECTIVE
+
+    for example in choices:
+        if example.feature_schema_id != PARTY_DEVELOPMENT_MATCHUP_FEATURE_SCHEMA_ID:
+            raise PartyDevelopmentOutcomeLearningError("mixed task cost needs observed-matchup schema")
+        if example.objective == PARTY_DEVELOPMENT_TARGET_TASK_OBJECTIVE:
+            goal = "context.goal.evolution"
+        elif example.objective in (FIXED_LEVEL_READY_OBJECTIVE, FIXED_LEVEL_READY_REPEATED_OBJECTIVE):
+            goal = "context.goal.balance"
+        else:
+            raise PartyDevelopmentOutcomeLearningError("mixed task cost objective is not canonical")
+        costs = []
+        for index in example.available_candidate_indices:
+            candidate, outcome = example.candidates[index], example.outcomes[index]
+            if candidate.features[example.feature_names.index(goal)] != 1.0:
+                raise PartyDevelopmentOutcomeLearningError("mixed task cost semantic goal differs")
+            if (
+                outcome is None
+                or outcome.criterion_values[:2] != (1.0, 1.0)
+                or outcome.frames_executed < 1
+                or outcome.criterion_values[2] not in (0.0, 1.0)
+            ):
+                raise PartyDevelopmentOutcomeLearningError("mixed task cost needs safe measured arms")
+            completed = outcome.criterion_values[2] == 1.0
+            if completed:
+                if outcome.criterion_values[3] != outcome.frames_executed:
+                    raise PartyDevelopmentOutcomeLearningError("completed task cost differs from physical frames")
+                costs.append((index, outcome.frames_executed))
+            elif example.objective != PARTY_DEVELOPMENT_TARGET_TASK_OBJECTIVE or outcome.criterion_values[3] != 0.0:
+                # The historical evolution objective masks unfinished-task cost
+                # behind its false completion bit. Keep actual frames separately;
+                # never make that arm a cheap completed task or ready lesson.
+                raise PartyDevelopmentOutcomeLearningError("unfinished task cost contract differs")
+        if not costs:
+            raise PartyDevelopmentOutcomeLearningError("mixed task cost needs an observed completed arm")
+        minimum = min(frames for _, frames in costs)
+        fastest = tuple(index for index, frames in costs if frames == minimum)
+        if len(fastest) != 1 or example.best_candidate_indices != fastest:
+            raise PartyDevelopmentOutcomeLearningError("mixed task cost needs an unambiguous original cost winner")
 
 def _require_hyperparameters(
     epochs: int,
@@ -1144,7 +1721,7 @@ def _require_hyperparameters(
     ):
         if (
             isinstance(value, bool)
-            or not isinstance(value, (int, float))
+            or not isinstance(value, int | float)
             or not math.isfinite(float(value))
             or (value <= 0 if strictly_positive else value < 0)
         ):
@@ -1191,7 +1768,7 @@ def _example_probabilities(
     model: PartyDevelopmentOutcomeModel,
     example: ScenarioOutcomeExample,
 ) -> NDArray[np.float64]:
-    return _masked_probabilities(model._scores(_example_features(example)), example)
+    return _masked_probabilities(model._scores(_aligned_features(_example_features(example), example.feature_schema_id, model.feature_schema_id)), example)
 
 
 def _masked_probabilities(
@@ -1210,6 +1787,7 @@ def _masked_probabilities(
 def _outcome_loss(
     model: PartyDevelopmentOutcomeModel,
     choices: tuple[ScenarioOutcomeExample, ...],
+    example_weights: tuple[float, ...] | None = None,
 ) -> float:
     losses = []
     for item in choices:
@@ -1217,7 +1795,15 @@ def _outcome_loss(
         target = item.target_distribution
         positive = target > 0
         losses.append(float(-np.sum(target[positive] * np.log(probabilities[positive]))))
-    return float(np.mean(losses))
+    if example_weights is None:
+        return float(np.mean(losses))
+    if (
+        len(example_weights) != len(losses)
+        or any(not math.isfinite(w) or w <= 0 for w in example_weights)
+        or not math.isclose(sum(example_weights), 1.0, rel_tol=0, abs_tol=1e-12)
+    ):
+        raise PartyDevelopmentOutcomeLearningError("task loss weights must form an origin-balanced mean")
+    return float(sum(w * loss for w, loss in zip(example_weights, losses, strict=True)))
 
 
 __all__ = [
@@ -1239,3 +1825,6 @@ __all__ = [
     "load_party_development_outcome_model",
     "run_party_development_outcome_learning_cycle",
 ]
+
+
+

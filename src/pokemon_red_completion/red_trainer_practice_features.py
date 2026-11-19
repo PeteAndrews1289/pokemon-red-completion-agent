@@ -240,3 +240,44 @@ def _integer(value: object, minimum: int, maximum: int, label: str) -> int:
     if type(value) is not int or not minimum <= value <= maximum:  # noqa: E721
         raise TrainerStatFeatureError(f"{label} is outside its public range")
     return value
+
+
+OBSERVED_PP_SWITCH_SCHEMA = "pokemon.core.battle.switch.observed-pp.v2"
+OBSERVED_PP_SWITCH_NAMES = (*SWITCH_FEATURE_NAMES_V2, "candidate.no_nonstatus_pp")
+
+
+def switch_schema(schema):
+    if schema == SWITCH_SCHEMA_ID:return SWITCH_SCHEMA_ID, SWITCH_FEATURE_NAMES_V2
+    if schema == OBSERVED_PP_SWITCH_SCHEMA:return OBSERVED_PP_SWITCH_SCHEMA, OBSERVED_PP_SWITCH_NAMES
+    raise TrainerStatFeatureError("unsupported switch-head schema")
+
+
+def no_nonstatus_pp(observation, catalog, slot):
+    """Observed inventory fact; status choices stay legal and may remain useful."""
+    party = _mapping(_mapping(observation.get("features"),"features").get("party"),"party")
+    members = party.get("members")
+    if not isinstance(members,(list,tuple)) or type(slot) is not int or not 1<=slot<=len(members):
+        raise TrainerStatFeatureError("switch PP fact needs an observed member")
+    moves = _mapping(members[slot-1],"member").get("moves")
+    if not isinstance(moves,(list,tuple)):raise TrainerStatFeatureError("switch PP moves missing")
+    damage = False
+    for item in moves:
+        item = _mapping(item,"move");pp = _integer(item.get("pp"),0,63,"move PP")
+        if pp>0 and catalog.resolve_move(item.get("move_ref")).category!="status":damage=True
+    return float(not damage)
+
+
+def project_switch_for_head(observation, catalog, head):
+    base = project_trainer_switch_features(observation,catalog)
+    if getattr(head, 'schema_id', SWITCH_SCHEMA_ID) != OBSERVED_PP_SWITCH_SCHEMA:return base
+    return TrainerCandidateFeatures(OBSERVED_PP_SWITCH_SCHEMA,OBSERVED_PP_SWITCH_NAMES,
+        tuple((*row,no_nonstatus_pp(observation,catalog,slot))for row,slot in zip(base.candidate_vectors,base.candidate_slots,strict=True)),base.candidate_slots)
+
+
+def expand_observed_pp_switch(head):
+    from .red_trainer_practice_head import TrainerHeadModel
+    if head.schema_id!=SWITCH_SCHEMA_ID or head.feature_names!=SWITCH_FEATURE_NAMES_V2:
+        raise TrainerStatFeatureError("PP extension needs original switch head")
+    weights=np.zeros((len(OBSERVED_PP_SWITCH_NAMES),head.weights1.shape[1]));weights[:-1]=head.weights1
+    return TrainerHeadModel(OBSERVED_PP_SWITCH_SCHEMA,OBSERVED_PP_SWITCH_NAMES,weights,
+        head.bias1.copy(),head.weights2.copy(),head.training_seed,head.training_objective)

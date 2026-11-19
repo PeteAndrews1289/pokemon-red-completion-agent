@@ -225,3 +225,24 @@ def test_inventory_requires_exact_retained_parent(monkeypatch, tmp_path, fault):
         (tmp_path / "RESULT.json").write_text(json.dumps(result))
     assert configuration._retained_field_faint_inventory(rt, actions, parent=tmp_path) is None
     assert not calls
+
+
+@pytest.mark.parametrize(("name", "label", "next_tile", "message", "matches"), (
+    (b"RAT", b"RAT", 0x7F, "fainted", True),
+    (b"RAT", b"CAT", 0x7F, "fainted", False),
+    (b"RAT", b"RAT", 0x80, "fainted", False),
+    (b"RAT", b"RAT", 0x7F, "wants to fight", False),
+    (b"", b"RAT", 0x7F, "fainted", False),
+))
+def test_named_field_faint_requires_the_exact_roster_nickname(name, label, next_tile, message, matches):
+    from pokemon_red_completion.observation import PokemonRedStateReader, RamAddress
+
+    encoded = lambda text: bytes(c - ord("A") + 0x80 for c in text)
+    memory = bytearray(65536)
+    slot = int(RamAddress.PARTY_MON_2_NICKNAME)
+    memory[slot:slot+len(name)+1] = encoded(name) + bytes([0x50])
+    line = int(RamAddress.TILE_MAP) + 14 * 20 + 1
+    memory[line:line+len(label)+1] = encoded(label) + bytes([next_tile])
+    reader = N(_memory=N(read_u8=memory.__getitem__), read_bottom_dialogue_box_visible=lambda: True,
+               read_screen_text_rows=lambda: [""]*14 + [label.decode(), "", message, ""])
+    assert PokemonRedStateReader.named_field_faint_visible(reader, 2) is matches

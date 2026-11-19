@@ -23,6 +23,7 @@ from pokemon_red_completion.red_status_battle_features import (
 from pokemon_red_completion.red_trainer_practice_features import (
     project_trainer_control_features,
     project_trainer_switch_features,
+    project_switch_for_head,
 )
 from pokemon_red_completion.red_trainer_practice_fit import (
     TrainerPracticeThreeHeadModel,
@@ -30,6 +31,7 @@ from pokemon_red_completion.red_trainer_practice_fit import (
 )
 from pokemon_red_completion.red_trainer_proposed_control import (
     PROPOSED_CONTROL_SCHEMA,
+    PROPOSED_CONTROL_SCHEMAS,
     proposed_control,
 )
 from pokemon_red_completion.wild_training_objective import WildTrainingObjective
@@ -203,7 +205,7 @@ class RedTrainerPracticeOutcomePolicy:
             # replace the model's attack. The ordinary anti-loop guard is unchanged.
             switch_masked = False
         switches = (
-            project_trainer_switch_features(observation, self.catalog)
+            project_switch_for_head(observation, self.catalog, self.model.switch)
             if _has_living_reserve(observation) and not switch_masked
             else None
         )
@@ -256,9 +258,10 @@ class RedTrainerPracticeOutcomePolicy:
             control_candidates = control_action_candidates(control)
             proposal = None
             # No control prediction is needed when switching is impossible.
-            if self.model.control.schema_id == PROPOSED_CONTROL_SCHEMA and switches is not None:
+            if self.model.control.schema_id in PROPOSED_CONTROL_SCHEMAS and switches is not None:
                 proposal = proposed_control(
                     observation,
+                    control_schema=self.model.control.schema_id,
                     catalog=self.catalog,
                     move_head=self.model.move,
                     switch_head=self.model.switch,
@@ -339,13 +342,13 @@ class RedTrainerPracticeOutcomePolicy:
                 )
             self.last_decision_diagnostics["control_probabilities"] = (
                 self.model.control.probabilities(control_candidates).tolist()
-                if switches is not None or self.model.control.schema_id != PROPOSED_CONTROL_SCHEMA
+                if switches is not None or self.model.control.schema_id not in PROPOSED_CONTROL_SCHEMAS
                 else [1.0, 0.0]
             )
             self.last_decision_diagnostics["control_input_schema"] = self.model.control.schema_id
             self.last_decision_diagnostics["control_candidate_vectors"] = (
                 [list(row) for row in control_candidates]
-                if switches is not None or self.model.control.schema_id != PROPOSED_CONTROL_SCHEMA
+                if switches is not None or self.model.control.schema_id not in PROPOSED_CONTROL_SCHEMAS
                 else []
             )
             if proposal is not None:
@@ -445,7 +448,7 @@ class RedTrainerPracticeOutcomePolicy:
         # that obligation executable rather than reopening an empty-PP loop.
         masked = self._unanswered_voluntary_switch_opponent is not None
         switches = (
-            project_trainer_switch_features(observation, self.catalog)
+            project_switch_for_head(observation, self.catalog, self.model.switch)
             if _has_living_reserve(observation) and not masked
             else None
         )
@@ -457,9 +460,10 @@ class RedTrainerPracticeOutcomePolicy:
             )
         )
         proposal = None
-        if switches is not None and self.model.control.schema_id == PROPOSED_CONTROL_SCHEMA:
+        if switches is not None and self.model.control.schema_id in PROPOSED_CONTROL_SCHEMAS:
             proposal = proposed_control(
                 projection,
+                control_schema=self.model.control.schema_id,
                 catalog=self.catalog,
                 move_head=self.model.move,
                 switch_head=self.model.switch,
@@ -484,7 +488,7 @@ class RedTrainerPracticeOutcomePolicy:
                 "control_candidate_vectors": (
                     [list(row) for row in candidates]
                     if switches is not None
-                    or self.model.control.schema_id != PROPOSED_CONTROL_SCHEMA
+                    or self.model.control.schema_id not in PROPOSED_CONTROL_SCHEMAS
                     else []
                 ),
                 "control_probabilities": self.model.control.probabilities(candidates).tolist()
@@ -531,7 +535,7 @@ class RedTrainerPracticeOutcomePolicy:
             }
             self._record_pp_screen(())
             return None
-        candidates = project_trainer_switch_features(observation, self.catalog)
+        candidates = project_switch_for_head(observation, self.catalog, self.model.switch)
         legal = tuple(slot for slot in candidates.candidate_slots if slot in legal_party_slots)
         unsupported_removed: tuple[int, ...] = ()
         if self.pp_depleted_switch_screen and may_decline:
@@ -582,9 +586,10 @@ class RedTrainerPracticeOutcomePolicy:
                 ).tolist()
             )
             options = control_action_candidates(control)
-            if self.model.control.schema_id == PROPOSED_CONTROL_SCHEMA:
+            if self.model.control.schema_id in PROPOSED_CONTROL_SCHEMAS:
                 proposal = proposed_control(
                     observation,
+                    control_schema=self.model.control.schema_id,
                     catalog=self.catalog,
                     move_head=self.model.move,
                     switch_head=self.model.switch,

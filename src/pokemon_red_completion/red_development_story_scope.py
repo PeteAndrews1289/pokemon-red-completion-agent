@@ -138,9 +138,9 @@ class DevelopmentStoryScope:
                 raise ValueError("development gym contract/reward profile differs")
 
         if self.train_admission is not None:
-            from .red_production_train_admission import ProductionTrainAdmission
+            from .red_production_train_admission import ProductionTrainAdmission, LeagueFundingTrainAdmission, LEAGUE_TRAIN_SCHEMA
 
-            if type(self.train_admission) is not ProductionTrainAdmission:
+            if type(self.train_admission) not in (ProductionTrainAdmission, LeagueFundingTrainAdmission):
                 raise ValueError("typed production TRAIN admission required")
             self.train_admission.require_scope(self, "story")
 
@@ -180,10 +180,10 @@ class DevelopmentStoryScope:
 
         values = dict(document)
         if values.get("train_admission") is not None:
-            from .red_production_train_admission import ProductionTrainAdmission
+            from .red_production_train_admission import ProductionTrainAdmission, LeagueFundingTrainAdmission, LEAGUE_TRAIN_SCHEMA
 
             if train_admission is not None:
-                if type(train_admission) is not ProductionTrainAdmission or canonical_sha256(
+                if type(train_admission) not in (ProductionTrainAdmission, LeagueFundingTrainAdmission) or canonical_sha256(
                     values["train_admission"]
                 ) != canonical_sha256(train_admission.document()):
                     raise ValueError("story scope differs from authenticated TRAIN admission")
@@ -191,6 +191,8 @@ class DevelopmentStoryScope:
             else:
                 # Original metadata-only admissions remain decodable. A derived
                 # document needs its separately authenticated sealed proof.
+                if values["train_admission"].get("schema") == LEAGUE_TRAIN_SCHEMA:
+                    raise ValueError("funding TRAIN scope needs authenticated admission bytes")
                 values["train_admission"] = ProductionTrainAdmission.from_document(
                     values["train_admission"]
                 )
@@ -236,9 +238,9 @@ class DevelopmentStoryScope:
 
     def require(self, actor, contract=None):
         if self.train_admission is not None:
-            from .red_production_train_admission import ProductionTrainAdmission
+            from .red_production_train_admission import ProductionTrainAdmission, LeagueFundingTrainAdmission, LEAGUE_TRAIN_SCHEMA
 
-            if type(self.train_admission) is not ProductionTrainAdmission:
+            if type(self.train_admission) not in (ProductionTrainAdmission, LeagueFundingTrainAdmission):
                 raise ValueError("typed production TRAIN admission required")
             self.train_admission.require_actor(actor, self, "story")
         partition = (

@@ -234,6 +234,9 @@ class BoundedEvolutionTrainingResult:
 
     battles_completed: int
     healing_trips: int
+    trainee_initial_xp: int | None = None
+    trainee_terminal_xp: int | None = None
+    trainee_xp_gained: int | None = None
 
     def __post_init__(self) -> None:
         if any(
@@ -245,6 +248,29 @@ class BoundedEvolutionTrainingResult:
             raise RedBoxedLevelEvolutionError(
                 "bounded evolution did not complete a training battle"
             )
+        xp_values = (
+            self.trainee_initial_xp,
+            self.trainee_terminal_xp,
+            self.trainee_xp_gained,
+        )
+        if any(value is not None for value in xp_values):
+            if any(type(value) is not int or value < 0 for value in xp_values):  # noqa: E721
+                raise RedBoxedLevelEvolutionError("bounded evolution trainee XP cost differs")
+            if self.trainee_terminal_xp - self.trainee_initial_xp != self.trainee_xp_gained:  # type: ignore[operator]
+                raise RedBoxedLevelEvolutionError("bounded evolution trainee XP delta differs")
+
+    def xp_dict(self) -> dict[str, int]:
+        if (
+            self.trainee_initial_xp is None
+            or self.trainee_terminal_xp is None
+            or self.trainee_xp_gained is None
+        ):
+            return {}
+        return {
+            "trainee_initial_xp": self.trainee_initial_xp,
+            "trainee_terminal_xp": self.trainee_terminal_xp,
+            "trainee_xp_gained": self.trainee_xp_gained,
+        }
 
 
 @dataclass(frozen=True, slots=True)
@@ -463,6 +489,7 @@ class BoxedLevelEvolutionExecutionReport:
             "withdraw_transition_passed": True,
             "completed_training_battles": self.training.battles_completed,
             "healing_trips": self.training.healing_trips,
+            **self.training.xp_dict(),
             "exact_evolution_transition": True,
             "required_living_preserved": True,
             "controller_actions": self.controller_actions,

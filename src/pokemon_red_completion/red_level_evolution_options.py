@@ -112,6 +112,7 @@ def enumerate_red_level_evolutions(
     allow_direct_evolution: bool = True,
     training_venues: tuple[TrainingVenue, ...] | None = None,
     include_level_workload: bool = False,
+    bind_collection_cost: bool = False,
     venue_model: PartyDevelopmentOutcomeModel | None = None,
     venue_model_sha256: str | None = None,
     observe_venue_decision: Callable[[object, tuple[TrainingVenue, ...], int, int], None]
@@ -137,6 +138,7 @@ def enumerate_red_level_evolutions(
         prefer_highest_supported_venue,
         allow_guarded_venue_escapes,
         include_level_workload,
+        bind_collection_cost,
         allow_direct_evolution,
     ):
         if type(permission) is not bool:
@@ -292,6 +294,7 @@ def enumerate_red_level_evolutions(
                 if binding is not None:
                     progress = None
                     observed_xp = None
+                    boxed_ref = None
                     if party:
                         if cartridge is None:
                             cartridge = RedPracticeCartridge(world.rom)
@@ -324,12 +327,15 @@ def enumerate_red_level_evolutions(
                                 cartridge,
                             )
                             if include_level_workload:
-                                observed_xp = next(
-                                    row.experience
+                                observed_row = next(
+                                    row
                                     for row in boxed_identities
                                     if row.box_index == precursor.container_index
                                     and row.box_slot == precursor.slot_index + 1
                                 )
+                                observed_xp = observed_row.experience
+                                if bind_collection_cost:
+                                    boxed_ref = observed_row.preparation_ref
                     workload = None
                     if include_level_workload and observed_xp is not None:
                         assert cartridge is not None
@@ -348,7 +354,9 @@ def enumerate_red_level_evolutions(
                     candidates.append(
                         RedEvolutionOption(
                             profile,
-                            binding,
+                            (replace(binding, level_evolution_transition=(source_ref, target_ref),
+                                     level_evolution_boxed_ref=boxed_ref)
+                             if bind_collection_cost and workload is not None else binding),
                             EconomyOffer(EconomyMode.OTHER, planned_spend=0),
                             level_evolution_effort(precursor.level, level, progress),
                             workload,

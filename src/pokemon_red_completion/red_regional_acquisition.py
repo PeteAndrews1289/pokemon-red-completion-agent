@@ -16,7 +16,7 @@ from typing import TypedDict
 from pokemon_red_completion.executor import CountingExecutor
 from pokemon_red_completion.gen1_field_moves import Gen1FieldMoveError, fly_menu_indices
 from pokemon_red_completion.gen1_regional_access import closed_remote_cave_entry
-from pokemon_red_completion.global_router import GlobalRouterError, find_macro_path
+from pokemon_red_completion.global_router import macro_path_estimates
 from pokemon_red_completion.goal_manager import GoalKind
 from pokemon_red_completion.goal_manager_composition_qualification import (
     living_completion_checkpoint,
@@ -71,6 +71,17 @@ MAXIMUM_ROUTED_SOURCE_EVALUATIONS = 8
 class _CorridorInputs(TypedDict, total=False):
     cartridge: bytes
     reachable_from: tuple[int, int]
+    permitted_excluded_origin: tuple[int, int]
+
+
+def _permitted_warp_origin(world, map_id, origin):
+    """Only an observed cartridge warp, never an occupied/object tile."""
+    if (
+        origin in world.macro_graph.warp_locations.get(map_id, ())
+        and origin not in world.object_blockers[map_id]
+    ):
+        return origin
+    return None
 
 
 def _rank_regional_sources(
@@ -89,11 +100,24 @@ def _rank_regional_sources(
     An unreachable topology estimate sorts last instead of becoming a false
     availability claim; field transport may still make the full binding viable.
     """
-    ranked: list[tuple[tuple[int, int, int, int, str], str, int]] = []
+    source_maps: dict[str, int] = {}
     for source in sources:
         try:
-            map_id = int(map_id_for_wild_source(source))
+            source_maps[source] = int(map_id_for_wild_source(source))
         except RedLivingDexMultifamilyError:
+            continue
+    destinations = set(source_maps.values()) & world.terrain.keys() & world.local_graphs.keys()
+    origins = ((current_map, last_outside_map, 0), *(
+        (origin, origin, 2 if current_map >= 0x25 else 1) for origin in sorted(set(fly_origins))
+    ))
+    topology = [
+        (macro_path_estimates(world.macro_graph, origin, destinations, last_outside=retained), overhead)
+        for origin, retained, overhead in origins
+    ]
+    ranked: list[tuple[tuple[int, int, int, int, str], str, int]] = []
+    for source in sources:
+        map_id = source_maps.get(source)
+        if map_id is None:
             if record_diagnostic_event is not None:
                 record_diagnostic_event(
                     "regional_source_excluded",
@@ -112,29 +136,8 @@ def _rank_regional_sources(
                     ),
                 )
             continue
-        estimates: list[tuple[int, int]] = []
-        for origin, retained, overhead in (
-            (current_map, last_outside_map, 0),
-            *(
-                (origin, origin, 2 if current_map >= 0x25 else 1)
-                for origin in sorted(set(fly_origins))
-            ),
-        ):
-            try:
-                topology = find_macro_path(
-                    world.macro_graph,
-                    origin,
-                    map_id,
-                    last_outside=retained,
-                )
-            except GlobalRouterError:
-                continue
-            estimates.append(
-                (
-                    overhead + sum(edge.cost for edge in topology.edges),
-                    overhead + len(topology.edges),
-                )
-            )
+        estimates = [(costs[map_id][0] + overhead, costs[map_id][1] + overhead)
+                     for costs, overhead in topology if map_id in costs]
         rank = (0, *min(estimates), map_id, source) if estimates else (1, 0, 0, map_id, source)
         ranked.append((rank, source, map_id))
         if record_diagnostic_event is not None:
@@ -337,6 +340,9 @@ def enumerate_red_regional_acquisitions(
                             "wild corridor origin is invalid or excluded"
                         )
                     corridor_inputs["reachable_from"] = (y, x)
+                    entry = _permitted_warp_origin(world, map_id, (y, x))
+                    if entry is not None:
+                        corridor_inputs["permitted_excluded_origin"] = entry
             corridor = derive_red_living_dex_wild_corridor(
                 RedEncounterSourceTarget(source),
                 world.terrain[map_id],

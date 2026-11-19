@@ -707,6 +707,7 @@ def run_red_trainer_practice_episode(
                         session,
                         target_index=None if chosen_slot is None else chosen_slot - 1,
                         label="model trainer practice prompt",
+                        allow_closed_outcome=True,
                     )
                     kind = "switch_prompt"
                 else:

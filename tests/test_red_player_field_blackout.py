@@ -72,3 +72,44 @@ def test_only_existing_native_loss_can_settle_without_changing_progress(
         assert not report.evidence["learned_recovery"]
         assert binding.verify(report).status is GoalDecisionOutcome.SUCCEEDED
         assert raw.player_money == 845
+
+
+@pytest.mark.parametrize("fault", [None, "wrong-goal", "wrong-error", "stale-state", "unreleased"])
+def test_retained_blackout_requires_exact_failed_restoration(tmp_path, monkeypatch, fault):
+    import hashlib
+    import json
+
+    from pokemon_red_completion import red_player_configuration as cfg
+    from pokemon_red_completion.goal_manager import GoalKind
+
+    state = b"pending-blackout"
+    digest = hashlib.sha256(state).hexdigest()
+    raw = N(battle_state=0, party_hp=(0,))
+    runtime = N(reader=N(read=lambda: raw), emulator=N(save_state_bytes=lambda: state))
+    (tmp_path / "terminal.state").write_bytes(b"elsewhere" if fault == "stale-state" else state)
+    last = dict(
+        selected_kind="advance_story" if fault == "wrong-goal" else "restore_team",
+        error_type="RouteExecutionError" if fault == "wrong-error" else "Gen1FieldBlackoutPending",
+        error="observed all-party field poison faint requires native blackout",
+        terminal_state_sha256=digest,
+    )
+    result = dict(released=fault != "unreleased", worker_stopped=True, field_ready=False,
+                  continuation_reason="native_execution_error", state_sha256=digest,
+                  episode=dict(outcomes=[last]))
+    (tmp_path / "RESULT.json").write_text(json.dumps(result))
+    offered = []
+
+    def offer(rt, actions):
+        offered.append((rt, actions))
+        return N(binding_ref="blackout", kind=GoalKind.RECOVER_CONTROL, opportunity=object())
+
+    monkeypatch.setattr(b, "field_blackout_binding", offer)
+    if fault is None:
+        # Test admission independently of the inventory's binding validation.
+        monkeypatch.setattr(cfg, "GoalBindingSet", lambda opportunities, bindings: bindings)
+        bindings = cfg._retained_field_blackout_inventory(runtime, None, parent=tmp_path)
+        assert len(bindings) == 1 and bindings[0].kind is GoalKind.RECOVER_CONTROL
+        assert offered == [(runtime, None)]
+    else:
+        assert cfg._retained_field_blackout_inventory(runtime, None, parent=tmp_path) is None
+        assert not offered

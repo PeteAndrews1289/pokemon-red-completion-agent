@@ -164,10 +164,16 @@ def execute_story_trainer_income(*, rom, reader, actions, emulator, battler, ada
         "qualification_sha256": battler.qualification_sha256,
         "recovery_contract": "story-income-recovery-v1",
         "goal_authority": "disclosed funding prerequisite", "sales": 0})
+    # A funding win can level a member into its cartridge evolution. Admit only
+    # that observed level edge per retained specimen (same guard as preparation);
+    # identity, inventory, payout and the healed return are still verified.
+    from .red_trainer_evolution import RedTrainerEvolutionGuard
+
     return _execute_admitted_trainer_excursion(
         reader=reader, actions=actions, emulator=emulator, battler=battler, adapter=adapter,
         target=target, source_raw=source_raw, record=record, route=route, rom=rom,
-        field_recovery_home=field_recovery_home)
+        field_recovery_home=field_recovery_home,
+        preparation_evolution_guard=RedTrainerEvolutionGuard.from_rom(rom, emulator))
 
 
 def _execute_admitted_trainer_excursion(*, reader, actions, emulator, battler, adapter,

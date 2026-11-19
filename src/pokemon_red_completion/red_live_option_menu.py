@@ -44,6 +44,7 @@ from pokemon_red_completion.living_dex_option_value import (
     LivingDexOptionAvailability,
     LivingDexOptionCandidate,
     LivingDexOptionContext,
+    LivingDexOptionKind,
     LivingDexOptionMenu,
     LivingDexOptionUtility,
     LivingDexOptionValueModel,
@@ -357,6 +358,45 @@ class RedLiveOptionSet:
         }
 
 
+def _all_maxima_movement_recurrence(options, scores):
+    """Reuse the observed public endpoint witness, with no target/goal priority.
+
+    Every tied maximum must be a certified unchanged movement return. A fresh
+    equal-score alternative preserves ordinary stable selection and its tie rule.
+    """
+    from .player_option_story_unit import OptionStoryUnit
+    available = options.menu.available_indices
+    if not available or any(
+        type(scores[i]) not in (int, float) or not math.isfinite(scores[i]) for i in available
+    ):
+        return False
+    peak = max(scores[i] for i in available)
+    best = tuple(i for i in available if scores[i] == peak)
+    return bool(best) and all(
+        options.menu.candidates[i].story_unit == OptionStoryUnit("movement", True)
+        and options.menu.candidates[i].movement_revisit is True for i in best
+    )
+
+
+def _recurrence_escape(options, scores, policy, context):
+    if policy.selection_mode == "stable_recurrence":
+        return _all_maxima_movement_recurrence(options, scores)
+    if policy.selection_mode != "stable_costly_recurrence":
+        return False
+    from .player_option_story_unit import OptionStoryUnit
+    available = options.menu.available_indices
+    if not available or any(type(scores[i]) not in (int, float)
+                            or not math.isfinite(scores[i]) for i in available):
+        return False
+    peak = max(scores[i] for i in available)
+    best = tuple(i for i in available if scores[i] == peak)
+    return bool(best) and all(
+        context.costly_search_witnesses[i] is True
+        or (options.menu.candidates[i].story_unit == OptionStoryUnit("movement", True)
+            and options.menu.candidates[i].movement_revisit is True)
+        for i in best)
+
+
 @dataclass(frozen=True, slots=True)
 class RedLiveOptionChoice:
     """Action-free learned or safety choice over one mixed-family menu."""
@@ -376,15 +416,23 @@ class RedLiveOptionChoice:
     consequence_receipt_json: str | None = None
     consequence_context_projection: str | None = None
     consequence_cash_prediction: str | None = None
+    form_balanced_exploration: bool = False
 
     def __post_init__(self) -> None:
         if not isinstance(self.options, RedLiveOptionSet):
             raise TypeError("live mixed-family choice needs a RedLiveOptionSet")
+        if type(self.form_balanced_exploration) is not bool or (
+            self.form_balanced_exploration
+            and (not self.kind_balanced_exploration or self.sequence_policy is not None)
+        ):
+            raise RedLiveOptionMenuError("form-balanced TRAIN exploration authority differs")
         if type(self.kind_balanced_exploration) is not bool or (
             self.kind_balanced_exploration
             and (
                 self.mode is not RedLiveOptionSelectionMode.MODEL_EXPLORATION
-                or self.sequence_policy is not None
+                or (self.sequence_policy is not None and not getattr(
+                    self.sequence_policy, "kind_balanced_exploration", False
+                ))
                 or self.consequence_head_sha256 is not None
                 or self.branch_recovery is not None
             )
@@ -493,7 +541,8 @@ class RedLiveOptionChoice:
                 raise RedLiveOptionMenuError("equivalent exploration differs")
         if self.mode is RedLiveOptionSelectionMode.MODEL_GREEDY:
             available = self.options.menu.available_indices
-            if self.sequence_policy is not None or any(self.scores[i] is None for i in available):
+            if (self.sequence_policy is not None and self.sequence_policy.selection_mode == "sample"
+                or any(self.scores[i] is None for i in available)):
                 raise RedLiveOptionMenuError("highest-score authority differs")
             peak = max(score for i in available if (score := self.scores[i]) is not None)
             best = tuple(i for i in available if self.scores[i] == peak)
@@ -502,6 +551,11 @@ class RedLiveOptionChoice:
                 for i, p in enumerate(self.probabilities)
             ):
                 raise RedLiveOptionMenuError("highest-score probabilities differ")
+        if self.sequence_policy is not None and self.sequence_policy.selection_mode != "sample":
+            if self.mode in {RedLiveOptionSelectionMode.MODEL_GREEDY, RedLiveOptionSelectionMode.MODEL_EXPLORATION}:
+                escape = _recurrence_escape(self.options, self.scores, self.sequence_policy, self.sequence_context)
+                if (self.mode is RedLiveOptionSelectionMode.MODEL_EXPLORATION) != escape:
+                    raise RedLiveOptionMenuError("stable sequence recurrence authority differs")
         if self.branch_recovery is not None:
             from .red_consequence_choice import BranchRecoveryDecision
 
@@ -547,10 +601,21 @@ class RedLiveOptionChoice:
         if self.kind_balanced_exploration:
             result["policy_id"] = "red-live-kind-balanced-option-v1"
             result["sampling_rule"] = "mean_exponential_weight_per_public_option_kind"
+        if self.form_balanced_exploration:
+            result["policy_id"] = RED_LIVE_FORM_BALANCED_OPTION_POLICY
+            result["sampling_rule"] = "mean_exponential_weight_per_public_option_form"
         if self.sequence_policy is not None:
             assert self.sequence_context is not None
-            result["policy_id"] = "red-live-mixed-sequence-option-v1"
+            result["policy_id"] = (
+                "red-live-kind-balanced-sequence-option-v1"
+                if self.kind_balanced_exploration else "red-live-mixed-sequence-option-v1"
+            )
+            if self.sequence_policy.selection_mode != "sample":
+                result["policy_id"] = "red-live-stable-sequence-option-v1"
             result["sequence"] = dict(
+                **({"selection_mode": self.sequence_policy.selection_mode,
+                    "recurrence_escape_triggered": self.mode is RedLiveOptionSelectionMode.MODEL_EXPLORATION}
+                   if self.sequence_policy.selection_mode != "sample" else {}),
                 baseline_sha256=self.sequence_policy.baseline_sha256,
                 head_sha256=self.sequence_policy.head.model_sha256,
                 context_sha256=canonical_sha256(self.sequence_context.document()),
@@ -859,8 +924,21 @@ def select_red_live_option(
     kind_balanced_exploration: bool = True,
     sequence_policy: SequencePolicy | None = None,
     sequence_context: SequenceChoiceContext | None = None,
+    form_balanced_exploration: bool = False,
 ) -> RedLiveOptionChoice:
-    """Select one private binding without executing it or creating a teacher label."""
+    """Select one private binding without executing it or creating a teacher label.
+
+    ``form_balanced_exploration`` is a TRAIN-only behavior opt-in: it refines the
+    existing kind groups by the policy-visible story form (certified movement
+    unit versus observed combat obstruction) so rare forms are not crowded out
+    by many same-kind variants. Propensities stay exact and recorded; scores,
+    model, utility and the greedy production path are unchanged.
+    """
+    if type(form_balanced_exploration) is not bool or (
+        form_balanced_exploration
+        and (not kind_balanced_exploration or greedy_selection or sequence_policy is not None)
+    ):
+        raise RedLiveOptionMenuError("form-balanced TRAIN exploration scope differs")
 
     if not isinstance(model, LivingDexOptionValueModel):
         raise TypeError("mixed live selection needs a living-Dex model")
@@ -907,6 +985,8 @@ def select_red_live_option(
             utility=utility,
             exploration_mix=exploration_mix,
         )
+        if sequence_policy.kind_balanced_exploration and not kind_balanced_exploration:
+            raise RedLiveOptionMenuError("sequence policy sampler differs from its declaration")
         model_sha256 = sequence_policy.model_sha256
         vectors = sequence_context.vectors(options.menu)
 
@@ -956,7 +1036,9 @@ def select_red_live_option(
             raise RedLiveOptionMenuError("mixed live model returned invalid scores")
         concrete.append(value)
     peak = max(concrete)
-    if greedy_selection:
+    stable = sequence_policy is not None and sequence_policy.selection_mode != "sample"
+    recurrence_escape = (stable and _recurrence_escape(options, raw_scores, sequence_policy, sequence_context))
+    if greedy_selection or stable and not recurrence_escape:
         best = tuple(i for i in available if raw_scores[i] == peak)
         return RedLiveOptionChoice(
             options,
@@ -966,18 +1048,28 @@ def select_red_live_option(
             tuple(1.0 / len(best) if i in best else 0.0 for i in range(len(options.bindings))),
             seed,
             model_sha256,
+            sequence_policy,
+            sequence_context,
         )
     exponentials = [math.exp(value - peak) for value in concrete]
-    balanced = kind_balanced_exploration and sequence_policy is None
+    balanced = kind_balanced_exploration and (
+        sequence_policy is None or sequence_policy.kind_balanced_exploration
+    )
+    form = balanced and form_balanced_exploration
+
+    def group(index: int):
+        candidate = options.menu.candidates[index]
+        return (candidate.features.kind, public_option_form(candidate) if form else None)
+
     kind_counts = {
-        kind: sum(options.menu.candidates[i].features.kind == kind for i in available)
-        for kind in {options.menu.candidates[i].features.kind for i in available}
+        key: sum(group(i) == key for i in available)
+        for key in {group(i) for i in available}
     }
     if balanced:
         # A family with more legitimate variants should not gain sampling mass
         # solely from its menu width. Use policy-visible kinds, never targets.
         exponentials = [
-            weight / kind_counts[options.menu.candidates[index].features.kind]
+            weight / kind_counts[group(index)]
             for index, weight in zip(available, exponentials, strict=True)
         ]
     total = sum(exponentials)
@@ -985,7 +1077,7 @@ def select_red_live_option(
     probabilities_list = [0.0] * len(options.bindings)
     for index, weight in zip(available, exponentials, strict=True):
         exploration_weight = (
-            1.0 / (len(kind_counts) * kind_counts[options.menu.candidates[index].features.kind])
+            1.0 / (len(kind_counts) * kind_counts[group(index)])
             if balanced
             else 1.0 / len(available)
         )
@@ -1007,7 +1099,28 @@ def select_red_live_option(
         sequence_policy,
         sequence_context,
         kind_balanced_exploration=balanced,
+        form_balanced_exploration=form,
     )
+
+
+RED_LIVE_FORM_BALANCED_OPTION_POLICY = "red-live-form-balanced-option-v1"
+
+
+def public_option_form(candidate: LivingDexOptionCandidate) -> str | None:
+    """Policy-visible story form; no objective, location or target identity.
+
+    Only story-access options are refined: a certified movement unit, an
+    observed combat obstruction, or another access form. Other kinds keep
+    their existing single kind group.
+    """
+    if candidate.features.kind is not LivingDexOptionKind.UNLOCK_ACCESS:
+        return None
+    if candidate.story_unit is not None:
+        return "story_unit_" + candidate.story_unit.mode
+    challenge = candidate.challenge
+    if challenge is not None and challenge.combat_required:
+        return "combat_obstruction"
+    return "other_access"
 
 
 def supplemental_live_option(
@@ -1041,6 +1154,8 @@ __all__ = [
     "RED_LIVE_FROZEN_RESTORE_CONTINUATION_DECLARATION_SCHEMA",
     "RED_LIVE_MIXED_EXECUTION_DECLARATION_SCHEMA",
     "RED_LIVE_MIXED_OPTION_POLICY",
+    "RED_LIVE_FORM_BALANCED_OPTION_POLICY",
+    "public_option_form",
     "RedLiveForcedSingleton",
     "RedLiveOptionChoice",
     "RedLiveOptionMenuError",

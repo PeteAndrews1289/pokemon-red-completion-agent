@@ -20,8 +20,9 @@ from pokemon_red_completion import red_goal_context as context
 from pokemon_red_completion.blaine import _route_11_heal_and_return
 from pokemon_red_completion.collection import CollectionLocation
 from pokemon_red_completion.executor import CountingExecutor
-from pokemon_red_completion.gen1_cartridge import wild_tables
+from pokemon_red_completion.gen1_cartridge import CartridgeReadError, wild_tables
 from pokemon_red_completion.gen1_route_runtime import Gen1TraversalObserver
+from pokemon_red_completion.gen1_traversal import map_object_events
 from pokemon_red_completion.goal_manager import GoalDecisionOutcome, GoalKind, GoalUnavailableReason
 from pokemon_red_completion.goal_manager_runtime import GoalExecutionReport
 from pokemon_red_completion.observation import MapId, RawGameState
@@ -32,6 +33,7 @@ from pokemon_red_completion.party_development_outcome_learning import (
 )
 from pokemon_red_completion.party_development_rank import (
     PARTY_DEVELOPMENT_WORKLOAD_FEATURE_SCHEMA_ID,
+    PARTY_DEVELOPMENT_MATCHUP_FEATURE_SCHEMA_ID,
 )
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_battle_catalog import (
@@ -62,7 +64,9 @@ from pokemon_red_completion.red_team_training import (
     COLLECTION_UNSUPPORTED_MOVE_EFFECTS,
     EvolutionSettlementReserveReached,
     EvolutionTrainingPaused,
+    EvolutionMovementLimitReached,
     EvolutionVenueExhausted,
+    collection_encounter_coverage,
     collection_escape_escort,
     collection_finisher,
     evolution_reserve_requested,
@@ -81,8 +85,23 @@ class EvolutionWallLimitReached(EvolutionTrainingPaused):
 class EvolutionQuantumLimitReached(EvolutionTrainingPaused):
     """All declared quanta finished with verified XP and settled field control."""
 
-    def __init__(self, battles: int, healing_trips: int, maximum_quanta: int) -> None:
-        super().__init__(battles, healing_trips)
+    def __init__(
+        self,
+        battles: int,
+        healing_trips: int,
+        maximum_quanta: int,
+        *,
+        trainee_initial_xp: int | None = None,
+        trainee_terminal_xp: int | None = None,
+        trainee_xp_gained: int | None = None,
+    ) -> None:
+        super().__init__(
+            battles,
+            healing_trips,
+            trainee_initial_xp=trainee_initial_xp,
+            trainee_terminal_xp=trainee_terminal_xp,
+            trainee_xp_gained=trainee_xp_gained,
+        )
         self.maximum_quanta = validate_native_evolution_quanta(maximum_quanta)
 
 
@@ -148,8 +167,28 @@ def native_evolution_training_diagnostics(actions):
     )
 
 
-def native_evolution_pc_replanner(runtime, world, actions):
-    """Wait for an observed moving NPC on a selected Center PC or return stance.
+def _center_blocker_can_walk(blocker, world, map_id):
+    """A known roaming NPC can pause between animation steps on the goal tile."""
+    if blocker.moving:
+        return True
+    from .observation import CurrentMapObject
+
+    rom = getattr(world, "rom", None)
+    if not isinstance(blocker, CurrentMapObject) or not isinstance(rom, bytes):
+        return False
+    try:
+        matches = tuple(
+            event
+            for event in map_object_events(rom, (map_id,))
+            if event.object_index == blocker.sprite_index and event.sprite_id == blocker.picture_id
+        )
+    except CartridgeReadError:
+        return False
+    return len(matches) == 1 and matches[0].can_walk
+
+
+def native_evolution_pc_replanner(runtime, world, actions, *, allow_offscreen_approach=False):
+    """Wait for a known walking NPC on a selected Center PC or return stance.
 
     No occupied tile is ignored. Once it vacates, fresh native occupancy and
     every other route constraint still apply. Static/unrecognized blockers keep
@@ -157,6 +196,9 @@ def native_evolution_pc_replanner(runtime, world, actions):
     """
     from .actions import MacroAction, MacroActionKind
     from .red_goal_skills import _POKEMON_CENTER_MAPS
+
+    if type(allow_offscreen_approach) is not bool:
+        raise TypeError("offscreen Center approach requires explicit boolean")
 
     delegate = world.replanner()
 
@@ -170,7 +212,7 @@ def native_evolution_pc_replanner(runtime, world, actions):
         objects = tuple(
             o for o in runtime.reader.read_current_map_objects() if o.at == request.goal_at
         )
-        if len(objects) != 1 or not objects[0].moving:
+        if len(objects) != 1 or not _center_blocker_can_walk(objects[0], world, request.goal_map):
             return world.with_current_observation(runtime.reader).replanner()(request)
         before = runtime.adapter.observe()
         if (
@@ -180,6 +222,76 @@ def native_evolution_pc_replanner(runtime, world, actions):
             != (request.current.map_id, *request.current.at)
         ):
             raise context.RedGoalContextError("PC wait requires the actual ready route boundary")
+        if allow_offscreen_approach and not getattr(objects[0], "visible", True):
+            # Off-camera movement can remain suspended. Approach the SAME
+            # occupied destination through a real adjacent land tile first.
+            # Only the initial _walk fallback opts in; in-flight replans retain
+            # their original position and bounded-wait contract.
+            from .red_player_party_loan import _walk
+            from .red_resource_goal_router import _walking_plan
+            from .route_plan import RoutePlanningError
+
+            current = world.with_current_observation(runtime.reader)
+            y, x = request.goal_at
+            choices = []
+            for adjacent in ((y - 1, x), (y + 1, x), (y, x - 1), (y, x + 1)):
+                if min(adjacent) < 0 or adjacent == request.current.at:
+                    continue
+                try:
+                    quote = current.plan_feasible_to_map(
+                        request.current, request.goal_map, goal_at=adjacent
+                    )
+                except RoutePlanningError:
+                    continue
+                if (
+                    _walking_plan(quote)
+                    and quote.macro_path.maps == (request.goal_map,)
+                    and quote.terminal_mode == "land"
+                    and quote.terminal_at == adjacent
+                ):
+                    choices.append((quote.cost, adjacent))
+            if not choices:
+                raise context.RedGoalContextError(
+                    "offscreen Center blocker has no legal local approach"
+                )
+            adjacent = min(choices)[1]
+            _walk(runtime, actions, current, request.goal_map, adjacent)
+            approached = runtime.adapter.observe()
+            if (
+                not approached.input_ready
+                or approached.raw.battle_state
+                or (approached.raw.map_id, approached.raw.player_y, approached.raw.player_x)
+                != (request.goal_map, *adjacent)
+                or approached.party != before.party
+                or approached.collection_observation != before.collection_observation
+                or any(
+                    getattr(approached.raw, k) != getattr(before.raw, k)
+                    for k in ("player_money", "bag_items", "badge_bits", "event_flags")
+                )
+            ):
+                raise context.RedGoalContextError(
+                    "offscreen Center approach changed protected native state"
+                )
+            live = Gen1TraversalObserver(runtime.reader).observe()
+            if not live.ready or live.interruption is not None or live.mode != "land":
+                raise context.RedGoalContextError(
+                    "offscreen Center approach did not settle on land"
+                )
+            record = getattr(actions, "record_diagnostic_event", None)
+            if callable(record):
+                record(
+                    "offscreen_center_approach",
+                    dict(
+                        original_goal_map=request.goal_map,
+                        original_goal_at=request.goal_at,
+                        approach_at=adjacent,
+                        same_map_legal_walk=True,
+                        occupied_goal_not_ignored=True,
+                        model_queries=0,
+                    ),
+                )
+            request = replace(request, current=live)
+            before = approached
         for _ in range(16):
             actions.execute(MacroAction(MacroActionKind.WAIT, repeat=120))
             after = runtime.adapter.observe()
@@ -201,7 +313,26 @@ def native_evolution_pc_replanner(runtime, world, actions):
             ):
                 raise context.RedGoalContextError("PC wait changed protected native state")
             live = Gen1TraversalObserver(runtime.reader).observe()
-            if request.goal_at not in live.occupied:
+            # The route world reserves off-camera sprites too. A visible-only
+            # snapshot must not mistake an off-screen occupied goal for vacancy.
+            occupied = frozenset(o.at for o in runtime.reader.read_current_map_objects())
+            record = getattr(actions, "record_diagnostic_event", None)
+            if callable(record):
+                record(
+                    "center_goal_wait_occupancy",
+                    dict(
+                        goal_map=request.goal_map,
+                        goal_at=request.goal_at,
+                        wait_ordinal=_ + 1,
+                        logical_occupied=sorted(occupied),
+                        visible_occupied=sorted(live.occupied),
+                        prior_blocked=sorted(request.blocked.get(request.goal_map, ())),
+                        model_queries=0,
+                    ),
+                )
+            # During a step, logical object tiles can advance before rendered
+            # occupancy. A free logical destination alone is not a free tile.
+            if request.goal_at not in occupied | live.occupied:
                 blocked = dict(request.blocked)
                 blocked[request.goal_map] = (
                     blocked.get(request.goal_map, frozenset()) - {request.goal_at}
@@ -212,6 +343,23 @@ def native_evolution_pc_replanner(runtime, world, actions):
         raise context.RedGoalContextError("moving PC blocker did not vacate within its bound")
 
     return replan
+
+
+def center_walk_party_preserved(before, after) -> bool:
+    """Keep exact party identity; admit only existing verified nonfaint poison loss."""
+    from .red_silph_reward import reward_vitals_preserved
+
+    if before.party == after.party:
+        return True
+    if (before.party.size != after.party.size
+            or not reward_vitals_preserved(before.raw, after.raw)):
+        return False
+    restored = []
+    for old, new in zip(before.party.members, after.party.members, strict=True):
+        if old.hp != new.hp and new.hp <= 0:
+            return False
+        restored.append(replace(new, hp=old.hp))
+    return before.party == replace(after.party, members=tuple(restored))
 
 
 def prepare_native_training_center(
@@ -254,7 +402,7 @@ def prepare_native_training_center(
         or (after.raw.map_id, after.raw.player_x, after.raw.player_y) != (before.raw.map_id, 3, 3)
         or after.raw.battle_state
         or not after.input_ready
-        or after.party != before.party
+        or not center_walk_party_preserved(before, after)
         or after.collection_observation != before.collection_observation
         or after.raw.bag_items != before.raw.bag_items
         or after.raw.player_money != before.raw.player_money
@@ -308,7 +456,10 @@ def native_training_move_slot(state: RawGameState) -> int:
     The venue's independent per-turn HP/PP guard still runs. Unsupported
     special-damage and risky self-damaging moves are not silently improvised.
     """
-    from pokemon_red_completion.red_team_training import _PauseForTeamTrainingRecovery
+    from pokemon_red_completion.red_team_training import (
+        _PauseForTeamTrainingRecovery,
+        _PauseForTrainingDisable,
+    )
 
     catalog = PokemonRedBattleCatalog()
     if state.active_party_species_id is None or state.enemy_species_id is None:
@@ -316,10 +467,11 @@ def native_training_move_slot(state: RawGameState) -> int:
     own = catalog.resolve_species(pokemon_red_species_ref(state.active_party_species_id)).types
     enemy = catalog.resolve_species(pokemon_red_species_ref(state.enemy_species_id)).types
     candidates = []
+    disabled_damage = False
     for index, (move_id, pp) in enumerate(
         zip(state.battler_moves or (), state.battler_pp or (), strict=True)
     ):
-        if not move_id or pp <= 0 or index + 1 == (state.player_disabled_move_slot or 0):
+        if not move_id or pp <= 0:
             continue
         move = catalog.resolve_move(pokemon_red_move_ref(move_id))
         if move.power <= 0 or move.effect_flags.intersection(COLLECTION_UNSUPPORTED_MOVE_EFFECTS):
@@ -327,24 +479,39 @@ def native_training_move_slot(state: RawGameState) -> int:
         effectiveness = catalog.type_effectiveness(move.type_name, enemy)
         score = move.power * move.accuracy * effectiveness * (1.5 if move.type_name in own else 1.0)
         if score > 0:
-            candidates.append((score, -(index + 1)))
+            if index + 1 == (state.player_disabled_move_slot or 0):
+                disabled_damage = True
+            else:
+                # Catalog constant damage is HP loss,not nominal base power1.
+                # Prefer a qualified high-accuracy finishing move on observed HP;
+                # no damage/survival estimate or guaranteed hit is invented.
+                constant = catalog.constant_damage_bound(pokemon_red_move_ref(move_id))
+                finishes = (
+                    constant is not None
+                    and type(state.enemy_hp) is int
+                    and 0 < state.enemy_hp <= constant
+                    and move.accuracy == 1.0
+                )
+                candidates.append((finishes, score, -(index + 1)))
     if not candidates:
+        if disabled_damage:
+            raise _PauseForTrainingDisable
         raise _PauseForTeamTrainingRecovery
-    return -max(candidates)[1]
+    return -max(candidates)[2]
 
 
 def native_training_move_guard(state: RawGameState) -> None:
     """Keep the per-turn health gate without an old party's preferred slots."""
-    from pokemon_red_completion.red_team_training import _PauseForTeamTrainingRecovery
+    from pokemon_red_completion.red_team_training import (
+        _PauseForTeamTrainingRecovery,
+        _PauseForTrainingHealth,
+    )
 
     hp, maximum = state.battler_hp, state.battler_max_hp
-    if (
-        hp is None
-        or maximum is None
-        or maximum <= 0
-        or (hp / maximum <= context.MANSION_TEAM_POLICY.retreat_hp_ratio)
-    ):
+    if hp is None or maximum is None or maximum <= 0:
         raise _PauseForTeamTrainingRecovery
+    if hp / maximum <= context.MANSION_TEAM_POLICY.retreat_hp_ratio:
+        raise _PauseForTrainingHealth
     native_training_move_slot(state)
 
 
@@ -403,10 +570,73 @@ def settle_native_evolution(runtime, actions, *, training_error=None) -> dict[st
         raise TypeError("deferred evolution settlement needs the actual training error")
     callback = runtime.evolution_settlement
     if callback is None:
+        # A closed no-loan party has nothing to repay, but its independently
+        # verified active roster still certifies a settled partial quantum.
+        # Unknown faults and active battles retain their original failure.
+        from .red_player_party_guard import RedPlayerPartyGuard
+
+        guard = getattr(runtime.adapter, "party_guard", None)
+        if (
+            training_error is None
+            and isinstance(guard, RedPlayerPartyGuard)
+            and not guard.loanable_refs
+            and guard.field_carrier is None
+        ):
+            observed = runtime.adapter.observe()
+            if (
+                observed.raw.battle_state == 0
+                and observed.input_ready
+                and not observed.party.fainted_count
+            ):
+                guard.verify_active_roster_restored()
+                expected = getattr(runtime, "evolution_active_roster_refs", None)
+                if expected is None:
+                    expected = guard.refs
+                if (
+                    type(expected) is not tuple
+                    or len(set(expected)) != len(expected)
+                    or not set(guard.refs) <= set(expected)
+                    or set(expected) != set(guard.reader.preparation_specimen_refs())
+                ):
+                    raise context.RedGoalContextError(
+                        "no-loan evolution settlement changed its exact active roster"
+                    )
+                deposited = getattr(runtime, "evolution_deposited_ref", None)
+                if deposited is not None and (
+                    type(deposited) is not str
+                    or sum(m.preparation_ref == deposited
+                           for m in runtime.reader.read_box_specimen_identities()) != 1
+                ):
+                    raise context.RedGoalContextError(
+                        "boxed evolution settlement lost its exact deposited specimen"
+                    )
+                return {"retained_active_roster_restored": True}
         return {}
     from .red_player_party_guard import RedPlayerPartyGuard
 
     guard = getattr(runtime.adapter, "party_guard", None)
+    if (
+        callable(callback)
+        and isinstance(guard, RedPlayerPartyGuard)
+        and not guard.loanable_refs
+        and guard.field_carrier is None
+    ):
+        # Declared no-loan configuration: no exchange could have been
+        # authorized, so there is nothing to repay. Settlement is a verified
+        # no-op only when every guarded individual is still active; any
+        # displaced member still fails closed. No input is sent here.
+        observed = runtime.adapter.observe()
+        if observed.raw.battle_state or not observed.input_ready:
+            if training_error is None:
+                raise context.RedGoalContextError("PC loan settlement requires settled field control")
+            return {"retained_active_roster_restoration_deferred": True}
+        try:
+            guard.verify_active_roster_restored()
+        except ValueError as error:
+            raise context.RedGoalContextError(
+                "no-loan evolution settlement found an unrestored active roster"
+            ) from error
+        return {"no_loan_active_roster_verified": True}
     if (
         not callable(callback)
         or not isinstance(guard, RedPlayerPartyGuard)
@@ -434,6 +664,9 @@ def settle_native_evolution(runtime, actions, *, training_error=None) -> dict[st
                 },
             )
         return {"retained_active_roster_restoration_deferred": True}
+    if guard.field_carrier is not None and guard.field_carrier.phase == "active":
+        guard.verify_authorized_active_roster()
+        return {"field_carrier_custody_retained": True}
     callback(actions)
     guard.verify_active_roster_restored()
     after = runtime.adapter.observe()
@@ -448,6 +681,68 @@ def settle_native_evolution(runtime, actions, *, training_error=None) -> dict[st
     ):
         raise context.RedGoalContextError("PC loan settlement changed its collection/resources")
     return {"retained_active_roster_restored": True}
+
+
+def bind_no_loan_evolution_roster(runtime):
+    """Snapshot the actual party before resumed training,including earned catches.
+
+    Retained identity/progress checks remain authoritative. This action-free
+    binding permits no additions,replacements or removals during training and
+    grants no custody or loan authority. Legacy settlement callers remain exact.
+    """
+    from .red_player_party_guard import RedPlayerPartyGuard
+
+    guard = getattr(runtime.adapter, "party_guard", None)
+    if (
+        runtime.evolution_settlement is None
+        and isinstance(guard, RedPlayerPartyGuard)
+        and not guard.loanable_refs
+        and guard.field_carrier is None
+    ):
+        guard.verify_active_roster_restored()
+        return replace(
+            runtime, evolution_active_roster_refs=guard.reader.preparation_specimen_refs()
+        )
+    return runtime
+
+
+def bind_boxed_evolution_roster(runtime, request):
+    """Bind only the declared PC exchange, before it sends any input.
+
+    Protected retained members stay active. The exact observed deposit moves to
+    storage and the exact observed boxed precursor becomes active; no other
+    replacement is permitted. Named loans keep their existing settlement.
+    """
+    from .red_player_party_guard import RedPlayerPartyGuard
+
+    guard = getattr(runtime.adapter, "party_guard", None)
+    if (runtime.evolution_settlement is not None
+            or not isinstance(guard, RedPlayerPartyGuard)
+            or guard.loanable_refs or guard.field_carrier is not None):
+        return runtime
+    if type(request) is not context.RedBoxedLevelEvolutionGoalRequest:
+        raise context.RedGoalContextError("boxed evolution roster needs its exact request")
+    request.__post_init__()
+    guard.verify_active_roster_restored()
+    party = guard.reader.read()
+    refs = guard.reader.preparation_specimen_refs()
+    slot = request.deposit_party_slot - 1
+    matches = tuple(m for m in runtime.reader.read_box_specimen_identities()
+                    if m.box_index == request.current_box_index
+                    and m.box_slot == request.precursor_box_slot
+                    and m.species_id == request.precursor_internal_species_id)
+    if (type(refs) is not tuple or len(refs) != len(party.members)
+            or len(set(refs)) != len(refs) or not 0 <= slot < len(refs)
+            or party.members[slot].species_id != request.deposit_internal_species_id
+            or refs[slot] in guard.refs or len(matches) != 1
+            or matches[0].preparation_ref in refs):
+        raise context.RedGoalContextError("boxed evolution roster exchange differs")
+    expected = tuple(ref for i, ref in enumerate(refs) if i != slot)
+    expected += (matches[0].preparation_ref,)
+    if len(set(expected)) != len(expected) or not set(guard.refs) <= set(expected):
+        raise context.RedGoalContextError("boxed evolution roster loses retained identity")
+    return replace(runtime, evolution_active_roster_refs=expected,
+                   evolution_deposited_ref=refs[slot])
 
 
 def boxed_loan_has_retained_fingerprint_collision(runtime, source_internal: int) -> bool:
@@ -520,7 +815,7 @@ def validate_native_evolution_venue_model(model, model_sha256):
         raise ValueError("native venue model and declared identity must be paired")
     if model is not None and (
         not isinstance(model, PartyDevelopmentOutcomeModel)
-        or model.feature_schema_id != PARTY_DEVELOPMENT_WORKLOAD_FEATURE_SCHEMA_ID
+        or model.feature_schema_id not in (PARTY_DEVELOPMENT_WORKLOAD_FEATURE_SCHEMA_ID, PARTY_DEVELOPMENT_MATCHUP_FEATURE_SCHEMA_ID)
         or canonical_party_development_outcome_model_sha256(model) != model_sha256
     ):
         raise ValueError("native venue model differs from its declared workload scorer")
@@ -534,8 +829,11 @@ class NativeEvolutionVenuePolicy:
     model_sha256: str
     training_venues: tuple[TrainingVenue, ...]
     allow_direct_evolution: bool = True
+    compare_recipient_yield: bool = False
 
     def __post_init__(self):
+        if type(self.compare_recipient_yield) is not bool:
+            raise ValueError("native venue yield comparison requires an explicit boolean")
         if type(self.allow_direct_evolution) is not bool:
             raise ValueError("configured evolution mode requires an explicit boolean")
         validate_native_evolution_venue_model(self.model, self.model_sha256)
@@ -547,6 +845,33 @@ class NativeEvolutionVenuePolicy:
             != len(self.training_venues)
         ):
             raise ValueError("configured native venue policy needs distinct declared venues")
+
+
+def live_native_evolution_venues(party, source_id, venues, tables, exclusions):
+    """Recheck the same per-encounter helper coverage the scorer requires."""
+    escaped = context.MANSION_VOLATILE_ENEMY_SPECIES | context.MANSION_ESCORT_ENEMY_SPECIES
+    return tuple(
+        venue for venue in venues
+        if collection_encounter_coverage(
+            party, source_id, context.MANSION_TEAM_POLICY, tables[venue.map_id],
+            resources=True, escape_species=escaped, excluded_helper_species=exclusions,
+        )
+    )
+
+
+def _recipient_yield_choice(candidates, available, frozen):
+    """Compare observable recipient XP only when every eligible venue has a known quote."""
+    eligible = [(row["candidate_index"], row["features"])
+                for row, allowed in zip(candidates, available, strict=True) if allowed]
+    if any(features["venue.useful_encounters_known"] != 1.0 for _, features in eligible):
+        return frozen, "unknown_yield"
+    yields = [(index, features["venue.expected_recipient_xp_per_encounter"])
+              for index, features in eligible]
+    highest = max(value for _, value in yields)
+    winners = [index for index, value in yields if value == highest]
+    if len(winners) != 1:
+        return frozen, "tied_maximum"
+    return winners[0], "unique_maximum"
 
 
 def select_native_evolution_model_venue(
@@ -562,18 +887,29 @@ def select_native_evolution_model_venue(
     actions,
     excluded_helper_species: frozenset[int],
     allow_guarded_escapes: bool,
+    allow_direct_evolution: bool = False,
+    geometry_quotes=None,
+    compare_recipient_yield=False,
 ) -> TrainingVenue:
-    """Select once per action, then recheck the exact retained venue each quantum."""
+    """Select greedily, retaining the venue until verified trainee level progress."""
     from pokemon_red_completion.red_party_development_adapter import (
         build_native_evolution_venue_menu,
     )
 
-    action_scope = (source_id, target_id, model_sha256)
+    if type(allow_direct_evolution) is not bool:
+        raise ValueError("native venue mode requires an explicit boolean")
+    if type(compare_recipient_yield) is not bool:
+        raise ValueError("native venue yield comparison requires an explicit boolean")
+    action_scope = (source_id, target_id, model_sha256, allow_direct_evolution)
+    if compare_recipient_yield:
+        action_scope += ("recipient-yield-v1",)
+    if ("venue_identity" in choice_state or "action_scope" in choice_state) and (
+        choice_state.get("action_scope") != action_scope
+    ):
+        raise context.RedGoalContextError(
+            "native venue choice state belongs to another action or model"
+        )
     if "venue_identity" in choice_state:
-        if choice_state.get("action_scope") != action_scope:
-            raise context.RedGoalContextError(
-                "native venue choice state belongs to another action or model"
-            )
         matches = tuple(
             venue for venue in venues if venue.band.identity == choice_state["venue_identity"]
         )
@@ -585,6 +921,8 @@ def select_native_evolution_model_venue(
     model_selected = len(venues) > 1
     document = None
     snapshot_sha256 = None
+    comparator_receipt = {}
+    actor = "learned_venue_model" if model_selected else "rule_based_support"
     if model_selected:
         trainee = next(
             (member for member in observation.party.members if member.species_id == source_id), None
@@ -601,6 +939,12 @@ def select_native_evolution_model_venue(
             excluded_helper_species=excluded_helper_species,
             allow_guarded_escapes=allow_guarded_escapes,
             resources=True,
+            allow_direct_evolution=allow_direct_evolution,
+            geometry_quotes=geometry_quotes,
+            include_matchup_context=(
+                getattr(model, "feature_schema_id", None)
+                == PARTY_DEVELOPMENT_MATCHUP_FEATURE_SCHEMA_ID
+            ),
         )
         if tuple(menu.bindings) != tuple(venue.band for venue in venues):
             raise context.RedGoalContextError(
@@ -614,6 +958,18 @@ def select_native_evolution_model_venue(
         ):
             raise context.RedGoalContextError("native venue model selected an illegal binding")
         document = menu.candidate_set.public_dict()
+        if compare_recipient_yield:
+            frozen = selected_index
+            selected_index, reason = _recipient_yield_choice(
+                document["candidates"], menu.candidate_available, frozen,
+            )
+            if reason == "unique_maximum":
+                model_selected = False
+                actor = "declared_yield_comparator"
+            comparator_receipt = dict(
+                comparison="recipient-yield-v1", comparison_reason=reason, frozen_model_index=frozen,
+                candidate_available=list(menu.candidate_available),
+            )
         snapshot_sha256 = menu.semantic_snapshot_sha256
     else:
         selected_index = 0
@@ -625,7 +981,8 @@ def select_native_evolution_model_venue(
         record(
             "native_evolution_venue_choice",
             dict(
-                actor="learned_venue_model" if model_selected else "rule_based_support",
+                actor=actor,
+                **comparator_receipt,
                 model_selected=model_selected,
                 model_sha256=model_sha256,
                 selected_index=selected_index,
@@ -634,8 +991,18 @@ def select_native_evolution_model_venue(
                 candidate_count=len(venues),
                 candidate_set=document,
                 semantic_snapshot_sha256=snapshot_sha256,
-                decision_lifetime="one-complete-evolution-action",
-                nominal_yield_model="unboosted-two-participant-wild-v1",
+                decision_lifetime="until-verified-trainee-level-progress-within-action",
+                nominal_yield_model=(
+                    "unboosted-guarded-recipient-wild-v2"
+                    if allow_direct_evolution
+                    else "unboosted-two-participant-wild-v1"
+                ),
+                allow_direct_evolution=allow_direct_evolution,
+                route_geometry=(
+                    None
+                    if geometry_quotes is None
+                    else [quote.public_dict() for quote in geometry_quotes]
+                ),
             ),
         )
     return selected
@@ -649,6 +1016,7 @@ def _native_route_11_heal_and_return(actions, reader, emulator, *, world, ground
     """
     from .red_dig_recovery import execute_dig_escape, plan_dig_escape
     from .red_training_transitions import (
+        DIG_MOVE_ID,
         RED_ESCAPE_WARP_TILESETS,
         RED_TRAINING_FLY_OUTDOOR_MAPS,
         red_training_fly_available,
@@ -669,6 +1037,49 @@ def _native_route_11_heal_and_return(actions, reader, emulator, *, world, ground
             ):
                 raise context.RedGoalContextError("native escape lacks its onward training return")
             execute_dig_escape(world, reader, emulator, actions, plan)
+        elif (
+            raw.map_id == MapId.POKEMON_MANSION_1F
+            and not any(DIG_MOVE_ID in moves for moves in (raw.party_moves or ()))
+            and red_training_fly_available(raw)
+            and int(MapId.VERMILION_CITY) in reader.read_fly_destinations()
+        ):
+            # A new training venue may become necessary after verified level
+            # progress. Exit the current venue normally before field Fly.
+            from .actions import MacroAction, MacroActionKind
+            from .gen1_field_moves import Gen1FieldMovePort
+            from .red_collection_fly import red_fly_landings
+            from .red_training_ground_route import VERMILION_TRAINING_EXTERIOR
+
+            landings = dict(red_fly_landings(world.rom))
+            RedVermilionGroundTransition(
+                rom=world.rom,
+                route_world=world,
+                destination_map=int(MapId.CINNABAR_ISLAND),
+                destination_at=landings[int(MapId.CINNABAR_ISLAND)],
+                full_event_offsets=True,
+                observe_terrain=True,
+            )(actions, reader, emulator)
+            if reader.read().map_id != MapId.CINNABAR_ISLAND:
+                raise context.RedGoalContextError("native training egress missed Cinnabar")
+            receipt = Gen1FieldMovePort(actions, reader, emulator).execute(
+                MacroAction(MacroActionKind.FIELD_MOVE, "fly:vermilion_city")
+            )
+            arrival = reader.read()
+            if (
+                receipt.destination_map != int(MapId.VERMILION_CITY)
+                or receipt.flight_confirmations != 1
+                or arrival.map_id != MapId.VERMILION_CITY
+                or (arrival.player_y, arrival.player_x) != VERMILION_TRAINING_EXTERIOR
+            ):
+                raise context.RedGoalContextError("native training egress missed the Vermilion healing boundary")
+            record = getattr(actions, "record_diagnostic_event", None)
+            if callable(record):
+                record("native_evolution_mansion_egress", dict(
+                    source_map=int(MapId.POKEMON_MANSION_1F),
+                    exit_map=int(MapId.CINNABAR_ISLAND),
+                    destination_map=int(arrival.map_id),
+                    flight_confirmations=receipt.flight_confirmations,
+                ))
     return _route_11_heal_and_return(
         actions,
         reader,
@@ -828,6 +1239,7 @@ def bind_native_boxed_evolution(
     if (venue_model is None) != (venue_model_sha256 is None):
         raise ValueError("native venue model and declared identity must be paired")
     policy = getattr(runtime, "native_evolution_venue_policy", None)
+    compare_recipient_yield = False
     if policy is not None:
         if not isinstance(policy, NativeEvolutionVenuePolicy):
             raise ValueError("configured native venue policy differs")
@@ -840,6 +1252,7 @@ def bind_native_boxed_evolution(
         if training_venues is not None and training_venues != policy.training_venues:
             raise ValueError("explicit native venues conflict with configured policy")
         training_venues = policy.training_venues
+        compare_recipient_yield = policy.compare_recipient_yield
         # A declared helper-only regime cannot be weakened by a local default.
         allow_direct_evolution = allow_direct_evolution and policy.allow_direct_evolution
     validate_native_evolution_venue_model(venue_model, venue_model_sha256)
@@ -1011,6 +1424,37 @@ def bind_native_boxed_evolution(
             )
         return context.RedGoalSkillAvailability.available()
 
+    def observe_trainee_xp(source_id: int, target_id: int | None = None) -> int | None:
+        try:
+            members = PokemonRedPartyReader(runtime.emulator).read().members
+        except Exception:
+            members = ()
+        for member in members:
+            if member.species_id == source_id and type(member.experience) is int and member.experience >= 0:
+                return member.experience
+        if target_id is not None:
+            for member in members:
+                if member.species_id == target_id and type(member.experience) is int and member.experience >= 0:
+                    return member.experience
+        return None
+
+    def xp_kwargs(
+        initial_xp: int | None,
+        terminal_xp: int | None,
+    ) -> dict[str, int]:
+        if (
+            type(initial_xp) is int
+            and initial_xp >= 0
+            and type(terminal_xp) is int
+            and terminal_xp >= initial_xp
+        ):
+            return {
+                "trainee_initial_xp": initial_xp,
+                "trainee_terminal_xp": terminal_xp,
+                "trainee_xp_gained": terminal_xp - initial_xp,
+            }
+        return {}
+
     def check_settlement_reserve(battles: int = 0, heals: int = 0) -> None:
         if evolution_reserve_requested(runtime.evolution_stop_requested):
             if (
@@ -1035,23 +1479,15 @@ def bind_native_boxed_evolution(
         if trainee is None:
             raise context.RedGoalContextError("native training lost its in-party precursor")
         current = runtime.adapter.observe()
-        initial_trainee_xp = None
-        current_trainee_xp = None
-        if helper_xp_guard is not None:
-            current_trainee_xp = next(
-                (
-                    member.experience
-                    for member in PokemonRedPartyReader(runtime.emulator).read().members
-                    if member.species_id == source_id
-                ),
-                None,
+        current_trainee_xp = observe_trainee_xp(source_id)
+        if choice_state is not None:
+            initial_trainee_xp = choice_state.setdefault(
+                "trainee_initial_xp", current_trainee_xp
             )
-            if choice_state is not None:
-                initial_trainee_xp = choice_state.setdefault(
-                    "trainee_initial_xp", current_trainee_xp
-                )
-            else:
+            if not isinstance(initial_trainee_xp, int):
                 initial_trainee_xp = current_trainee_xp
+        else:
+            initial_trainee_xp = current_trainee_xp
         venues = supported_venues(current)
         if not venues:
             if (
@@ -1071,7 +1507,12 @@ def bind_native_boxed_evolution(
                 )
                 # A diagnostic counterquote can explain a pause, never authorize input.
                 if blocked and supported_venues(current, diagnostic_headroom=True):
-                    raise EvolutionHelperXPExhausted(0, initial_heals, frozenset(blocked))
+                    raise EvolutionHelperXPExhausted(
+                        0,
+                        initial_heals,
+                        frozenset(blocked),
+                        **xp_kwargs(initial_trainee_xp, current_trainee_xp),
+                    )
             raise context.RedGoalContextError(
                 "no cartridge venue permits safe shared-experience evolution"
             )
@@ -1120,6 +1561,31 @@ def bind_native_boxed_evolution(
                 raise context.RedGoalContextError(
                     "native venue model lacks declared identity or state"
                 )
+            from .red_native_venue_geometry import quote_native_evolution_venue_geometry
+
+            if "venue_identity" not in choice_state:
+                tables = wild_tables(world.rom)
+                exclusions = helper_exclusions(venue_observation)
+                quoted_venues = venues
+                venues = live_native_evolution_venues(
+                    venue_observation.party, source_id, venues, tables, exclusions
+                )
+                record = getattr(actions, "record_diagnostic_event", None)
+                if callable(record) and venues != quoted_venues:
+                    record("native_evolution_resource_recheck", dict(
+                        recoverable_map_ids=[venue.map_id for venue in quoted_venues],
+                        live_map_ids=[venue.map_id for venue in venues],
+                    ))
+                if not venues:
+                    if not venue_observation.input_ready or venue_observation.raw.battle_state:
+                        raise context.RedGoalContextError("helper resource pause requires settled control")
+                    raise EvolutionVenueExhausted(0, initial_heals)
+
+            geometry_quotes = (
+                quote_native_evolution_venue_geometry(runtime, world, venue_observation, venues)
+                if len(venues) > 1 and "venue_identity" not in choice_state
+                else None
+            )
             selected = select_native_evolution_model_venue(
                 venue_observation,
                 rom=world.rom,
@@ -1132,6 +1598,9 @@ def bind_native_boxed_evolution(
                 actions=actions,
                 excluded_helper_species=helper_exclusions(venue_observation),
                 allow_guarded_escapes=allow_guarded_venue_escapes,
+                allow_direct_evolution=allow_direct_evolution,
+                geometry_quotes=geometry_quotes,
+                **({"compare_recipient_yield": True} if compare_recipient_yield else {}),
             )
             venues = (selected,)
         else:
@@ -1170,6 +1639,11 @@ def bind_native_boxed_evolution(
                 evolution_target=(source_id, target_id),
                 allow_direct_evolution=allow_direct_evolution,
                 collection_shared_experience=True,
+                **(
+                    {"recover_collection_faints": True}
+                    if getattr(runtime, "evolution_training_faint_recovery", False)
+                    else {}
+                ),
                 collection_encounters={venue.map_id: tables[venue.map_id] for venue in venues},
                 excluded_collection_helper_species=excluded_helper_species,
                 evolution_battle_quantum=4,
@@ -1184,14 +1658,7 @@ def bind_native_boxed_evolution(
                 **native_evolution_training_diagnostics(actions),
             )
         except EvolutionHelperXPExhausted as paused:
-            final_trainee_xp = next(
-                (
-                    member.experience
-                    for member in PokemonRedPartyReader(runtime.emulator).read().members
-                    if member.species_id == source_id
-                ),
-                None,
-            )
+            final_trainee_xp = observe_trainee_xp(source_id)
             if (
                 type(initial_trainee_xp) is not int
                 or type(final_trainee_xp) is not int
@@ -1201,9 +1668,13 @@ def bind_native_boxed_evolution(
                     "helper headroom pause requires verified trainee XP progress"
                 ) from paused
             raise EvolutionHelperXPExhausted(
-                paused.battles, paused.healing_trips + initial_heals, paused.blocked_helpers
+                paused.battles,
+                paused.healing_trips + initial_heals,
+                paused.blocked_helpers,
+                **xp_kwargs(initial_trainee_xp, final_trainee_xp),
             ) from paused
         except EvolutionTrainingPaused as paused:
+            final_trainee_xp = observe_trainee_xp(source_id)
             record = getattr(actions, "record_diagnostic_event", None)
             if callable(record):
                 record(
@@ -1218,8 +1689,17 @@ def bind_native_boxed_evolution(
                 )
             # Nursing before the inner trainer belongs to this quantum too.
             # Preserve reserve/wall subtypes so the outer report keeps its cause.
-            raise type(paused)(paused.battles, paused.healing_trips + initial_heals) from paused
-        return BoundedEvolutionTrainingResult(battles, heals + initial_heals)
+            raise type(paused)(
+                paused.battles,
+                paused.healing_trips + initial_heals,
+                **xp_kwargs(initial_trainee_xp, final_trainee_xp),
+            ) from paused
+        final_trainee_xp = observe_trainee_xp(source_id, target_id)
+        return BoundedEvolutionTrainingResult(
+            battles,
+            heals + initial_heals,
+            **xp_kwargs(initial_trainee_xp, final_trainee_xp),
+        )
 
     def train(
         actions: CountingExecutor,
@@ -1275,8 +1755,8 @@ def bind_native_boxed_evolution(
                     battles + paused.battles,
                     heals + paused.healing_trips,
                 ) from paused
-            except EvolutionSettlementReserveReached as paused:
-                raise EvolutionSettlementReserveReached(
+            except (EvolutionSettlementReserveReached, EvolutionMovementLimitReached) as paused:
+                raise type(paused)(
                     battles + paused.battles,
                     heals + paused.healing_trips,
                 ) from paused
@@ -1321,17 +1801,79 @@ def bind_native_boxed_evolution(
                 or current.experience <= previous.experience
             ):
                 raise context.RedGoalContextError("complete evolution made no verified XP progress")
+            if venue_model is not None and current.level > previous.level:
+                # Keep this committed action and exact trainee. Only a genuine
+                # level change expires the venue; unchanged quanta retain it.
+                # The next quantum uses the existing full inventory, resource
+                # gates, current geometry and frozen greedy selector.
+                choice_state.pop("venue_identity", None)
             if retain_quantum is not None:
                 retain_quantum()
         raise EvolutionQuantumLimitReached(battles, heals, maximum_quanta)
 
+    def train_with_xp(
+        actions: CountingExecutor,
+        source_id: int,
+        target_id: int,
+    ) -> BoundedEvolutionTrainingResult:
+        initial_xp = observe_trainee_xp(source_id)
+        try:
+            result = train(actions, source_id, target_id)
+        except EvolutionTrainingPaused as paused:
+            if paused.trainee_initial_xp is not None:
+                raise
+            terminal_xp = observe_trainee_xp(source_id)
+            xp_data = xp_kwargs(initial_xp, terminal_xp)
+            if not xp_data:
+                raise
+            if isinstance(paused, EvolutionHelperXPExhausted):
+                raise EvolutionHelperXPExhausted(
+                    paused.battles,
+                    paused.healing_trips,
+                    paused.blocked_helpers,
+                    **xp_data,
+                ) from paused
+            if isinstance(paused, EvolutionQuantumLimitReached):
+                raise EvolutionQuantumLimitReached(
+                    paused.battles,
+                    paused.healing_trips,
+                    paused.maximum_quanta,
+                    **xp_data,
+                ) from paused
+            raise type(paused)(
+                paused.battles,
+                paused.healing_trips,
+                **xp_data,
+            ) from paused
+        if result.trainee_initial_xp is not None:
+            return result
+        terminal_xp = observe_trainee_xp(source_id, target_id)
+        return BoundedEvolutionTrainingResult(
+            result.battles_completed,
+            result.healing_trips,
+            **xp_kwargs(initial_xp, terminal_xp),
+        )
+
     def partial_report(paused: EvolutionTrainingPaused) -> GoalExecutionReport:
         # Final verification independently observes the collection. A partial
         # quantum never carries an exact-evolution or success assertion.
+        zero_progress = {}
+        xp = paused.xp_dict()
+        if (type(paused) is EvolutionSettlementReserveReached and paused.battles == 0
+                and xp.get("trainee_xp_gained") == 0 and xp):
+            party_reader = PokemonRedPartyReader(runtime.emulator)
+            refs = party_reader.preparation_specimen_refs()
+            trainees = [member for member in party_reader.read().members
+                if red_species_ref(red_internal_species_number(member.species_id))
+                == spec.parameters["source_species_ref"]]
+            if len(trainees) == 1:
+                zero_progress = dict(zero_progress_evolution=True,
+                    zero_progress_trainee_ref=refs[trainees[0].slot - 1])
         return GoalExecutionReport(
             0,
             0,
             {
+                **zero_progress,
                 "schema": "pokemon.red.native-evolution-partial.v1",
                 "bounded": True,
                 "evolution_partial": True,
@@ -1339,6 +1881,11 @@ def bind_native_boxed_evolution(
                 "target_species_ref": spec.parameters["target_species_ref"],
                 "settlement_reserve_reached": isinstance(paused, EvolutionSettlementReserveReached),
                 "wall_limit_reached": isinstance(paused, EvolutionWallLimitReached),
+                **(
+                    {"training_movement_limit_reached": True}
+                    if type(paused) is EvolutionMovementLimitReached
+                    else {}
+                ),
                 **(
                     {"helper_xp_headroom_exhausted": True}
                     if isinstance(paused, EvolutionHelperXPExhausted)
@@ -1364,6 +1911,7 @@ def bind_native_boxed_evolution(
                 ),
                 "completed_training_battles": paused.battles,
                 "healing_trips": paused.healing_trips,
+                **paused.xp_dict(),
             },
         )
 
@@ -1378,10 +1926,11 @@ def bind_native_boxed_evolution(
             != spec.parameters["target_species_ref"]
         ):
             raise context.RedGoalContextError("resumed evolution lost its unique declared trainee")
+        settlement_runtime = bind_no_loan_evolution_roster(runtime)
         action_start, frame_start = actions.actions_executed, runtime.emulator.frame_count
         training_error = None
         try:
-            result = train(actions, source_id, target_id)
+            result = train_with_xp(actions, source_id, target_id)
             report = GoalExecutionReport(
                 0,
                 0,
@@ -1389,6 +1938,7 @@ def bind_native_boxed_evolution(
                     "bounded": True,
                     "completed_training_battles": result.battles_completed,
                     "healing_trips": result.healing_trips,
+                    **result.xp_dict(),
                 },
             )
         except EvolutionTrainingPaused as paused:
@@ -1398,9 +1948,11 @@ def bind_native_boxed_evolution(
             raise
         finally:
             settlement = (
-                settle_native_evolution(runtime, actions)
+                settle_native_evolution(settlement_runtime, actions)
                 if training_error is None
-                else settle_native_evolution(runtime, actions, training_error=training_error)
+                else settle_native_evolution(
+                    settlement_runtime, actions, training_error=training_error
+                )
             )
         return replace(
             report,
@@ -1437,6 +1989,22 @@ def bind_native_boxed_evolution(
             raise context.RedGoalContextError(
                 "native evolution storage request changed before input"
             )
+        from .red_player_party_guard import RedPlayerPartyGuard
+        from .red_player_party_loan import _stock
+
+        settlement_runtime = bind_boxed_evolution_roster(runtime, request)
+        guard = getattr(runtime.adapter, "party_guard", None)
+        original_trainee = initial_stock = None
+        if isinstance(guard, RedPlayerPartyGuard) and guard.storage_reader is not None:
+            matches = tuple(
+                specimen for specimen in runtime.reader.read_box_specimen_identities()
+                if specimen.box_index == request.current_box_index
+                and specimen.box_slot == request.precursor_box_slot
+                and specimen.species_id == request.precursor_internal_species_id
+            )
+            if len(matches) == 1:
+                original_trainee = matches[0]
+                initial_stock = _stock(runtime)
         retained_helpers = tuple(
             replace(member, slot=index + 1)
             for index, member in enumerate(
@@ -1451,25 +2019,37 @@ def bind_native_boxed_evolution(
         traversal = Gen1TraversalObserver(runtime.reader)
         start = traversal.observe()
         pc_replanner = native_evolution_pc_replanner(runtime, world, actions)
+        nurse_prepared = False
         try:
             to_pc = world.plan_feasible_to_map(start, start.map_id, goal_at=(4, 13))
         except RoutePlanningError:
             from .route_executor import ReplanRequest
 
-            to_pc = pc_replanner(ReplanRequest(start, start.map_id, (4, 13), {}, 1))
+            restore_native_center_party(runtime, actions)
+            finish_center_dialogue(actions, runtime.reader)
+            nurse_prepared = True
+            start = traversal.observe()
+            initial_pc_replan = native_evolution_pc_replanner(
+                runtime, world, actions, allow_offscreen_approach=True
+            )
+            to_pc = initial_pc_replan(ReplanRequest(start, start.map_id, (4, 13), {}, 1))
+            start = traversal.observe()
+            world_now = world.with_current_observation(runtime.reader)
+        else:
+            world_now = world
         # This is a route-plan start, not a fabricated game observation or offer.
         pc_start = replace(start, at=(4, 13))
-        to_training = world.plan_feasible_to_map(pc_start, start.map_id, goal_at=(3, 3))
+        to_training = world_now.plan_feasible_to_map(pc_start, start.map_id, goal_at=(3, 3))
         from pokemon_red_completion.red_resource_goal_router import _walking_plan
 
         if not _walking_plan(to_pc) or not _walking_plan(to_training):
             raise RoutePlanningError("native evolution requires walking-only PC access")
         # Plan before any input. Healing is declared skill preparation, not a
         # model-selected outcome; all costs stay inside the outer goal budget.
-        restore_native_center_party(runtime, actions)
-        # Old checkpoints may contain the already-healed farewell screen. They
-        # have no restore offer; explicitly finish that interaction too.
-        finish_center_dialogue(actions, runtime.reader)
+        if not nurse_prepared:
+            restore_native_center_party(runtime, actions)
+            # A checkpoint may still contain the already-healed farewell screen.
+            finish_center_dialogue(actions, runtime.reader)
         # The legacy engine binds Blastoise as its escort. Early native play
         # instead binds a real remaining finisher, after the existing venue
         # coverage, retained-helper, walking-route and Center checks. No empty
@@ -1532,7 +2112,9 @@ def bind_native_boxed_evolution(
             identity_document["prefer_highest_supported_venue"] = True
         if venue_model is not None:
             identity_document["venue_model_sha256"] = venue_model_sha256
-            identity_document["venue_choice_protocol"] = "native-full-evolution-venue-v1"
+            identity_document["venue_choice_protocol"] = (
+                "native-recipient-yield-comparison-v1" if compare_recipient_yield else "native-full-evolution-venue-v1"
+            )
         identity = canonical_sha256(identity_document)
 
         pc_access: SemanticPCBoundaryAccess = SemanticVenueRouteBinding(to_pc, identity)
@@ -1558,7 +2140,9 @@ def bind_native_boxed_evolution(
             reader=runtime.reader,
             traversal_observer=traversal,
             observe_collection=lambda: runtime.adapter.observe().collection_observation,
-            train_evolution=lambda source_id, target_id: train(actions, source_id, target_id),
+            train_evolution=lambda source_id, target_id: train_with_xp(
+                actions, source_id, target_id
+            ),
             emulator=runtime.emulator,
             replanner=pc_replanner,
             pc_facing="up",
@@ -1566,12 +2150,52 @@ def bind_native_boxed_evolution(
             allow_declared_blastoise_loan=request.declared_blastoise_loan,
             escort_internal_species_id=escort_id,
         )
+        venue_exhausted = False
         try:
             report = executor(request, actions)
         except EvolutionTrainingPaused as paused:
             report = partial_report(paused)
+            venue_exhausted = type(paused) is EvolutionVenueExhausted and paused.battles == 0
         finally:
-            settlement = settle_native_evolution(runtime, actions)
+            settlement = settle_native_evolution(settlement_runtime, actions)
+        if venue_exhausted and initial_stock is not None:
+            evidence = dict(report.evidence)
+            trainee_identity = (
+                original_trainee.preparation_ref, original_trainee.species_id,
+                original_trainee.level, original_trainee.experience,
+            )
+            after = runtime.adapter.observe()
+            returned = tuple(
+                specimen for specimen in runtime.reader.read_box_specimen_identities()
+                if specimen.preparation_ref == original_trainee.preparation_ref
+            )
+            if (
+                settlement.get("retained_active_roster_restored") is True
+                and initial_stock[trainee_identity] == 1
+                and len(returned) == 1
+                and returned[0].species_id == original_trainee.species_id
+                and returned[0].experience == original_trainee.experience
+                and evidence.get("trainee_initial_xp") == evidence.get("trainee_terminal_xp")
+                == original_trainee.experience
+                and evidence.get("trainee_xp_gained") == 0
+                and after.input_ready and not after.raw.battle_state
+                and not runtime.emulator.pressed_buttons
+                and before.raw.bag_items == after.raw.bag_items
+                and before.raw.player_money == after.raw.player_money
+                and before.collection_observation.owned_species == after.collection_observation.owned_species
+                and _stock(runtime) == initial_stock
+            ):
+                evidence.update(
+                    zero_progress_evolution=True,
+                    zero_progress_trainee_ref=original_trainee.preparation_ref,
+                    boxed_no_win_venue=dict(
+                        schema="pokemon.red.boxed-no-win-venue.v1",
+                        identical_stock_sha256=canonical_sha256(sorted(initial_stock.items())),
+                        trainee_boxed_before_and_after=True,
+                        trainee_experience=original_trainee.experience,
+                    ),
+                )
+                report = replace(report, evidence=evidence)
         if registration is not None:
             evidence = dict(report.evidence)
             evidence.pop("required_living_preserved", None)

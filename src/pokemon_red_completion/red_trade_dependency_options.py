@@ -20,7 +20,7 @@ from .red_goal_context_profile import (
     build_red_goal_context_profile_payload,
     parse_red_goal_context_profile,
 )
-from .red_native_boxed_evolution import bind_native_boxed_evolution
+from .red_native_boxed_evolution import bind_native_boxed_evolution, bind_native_evolution_goal_reserve
 from .red_npc_trade import RedNPCTradeError, stationary_npc_trades
 from .red_npc_trade_options import npc_trade_bindings
 from .red_resource_goal_router import RedResourceGoalRouter
@@ -96,8 +96,12 @@ def npc_trade_dependency_bindings(
                     ),
                 )
             )
+            scoped_runtime = bind_native_evolution_goal_reserve(
+                replace(runtime, profile=profile, registration_policy=scoped), actions,
+                maximum_actions=maximum_actions, maximum_frames=maximum_frames,
+            )
             native = bind_native_boxed_evolution(
-                replace(runtime, profile=profile, registration_policy=scoped),
+                scoped_runtime,
                 world,
                 maximum_quanta=maximum_quanta,
                 allow_cross_box=True,

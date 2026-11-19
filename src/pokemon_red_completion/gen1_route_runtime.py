@@ -136,6 +136,8 @@ class Gen1WildFleeHandler:
     emulator: object | None = None
     allow_field_faint_dialogue: bool = False
     field_faint_warps: tuple[tuple[int, tuple[int, int], int, tuple[int, int]], ...] = ()
+    # Purification is a native escape transition, not field-dialogue authority.
+    allow_native_purification: bool = False
     evidence: list[Route1WildFleeEvidence] = field(default_factory=list, init=False)
     field_faint_evidence: list[InterruptionReceipt] = field(default_factory=list, init=False)
     field_healing_evidence: list[InterruptionReceipt] = field(default_factory=list, init=False)
@@ -151,6 +153,10 @@ class Gen1WildFleeHandler:
             raise ValueError("a route name is required")
         if type(self.allow_party_faints) is not bool:
             raise TypeError("wild faint recovery opt-in must be boolean")
+        if type(self.allow_native_purification) is not bool:
+            raise TypeError("native purification opt-in must be boolean")
+        if self.allow_native_purification and (not self.allow_party_faints or self.emulator is None):
+            raise ValueError("native purification requires guarded party escape and its emulator")
         if type(self.allow_field_faint_dialogue) is not bool:
             raise TypeError("field faint dialogue opt-in must be boolean")
         if not isinstance(self.field_faint_warps, tuple) or any(
@@ -245,7 +251,7 @@ class Gen1WildFleeHandler:
                     getattr(self.reader, "read_retained_wild_identity", None)
                 ),
             }
-            if self.allow_field_faint_dialogue:
+            if self.allow_field_faint_dialogue or self.allow_native_purification:
                 extra["allow_native_purified_transition"] = True
                 extra["allow_native_purified_healing"] = True
             receipt = flee_with_fainted_lead(
@@ -270,7 +276,7 @@ class Gen1WildFleeHandler:
             )
         self.evidence.append(receipt)
         native_event = None
-        if self.allow_field_faint_dialogue:
+        if self.allow_field_faint_dialogue or self.allow_native_purification:
             from .wild_party_flee import purified_zone_escape_event
 
             native_event = purified_zone_escape_event(
@@ -577,8 +583,10 @@ class Gen1WildFleeHandler:
         ) in self.field_faint_warps
         # Gen I processes field poison in party order. A faint message pauses
         # that loop; only later, still-poisoned living members can receive its
-        # remaining one-point tick. Never admit healing or another faint here.
+        # remaining one-point tick, including a second native poison faint at 1 HP.
         pending_ticks = []
+        later_faints = []
+        expected_status = list(current.party_status or ())
         hp_preserved = (
             after.party_hp is not None
             and current.party_status is not None
@@ -595,11 +603,19 @@ class Gen1WildFleeHandler:
                 elif hp != old_hp:
                     if index > min(slots) and status & 0x08 and old_hp > 1 and hp == old_hp - 1:
                         pending_ticks.append(index)
+                    elif (index > max(slots) and status == 8 and old_hp == 1 and hp == 0
+                          and after.party_status is not None and len(after.party_status) == len(current.party_hp)
+                          and type(after.party_status[index - 1]) is int and after.party_status[index - 1] == 0
+                          and any(after.party_hp)):
+                        later_faints.append(index)
+                        pending_ticks.append(index)
+                        expected_status[index - 1] = 0
                     else:
                         hp_preserved = False
         if (
             not (same_tile or declared_warp)
             or not hp_preserved
+            or after.party_status != tuple(expected_status)
             or any(
                 getattr(after, key) != getattr(current, key)
                 for key in (
@@ -613,7 +629,6 @@ class Gen1WildFleeHandler:
                     "party_max_hp",
                     "party_stats",
                     "party_pp",
-                    "party_status",
                     "party_moves",
                 )
             )
@@ -628,7 +643,7 @@ class Gen1WildFleeHandler:
             details={
                 **receipt.details,
                 "native_field_faint": True,
-                "new_fainted_slots": list(slots),
+                "new_fainted_slots": [*slots, *later_faints],
                 "pending_native_poison_tick_slots": pending_ticks,
                 "declared_native_warp": declared_warp,
                 **({"source_map": interruption.map_id} if declared_warp else {}),
@@ -899,6 +914,28 @@ class Gen1RouteInterruptionHandler:
         )
 
     @property
+    def verified_trainer_income(self) -> int:
+        """Sum only cash independently sampled around completed native battles."""
+        total = 0
+        for receipt in self.trainer_evidence:
+            if receipt.kind != "trainer_engagement" or receipt.details.get("verified") is not True:
+                raise RouteExecutionError("trainer income lacks verified route receipt")
+            if receipt.details.get("battle_started") is False:
+                continue
+            proof = receipt.details.get("native_trainer_income")
+            if (
+                receipt.details.get("battle_started") is not True
+                or not isinstance(proof, dict)
+                or proof.get("schema") != "pokemon.red.native-route-trainer-income.v1"
+                or any(type(proof.get(k)) is not int for k in ("before", "after", "delta"))
+                or proof["delta"] < 0
+                or proof["after"] - proof["before"] != proof["delta"]
+            ):
+                raise RouteExecutionError("trainer income lacks exact native cash evidence")
+            total += proof["delta"]
+        return total
+
+    @property
     def handled_hazard_kinds(self) -> frozenset[str]:
         return frozenset({"trainer_sight"}) if self.maximum_trainer_battles else frozenset()
 
@@ -1048,6 +1085,16 @@ class Gen1RouteInterruptionHandler:
                 "intro_pulses": intro_pulses,
                 "recoveries": recoveries,
                 "verified": True,
+                **(
+                    {"native_trainer_income": {
+                        "schema": "pokemon.red.native-route-trainer-income.v1",
+                        "before": initial.player_money,
+                        "after": final.player_money,
+                        "delta": final.player_money - initial.player_money,
+                    }}
+                    if type(initial.player_money) is int and type(final.player_money) is int
+                    else {}
+                ),
                 # An adjacent native trainer can already own the same field
                 # boundary after the first battle. Report that observed intro;
                 # routing must resolve it separately, not pretend free control.

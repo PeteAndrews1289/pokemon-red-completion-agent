@@ -3,7 +3,7 @@
 from pokemon_red_completion.red_battle_scenario import red_battle_move_is_model_supported
 
 
-def capped_stat_choices(observation, catalog, legal_moves):
+def capped_stat_slots(observation, catalog, legal_moves):
     """Screen known capped stat effects only; never choose a damaging move.
 
     This supplied mechanics rule is opt-in at the policy. Unknown effects,
@@ -39,6 +39,12 @@ def capped_stat_choices(observation, catalog, legal_moves):
                     context[f"{side}_stages"][index] == cap
                 ):
                     removed.append(slot)
+    return tuple(removed)
+
+
+def capped_stat_choices(observation, catalog, legal_moves):
+    """Preserve the existing optional screening and all-no-op fallback."""
+    removed = capped_stat_slots(observation, catalog, legal_moves)
     if len(removed) == len(legal_moves):
         return legal_moves, ()
     return tuple(s for s in legal_moves if s not in removed), tuple(removed)

@@ -115,8 +115,12 @@ def _without_unwired_celadon_elevator(graph: MacroGraph) -> MacroGraph:
     Keep its trigger metadata so a local walk cannot accidentally enter it.
     """
     elevator = int(MapId.CELADON_MART_ELEVATOR)
+    # The keyed Hideout lift has a separately verified floor-menu binding.
+    # Keep inbound approaches for that binding, but ordinary walking cannot
+    # assume the ROM's B1 placeholder is its script-mutated exit destination.
+    keyed_elevator = int(MapId.ROCKET_HIDEOUT_ELEVATOR)
     return replace(graph, edges={
-        source: () if source == elevator else tuple(
+        source: () if source in (elevator, keyed_elevator) else tuple(
             edge for edge in edges if edge.target_map != elevator
         )
         for source, edges in graph.edges.items()
@@ -198,6 +202,47 @@ class SameDestinationRoutePair:
             raise ValueError("same-destination detour is not strictly costlier")
         if self.detour.actions == self.shortest.actions:
             raise ValueError("same-destination routes are not behaviorally distinct")
+
+
+def _native_silph_elevator_exit(graph, rom, reader, raw):
+    """Resolve only the currently observed,already selected lift return floor."""
+    from .gen1_maps import PassageKind
+    from .global_router import MacroEdge
+
+    elevator = int(MapId.SILPH_CO_ELEVATOR)
+    if raw.map_id != elevator:
+        # A selected return is not a promise about a future elevator visit.
+        if graph.edges.get(elevator):
+            return replace(graph, edges={**graph.edges, elevator: ()})
+        return graph
+    maps = map_graph(rom)
+    source = maps[elevator]
+    scripted = tuple(p for p in source.passages if p.kind is PassageKind.SCRIPTED)
+    rows = reader.read_retained_warp_entries()
+    if (not scripted or len(rows) != len(scripted)
+            or {row.at for row in rows} != {p.at for p in scripted}
+            or len({row.at for row in rows}) != len(rows)
+            or len({(row.destination_map, row.destination_warp_index) for row in rows}) != 1):
+        raise ValueError("native Silph elevator warp table lacks cartridge provenance")
+    selected = rows[0]
+    destination = maps.get(selected.destination_map)
+    index = selected.destination_warp_index
+    if (destination is None or type(index) is not int or index < 0
+            or destination.warp_arrivals is None
+            or index >= len(destination.warp_locations)
+            or index >= len(destination.warp_arrivals)
+            or not any(p.to_map == elevator and p.at == destination.warp_locations[index]
+                       for p in destination.passages)):
+        raise ValueError("native Silph elevator destination is not its reciprocal floor door")
+    by_at = {row.at: row for row in rows}
+    edges = tuple(MacroEdge(
+        target_map=by_at[p.at].destination_map, kind="warp", at=p.at,
+        # Macro edges declare the destination trigger; route_plan resolves its
+        # cartridge-decoded automatic arrival step exactly once.
+        arrival_at=destination.warp_locations[index], exit_action=p.exit_action,
+        destination_warp_index=index,
+    ) for p in scripted)
+    return replace(graph, edges={**graph.edges, elevator: edges})
 
 
 @dataclass(frozen=True, slots=True)
@@ -345,7 +390,11 @@ class StrategicScenarioRouteWorld:
         observed = replace(
             self, object_blockers={**self.object_blockers, blocks.map_id: occupied}
         )
-        return observed.with_current_blocks(blocks)
+        observed = observed.with_current_blocks(blocks)
+        graph = _native_silph_elevator_exit(observed.macro_graph, self.rom, reader, before)
+        if before.map_id == int(MapId.SILPH_CO_ELEVATOR) and reader.read() != before:
+            raise ValueError("native scripted exit changed during observation")
+        return replace(observed, macro_graph=graph) if graph is not observed.macro_graph else observed
 
     def _staged_cut_plan(
         self,
@@ -505,6 +554,11 @@ class StrategicScenarioRouteWorld:
         goal_at: tuple[int, int] | None = None,
         blocked: Mapping[int, frozenset[tuple[int, int]]] | None = None,
     ) -> RoutePlan:
+        elevator = int(MapId.SILPH_CO_ELEVATOR)
+        if start.map_id != elevator and self.macro_graph.edges.get(elevator):
+            scoped = replace(self, macro_graph=replace(
+                self.macro_graph, edges={**self.macro_graph.edges, elevator: ()}))
+            return scoped._plan_candidate(start, goal_map, goal_at=goal_at, blocked=blocked)
         try:
             return plan_route(
                 self.macro_graph,
@@ -682,6 +736,11 @@ class StrategicScenarioRouteWorld:
             raise TypeError("scenario relocation start must be a traversal snapshot")
         if type(goal_map) is not int or goal_map < 0:  # noqa: E721
             raise TypeError("scenario relocation goal must be a non-negative map ID")
+        elevator = int(MapId.SILPH_CO_ELEVATOR)
+        if start.map_id != elevator and self.macro_graph.edges.get(elevator):
+            scoped = replace(self, macro_graph=replace(
+                self.macro_graph, edges={**self.macro_graph.edges, elevator: ()}))
+            return scoped._bounded_single_cut_plan(start, goal_map, goal_at=goal_at)
         # A prospective approach has no authority to resolve a trainer fight.
         # Reserve the complete observed sight lanes, not only solid objects or
         # the final interaction tile. Execution still rechecks changing hazards.

@@ -90,6 +90,7 @@ def quoted_boxed_frontier_machine_options(runtime, actions, observation, *, rom,
     if (
         not isinstance(guard, RedPlayerPartyGuard)
         or guard.storage_reader is None
+        or getattr(guard, "field_carrier", None) is not None
         or len(guard.loanable_refs) != 1
         or registration is None
         or raw.map_id not in _POKEMON_CENTER_MAPS

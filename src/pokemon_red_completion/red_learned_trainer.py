@@ -241,6 +241,28 @@ def load_frozen_trainer_model(
     return TrainerPracticeThreeHeadModel.from_dict(json.loads(payload))
 
 
+# Cartridge trainer classes Rival1/Rival2; no other story/funding scope widens.
+RIVAL_TRAINER_CLASSES = frozenset({225, 242})
+RIVAL_WHOLE_BATTLE_DECISIONS = 160
+# Explicit whole-battle allowance; generic funding/wild/default calls stay80.
+LEAGUE_WHOLE_BATTLE_DECISIONS = 160
+_LEAGUE_WHOLE_BATTLE_IDENTITIES = frozenset({
+    (244, 44, 1), (233, 33, 1), (246, 46, 1), (247, 47, 1),
+    (243, 43, 1), (243, 43, 2), (243, 43, 3),
+})
+
+
+def story_whole_battle_decision_limit(identity):
+    """Finite cap for an already-authorized, exact cartridge story trainer."""
+    if (isinstance(identity, tuple) and len(identity) == 3
+            and all(type(value) is int for value in identity)):
+        if identity[0] in RIVAL_TRAINER_CLASSES:
+            return RIVAL_WHOLE_BATTLE_DECISIONS
+        if identity in _LEAGUE_WHOLE_BATTLE_IDENTITIES:
+            return LEAGUE_WHOLE_BATTLE_DECISIONS
+    return 80
+
+
 @dataclass
 class FrozenTrainerBattler:
     wild_training_objective_version: ClassVar[int] = 1
@@ -334,8 +356,17 @@ class FrozenTrainerBattler:
             if authority != self.story_authority():
                 raise ValueError("PP reentry screen requires its scoped story authority")
             return True
+        train_funding = (
+            self.source_partition is ScenarioPartition.TRAIN
+            and self.train_funding_diagnostic is True
+        )
+        if train_funding:
+            # The existing diagnostic admits exact K ordinary funding on TRAIN.
+            # Reuse its PP mechanics without relabeling the actor or admitting
+            # a new model, lesson source, story contract or fitted target.
+            self.require_funding_scope()
         if (
-            self.source_partition is not ScenarioPartition.DEVELOPMENT
+            (self.source_partition is not ScenarioPartition.DEVELOPMENT and not train_funding)
             or self.model_sha256 != FROZEN_K_SHA256
             or self.qualification_sha256 != K_QUALIFICATION_SHA256
             or self.development_preparation_scope is not None
@@ -851,8 +882,18 @@ class FrozenTrainerBattler:
             )
         ):
             raise ValueError("immune recovery requires explicit qualified K League authority")
-        if type(maximum_decisions) is not int or not 1 <= maximum_decisions <= 80:
-            raise ValueError("frozen battle decision remainder must be one through80")
+        # A story caller may declare one larger episode before battle entry.
+        # Ordinary funding/wild scopes retain their original80-decision bound.
+        larger_story_scope = False
+        if (
+            type(maximum_decisions) is int and maximum_decisions > 80
+            and resume and authority is not None and authority == self.story_authority()
+        ):
+            identity = reader.read_active_trainer_identity()
+            larger_story_scope = story_whole_battle_decision_limit(identity) > 80
+        limit = story_whole_battle_decision_limit(identity) if larger_story_scope else 80
+        if type(maximum_decisions) is not int or not 1 <= maximum_decisions <= limit:
+            raise ValueError("frozen battle decision remainder exceeds its finite scope")
         self.calls += 1
         directory = self.output / f"battle-{self.calls:04d}"
         directory.mkdir(parents=True, mode=0o700, exist_ok=False)

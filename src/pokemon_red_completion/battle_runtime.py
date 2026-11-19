@@ -417,6 +417,10 @@ class BattleRuntimeError(RuntimeError):
     battle_runtime_diagnostic: BattleRuntimeDiagnostic | None = None
 
 
+class ActiveBattlerFaintedError(BattleRuntimeError):
+    """The native active battler fainted;callers may own scoped recovery."""
+
+
 class BattleRuntimeTimeoutError(BattleRuntimeError):
     """Raised when a battle does not finish inside its bounded pulse budget."""
 
@@ -591,6 +595,13 @@ def advance_battle_to_policy_boundary(
             _require_present_state(raw, expected_map=expected_map, label=label)
             if raw.battle_state != expected_battle_state:
                 raise BattleRuntimeError(f"{label} ended before a policy boundary.")
+            prompt = getattr(reader, "trainer_switch_prompt_visible", None)
+            if (expected_battle_state == _TRAINER_BATTLE_STATE and callable(prompt)
+                    and prompt(raw) is True):
+                # This newly arrived prompt is already owned by the local
+                # battle policy. Do not confirm YES and enter an unowned party menu.
+                return BattlePolicyBoundary(state=raw, actions_executed=measured.actions_executed,
+                                            frames_executed=measured.frames_executed)
             menu = _validated_menu(reader.read_battle_menu_state(raw), label=label)
             if menu.phase is BattleMenuPhase.MAIN:
                 if raw.enemy_hp is None or raw.enemy_hp <= 0:
@@ -919,12 +930,21 @@ def _await_next_battle_decision(
     if type(allow_delayed_selected_spend) is not bool:
         raise BattleRuntimeError(f"{label} lacks explicit selected-move settlement authority.")
 
+    allocation_witness = None
+
     def verify_settlement_pp(raw: RawGameState) -> None:
-        nonlocal move_executed
+        nonlocal move_executed, allocation_witness
+        if any(_automatic_level_up_move_allocation(initial_raw, raw, index) for index in range(4)):
+            allocation_witness = raw
         if move_executed and raw.battle_state != 0:
-            _verify_selected_turn_pp(initial_raw, raw, slot=slot, label=label)
+            _verify_selected_turn_pp(initial_raw, raw, slot=slot, label=label, automatic_allocation_witness=allocation_witness)
         elif raw.battle_state == expected_battle_state:
             if _original_battler_pp_vector(initial_raw, raw, label=label) == initial_raw.battler_pp:
+                return
+            if _unspent_level_up_pp_allocation(initial_raw, raw, automatic_allocation_witness=allocation_witness):
+                # A trapping continuation can finish a foe without submitting
+                # another move. Automatic empty-slot learning allocates PP;
+                # it does not prove a selected move spend or a new attack.
                 return
             if (
                 allow_delayed_selected_spend
@@ -938,12 +958,17 @@ def _await_next_battle_decision(
                 # No new attack is selected here: the existing whole-vector
                 # verifier permits exactly its one spend, and remains active
                 # after promotion to reject any second or other-slot spend.
-                _verify_selected_turn_pp(initial_raw, raw, slot=slot, label=label)
+                _verify_selected_turn_pp(initial_raw, raw, slot=slot, label=label, automatic_allocation_witness=allocation_witness)
                 move_executed = True
             else:
                 raise BattleRuntimeError(f"{label} changed PP while settling an unspent turn.")
 
-    for pulse in range(timing.max_post_attack_transition_pulses + 1):
+    # Attack progress and a proved final knockout have separate finite text
+    # allowances. A late KO must not inherit an already exhausted animation
+    # budget. This grants no new attack, replacement choice or live-foe retry.
+    normal_limit = timing.max_post_attack_transition_pulses
+    terminal_limit = None
+    for pulse in range(2 * normal_limit + 1):
         raw = reader.read()
         _require_present_turn_state(
             raw, expected_map=expected_map, label=label, allow_player_faint=True
@@ -956,6 +981,24 @@ def _await_next_battle_decision(
             return move_executed
         if raw.battle_state != expected_battle_state:
             raise BattleRuntimeError(f"{label} changed to an unsupported battle state.")
+        terminal_roster = (
+            _terminal_enemy_roster_hp(reader)
+            if expected_battle_state == _TRAINER_BATTLE_STATE and raw.enemy_hp == 0
+            else None
+        )
+        final_knockout = raw.enemy_hp == 0 and (
+            expected_battle_state == _WILD_BATTLE_STATE
+            or (
+                isinstance(terminal_roster, tuple)
+                and 1 <= len(terminal_roster) <= 6
+                and all(type(hp) is int and hp == 0 for hp in terminal_roster)
+            )
+        )
+        if terminal_limit is not None and not final_knockout:
+            raise BattleRuntimeError(f"{label} changed terminal knockout while settling.")
+        if final_knockout and terminal_limit is None:
+            terminal_limit = pulse + normal_limit
+        limit = normal_limit if terminal_limit is None else terminal_limit
         if (raw.battler_hp or 0) == 0:
             if (
                 expected_battle_state == _WILD_BATTLE_STATE
@@ -966,7 +1009,7 @@ def _await_next_battle_decision(
                 # A wild double KO with a living reserve ends the encounter
                 # after faint text; it does not offer a replacement choice.
                 # Settle that terminal before asking the model to switch.
-                if pulse == timing.max_post_attack_transition_pulses:
+                if pulse == limit:
                     break
                 _pulse(executor, MacroAction(MacroActionKind.CONFIRM), timing.attack_wait_frames)
                 continue
@@ -1001,7 +1044,7 @@ def _await_next_battle_decision(
                     _unspent_sleep_turn_progress(initial_raw, stable, label=label)
                     _unspent_sleep_turn_progress(raw, stable, label=label)
                 return move_executed
-        if pulse == timing.max_post_attack_transition_pulses:
+        if pulse == limit:
             break
         if menu.phase is BattleMenuPhase.UNKNOWN:
             # The chosen attack already completed. B advances remaining text,
@@ -1750,7 +1793,8 @@ def _execute_policy_turn(
                     )
                 return False
             if (
-                (initial_raw.enemy_using_trapping_move or raw.enemy_using_trapping_move)
+                (initial_raw.enemy_using_trapping_move or raw.enemy_using_trapping_move
+                 or initial_raw.player_using_trapping_move or raw.player_using_trapping_move)
                 and initial_raw.battler_hp is not None
                 and raw.battler_hp is not None
                 and raw.battler_hp < initial_raw.battler_hp
@@ -1810,9 +1854,11 @@ def _execute_policy_turn(
             return False
         if (
             initial_raw.enemy_using_trapping_move or raw.enemy_using_trapping_move
+            or initial_raw.player_using_trapping_move or raw.player_using_trapping_move
         ) and raw.battler_pp == initial_raw.battler_pp:
-            # Gen I trapping moves such as Bind suppress the trapped player's
-            # move selection on continuation turns. The enemy battle-status
+            # Gen I trapping continuations suppress move selection for both
+            # the trapped player and the player already using the move. A
+            # confused user's continuation may change neither HP nor PP. The enemy battle-status
             # bit can clear before the menu returns, so evidence at either the
             # policy gate or the final transition gate proves the forced
             # no-action turn; unchanged PP proves no player move was spent.
@@ -1960,6 +2006,7 @@ def _confirm_attack_with_pp_gate(
                 timing=timing,
                 label=label,
                 allow_player_faint=allow_player_faint,
+                preserve_next_decision=return_after_suppressed_turn,
             )
             return True
         if _selected_move_identity_replaced(initial_raw, raw, slot=slot):
@@ -2441,6 +2488,7 @@ def _await_selected_turn_effect(
     timing: BattleRuntimeTiming,
     label: str,
     allow_player_faint: bool = False,
+    preserve_next_decision: bool = False,
 ) -> None:
     """Latch one PP-proven turn until its semantic effect becomes observable."""
 
@@ -2477,9 +2525,17 @@ def _await_selected_turn_effect(
             break
         if menu.phase is BattleMenuPhase.UNKNOWN:
             saw_unknown = True
+            # A bounded single-turn caller owns the next model decision.
+            # Text can finish between coarse observations. Another A can then
+            # enter an unowned FIGHT menu after this PP-proven turn. B advances
+            # live-opponent text without selecting FIGHT; terminal KO retains
+            # A so post-battle evolution cannot be cancelled here.
             _pulse(
                 executor,
-                MacroAction(MacroActionKind.CONFIRM),
+                MacroAction(
+                    MacroActionKind.CANCEL if preserve_next_decision and (raw.enemy_hp or 0) > 0
+                    else MacroActionKind.CONFIRM
+                ),
                 timing.attack_wait_frames,
             )
         elif menu.phase is BattleMenuPhase.MAIN:
@@ -2561,12 +2617,50 @@ def _automatic_level_up_move_allocation(
     return new_pp[index] == move.max_pp
 
 
+
+def _retained_automatic_move_allocation(initial, current, index, witness) -> bool:
+    """Keep one exact observed allocation through this turn's later send-out text."""
+    return bool(
+        type(witness) is RawGameState
+        and _automatic_level_up_move_allocation(initial, witness, index)
+        and current.active_party_index == witness.active_party_index
+        and current.active_party_species_id == witness.active_party_species_id
+        and type(current.battler_level) is int and current.battler_level >= witness.battler_level
+        and current.battler_moves is not None and current.battler_pp is not None
+        and len(current.battler_moves) == len(current.battler_pp) == 4
+        and current.battler_moves[index] == witness.battler_moves[index]
+        and current.battler_pp[index] == witness.battler_pp[index]
+    )
+
+
+def _unspent_level_up_pp_allocation(initial: RawGameState, current: RawGameState, *, automatic_allocation_witness=None) -> bool:
+    """Reuse exact automatic allocation proof; every old move/PP stays unchanged."""
+    before, after = initial.battler_pp, current.battler_pp
+    old_moves, new_moves = initial.battler_moves, current.battler_moves
+    if (
+        type(initial.active_party_index) is not int
+        or before is None or after is None or old_moves is None or new_moves is None
+        or any(len(values) != 4 for values in (before, after, old_moves, new_moves))
+    ):
+        return False
+    allocated = False
+    for index, (old, new) in enumerate(zip(before, after, strict=True)):
+        if old == new and old_moves[index] == new_moves[index]:
+            continue
+        if not (_automatic_level_up_move_allocation(initial, current, index)
+                or _retained_automatic_move_allocation(initial, current, index, automatic_allocation_witness)):
+            return False
+        allocated = True
+    return allocated
+
+
 def _verify_selected_turn_pp(
     initial: RawGameState,
     current: RawGameState,
     *,
     slot: int,
     label: str,
+    automatic_allocation_witness: RawGameState | None = None,
 ) -> None:
     """Prove one selected spend against the original battler's whole PP vector.
 
@@ -2583,7 +2677,10 @@ def _verify_selected_turn_pp(
     for index, (old, new) in enumerate(zip(before, after, strict=True)):
         if index == slot - 1 and replaced:
             continue
-        if index != slot - 1 and _automatic_level_up_move_allocation(initial, current, index):
+        if index != slot - 1 and (
+            _automatic_level_up_move_allocation(initial, current, index)
+            or _retained_automatic_move_allocation(initial, current, index, automatic_allocation_witness)
+        ):
             continue
         expected = (old & _CURRENT_PP_MASK) - (index == slot - 1)
         if new & _CURRENT_PP_MASK != expected:
@@ -2763,7 +2860,7 @@ def _require_present_state(
         raise BattleRuntimeError(f"{label} lacks living active-battler evidence.")
     terminal_enemy_ko = raw.enemy_hp == 0 and raw.battle_state in {0, _ACTIVE_BATTLE_STATE.get()}
     if raw.battler_hp <= 0 and not terminal_enemy_ko:
-        raise BattleRuntimeError(
+        raise ActiveBattlerFaintedError(
             f"{label} active battler fainted: hp={raw.battler_hp}/"
             f"{raw.battler_max_hp}, status={raw.battler_status}, "
             f"enemy_species={raw.enemy_species_id}, enemy_hp={raw.enemy_hp}/"

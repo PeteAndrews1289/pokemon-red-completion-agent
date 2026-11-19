@@ -865,3 +865,43 @@ def test_zero_xp_recovery_changes_offer_identity_only_when_explicitly_enabled(mo
     default1 = p.preparation_binding(rt, actions, **kwargs)
     assert default0.binding_ref == default1.binding_ref != explicit.binding_ref
     assert actions.actions_executed == rt.emulator.frame_count == 0
+
+@pytest.mark.parametrize("progress", [(False, True), (False, True, False, True)])
+def test_helper_only_xp_health_return_uses_existing_bounded_target_retry(monkeypatch, progress):
+    rt, actions, kwargs, mon, calls, heals, rows = zero_progress_recovery_setup(
+        monkeypatch, progress, stop_reason="trainee_received_no_xp"
+    )
+    binding = p.preparation_binding(rt, actions, **kwargs)
+    report = binding.execute()
+    assert len(calls) == len(progress) and len(heals) == len(progress) - 1
+    assert report.evidence["original_target"] == dict(specimen_ref="starter", level=6)
+    assert mon.experience == 135 + 10 * sum(progress)
+    assert report.actions_executed == 2 * len(progress) + len(heals)
+    assert report.frames_executed == 40 * len(progress) + 20 * len(heals)
+    assert binding.verify(report).status is GoalDecisionOutcome.SUCCEEDED
+
+
+def test_helper_only_xp_retreat_stops_at_original_no_progress_limit(monkeypatch):
+    rt, actions, kwargs, mon, calls, heals, rows = zero_progress_recovery_setup(
+        monkeypatch, (False, False, False), stop_reason="trainee_received_no_xp"
+    )
+    binding = p.preparation_binding(rt, actions, **kwargs)
+    report = binding.execute()
+    assert calls == [8, 7, 6] and len(heals) == 2
+    assert mon.experience == 135 and mon.level == 5
+    assert [v["consecutive_no_progress"] for k, v in rows if k == "retained-dose"] == [1, 2, 3]
+    assert binding.verify(report).failure_reason is GoalFailureReason.RECOVERY_REQUIRED
+
+
+@pytest.mark.parametrize("disabled", ["no_health_return", "retry_default_off"])
+def test_helper_only_xp_retry_requires_both_explicit_scope_and_verified_retreat(monkeypatch, disabled):
+    rt, actions, kwargs, mon, calls, heals, rows = zero_progress_recovery_setup(
+        monkeypatch, (False,), stop_reason="trainee_received_no_xp",
+        verified=disabled != "no_health_return",
+    )
+    if disabled == "retry_default_off":
+        kwargs["repeat_health_limited_zero_progress"] = False
+    binding = p.preparation_binding(rt, actions, **kwargs)
+    report = binding.execute()
+    assert calls == [8] and not heals and mon.experience == 135
+    assert binding.verify(report).status is GoalDecisionOutcome.FAILED

@@ -9,7 +9,9 @@ publishing no route identity or learner label.
 from __future__ import annotations
 
 from collections.abc import Callable
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass, replace
+from enum import Enum
+import json
 from functools import partial
 from typing import Protocol
 
@@ -29,9 +31,51 @@ from .observation import (
     ReadOnlyMemory,
 )
 from .red_resource_goal_router import _supported_plan, collection_field_capabilities
-from .route_executor import InterruptionHandler, RouteExecutionLimits, execute_route
+from .route_executor import (
+    InterruptionHandler, RouteExecutionError, RouteExecutionLimits,
+    _handler_resolves_hazard, execute_route,
+)
 from .route_plan import RoutePlan, RoutePlanningError
 from .strategic_navigation_scenario_runtime import StrategicScenarioRouteWorld
+
+def _private_route_trace(value):
+    def default(item):
+        if isinstance(item, Enum):
+            return item.value
+        if isinstance(item, (set, frozenset)):
+            return sorted(item)
+        raise TypeError(type(item).__name__)
+    return json.loads(json.dumps(asdict(value), default=default, sort_keys=True))
+
+
+def _recording_execute_route(delegate, journal):
+    """Retain existing route evidence through the counted private journal."""
+    if not callable(journal):
+        raise ValueError("diagnostic route trace requires the existing counted journal")
+
+    def execute(plan, actions, observer, **kwargs):
+        replanner = kwargs.get("replanner")
+        if replanner is not None:
+            def recorded_replanner(request):
+                journal("diagnostic_route_replan_request", {
+                    "recording_only": True, "request": _private_route_trace(request)})
+                return replanner(request)
+            kwargs = dict(kwargs, replanner=recorded_replanner)
+        try:
+            return delegate(plan, actions, observer, **kwargs)
+        except RouteExecutionError as error:
+            try:
+                journal("diagnostic_route_execution_failure", {
+                    "recording_only": True,
+                    "error_type": type(error).__name__, "error": str(error),
+                    "reason": error.reason.value,
+                    "failure": None if error.failure is None else _private_route_trace(error.failure)})
+            except BaseException as recording_error:
+                error.add_note("Route trace recording failed: " +
+                    type(recording_error).__name__ + ": " + str(recording_error))
+            raise
+    return execute
+
 
 SUPER_ROD_STATUS_MASK = 1 << 5
 SUPER_ROD_HOUSE_MAP_ID = int(MapId.ROUTE_12_SUPER_ROD_HOUSE)
@@ -584,6 +628,7 @@ class RedRoutedSuperRodSupport:
             self._settle_active_safari_gate(initial_raw)
             plan = self._plan_to_super_rod(
                 observer,
+                interruption_handler=interruptions,
                 unavailable="no cartridge route reaches the Super Rod after Safari exit",
                 unsupported="post-Safari Super Rod route needs unsupported transport",
             )
@@ -591,12 +636,14 @@ class RedRoutedSuperRodSupport:
             self._settle_post_safari_gate_autowalk(initial_raw)
             plan = self._plan_to_super_rod(
                 observer,
+                interruption_handler=interruptions,
                 unavailable="no cartridge route reaches the Super Rod after Safari exit",
                 unsupported="post-Safari Super Rod route needs unsupported transport",
             )
         else:
             plan = self._plan_to_super_rod(
                 observer,
+                interruption_handler=interruptions,
                 unavailable="no cartridge route reaches the Super Rod boundary",
                 unsupported="Super Rod route needs unsupported transport",
             )
@@ -609,10 +656,13 @@ class RedRoutedSuperRodSupport:
             )
             plan = self._plan_to_super_rod(
                 observer,
+                interruption_handler=interruptions,
                 unavailable="no cartridge route reaches the Super Rod after Safari exit",
                 unsupported="post-Safari Super Rod route needs unsupported transport",
             )
-        report = execute_route(
+        report = _recording_execute_route(
+            execute_route, self.actions.record_diagnostic_event
+        )(
             plan,
             field_actions,
             observer,
@@ -673,10 +723,17 @@ class RedRoutedSuperRodSupport:
         *,
         unavailable: str,
         unsupported: str,
+        interruption_handler: InterruptionHandler | None = None,
     ) -> RoutePlan:
+        current = observer.observe()
+        current = replace(current, hazards=tuple(
+            hazard for hazard in current.hazards
+            if not (hazard.kind == "trainer_sight"
+                    and _handler_resolves_hazard(interruption_handler, hazard))
+        ))
         try:
             plan = self.world.plan_feasible_to_map(
-                observer.observe(),
+                current,
                 SUPER_ROD_HOUSE_MAP_ID,
                 goal_at=SUPER_ROD_STANCE_YX,
             )
@@ -722,7 +779,9 @@ class RedRoutedSuperRodSupport:
             raise RedSuperRodSupportError("Safari exit source is unreachable") from error
         if prefix.steps and not _supported_plan(prefix, allow_cut=True, allow_surf=True):
             raise RedSuperRodSupportError("Safari exit prefix needs unsupported transport")
-        report = execute_route(
+        report = _recording_execute_route(
+            execute_route, self.actions.record_diagnostic_event
+        )(
             prefix,
             field_actions,
             observer,

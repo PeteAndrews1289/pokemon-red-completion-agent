@@ -224,6 +224,27 @@ def _goal(kind: object, objective: object = None) -> str:
     return _GOALS.get(str(kind), "Player goal")
 
 
+def _step_result(outcome, objective):
+    """A successful movement unit is not completion of its named story goal."""
+    if not outcome:
+        return "In progress"
+    if outcome.get("ordinary_setback"):
+        return "Safe setback"
+    if outcome.get("verification") != "succeeded":
+        return "Failed"
+    if not objective:
+        return "Completed"
+    completed = (outcome.get("after") or {}).get("completed_objectives")
+    evidence = outcome.get("evidence") or {}
+    if evidence.get("objective_completed") is True or (
+        isinstance(completed, list) and objective in completed
+    ):
+        return "Goal completed"
+    if evidence.get("objective_completed") is False or isinstance(completed, list):
+        return "Step completed; goal pending"
+    return "Step completed"
+
+
 def _authority(choice: dict, support: object) -> str:
     if str(choice.get("mode", "")).startswith("model"):
         return "Model"
@@ -435,15 +456,7 @@ class RedRunReader:
                     dict(
                         goal=activity,
                         authority=_authority(decision, outcome.get("support_role")),
-                        result=(
-                            "Safe setback"
-                            if outcome.get("ordinary_setback")
-                            else "Completed"
-                            if outcome.get("verification") == "succeeded"
-                            else "Failed"
-                            if outcome
-                            else "In progress"
-                        ),
+                        result=_step_result(outcome, objective),
                         seconds=round(float(outcome.get("elapsed_seconds") or 0), 2),
                         actions=_count((outcome.get("observed_cost") or {}).get("actions")),
                     )

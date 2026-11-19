@@ -132,8 +132,15 @@ def indoor_departure_binding(runtime, actions, *, route):
     from .red_player_lesson import capture_player_lesson_snapshot
     from .red_routed_semantic_goal import RedSemanticTransportRoute
 
-    if not _field_ready(runtime):
+    record = getattr(actions, "record_diagnostic_event", None)
+
+    def unavailable(reason, **details):
+        if callable(record):
+            record("empty_indoor_departure_unavailable", dict(reason=reason, **details))
         return None
+
+    if not _field_ready(runtime):
+        return unavailable("not_field_ready")
     reader = runtime.reader
     if (
         reader.read_overworld_movement_mode() is not OverworldMovementMode.WALKING
@@ -153,16 +160,25 @@ def indoor_departure_binding(runtime, actions, *, route):
     plan = bounded_indoor_departure(start, world)
     if plan is None:
         plan = bounded_indoor_boundary_departure(start, world)
-    if plan is None or runtime.emulator.save_state_bytes() != source:
-        return None
+    if plan is None:
+        return unavailable(
+            "no_bounded_walking_exit", map_id=start.map_id, at=start.at,
+            last_outside_map=start.last_outside_map, mode=start.mode,
+            ready=start.ready, interruption=start.interruption,
+        )
+    if runtime.emulator.save_state_bytes() != source:
+        return unavailable("source_changed_during_quote")
     # A walking-only quote does not authorize crossing any known battle lane.
     from .red_player_cash_exposure import require_cash_safe_plan
     from .route_executor import RouteExecutionError
 
     try:
         require_cash_safe_plan(route.rom, before.raw, plan)
-    except RouteExecutionError:
-        return None
+    except RouteExecutionError as exc:
+        return unavailable(
+            "cash_safety_rejected", map_id=start.map_id, at=start.at,
+            last_outside_map=start.last_outside_map, error_type=type(exc).__name__,
+        )
     ship_handler = Gen1WildFleeHandler(actions, reader, maximum_flees=0, stabilization_frames=120)
     ship_handoffs = []
 

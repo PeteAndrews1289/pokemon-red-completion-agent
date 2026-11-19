@@ -955,3 +955,34 @@ def test_traversal_progress_receives_the_same_actual_raw_frame():
     observed = []
     Gen1TraversalObserver(reader, observe_progress=observed.append).observe()
     assert observed == [reader.raw] and observed[0] is reader.raw
+
+
+def test_route_income_records_native_cash_across_the_existing_battle(monkeypatch):
+    fake=FakeReader(replace(raw(),player_money=2943),trainer_engagement=True)
+    executor=TrainerIntroExecutor(fake)
+    def finish(*args,**kwargs):
+        fake.raw=replace(fake.raw,battle_state=0,player_money=3603)
+        return fake.raw
+    monkeypatch.setattr('pokemon_red_completion.gen1_route_runtime.run_adaptive_trainer_battle',finish)
+    handler=Gen1RouteInterruptionHandler(executor,reader_as_real(fake),maximum_flees=0,maximum_trainer_battles=1,stabilization_frames=24)
+    assert handler.verified_trainer_income==0
+    receipt=handler.handle(TraversalSnapshot(MapId.ROUTE_1,(8,7),False,'trainer_engagement'))
+    assert receipt.details['native_trainer_income']==dict(schema='pokemon.red.native-route-trainer-income.v1',before=2943,after=3603,delta=660)
+    assert handler.verified_trainer_income==660
+
+@pytest.mark.parametrize('fault',['unverified','missing','boolean','fraction','negative','mismatch','not_started'])
+def test_native_route_income_rejects_unverified_or_inconsistent_receipts(fault):
+    from pokemon_red_completion.route_executor import InterruptionReceipt
+    fake=FakeReader(raw())
+    handler=Gen1RouteInterruptionHandler(FakeExecutor(),reader_as_real(fake),maximum_flees=0,maximum_trainer_battles=1,stabilization_frames=24)
+    proof=dict(schema='pokemon.red.native-route-trainer-income.v1',before=100,after=760,delta=660)
+    details=dict(verified=True,battle_started=True,native_trainer_income=proof)
+    if fault=='unverified':details['verified']=False
+    elif fault=='missing':details.pop('native_trainer_income')
+    elif fault=='boolean':proof['delta']=True
+    elif fault=='fraction':proof['delta']=660.0
+    elif fault=='negative':proof.update(after=90,delta=-10)
+    elif fault=='mismatch':proof['after']=761
+    else:details['battle_started']=None
+    handler.trainer_evidence.append(InterruptionReceipt('trainer_engagement',MapId.ROUTE_1,(8,7),details))
+    with pytest.raises(RouteExecutionError,match='income'):handler.verified_trainer_income

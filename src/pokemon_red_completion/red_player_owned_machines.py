@@ -58,13 +58,14 @@ def owned_machine_options(
     *,
     rom,
     include_fly_lesson=False,
+    include_cut_lesson=False,
     include_attack_lessons=True,
     include_move_change_facts=False,
 ):
     """Read-only finite inventory; selection stays in the ordinary model port."""
     if any(
         type(v) is not bool
-        for v in (include_fly_lesson, include_attack_lessons, include_move_change_facts)
+        for v in (include_fly_lesson, include_cut_lesson, include_attack_lessons, include_move_change_facts)
     ):
         raise ValueError("machine lesson permissions must be boolean")
     if not _field_ready(runtime):
@@ -89,6 +90,11 @@ def owned_machine_options(
             and item == 197
             and not any(19 in row for row in raw.party_moves)
             and bool(int(raw.badge_bits or 0) & int(Badge.THUNDER))
+        )
+        field_lesson = field_lesson or (
+            include_cut_lesson and item == 196
+            and not any(15 in row for row in raw.party_moves)
+            and bool(int(raw.badge_bits or 0) & int(Badge.CASCADE))
         )
         attack_lesson = include_attack_lessons and 201 <= item <= 250
         if (not attack_lesson and not field_lesson) or quantity <= 0:
@@ -306,7 +312,8 @@ def _machine_binding(
                 normal_controller_inputs=True,
                 learned_menu_execution=False,
                 capacity_proxy=(
-                    "missing_Fly_dependency_not_attack_gain"
+                    ("missing_Cut_dependency_not_attack_gain" if lesson.move_id == 15
+                     else "missing_Fly_dependency_not_attack_gain")
                     if field_lesson
                     else "current_PP_times_power_accuracy_STAB_not_damage_or_win"
                 ),

@@ -137,12 +137,22 @@ class RedLeagueFundingQualification:
     opponent_attack_demands: int
     reset_stale_league_events: bool = False
     fly_required: bool = True
+    resume_at_lorelei: bool = False
 
     def __post_init__(self) -> None:
         if type(self.reset_stale_league_events) is not bool:  # noqa: E721
             raise TypeError("League event reset projection must be a boolean")
         if type(self.fly_required) is not bool:  # noqa: E721
             raise TypeError("League Fly requirement must be a boolean")
+
+        if type(self.resume_at_lorelei) is not bool:
+            raise TypeError("League room continuation must be a boolean")
+        if self.resume_at_lorelei and (
+            self.fly_required or self.exit_plan is not None
+            or self.supply.route.steps or self.entry_plan.steps
+            or self.supply.sales or self.supply.full_restores_purchased
+        ):
+            raise ValueError("In-room League continuation cannot invent transport or supply")
 
     @property
     def expected_gross_income(self) -> int:
@@ -164,6 +174,7 @@ class RedLeagueFundingQualification:
             "exit_steps": 0 if self.exit_plan is None else len(self.exit_plan.steps),
             "fly_town": self.fly_town,
             **({"fly_required": False} if not self.fly_required else {}),
+            **({"resume_at_lorelei": True} if self.resume_at_lorelei else {}),
             "supply_steps": len(self.supply.route.steps),
             "supply_sales": [
                 {
@@ -495,6 +506,14 @@ def _minimum_attack_allocation(
     return sum(move_capacities.values()), len(demands)
 
 
+def require_indigo_fly_destination(destinations, landings, *, fly_required):
+    """A walking Indigo entry does not consume an undiscovered Fly destination."""
+    if type(fly_required) is not bool:
+        raise TypeError("Fly requirement must be explicit")
+    if _INDIGO_TOWN not in landings or (fly_required and _INDIGO_TOWN not in destinations):
+        raise RedLeagueFundingError("Indigo Plateau is not an observed Fly destination")
+
+
 def qualify_red_league_funding(
     rom: bytes,
     observation: RedGoalObservation,
@@ -518,11 +537,21 @@ def qualify_red_league_funding(
         or "story:victory_road_cleared" not in observation.game_state.facts
     ):
         raise RedLeagueFundingError("save is not at a fresh postgame League boundary")
-    projected_events, reset_stale_events = projected_fresh_league_events(
-        raw.event_flags,
-        challenge_started=(reader.read_league_challenge_started()
-                           if learned_development else None),
-    )
+    # A started rematch may be interrupted after its one-way room entry.
+    # Continue that same fresh challenge; do not pretend it can exit to Fly or
+    # project a lobby reset that has not actually happened in this guest.
+    resume_at_lorelei = learned_development and raw.map_id == MapId.LORELEIS_ROOM
+    if resume_at_lorelei:
+        if (reader.read_league_challenge_started() is not True
+                or any(event_flag_is_set(raw.event_flags, flag) for flag in _LEAGUE_EVENTS)):
+            raise RedLeagueFundingError("in-room income requires a fresh started Lorelei challenge")
+        projected_events, reset_stale_events = raw.event_flags, False
+    else:
+        projected_events, reset_stale_events = projected_fresh_league_events(
+            raw.event_flags,
+            challenge_started=(reader.read_league_challenge_started()
+                               if learned_development else None),
+        )
     if not int(raw.badge_bits or 0) & int(Badge.THUNDER):
         raise RedLeagueFundingError("League funding requires observed Fly permission")
     try:
@@ -531,83 +560,90 @@ def qualify_red_league_funding(
         raise RedLeagueFundingError("party cannot currently execute Fly") from error
     destinations = reader.read_fly_destinations()
     landings = dict(red_fly_landings(rom))
-    if _INDIGO_TOWN not in destinations or _INDIGO_TOWN not in landings:
-        raise RedLeagueFundingError("Indigo Plateau is not an observed Fly destination")
 
     start = Gen1TraversalObserver(reader).observe()
-    exit_plan: RoutePlan | None = None
-    projected = start
-    if start.map_id >= 0x25:
-        if start.last_outside_map is None:
-            raise RedLeagueFundingError("indoor League funding lacks an observed exit")
+    if resume_at_lorelei:
+        # The existing world owns the observed zero-length route. No target,
+        # movement, item purchase or event reset is supplied by this branch.
+        stay = world.plan_feasible_to_map(start, start.map_id, goal_at=start.at)
+        if stay.steps or (stay.terminal_map, stay.terminal_at) != (start.map_id, start.at):
+            raise RedLeagueFundingError("in-room income changed its observed origin")
+        exit_plan, landing, fly_required = None, start.at, False
+        supply, entry = RedLeagueSupplyPlan(stay, (), 0), stay
+    else:
+        exit_plan: RoutePlan | None = None
+        projected = start
+        if start.map_id >= 0x25:
+            if start.last_outside_map is None:
+                raise RedLeagueFundingError("indoor League funding lacks an observed exit")
+            try:
+                exit_plan = world.plan_feasible_to_map(start, start.last_outside_map)
+            except RoutePlanningError as error:
+                raise RedLeagueFundingError("no bounded walking exit before Fly") from error
+            if not exit_plan.steps or not _walking_plan(exit_plan):
+                raise RedLeagueFundingError("League funding exit is not a bounded walk")
+            projected = replace(
+                start,
+                map_id=exit_plan.terminal_map,
+                at=exit_plan.terminal_at,
+                last_outside_map=exit_plan.terminal_map,
+                occupied=frozenset(),
+            )
+        if not 0 <= projected.map_id <= 0x24 or projected.map_id == 0x0B:
+            raise RedLeagueFundingError("League funding did not reach a legal Fly origin")
+    
+        # Fly cannot target the current town. Preserve the actual outdoor pose
+        # after an Indigo lobby exit instead of inventing a second Fly landing.
+        fly_required = projected.map_id != _INDIGO_TOWN
+        require_indigo_fly_destination(destinations, landings, fly_required=fly_required)
+        landing = landings[_INDIGO_TOWN] if fly_required else projected.at
+        graph = world.local_graphs.get(_INDIGO_TOWN)
+        if (
+            graph is None
+            or landing not in graph.edges
+            or landing in world.object_blockers[_INDIGO_TOWN]
+        ):
+            raise RedLeagueFundingError("Indigo Fly landing is not a standable cartridge tile")
+        indigo = replace(
+            projected,
+            map_id=_INDIGO_TOWN,
+            at=landing,
+            last_outside_map=_INDIGO_TOWN,
+            occupied=world.object_blockers[_INDIGO_TOWN],
+            hazards=(),
+        )
+        arrival = trainer_room_arrival(rom, int(MapId.LORELEIS_ROOM), projected_events)
+        entry_world = replace(
+            world,
+            macro_graph=with_scripted_trainer_arrival(world.macro_graph, arrival),
+        )
         try:
-            exit_plan = world.plan_feasible_to_map(start, start.last_outside_map)
+            supply_route = world.plan_feasible_to_map(
+                indigo,
+                int(MapId.INDIGO_PLATEAU_LOBBY),
+                goal_at=_INDIGO_CLERK_AT,
+            )
         except RoutePlanningError as error:
-            raise RedLeagueFundingError("no bounded walking exit before Fly") from error
-        if not exit_plan.steps or not _walking_plan(exit_plan):
-            raise RedLeagueFundingError("League funding exit is not a bounded walk")
-        projected = replace(
-            start,
-            map_id=exit_plan.terminal_map,
-            at=exit_plan.terminal_at,
-            last_outside_map=exit_plan.terminal_map,
-            occupied=frozenset(),
-        )
-    if not 0 <= projected.map_id <= 0x24 or projected.map_id == 0x0B:
-        raise RedLeagueFundingError("League funding did not reach a legal Fly origin")
-
-    # Fly cannot target the current town. Preserve the actual outdoor pose
-    # after an Indigo lobby exit instead of inventing a second Fly landing.
-    fly_required = projected.map_id != _INDIGO_TOWN
-    landing = landings[_INDIGO_TOWN] if fly_required else projected.at
-    graph = world.local_graphs.get(_INDIGO_TOWN)
-    if (
-        graph is None
-        or landing not in graph.edges
-        or landing in world.object_blockers[_INDIGO_TOWN]
-    ):
-        raise RedLeagueFundingError("Indigo Fly landing is not a standable cartridge tile")
-    indigo = replace(
-        projected,
-        map_id=_INDIGO_TOWN,
-        at=landing,
-        last_outside_map=_INDIGO_TOWN,
-        occupied=world.object_blockers[_INDIGO_TOWN],
-        hazards=(),
-    )
-    arrival = trainer_room_arrival(rom, int(MapId.LORELEIS_ROOM), projected_events)
-    entry_world = replace(
-        world,
-        macro_graph=with_scripted_trainer_arrival(world.macro_graph, arrival),
-    )
-    try:
-        supply_route = world.plan_feasible_to_map(
+            raise RedLeagueFundingError("no bounded route from Indigo landing to its clerk") from error
+        if not supply_route.steps or not _walking_plan(supply_route):
+            raise RedLeagueFundingError("Indigo supply route is not a bounded walk")
+        supplied = replace(
             indigo,
-            int(MapId.INDIGO_PLATEAU_LOBBY),
-            goal_at=_INDIGO_CLERK_AT,
+            map_id=supply_route.terminal_map,
+            at=supply_route.terminal_at,
+            last_outside_map=_INDIGO_TOWN,
+            occupied=world.object_blockers[supply_route.terminal_map],
         )
-    except RoutePlanningError as error:
-        raise RedLeagueFundingError("no bounded route from Indigo landing to its clerk") from error
-    if not supply_route.steps or not _walking_plan(supply_route):
-        raise RedLeagueFundingError("Indigo supply route is not a bounded walk")
-    supplied = replace(
-        indigo,
-        map_id=supply_route.terminal_map,
-        at=supply_route.terminal_at,
-        last_outside_map=_INDIGO_TOWN,
-        occupied=world.object_blockers[supply_route.terminal_map],
-    )
-    # This actor exposes attack/switch only. No item purchase, liquidation or
-    # deterministic healing fallback may be smuggled into its qualification.
-    supply = (RedLeagueSupplyPlan(supply_route, (), 0) if learned_development
-              else _plan_supply(raw.player_money, raw.bag_items, supply_route))
-    try:
-        entry = entry_world.plan_feasible_to_map(supplied, int(MapId.LORELEIS_ROOM))
-    except RoutePlanningError as error:
-        raise RedLeagueFundingError("no bounded route from Indigo landing to Lorelei") from error
-    if not entry.steps or not _walking_plan(entry):
-        raise RedLeagueFundingError("League entry is not a bounded walk")
-
+        # This actor exposes attack/switch only. No item purchase, liquidation or
+        # deterministic healing fallback may be smuggled into its qualification.
+        supply = (RedLeagueSupplyPlan(supply_route, (), 0) if learned_development
+                  else _plan_supply(raw.player_money, raw.bag_items, supply_route))
+        try:
+            entry = entry_world.plan_feasible_to_map(supplied, int(MapId.LORELEIS_ROOM))
+        except RoutePlanningError as error:
+            raise RedLeagueFundingError("no bounded route from Indigo landing to Lorelei") from error
+        if not entry.steps or not _walking_plan(entry):
+            raise RedLeagueFundingError("League entry is not a bounded walk")
     room_quotes = tuple(
         _room_quote(rom, projected_events, objective, room, event, final_class)
         for objective, room, event, final_class in _ROOMS
@@ -664,6 +700,7 @@ def qualify_red_league_funding(
         opponent_attack_demands,
         reset_stale_events,
         fly_required,
+        resume_at_lorelei,
     )
 
 

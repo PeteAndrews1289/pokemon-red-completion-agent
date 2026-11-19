@@ -81,3 +81,42 @@ def recorded_branch_history(
     # failures "exhausted searches" or changing the acquisition memory schema.
     GoalSearchHistory(attempts=attempts, actions=actions, frames=frames)
     return RecordedBranchHistory(attempts, actions, frames, debits, credits, losses, gains, unknown)
+
+
+STORY_HISTORY = "story-branch-history-v1"
+PREPARATION_HISTORY = "story-and-preparation-kind-history-v2"
+
+
+def validate_history_contract(value):
+    if value not in (STORY_HISTORY, PREPARATION_HISTORY):
+        raise ValueError("sequence history contract differs")
+
+
+def recorded_option_history(episode, *, kind, objective_ref, history_contract=STORY_HISTORY,
+                            boundary_sha256, expected_source_sha256, expected_plan_sha256):
+    """Prior story-branch effort or opt-in episode-wide preparation effort.
+
+    Preparation counts all earlier model-selected preparation, across trainees
+    and venues. They do not assert failure, exhaustion, same-task identity or a
+    reason to switch. Attached support costs remain charged exactly once by the
+    existing prefix reader. No reference becomes a numeric feature.
+    """
+    from dataclasses import replace
+    from .goal_manager import GoalKind
+    validate_history_contract(history_contract)
+    if not episode.choices:
+        return RecordedBranchHistory(0, 0, 0, 0, 0, 0, 0, 0)
+    if objective_ref is not None:
+        return recorded_branch_history(episode, objective_ref=objective_ref,
+            boundary_sha256=boundary_sha256, expected_source_sha256=expected_source_sha256,
+            expected_plan_sha256=expected_plan_sha256)
+    if history_contract == PREPARATION_HISTORY and kind == GoalKind.DEVELOP_TEAM.value:
+        # Reuse the checked numeric projection with an ephemeral kind join.
+        # No native story context is invented or written to the run.
+        contexts = tuple("preparation-kind" if k == GoalKind.DEVELOP_TEAM.value else None
+                         for k in episode.selected_kinds)
+        return recorded_branch_history(replace(episode, story_contexts=contexts),
+            objective_ref="preparation-kind", boundary_sha256=boundary_sha256,
+            expected_source_sha256=expected_source_sha256,
+            expected_plan_sha256=expected_plan_sha256)
+    return RecordedBranchHistory(0, 0, 0, 0, 0, 0, 0, 0)

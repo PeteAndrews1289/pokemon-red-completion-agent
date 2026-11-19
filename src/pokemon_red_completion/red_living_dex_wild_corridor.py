@@ -442,6 +442,7 @@ def derive_red_living_dex_wild_corridor(
     excluded: Collection[Coordinate] = (),
     cartridge: bytes | None = None,
     reachable_from: Coordinate | None = None,
+    permitted_excluded_origin: Coordinate | None = None,
     preferred_corridor: RedLivingDexWildCorridor | None = None,
 ) -> RedLivingDexWildCorridor:
     """Choose a reversible pair, optionally within the observed land component.
@@ -488,6 +489,14 @@ def derive_red_living_dex_wild_corridor(
             "wild corridor exclusions contain an invalid coordinate"
         )
 
+    # A current declared warp may seed outward reachability, but remains
+    # excluded from patrol endpoints and every subsequent expansion edge.
+    # The cartridge adapter must separately reject object-blocked origins.
+    if permitted_excluded_origin is not None and (
+        permitted_excluded_origin != reachable_from
+        or permitted_excluded_origin not in blocked
+    ):
+        raise RedLivingDexWildCorridorError("permitted entry differs from excluded origin")
     reachable = None
     if reachable_from is not None:
         if (
@@ -496,7 +505,7 @@ def derive_red_living_dex_wild_corridor(
             or any(type(value) is not int or value < 0 for value in reachable_from)
             or reachable_from[0] >= terrain.height
             or reachable_from[1] >= terrain.width
-            or reachable_from in blocked
+            or reachable_from in blocked and reachable_from != permitted_excluded_origin
         ):
             raise RedLivingDexWildCorridorError("wild corridor origin is invalid or excluded")
         reachable, pending = {reachable_from}, [reachable_from]

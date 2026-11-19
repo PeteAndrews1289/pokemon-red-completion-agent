@@ -30,10 +30,20 @@ class RedRegistrationPolicy:
     initial_collection: CollectionObservation
     protected_counts: Mapping[str, int]
     completion_scope: str = "shared"
+    target_species: tuple[str, ...] | None = None
 
     def __post_init__(self) -> None:
         if self.completion_scope not in {"shared", "local_red"}:
             raise ValueError("Red registration completion scope differs")
+        if self.target_species is not None and (
+            type(self.target_species) is not tuple
+            or not self.target_species
+            or any(type(s) is not str for s in self.target_species)
+            or len(set(self.target_species)) != len(self.target_species)
+            or not set(self.target_species) <= set(RED_SOLO_COLLECTION_CONTRACT.species_universe)
+            or self.completion_scope != "local_red"
+        ):
+            raise ValueError("explicit registration targets require distinct local Red species")
         initial = self.initial_memory.latest(self.run_id)
         if initial is None or initial.game_id != RED_COLLECTION_GAME_ID:
             raise ValueError("Red registered binding requires an actual Red run identity")
@@ -66,6 +76,8 @@ class RedRegistrationPolicy:
 
     @property
     def targets(self) -> frozenset[str]:
+        if self.target_species is not None:
+            return frozenset(self.target_species)
         if self.completion_scope == "local_red":
             return frozenset(red_species_ref(n) for n in range(1, 152))
         return frozenset(RED_SOLO_COLLECTION_CONTRACT.target_species)
@@ -90,6 +102,11 @@ class RedRegistrationPolicy:
                 "schema": "pokemon.red.registered-runtime-binding.v2",
                 "completion_scope": self.completion_scope,
             })
+        if self.target_species is not None:
+            document.update(
+                schema="pokemon.red.registered-runtime-binding.v3",
+                target_species=list(self.target_species),
+            )
         return document
 
     @property

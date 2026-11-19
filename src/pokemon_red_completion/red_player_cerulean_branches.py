@@ -28,6 +28,90 @@ class CeruleanStoryOption:
     challenge: OptionChallenge
 
 
+def _bill_story_rows(runtime, actions, *, before, available, route, actor, combat_levels,
+                     trainer_battler_for_contract=None):
+    """Quote the existing Bill mechanics only; no other goal is constructed."""
+    raw, result = before.raw, []
+    def add(objective, binding, *, contract=None, combat=False):
+        if binding is None:
+            return
+        challenge = OptionChallenge(combat, False, 0.0, 0.0, 0.0)
+        if contract is not None:
+            quote = trainer_party_quote(
+                route.rom, contract.trainer_identity[0], contract.trainer_identity[2]
+            )
+            challenge = OptionChallenge.from_levels(
+                combat_levels=combat_levels, opponent_levels=tuple(m.level for m in quote.party)
+            )
+        result.append(
+            CeruleanStoryOption(
+                objective,
+                replace(binding, story_objective_ref=objective),
+                challenge,
+            )
+        )
+    if "help_bill" in available:
+        if raw.map_id == int(MapId.BILLS_HOUSE):
+            add("help_bill", bill_interaction_binding(runtime, actions, route=route))
+        elif raw.map_id == int(MapId.CERULEAN_CITY) and not event_flag_is_set(
+            raw.event_flags, int(EventFlag.BEAT_CERULEAN_RIVAL)
+        ):
+            binding = cerulean_rival_binding(
+                runtime, actions, route=route,
+                battler=(actor("help_bill") if trainer_battler_for_contract is None else
+                         trainer_battler_for_contract(cerulean_rival_contract(route.rom, runtime.reader)))
+            )
+            if binding is not None:
+                add(
+                    "help_bill",
+                    binding,
+                    contract=cerulean_rival_contract(route.rom, runtime.reader),
+                )
+        else:
+            binding = story_travel_binding(
+                runtime,
+                actions,
+                objective_id="help_bill",
+                route=route,
+                frontier=True,
+                stop_at_map_boundary=True,
+            )
+            if binding is not None:
+                add("help_bill", binding)
+            else:
+                add(
+                    "help_bill",
+                    obstructing_story_battle_binding(
+                        runtime,
+                        actions,
+                        objective_id="help_bill",
+                        route=route,
+                        battler=actor("help_bill"),
+                        frontier=True,
+                        allow_sequence=True,
+                        **({"trainer_battler_for_contract": trainer_battler_for_contract}
+                           if trainer_battler_for_contract is not None else {}),
+                    ),
+                    combat=True,
+                )
+    return tuple(result)
+
+
+def cerulean_bill_story_option(runtime, actions, *, route, battler, combat_levels,
+                              trainer_battler_for_contract=None):
+    """One Bill quote, preserving the bundled helper's exact Bill mechanics."""
+    if trainer_battler_for_contract is not None and not callable(trainer_battler_for_contract):
+        raise TypeError("Bill trainer contract dispatch must be callable")
+    if not _field_ready(runtime):
+        return None
+    before = runtime.adapter.observe()
+    available = {o.id for o in runtime.adapter.graph.available_objectives(before.game_state)}
+    rows = _bill_story_rows(runtime, actions, before=before, available=available,
+        route=route, actor=lambda objective: battler, combat_levels=combat_levels,
+        trainer_battler_for_contract=trainer_battler_for_contract)
+    return None if not rows else rows[0]
+
+
 def cerulean_story_options(
     runtime, actions, *, route, battler, combat_levels, battler_for_objective=None
 ):
@@ -111,44 +195,6 @@ def cerulean_story_options(
                 ),
             )
 
-    if "help_bill" in available:
-        if raw.map_id == int(MapId.BILLS_HOUSE):
-            add("help_bill", bill_interaction_binding(runtime, actions, route=route))
-        elif raw.map_id == int(MapId.CERULEAN_CITY) and not event_flag_is_set(
-            raw.event_flags, int(EventFlag.BEAT_CERULEAN_RIVAL)
-        ):
-            binding = cerulean_rival_binding(
-                runtime, actions, route=route, battler=actor("help_bill")
-            )
-            if binding is not None:
-                add(
-                    "help_bill",
-                    binding,
-                    contract=cerulean_rival_contract(route.rom, runtime.reader),
-                )
-        else:
-            binding = story_travel_binding(
-                runtime,
-                actions,
-                objective_id="help_bill",
-                route=route,
-                frontier=True,
-                stop_at_map_boundary=True,
-            )
-            if binding is not None:
-                add("help_bill", binding)
-            else:
-                add(
-                    "help_bill",
-                    obstructing_story_battle_binding(
-                        runtime,
-                        actions,
-                        objective_id="help_bill",
-                        route=route,
-                        battler=actor("help_bill"),
-                        frontier=True,
-                        allow_sequence=True,
-                    ),
-                    combat=True,
-                )
+    result.extend(_bill_story_rows(runtime, actions, before=before, available=available,
+        route=route, actor=actor, combat_levels=combat_levels))
     return tuple(result)

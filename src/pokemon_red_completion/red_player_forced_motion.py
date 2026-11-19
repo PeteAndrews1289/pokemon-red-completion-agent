@@ -284,10 +284,313 @@ def _interrupted_purified_message_binding(runtime, actions, *, settle_frames):
     )
 
 
+def _pending_lift_arrival_endpoint(runtime, rom):
+    """Decode an in-flight keyed-lift warp, never select a floor or a route.
+
+    Red changes wCurMap before completing a warp. The retained source lift's
+    two warp rows still identify its door and already selected destination.
+    Coordinates and settled arrival geometry come from the verified cartridge.
+    """
+    from .gen1_maps import map_graph
+    from .observation import MapId, SCRIPTED_MOVEMENT_STATUS_MASK
+
+    raw = runtime.reader.read()
+    if raw.map_id not in (199, 200, 202) or raw.battle_state:
+        return None
+    ready = runtime.reader.read_input_readiness()
+    if (
+        _field_ready(runtime)
+        or runtime.emulator.pressed_buttons
+        or ready.joy_ignore
+        or ready.simulated_joypad_index
+        or ready.npc_movement_script_table
+        or ready.status_flags_5 & SCRIPTED_MOVEMENT_STATUS_MASK
+        or ready.player_moving_direction not in {1, 2, 4, 8}
+        or ready.movement_flags & 128
+        or runtime.reader.read_bottom_dialogue_box_visible()
+        or runtime.reader.read_overworld_start_menu_visible()
+        or runtime.reader.trainer_engagement_active()
+    ):
+        return None
+    nodes = map_graph(rom)
+    lift = nodes[int(MapId.ROCKET_HIDEOUT_ELEVATOR)]
+    floor = nodes[raw.map_id]
+    if (
+        floor.warp_arrivals is None
+        or not any(p.to_map == lift.map_id for p in floor.passages)
+        or (raw.player_y, raw.player_x) not in lift.warp_locations
+    ):
+        return None
+    # The revision adapter exposes retained rows without asserting current
+    # topology. Authenticate the source lift geometry and selected destination.
+    entries = runtime.reader.read_retained_warp_entries()
+    if len(entries) != len(lift.warp_locations) or not entries:
+        return None
+    endpoints = set()
+    for entry, at in zip(entries, lift.warp_locations, strict=True):
+        if (
+            entry.at != at or entry.destination_map != raw.map_id
+            or entry.destination_warp_index >= len(floor.warp_arrivals)
+        ):
+            return None
+        endpoints.add(floor.warp_arrivals[entry.destination_warp_index])
+    if len(endpoints) != 1:
+        return None
+    (endpoint,) = endpoints
+    if endpoint == (raw.player_y, raw.player_x):
+        return None
+    return endpoint
+
+
+def _warp_row_identity(entries):
+    return tuple((entry.at, entry.destination_warp_index, entry.destination_map)
+                 for entry in entries)
+
+
+def _pending_static_warp_arrival_endpoint(runtime, rom):
+    """Resolve an already-committed reciprocal warp from retained native rows.
+
+    During loading the current map changes before the source warp table does.
+    Require one exact cartridge source table, its committed destination/index,
+    and the reciprocal destination row. Never choose a door or a target.
+    """
+    from .observation import SCRIPTED_MOVEMENT_STATUS_MASK
+
+    read_entries = getattr(runtime.reader, "read_retained_warp_entries", None)
+    if not callable(read_entries):
+        return None
+    raw = runtime.reader.read()
+    if raw.battle_state or _field_ready(runtime) or runtime.emulator.pressed_buttons:
+        return None
+    ready = runtime.reader.read_input_readiness()
+    if (ready.joy_ignore or ready.simulated_joypad_index
+        or ready.npc_movement_script_table or ready.status_flags_5 & SCRIPTED_MOVEMENT_STATUS_MASK
+        or ready.player_moving_direction not in {1, 2, 4, 8}
+        or ready.movement_flags & 128
+        or runtime.reader.read_bottom_dialogue_box_visible()
+        or runtime.reader.read_overworld_start_menu_visible()
+        or runtime.reader.trainer_engagement_active()):
+        return None
+    from .gen1_maps import _read_headers, map_graph
+
+    entries = read_entries()
+    if not entries:
+        return None
+    nodes = map_graph(rom)
+    _, warps, _ = _read_headers(rom)
+    floor = nodes.get(raw.map_id)
+    if floor is None or floor.warp_arrivals is None:
+        return None
+    sources = tuple(map_id for map_id, rows in warps.items()
+                    if map_id in nodes and map_id != raw.map_id
+                    and _warp_row_identity(rows) == _warp_row_identity(entries))
+    if len(sources) != 1:
+        return None
+    source_map, = sources
+    selected = tuple((i, entry) for i, entry in enumerate(entries)
+                     if entry.at == (raw.player_y, raw.player_x)
+                     and entry.destination_map == raw.map_id)
+    if len(selected) != 1:
+        return None
+    source_index, entry = selected[0]
+    destination_rows = warps.get(raw.map_id, ())
+    index = entry.destination_warp_index
+    if not (0 <= index < len(destination_rows)
+            and index < len(floor.warp_arrivals)):
+        return None
+    back = destination_rows[index]
+    if back.destination_map != source_map or back.destination_warp_index != source_index:
+        return None
+    return floor.warp_arrivals[index]
+
+
+def _interrupted_lift_arrival_binding(runtime, actions, *, rom, maximum_waits, settle_frames, static_warp=False):
+    endpoint = (_pending_static_warp_arrival_endpoint(runtime, rom) if static_warp
+                else _pending_lift_arrival_endpoint(runtime, rom))
+    if endpoint is None:
+        return None
+    from copy import deepcopy
+
+    raw = runtime.reader.read()
+    source = runtime.emulator.save_state_bytes()
+    _, lesson = capture_player_lesson_snapshot(runtime)
+    custody = deepcopy(_purified_message_custody(runtime))
+    used, terminal, retained = False, None, None
+
+    def execute():
+        nonlocal used, terminal, retained
+        if used or runtime.emulator.save_state_bytes() != source:
+            raise ValueError("lift arrival settlement is stale or consumed")
+        used = True
+        a, f = actions.actions_executed, runtime.emulator.frame_count
+        allowed = {(raw.player_y, raw.player_x), endpoint}
+        for _ in range(maximum_waits):
+            actions.execute(MacroAction(MacroActionKind.WAIT, repeat=settle_frames))
+            after = runtime.reader.read()
+            if (
+                after.map_id != raw.map_id
+                or after.battle_state
+                or (after.player_y, after.player_x) not in allowed
+                or runtime.emulator.pressed_buttons
+                or runtime.reader.read_bottom_dialogue_box_visible()
+                or runtime.reader.read_overworld_start_menu_visible()
+                or runtime.reader.trainer_engagement_active()
+            ):
+                raise RuntimeError("lift arrival settlement left its declared native warp")
+            if _field_ready(runtime):
+                if (after.player_y, after.player_x) != endpoint:
+                    raise RuntimeError("lift arrival settled at an unexpected endpoint")
+                break
+        else:
+            raise RuntimeError("lift arrival settlement exhausted its wait bound")
+        if static_warp:
+            from .gen1_maps import _read_headers
+
+            _, expected_warps, _ = _read_headers(rom)
+            if (_warp_row_identity(runtime.reader.read_retained_warp_entries())
+                != _warp_row_identity(expected_warps.get(raw.map_id, ()))):
+                raise RuntimeError("static warp arrival retained the wrong room table")
+        _, after_lesson = capture_player_lesson_snapshot(runtime)
+        if (
+            after_lesson != lesson
+            or _purified_message_custody(runtime) != custody
+            or any(
+                getattr(after, name) != getattr(raw, name)
+                for name in (
+                    "player_money", "bag_items", "badge_bits", "event_flags",
+                    "party_count", "party_hp", "party_max_hp", "party_pp",
+                    "party_status", "party_species_ids", "party_levels",
+                    "party_moves", "party_stats",
+                )
+            )
+        ):
+            raise RuntimeError("lift arrival settlement changed protected resources")
+        terminal = runtime.emulator.save_state_bytes()
+        retained = GoalExecutionReport(
+            actions.actions_executed - a,
+            runtime.emulator.frame_count - f,
+            dict(
+                mechanic=("native_pending_static_warp_arrival_settlement" if static_warp
+                          else "native_pending_lift_arrival_settlement"),
+                learned_recovery=False, model_queries=0, directional_inputs=0,
+                dialogue_confirms=0, verified=True,
+                endpoint=endpoint, map_id=raw.map_id,
+                cartridge_arrival_and_observed_selected_destination=True,
+                individual_xp_box_dex_custody_verified=True,
+            ),
+        )
+        return retained
+
+    def verify(report):
+        if (
+            terminal is None or report != retained or not _field_ready(runtime)
+            or runtime.emulator.pressed_buttons
+            or runtime.emulator.save_state_bytes() != terminal
+        ):
+            return GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
+        return GoalVerification.succeeded()
+
+    return ExecutableGoalBinding(
+        "pokemon.red:retained-motion:" + sha256(source).hexdigest(),
+        GoalKind.RECOVER_CONTROL, 0.04, 0.02, execute, verify, maximum_cash_debit=0,
+    )
+
+
+
+def _interrupted_field_party_menu_binding(runtime, actions, *, maximum_cancels, settle_frames, menu_kind="party"):
+    """Cancel a rendered unowned field party chooser; never select its member."""
+    # Reuse the reader's exact shared PartyMenuInit cursor+Choose signature.
+    # Its observation does not authorize an NPC trade or a party selection.
+    def visible_menu():
+        method = "read_npc_trade_input" if menu_kind == "party" else "read_mart_input"
+        return getattr(runtime.reader, method, lambda: None)()
+    chooser = visible_menu()
+    if not (type(chooser) is tuple and len(chooser) == 2 and chooser[0] in ({"party"} if menu_kind == "party" else {"offer", "buy", "quantity"})):
+        return None
+    raw = runtime.reader.read()
+    if (raw.battle_state != 0 or runtime.emulator.pressed_buttons
+        or type(chooser[1]) is not int or raw.party_count is None
+        or not (
+            1 <= chooser[1] <= 99 if menu_kind == "mart" and chooser[0] == "quantity"
+            else 0 <= chooser[1] < (raw.party_count if menu_kind == "party" else 4)
+        )
+        or runtime.reader.trainer_engagement_active()
+        or (menu_kind == "party" and not runtime.reader.read_bottom_dialogue_box_visible())):
+        return None
+    source = runtime.emulator.save_state_bytes()
+    _, lesson = capture_player_lesson_snapshot(runtime)
+    used, terminal, retained = False, None, None
+    custody = _purified_message_custody(runtime)
+
+    def execute():
+        nonlocal used, terminal, retained
+        if used or runtime.emulator.save_state_bytes() != source:
+            raise ValueError("retained party menu is stale or consumed")
+        used = True
+        a, f = actions.actions_executed, runtime.emulator.frame_count
+        for _ in range(maximum_cancels):
+            if _field_ready(runtime) and visible_menu() is None:
+                break
+            actions.execute(MacroAction(MacroActionKind.CANCEL))
+            actions.execute(MacroAction(MacroActionKind.WAIT, repeat=settle_frames))
+            after = runtime.reader.read()
+            if (after.battle_state != 0 or after.map_id != raw.map_id
+                or (after.player_y, after.player_x) != (raw.player_y, raw.player_x)):
+                raise RuntimeError("retained party menu cancellation left its field tile")
+        else:
+            if not _field_ready(runtime) or visible_menu() is not None:
+                raise RuntimeError("retained party menu exceeded its cancel bound")
+        after = runtime.reader.read()
+        _, after_lesson = capture_player_lesson_snapshot(runtime)
+        if (after_lesson != lesson or _purified_message_custody(runtime) != custody
+            or any(getattr(after, name) != getattr(raw, name) for name in (
+                "player_money", "bag_items", "badge_bits", "event_flags",
+                "party_hp", "party_max_hp", "party_pp", "party_status",
+                "party_species_ids", "party_levels", "party_moves", "party_stats"))):
+            raise RuntimeError("retained party menu cancellation changed protected resources")
+        terminal = runtime.emulator.save_state_bytes()
+        retained = GoalExecutionReport(actions.actions_executed - a,
+            runtime.emulator.frame_count - f,
+            dict(mechanic="native_retained_field_" + menu_kind + "_cancel", learned_recovery=False,
+                 model_queries=0, directional_inputs=0, confirms=0, verified=True))
+        return retained
+
+    def verify(report):
+        if (terminal is None or report != retained or not _field_ready(runtime)
+            or visible_menu() is not None or runtime.emulator.save_state_bytes() != terminal):
+            return GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
+        return GoalVerification.succeeded()
+
+    return ExecutableGoalBinding("pokemon.red:retained-motion:" + sha256(source).hexdigest(),
+        GoalKind.RECOVER_CONTROL, 0.04, 0.02, execute, verify, maximum_cash_debit=0)
+
+
 def interrupted_motion_binding(runtime, actions, *, rom, maximum_waits=16, settle_frames=120):
     """Observe one unambiguous native chain endpoint before offering recovery."""
     if any(type(v) is not int or v <= 0 for v in (maximum_waits, settle_frames)):
         raise ValueError("motion settlement bounds must be positive integers")
+    party = _interrupted_field_party_menu_binding(
+        runtime, actions, maximum_cancels=maximum_waits, settle_frames=settle_frames
+    )
+    if party is not None:
+        return party
+    mart = _interrupted_field_party_menu_binding(
+        runtime, actions, maximum_cancels=maximum_waits,
+        settle_frames=settle_frames, menu_kind="mart"
+    )
+    if mart is not None:
+        return mart
+    arrival = _interrupted_lift_arrival_binding(
+        runtime, actions, rom=rom, maximum_waits=maximum_waits, settle_frames=settle_frames
+    )
+    if arrival is not None:
+        return arrival
+    arrival = _interrupted_lift_arrival_binding(
+        runtime, actions, rom=rom, maximum_waits=maximum_waits,
+        settle_frames=settle_frames, static_warp=True
+    )
+    if arrival is not None:
+        return arrival
     purified = _interrupted_purified_message_binding(runtime, actions, settle_frames=settle_frames)
     if purified is not None:
         return purified
@@ -490,6 +793,92 @@ def _prior_poison_boundary(raw, proof):
         return None
 
 
+def _loan_poison_boundary(raw, proof):
+    """Use a closed native training witness for one poisoned inactive loan escort.
+
+    The caller authenticates the exact failed source and named PC custody. No
+    ancestor state is loaded. The recorded poison/HP is evidence only; all
+    other HP/status values remain the actual retained values.
+    """
+    try:
+        if (type(proof) is not dict
+                or proof.get("schema") != "pokemon.red.retained-loan-poison.v1"
+                or proof.get("named_loan_verified") is not True):
+            return None
+        events = proof["events"]
+        matches = [i for i,e in enumerate(events) if e["kind"] == "wild_training_move"]
+        if not matches:
+            return None
+        index = matches[-1]; event = events[index]; payload = event["payload"]
+        old = payload["observed"]
+        controls = [e["payload"]["action"] for e in events[index+1:]
+                    if e["kind"] == "wild_training_control"]
+        tail = events[index + 1:]
+        flee_heal = (controls[-2:] == ["flee", "heal"]
+                     and all(c in {"seek", "fight"} for c in controls[:-2]))
+        # A verified win may be followed by overworld seeking before an
+        # inactive poisoned escort faints. This is a second recorded route
+        # to the same field dialogue, not permission to dismiss other text.
+        gains = [e for e in tail if e["kind"] == "wild_training_experience"]
+        win_seek = False
+        if (controls and all(c == "seek" for c in controls) and len(gains) == 1
+                and all(e["kind"] in {"wild_training_control", "wild_training_experience"}
+                        for e in tail)):
+            gain = gains[0]
+            xp = gain["payload"]
+            seek_frames = [e["frame"] for e in tail if e["kind"] == "wild_training_control"]
+            before_xp, after_xp, delta = (xp.get("experience_before"),
+                                         xp.get("experience_after"),
+                                         xp.get("experience_gained"))
+            win_seek = (
+                xp.get("actor") == "rule_based_support"
+                and xp.get("source") == "native_level_evolution"
+                and all(type(x) is int for x in (before_xp, after_xp, delta))
+                and before_xp >= 0 and after_xp - before_xp == delta and delta > 0
+                and xp.get("recipient_species_id_before") == xp.get("recipient_species_id_after")
+                and xp.get("recipient_species_id_before") in old["party_species_ids"]
+                and event["frame"] <= gain["frame"] <= min(seek_frames)
+            )
+        if (payload.get("source") != "native_level_evolution"
+                or payload.get("actor") != "rule_based_support"
+                or payload.get("selection_validated") is not True
+                or payload.get("execution_confirmed") is not False
+                or old["battle_state"] != 1 or not (flee_heal or win_seek)
+                or event["frame"] > proof["native_frames"]
+                or any(e["frame"] > proof["native_frames"] for e in events[index:])):
+            return None
+        def norm(v):
+            return tuple(norm(x) for x in v) if isinstance(v,(list,tuple)) else v
+        for key in ("party_species_ids","party_levels","party_max_hp","party_moves"):
+            if norm(old[key]) != getattr(raw,key):
+                return None
+        previous_pp = norm(old["party_pp"])
+        if len(previous_pp) != len(raw.party_pp) or any(
+                len(a)!=len(b) or any(type(x)is not int or type(y)is not int
+                    or (x&192)!=(y&192) or (y&63)>(x&63) for x,y in zip(a,b))
+                for a,b in zip(previous_pp,raw.party_pp)):
+            return None
+        hp,status = tuple(old["party_hp"]),tuple(old["party_status"])
+        count = raw.party_count
+        if not 1 <= count <= 6 or any(len(v)!=count for v in (hp,status,raw.party_hp,raw.party_status)):
+            return None
+        slots = [i for i in range(count) if hp[i]>0 and status[i]==8
+                 and raw.party_hp[i]==0 and raw.party_status[i]==0]
+        if len(slots)!=1 or old["active_party_index"] in slots:
+            return None
+        slot=slots[0]
+        if any(type(v)is not int or v<0 for v in (*hp,*status,*raw.party_hp,*raw.party_status)):
+            return None
+        if any(i!=slot and (raw.party_status[i]!=status[i] or raw.party_hp[i]>hp[i])
+               for i in range(count)):
+            return None
+        previous_hp=list(raw.party_hp);previous_status=list(raw.party_status)
+        previous_hp[slot]=hp[slot];previous_status[slot]=status[slot]
+        return tuple(previous_hp),tuple(previous_status)
+    except (KeyError,TypeError,ValueError,IndexError,AttributeError):
+        return None
+
+
 def retained_field_faint_binding(
     runtime, actions, *, outcome, settle_frames=120, prior_native_boundary=None
 ):
@@ -531,18 +920,27 @@ def retained_field_faint_binding(
         old, current = before["diagnostics"], after["diagnostics"]
         count = raw.party_count
         old_hp, old_status = tuple(old["party_hp"]), tuple(old["party_status"])
+        loan_boundary = None
+        if (outcome["error_type"] == "RedGoalContextError"
+                and outcome["selected_kind"] == "evolve_species"
+                and outcome["error"] == "PC loan settlement requires settled field control"):
+            loan_boundary = _loan_poison_boundary(raw, prior_native_boundary)
+            if loan_boundary is None:
+                return None
+            old_hp, old_status = loan_boundary
         if outcome["error"] == "field dialogue lacks a newly poisoned member faint":
             boundary = _prior_poison_boundary(raw, prior_native_boundary)
             if boundary is None:
                 return None
             old_hp, old_status = boundary
         if (
-            outcome["error_type"] != "RouteExecutionError"
-            or outcome["error"]
-            not in {
-                "Gen I route cannot dismiss 'scripted_dialogue'",
-                "field dialogue lacks a newly poisoned member faint",
-            }
+            (loan_boundary is None and (
+                outcome["error_type"] != "RouteExecutionError"
+                or outcome["error"] not in {
+                    "Gen I route cannot dismiss 'scripted_dialogue'",
+                    "field dialogue lacks a newly poisoned member faint",
+                }
+            ))
             or outcome["failure_phase"] != "execution"
             or outcome["safe_terminal"] is not True
             or outcome["terminal_state_sha256"] != sha256(source).hexdigest()
@@ -562,7 +960,7 @@ def retained_field_faint_binding(
             or len(raw.party_status) != count
             or not any(hp > 0 for hp in raw.party_hp)
             or any(type(v) is not int or v < 0 for v in (*old_hp, *old_status))
-            or normalized(old["party_species_ids"]) != raw.party_species_ids
+            or (loan_boundary is None and normalized(old["party_species_ids"]) != raw.party_species_ids)
             or any(
                 normalized(current[name]) != getattr(raw, name)
                 for name in (
@@ -593,8 +991,15 @@ def retained_field_faint_binding(
             )
             if hp > 0 and status == 8 and now == 0 and now_status == 0
         )
+        named_slot = None
         if not slots:
-            return None
+            newly_fainted = [i+1 for i,(old_hp_i,hp) in enumerate(zip(old_hp,raw.party_hp,strict=True))
+                             if old_hp_i > 0 and hp == 0]
+            if (outcome["selected_kind"] != "resupply"
+                    or outcome["error"] != "Gen I route cannot dismiss 'scripted_dialogue'"
+                    or len(newly_fainted) != 1 or any(raw.party_status)):
+                return None
+            named_slot = newly_fainted[0]
     except (KeyError, TypeError, ValueError):
         return None
 
@@ -609,26 +1014,48 @@ def retained_field_faint_binding(
 
         custody = deepcopy(_purified_message_custody(runtime))
         a, f = actions.actions_executed, runtime.emulator.frame_count
-        handler = Gen1WildFleeHandler(
-            actions,
-            runtime.reader,
-            maximum_flees=0,
-            stabilization_frames=settle_frames,
-            allow_party_faints=True,
-            allow_field_faint_dialogue=True,
-            emulator=runtime.emulator,
-        )
-        # Restore only the observer's recorded transition evidence. The native
-        # state stays at the failed tail, including its fainted party member.
-        handler._field_boundary = replace(raw, party_hp=old_hp, party_status=old_status)
-        receipt = handler.handle(
-            TraversalSnapshot(raw.map_id, (raw.player_y, raw.player_x), False, "scripted_dialogue")
-        )
+        if named_slot is not None:
+            # A trainer can inflict poison after the strategic goal's opening
+            # observation. The cartridge's named faint text establishes this
+            # settlement without inventing an earlier poison or HP reading.
+            actions.execute(MacroAction(MacroActionKind.WAIT, repeat=128))
+            observed = runtime.reader.read()
+            if any(getattr(observed, k) != getattr(raw, k) for k in
+                    ("map_id","player_x","player_y","battle_state","party_species_ids","party_hp",
+                     "party_status","player_money","bag_items","event_flags")):
+                raise RuntimeError("field state changed while awaiting the faint message")
+            if not runtime.reader.named_field_faint_visible(named_slot):
+                raise RuntimeError("funding interruption did not print the newly fainted party member")
+            actions.execute(MacroAction(MacroActionKind.CANCEL))
+            actions.execute(MacroAction(MacroActionKind.WAIT, repeat=settle_frames))
+            raw_after = runtime.reader.read()
+            if any(getattr(raw_after,k) != getattr(raw,k) for k in (
+                    "party_hp","party_status","party_max_hp","party_moves","party_pp",
+                    "player_money","bag_items","badge_bits","event_flags","battle_state")):
+                raise RuntimeError("named faint message changed protected resources")
+            details = dict(named_faint_message=True, new_fainted_slots=(named_slot,), cancel_pulses=1)
+        else:
+            handler = Gen1WildFleeHandler(
+                actions,
+                runtime.reader,
+                maximum_flees=0,
+                stabilization_frames=settle_frames,
+                allow_party_faints=True,
+                allow_field_faint_dialogue=True,
+                emulator=runtime.emulator,
+            )
+            # Restore only the observer's recorded transition evidence. The native
+            # state stays at the failed tail, including its fainted party member.
+            handler._field_boundary = replace(raw, party_hp=old_hp, party_status=old_status)
+            receipt = handler.handle(
+                TraversalSnapshot(raw.map_id, (raw.player_y, raw.player_x), False, "scripted_dialogue")
+            )
+            details = receipt.details
+            if not details.get("native_field_faint") or tuple(details.get("new_fainted_slots", ())) != slots:
+                raise RuntimeError("retained faint evidence did not match the recorded party transition")
         after_raw = runtime.reader.read()
         if (
-            not receipt.details.get("native_field_faint")
-            or tuple(receipt.details.get("new_fainted_slots", ())) != slots
-            or not _field_ready(runtime)
+            not _field_ready(runtime)
             or runtime.emulator.pressed_buttons
             or (after_raw.map_id, after_raw.player_y, after_raw.player_x)
             != (raw.map_id, raw.player_y, raw.player_x)
@@ -648,7 +1075,7 @@ def retained_field_faint_binding(
                 prior_native_outcome_authenticated=True,
                 verified=True,
                 individual_xp_box_dex_custody_verified=True,
-                route_details=receipt.details,
+                route_details=details,
             ),
         )
         return retained

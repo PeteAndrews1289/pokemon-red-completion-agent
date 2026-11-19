@@ -21,6 +21,7 @@ from .observation import (
     MapId,
     event_flag_is_set,
 )
+from .provenance import canonical_sha256
 from .red_player_field_goals import _field_ready
 from .red_scoped_training_battlers import resolve_story_battler
 from .red_story_battle import FrozenStoryBattleController, StoryTrainerContract
@@ -42,6 +43,57 @@ _LEAGUE_CONTEXTS = frozenset(
         "defeat_champion",
     }
 )
+
+
+class RetainedTrainerBattleDecisionBudgetReached(RuntimeError):
+    """Retain a still-engaged battle at the unchanged local decision bound."""
+
+    reason_code = "retained_trainer_battle_decision_budget"
+
+
+def _retain_bounded_trainer_battle(runtime, actions, controller, contract, result):
+    episode = getattr(result, "episode", None)
+    if not (
+        result.outcome == "unresolved"
+        and result.field_ready is False
+        and episode is not None
+        and getattr(episode, "stop_reason", None) == "decision_budget"
+        and not episode.battle_won
+        and len(episode.decisions) == controller.maximum_decisions
+        and episode.final_battle_state == 2
+    ):
+        return
+    current = runtime.reader.read()
+    if not (
+        current.battle_state == 2
+        and current.map_id == contract.map_id
+        and runtime.reader.read_active_trainer_identity() == contract.trainer_identity
+        and current.party_hp and any(current.party_hp)
+    ):
+        return
+    record = getattr(actions, "record_diagnostic_event", None)
+    if callable(record):
+        public = result.public_dict()
+        battle_sha256 = canonical_sha256(public)
+        summary = dict(public, episode=dict(public["episode"]))
+        decisions = summary["episode"].pop("decisions")
+        # The existing diagnostic journal retains bounded individual records.
+        # Keep every turn, rather than putting a long battle in one envelope.
+        for ordinal, decision in enumerate(decisions):
+            record("retained_trainer_battle_decision", dict(
+                battle_sha256=battle_sha256, ordinal=ordinal, decision=decision,
+            ))
+        record("retained_trainer_battle_decision_budget", dict(
+            decisions_consumed=len(episode.decisions),
+            maximum_decisions=controller.maximum_decisions,
+            battle=summary, battle_sha256=battle_sha256,
+            decision_records_written=len(decisions),
+            terminal_state_sha256=sha256(runtime.emulator.save_state_bytes()).hexdigest(),
+            outcome_and_costs_retained=True, new_controller_inputs=0,
+        ))
+    raise RetainedTrainerBattleDecisionBudgetReached(
+        "retained trainer battle reached its bounded decision limit"
+    )
 
 
 class SettledNativeTrainerLoss(RouteExecutionError):
@@ -331,6 +383,13 @@ def engaged_story_contract(
         from .red_scripted_story_trainer import cerulean_thief_contract
 
         return cerulean_thief_contract(rom, reader)
+    if (objective_id == "postgame_collection" and raw.battle_state == 0
+            and raw.map_id == int(MapId.FIGHTING_DOJO)):
+        from .red_scripted_story_trainer import dojo_master_introduction_contract
+
+        introduction = dojo_master_introduction_contract(rom, reader)
+        if introduction is not None:
+            return introduction
     if raw.battle_state == 2:
         identity = reader.read_active_trainer_identity()
     elif raw.battle_state == 0 and reader.trainer_engagement_active():
@@ -536,7 +595,10 @@ def engaged_story_binding(
     }
     postgame = (
         allow_postgame_collection
-        and objective_id == "postgame_collection"
+        and (objective_id == "postgame_collection" or (
+            objective_id in _LEAGUE_CONTEXTS and context_ref == objective_id
+            and runtime.reader.read().battle_state == 2
+        ))
         and {"defeat_champion", "enter_hall_of_fame"}
         <= set(runtime.adapter.graph.completed_ids(before.game_state))
     )
@@ -616,7 +678,17 @@ def engaged_story_binding(
             raise ValueError("retained Giovanni reward contract differs")
         reward = GIOVANNI_REWARD
     actor = resolve_story_battler(battler, contract)
-    controller = FrozenStoryBattleController(actor, (contract,), evolution_rom=rom)
+    from .red_player_party_guard import RedPlayerPartyGuard
+
+    party_guard = getattr(runtime.adapter, "party_guard", None)
+    retained_origin = None
+    if (type(party_guard) is RedPlayerPartyGuard
+            and party_guard.refs == party_guard.reader.preparation_specimen_refs()
+            and contract.objective_id in _LEAGUE_CONTEXTS):
+        retained_origin = party_guard.retained_story_origin
+    controller = FrozenStoryBattleController(
+        actor, (contract,), evolution_rom=rom, retained_evolution_origin=retained_origin,
+    )
     source = runtime.emulator.save_state_bytes()
     used, terminal, result = False, None, None
 
@@ -691,6 +763,7 @@ def engaged_story_binding(
             or not result.field_ready
             or not _field_ready(runtime)
         ):
+            _retain_bounded_trainer_battle(runtime, actions, controller, contract, result)
             raise RuntimeError("retained trainer battle did not settle")
         if reward_evidence is not None:
             objective = runtime.adapter.graph.objective(objective_id)

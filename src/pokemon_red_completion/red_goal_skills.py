@@ -1065,12 +1065,13 @@ class RedMartResupplyGoalProvider:
 
     def _open_buy_list(self) -> None:
         for _ in range(8):
-            if (
-                self.emulator.read_u8(RamAddress.TOP_MENU_ITEM_X),
-                self.emulator.read_u8(RamAddress.TOP_MENU_ITEM_Y),
-            ) == (5, 4):
+            menu = self.reader.read_mart_input()
+            if menu is not None and menu[0] == "buy":
                 return
-            self.actions.execute(MacroAction(MacroActionKind.CONFIRM))
+            # An interrupted quantity prompt is not an acknowledgement gate.
+            # Cancel it before executing this binding's exact purchase target.
+            kind = MacroActionKind.CANCEL if menu is not None and menu[0] == "quantity" else MacroActionKind.CONFIRM
+            self.actions.execute(MacroAction(kind))
             self._settle()
         raise RedGoalSkillError("Mart dialogue did not reach the priced item list")
 
@@ -1785,6 +1786,7 @@ class RedAreaSurveyGoalProvider:
                 before=guard.reader.read(),
                 refs=guard.reader.preparation_specimen_refs(),
                 loanable_refs=frozenset(),
+                field_carrier=None,
             )
             if isinstance(guard, RedPlayerPartyGuard)
             else None
@@ -1897,6 +1899,15 @@ class RedAreaSurveyGoalProvider:
                     **(
                         {"capture_health_stopped": True}
                         if getattr(self.area_executor, "capture_health_stopped", False)
+                        else {}
+                    ),
+                    **(
+                        {"capture_drift_settlements": drift_settlements}
+                        if (
+                            drift_settlements := getattr(
+                                self.area_executor, "capture_drift_settlements", 0
+                            )
+                        )
                         else {}
                     ),
                     "capture_diagnostics": dict(

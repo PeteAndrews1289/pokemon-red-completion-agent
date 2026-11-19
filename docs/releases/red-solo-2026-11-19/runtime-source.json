@@ -1,0 +1,2536 @@
+{
+  "checked_import_modules": 352,
+  "declared_overrides": 59,
+  "directly_bound_files": 375,
+  "files": {
+    "pokemon_red_completion": {
+      "path": "src/pokemon_red_completion/__init__.py",
+      "scope": "bound",
+      "sha256": "7089116e7418f775601bdc04f0c2236e45461401917b829685ef08a5d039bd0f"
+    },
+    "pokemon_red_completion.actions": {
+      "path": "src/pokemon_red_completion/actions.py",
+      "scope": "bound",
+      "sha256": "982909b2c81ff7ec9ec7e9eab57cad8cb40dd70ce9a0870f476a0c6f08966d39"
+    },
+    "pokemon_red_completion.agatha": {
+      "path": "src/pokemon_red_completion/agatha.py",
+      "scope": "bound",
+      "sha256": "512f1f01dc3aca69c27b282d6858ab4738976623bd22d8ca7dd4f7b9a42b5f32"
+    },
+    "pokemon_red_completion.battle_action_targets": {
+      "path": "src/pokemon_red_completion/battle_action_targets.py",
+      "scope": "bound",
+      "sha256": "f36e82c46e94eed2dd9953fb68af92089a7b2b79b046e3ef5389da175b3ea23e"
+    },
+    "pokemon_red_completion.battle_actions": {
+      "path": "src/pokemon_red_completion/battle_actions.py",
+      "scope": "bound",
+      "sha256": "922276708a9b51812a60bb1320d665cc4de84583cb08f138e2d781d81014460b"
+    },
+    "pokemon_red_completion.battle_control_features": {
+      "path": "src/pokemon_red_completion/battle_control_features.py",
+      "scope": "bound",
+      "sha256": "ac9cc6d49b54056794f51f7787f3fcd51bfae61017a3ac0c9899af3785b4f9af"
+    },
+    "pokemon_red_completion.battle_control_model": {
+      "path": "src/pokemon_red_completion/battle_control_model.py",
+      "scope": "bound",
+      "sha256": "481f7c65bed5c0d903b8777f55a78d48b43d8152f6ba9200302b2205338c35ef"
+    },
+    "pokemon_red_completion.battle_matchups": {
+      "path": "src/pokemon_red_completion/battle_matchups.py",
+      "scope": "bound",
+      "sha256": "6934c91e283c2b82569ed9de4e36edf84261188404671b02a0142e334c1e2c9d"
+    },
+    "pokemon_red_completion.battle_model": {
+      "path": "src/pokemon_red_completion/battle_model.py",
+      "scope": "bound",
+      "sha256": "423def7fcd2ad4c3360587a2bfab41b2af52ee2509624760e0309ba5fbcd5442"
+    },
+    "pokemon_red_completion.battle_neural_model": {
+      "path": "src/pokemon_red_completion/battle_neural_model.py",
+      "scope": "bound",
+      "sha256": "b2f6fb8704f13fd61ac92f396c714f21323950045b759d45d849ae591672b3d4"
+    },
+    "pokemon_red_completion.battle_opposition": {
+      "path": "src/pokemon_red_completion/battle_opposition.py",
+      "scope": "bound",
+      "sha256": "59323b26022378bfda13c9229a94d8ca7f34fe15c6ae32224724d7ebb0db5c10"
+    },
+    "pokemon_red_completion.battle_outcome_learning": {
+      "path": "src/pokemon_red_completion/battle_outcome_learning.py",
+      "scope": "bound",
+      "sha256": "40d24e1f9bb6c06e1e2656ddb49668a5ec3cc6086ad3c10bb98a3bfe3da3aa46"
+    },
+    "pokemon_red_completion.battle_plan": {
+      "path": "src/pokemon_red_completion/battle_plan.py",
+      "scope": "bound",
+      "sha256": "5f85301e4879e92ac184c9de71e1a87867a9081a187dc59e7266ce2097dbec8b"
+    },
+    "pokemon_red_completion.battle_policy": {
+      "path": "src/pokemon_red_completion/battle_policy.py",
+      "scope": "bound",
+      "sha256": "046e7a72914e02c31047c2a265b041b5762be509fc5cbcb3959b271fdee0b345"
+    },
+    "pokemon_red_completion.battle_practice_factory": {
+      "path": "src/pokemon_red_completion/battle_practice_factory.py",
+      "scope": "bound",
+      "sha256": "5b99478256d5e67e556e4cd5dc35f344985ce5d96a5b0479f381b27228a6135d"
+    },
+    "pokemon_red_completion.battle_recovery": {
+      "path": "src/pokemon_red_completion/battle_recovery.py",
+      "scope": "bound",
+      "sha256": "2a115e546f5ab309d5cfa938c408f37d2097de1012dc7045a18aec67cbab6624"
+    },
+    "pokemon_red_completion.battle_runtime": {
+      "path": "src/pokemon_red_completion/battle_runtime.py",
+      "scope": "bound",
+      "sha256": "ec61c0222646ccf55bef59c07c3bdb45232c85d08cb04de39be21dfbec10450b"
+    },
+    "pokemon_red_completion.battle_runtime_diagnostics": {
+      "path": "src/pokemon_red_completion/battle_runtime_diagnostics.py",
+      "scope": "bound",
+      "sha256": "49fdc8cd3cd5cf6cab37ce17ed9fef34ffb120d2dd6388e40aee9b836e1f0c29"
+    },
+    "pokemon_red_completion.battle_scenario_capture": {
+      "path": "src/pokemon_red_completion/battle_scenario_capture.py",
+      "scope": "bound",
+      "sha256": "f6ea41619d1386644e6e05eb776ec609499d83009297412058d52fde7f8edaa0"
+    },
+    "pokemon_red_completion.battle_schedule": {
+      "path": "src/pokemon_red_completion/battle_schedule.py",
+      "scope": "bound",
+      "sha256": "bcdccf2f792c91a7540951fdb92abb3101746d7b9f6871584ca236d58a91412c"
+    },
+    "pokemon_red_completion.battle_semantics": {
+      "path": "src/pokemon_red_completion/battle_semantics.py",
+      "scope": "bound",
+      "sha256": "a10882d3b0ff84a838cdbbd0646b6b96e4c8c07441c6317d46b52b4f0caa9404"
+    },
+    "pokemon_red_completion.battle_switch_target": {
+      "path": "src/pokemon_red_completion/battle_switch_target.py",
+      "scope": "bound",
+      "sha256": "1281dc6bf673b6415b18bba68a39856734cb8f77e7954191ea4ed02ebf5640c5"
+    },
+    "pokemon_red_completion.battle_switch_target_model": {
+      "path": "src/pokemon_red_completion/battle_switch_target_model.py",
+      "scope": "bound",
+      "sha256": "b4aaa0cd390d7e8fb6d7be2b19f496e6069068bd806cd31fa6901cba7766feba"
+    },
+    "pokemon_red_completion.blaine": {
+      "path": "src/pokemon_red_completion/blaine.py",
+      "scope": "bound",
+      "sha256": "ec1c1e1561359c9bbbaf3bc8fbf10ff03d328da737b67024a26994c15d7effde"
+    },
+    "pokemon_red_completion.bootstrap": {
+      "path": "src/pokemon_red_completion/bootstrap.py",
+      "scope": "bound",
+      "sha256": "5c8dea49b350a0603a54e37e52cd81a62fa063c2f878ceb13128879d5051b850"
+    },
+    "pokemon_red_completion.bruno": {
+      "path": "src/pokemon_red_completion/bruno.py",
+      "scope": "bound",
+      "sha256": "28dfbb9d4b2dff09622d7f904b35bc659c90e9fcaa729583c41eac91876bb2b2"
+    },
+    "pokemon_red_completion.capture": {
+      "path": "src/pokemon_red_completion/capture.py",
+      "scope": "bound",
+      "sha256": "522b0c5b365fbdab5feca994be61ffa059c0e5324bfb1119d2dabd8ebbd94b4a"
+    },
+    "pokemon_red_completion.capture_support": {
+      "path": "src/pokemon_red_completion/capture_support.py",
+      "scope": "bound",
+      "sha256": "c58adb857500a571d776718bfc60e64845ec15d0713c6c1946281e301400fe8e"
+    },
+    "pokemon_red_completion.capture_survey": {
+      "path": "src/pokemon_red_completion/capture_survey.py",
+      "scope": "static_dependency",
+      "sha256": "b72a206ab818b1c3a5c1d51c36afea1b8b387abb0fe41859fa1426a39be51954"
+    },
+    "pokemon_red_completion.captured_progress": {
+      "path": "src/pokemon_red_completion/captured_progress.py",
+      "scope": "bound",
+      "sha256": "ba22f83c73d4c2121f8f165ee029f9b7e83c015520b7c548edebe15e00c91ef0"
+    },
+    "pokemon_red_completion.cascade": {
+      "path": "src/pokemon_red_completion/cascade.py",
+      "scope": "bound",
+      "sha256": "b118838c3553c72974815caed45ecb9c5b43f02e5b0295e943ec8b2f0fdf6567"
+    },
+    "pokemon_red_completion.celadon": {
+      "path": "src/pokemon_red_completion/celadon.py",
+      "scope": "bound",
+      "sha256": "fdbf05c6cce4faef9041f1ff8fac3d8c9e2f6baed7a1a17b3330c27550733ed7"
+    },
+    "pokemon_red_completion.cerulean": {
+      "path": "src/pokemon_red_completion/cerulean.py",
+      "scope": "bound",
+      "sha256": "8e830562e17ef65dba402ddfd5ec458c140eb2f7c0743dc1e9882265b66d68db"
+    },
+    "pokemon_red_completion.champion": {
+      "path": "src/pokemon_red_completion/champion.py",
+      "scope": "bound",
+      "sha256": "b0ce0a6127c3f47b9b1b0cdcadc21d24933286b8ea353d5adb8c6b3bac580345"
+    },
+    "pokemon_red_completion.cinnabar": {
+      "path": "src/pokemon_red_completion/cinnabar.py",
+      "scope": "bound",
+      "sha256": "60b690bc4438eb13dd6953dcbdc91d6837ce071c8019af0b348a8a6bec56b7b1"
+    },
+    "pokemon_red_completion.claim_first_admission": {
+      "path": "src/pokemon_red_completion/claim_first_admission.py",
+      "scope": "bound",
+      "sha256": "183a2d9fb6a2eb47fb6baf4128b8a8dec68ef3a6949f4a30206a09c44fa45fa1"
+    },
+    "pokemon_red_completion.collection": {
+      "path": "src/pokemon_red_completion/collection.py",
+      "scope": "bound",
+      "sha256": "59b57cee050990ac64d7ecbae1759a7bfd4d4eee4152f3df393861bf07c49d34"
+    },
+    "pokemon_red_completion.collection_acquisition_demand": {
+      "path": "src/pokemon_red_completion/collection_acquisition_demand.py",
+      "scope": "static_dependency",
+      "sha256": "da8b32e368f253ecd6b694dd97a596bc4946f616f9de0c06135e98e288376e5c"
+    },
+    "pokemon_red_completion.collection_protocol": {
+      "path": "src/pokemon_red_completion/collection_protocol.py",
+      "scope": "bound",
+      "sha256": "2e42a415fef56c3ce434fc714807bd9babbbc5387e88682623dcfa13aa4d8553"
+    },
+    "pokemon_red_completion.collection_training_cost": {
+      "path": "src/pokemon_red_completion/collection_training_cost.py",
+      "scope": "bound",
+      "sha256": "e117c8225c3ba578d06bb012b926619011b4f9cf4e1d4228590fc161a4aafc9b"
+    },
+    "pokemon_red_completion.constants": {
+      "path": "src/pokemon_red_completion/constants.py",
+      "scope": "bound",
+      "sha256": "abd7f22406d423a2bf1a4bf68f9fcc6fc6841c45b934382a837f958f74d46f31"
+    },
+    "pokemon_red_completion.dashboard_relay": {
+      "path": "src/pokemon_red_completion/dashboard_relay.py",
+      "scope": "bound",
+      "sha256": "416cb0a8d2cb3a5f14ced9cebf5b7125ff75f5d60f61099ef3c80609b29567f9"
+    },
+    "pokemon_red_completion.destination_unavailable": {
+      "path": "src/pokemon_red_completion/destination_unavailable.py",
+      "scope": "bound",
+      "sha256": "f3de758b3d4b800cba72d1a251eb7e78de6b63aa79e77e034c45784c219dedc8"
+    },
+    "pokemon_red_completion.dojo": {
+      "path": "src/pokemon_red_completion/dojo.py",
+      "scope": "bound",
+      "sha256": "6c7892baf657b116f149ccc51ba3316f3780f09bd00ec2ffc98af376f0e627d7"
+    },
+    "pokemon_red_completion.domain": {
+      "path": "src/pokemon_red_completion/domain.py",
+      "scope": "bound",
+      "sha256": "a7990ed1c6d3902cf29243f00d5969f95d7a8cc5764102febad6678921d1cb80"
+    },
+    "pokemon_red_completion.economy": {
+      "path": "src/pokemon_red_completion/economy.py",
+      "scope": "bound",
+      "sha256": "7aa6529599c5dac526dacbe59590a67764e1b10bdb709e68ef2676fec2de7ab7"
+    },
+    "pokemon_red_completion.emulation_batch": {
+      "path": "src/pokemon_red_completion/emulation_batch.py",
+      "scope": "bound",
+      "sha256": "91dae74d747b55410de8bf30da2e3c10cd0f9f527c6a7d8f2fd737724d5317f3"
+    },
+    "pokemon_red_completion.emulator": {
+      "path": "src/pokemon_red_completion/emulator.py",
+      "scope": "bound",
+      "sha256": "4532ef6d2e13726e68655542c01a15910db685097eb8ec302c6256812aff7af8"
+    },
+    "pokemon_red_completion.encounter_source_development": {
+      "path": "src/pokemon_red_completion/encounter_source_development.py",
+      "scope": "bound",
+      "sha256": "1deb14b4db06a2597be95fb5de6fd5be448ed77102499312fd2dfdd1919913fa"
+    },
+    "pokemon_red_completion.encounters": {
+      "path": "src/pokemon_red_completion/encounters.py",
+      "scope": "bound",
+      "sha256": "2014d589bbb04560851c9fc3cf8d3d4f52b59fa2be6ec41a9474d3d3e5110be8"
+    },
+    "pokemon_red_completion.erika": {
+      "path": "src/pokemon_red_completion/erika.py",
+      "scope": "bound",
+      "sha256": "0e68252a4409973bfe55114d4560b0a9978ebdb3d9752af67ef88da5619509a7"
+    },
+    "pokemon_red_completion.evaluation_design": {
+      "path": "src/pokemon_red_completion/evaluation_design.py",
+      "scope": "bound",
+      "sha256": "b7fe8eef734d3f514a892097af4fed0466621cd90f03b9df8ac75d87e19417e5"
+    },
+    "pokemon_red_completion.executor": {
+      "path": "src/pokemon_red_completion/executor.py",
+      "scope": "bound",
+      "sha256": "09ed835bfecc9bd401e195a5b498be3fdb2c103f65e61f4ced93ab7ae17a4c65"
+    },
+    "pokemon_red_completion.field_move_summary": {
+      "path": "src/pokemon_red_completion/field_move_summary.py",
+      "scope": "static_dependency",
+      "sha256": "a235952519cdb99e2d3a981e864edd3e4f051fb0c2ea9d88791e2f524c5f2306"
+    },
+    "pokemon_red_completion.field_recovery": {
+      "path": "src/pokemon_red_completion/field_recovery.py",
+      "scope": "bound",
+      "sha256": "5c8e542880b9f245f2ec386732314fc6395c50d99ae8da1c18d13513c4804ec5"
+    },
+    "pokemon_red_completion.fishing": {
+      "path": "src/pokemon_red_completion/fishing.py",
+      "scope": "static_dependency",
+      "sha256": "567f050e9b382e39492a3eabf6a45e9a827a8b6c2497e7b11d29a8e48267edd6"
+    },
+    "pokemon_red_completion.fly_resource": {
+      "path": "src/pokemon_red_completion/fly_resource.py",
+      "scope": "bound",
+      "sha256": "99bfff8f6dfe4b76d2d815895ffbc916210be47f0bf7b07aba8aab1309676065"
+    },
+    "pokemon_red_completion.fuchsia": {
+      "path": "src/pokemon_red_completion/fuchsia.py",
+      "scope": "bound",
+      "sha256": "f3cfc72b0cf94fbb43ce091d4889046999c8a41b98b04997bf85e6b11a02b7b3"
+    },
+    "pokemon_red_completion.gen1_acquisition": {
+      "path": "src/pokemon_red_completion/gen1_acquisition.py",
+      "scope": "bound",
+      "sha256": "296a06ae8b1e0cd7b2b5b51b2f4ee90efc9c9dd01a4ae5ba2621cab12f28ddc7"
+    },
+    "pokemon_red_completion.gen1_arrival_runtime": {
+      "path": "src/pokemon_red_completion/gen1_arrival_runtime.py",
+      "scope": "static_dependency",
+      "sha256": "89edb1fc84e1fb6128be2ce10d505eef29745a65e8e5fd5d295b2e6e9f32de22"
+    },
+    "pokemon_red_completion.gen1_boulder_switch": {
+      "path": "src/pokemon_red_completion/gen1_boulder_switch.py",
+      "scope": "static_dependency",
+      "sha256": "27180619a9178c4f0ce11023aadfd66d6f7d86a8747c8c795a23054b66738d83"
+    },
+    "pokemon_red_completion.gen1_cartridge": {
+      "path": "src/pokemon_red_completion/gen1_cartridge.py",
+      "scope": "bound",
+      "sha256": "673978a1733e3eb935005a41f694b36d33e87d4e923003b812ea47d725d36700"
+    },
+    "pokemon_red_completion.gen1_champion_script": {
+      "path": "src/pokemon_red_completion/gen1_champion_script.py",
+      "scope": "bound",
+      "sha256": "a81909ef8457f50a1055a752afc75057a33f51f5ebe419a76795bebd0e6a0420"
+    },
+    "pokemon_red_completion.gen1_cut": {
+      "path": "src/pokemon_red_completion/gen1_cut.py",
+      "scope": "bound",
+      "sha256": "678744344d8d9e75e39694e2de4f02fa2a5858aecb5a942349f5888064e08f41"
+    },
+    "pokemon_red_completion.gen1_field_moves": {
+      "path": "src/pokemon_red_completion/gen1_field_moves.py",
+      "scope": "bound",
+      "sha256": "25cec0effde6f39fc8284594bc2e05633da1be605b0194356aa3dd4160958d62"
+    },
+    "pokemon_red_completion.gen1_forced_motion": {
+      "path": "src/pokemon_red_completion/gen1_forced_motion.py",
+      "scope": "bound",
+      "sha256": "053dc008a57be4a3da035fce8f1e9d7234be9b10a33d7380e55ea43035d8e66d"
+    },
+    "pokemon_red_completion.gen1_indoor_encounters": {
+      "path": "src/pokemon_red_completion/gen1_indoor_encounters.py",
+      "scope": "bound",
+      "sha256": "57753f3eafd7f0bd83bc6632aac10e1391c41ad34c77ad1d9e22dd0ef5cbb62d"
+    },
+    "pokemon_red_completion.gen1_joypad_rle": {
+      "path": "src/pokemon_red_completion/gen1_joypad_rle.py",
+      "scope": "bound",
+      "sha256": "54e5d3cdce770382e36dd0f8948250bf68a7bf642bd4695549637136544a6f04"
+    },
+    "pokemon_red_completion.gen1_maps": {
+      "path": "src/pokemon_red_completion/gen1_maps.py",
+      "scope": "bound",
+      "sha256": "c46c9f35093f6c92ed82fe386dbe8a59f538dc0c75ed66c5660af4e9f02fdbe1"
+    },
+    "pokemon_red_completion.gen1_party_menu": {
+      "path": "src/pokemon_red_completion/gen1_party_menu.py",
+      "scope": "bound",
+      "sha256": "2350697e1492e3d412e08a2ef8e752fe005799415ef1e4a36f393e326b4845d6"
+    },
+    "pokemon_red_completion.gen1_regional_access": {
+      "path": "src/pokemon_red_completion/gen1_regional_access.py",
+      "scope": "static_dependency",
+      "sha256": "530590be89bcb498cecde2518162c4c4355654484e85473e4d6ddcee2c5076b2"
+    },
+    "pokemon_red_completion.gen1_repel": {
+      "path": "src/pokemon_red_completion/gen1_repel.py",
+      "scope": "bound",
+      "sha256": "2e3cb7910c8e9f1c2e488145928ae870e28159fdfbc0401ac67ed9c21e2e2f8b"
+    },
+    "pokemon_red_completion.gen1_route22_script": {
+      "path": "src/pokemon_red_completion/gen1_route22_script.py",
+      "scope": "static_dependency",
+      "sha256": "75d8504f9810c6e53da4f80b474ad4fd914aff8bfe569a0be0bf5949976be510"
+    },
+    "pokemon_red_completion.gen1_route_runtime": {
+      "path": "src/pokemon_red_completion/gen1_route_runtime.py",
+      "scope": "bound",
+      "sha256": "0b84c126b0479e8dbea943e8d795de531515f429764f5c2fc0ca7c7af78b8fc4"
+    },
+    "pokemon_red_completion.gen1_scripted_arrival": {
+      "path": "src/pokemon_red_completion/gen1_scripted_arrival.py",
+      "scope": "bound",
+      "sha256": "9b66aa1be26be4d31f4e05aaefffa7d1a38a0155bdf1a3358a93f6743487a1dd"
+    },
+    "pokemon_red_completion.gen1_scripted_wild": {
+      "path": "src/pokemon_red_completion/gen1_scripted_wild.py",
+      "scope": "static_dependency",
+      "sha256": "b14c3328418f46c22eeeef02e1782990781b3639bf218898db80ada4defee69e"
+    },
+    "pokemon_red_completion.gen1_seafoam": {
+      "path": "src/pokemon_red_completion/gen1_seafoam.py",
+      "scope": "static_dependency",
+      "sha256": "a121e0904b3b05da71e56a456f02d4221a2a3cd0b268442b78ff4efe2847d1b6"
+    },
+    "pokemon_red_completion.gen1_story_routing": {
+      "path": "src/pokemon_red_completion/gen1_story_routing.py",
+      "scope": "bound",
+      "sha256": "c4602602b130ded09e3ff662f22cf5554b4e28e01e135fe7ac2f35de86c2f4dd"
+    },
+    "pokemon_red_completion.gen1_strength": {
+      "path": "src/pokemon_red_completion/gen1_strength.py",
+      "scope": "static_dependency",
+      "sha256": "4e36b495f439bfff827d44b605f573399e5c7916a11db6829e0d7a518021737f"
+    },
+    "pokemon_red_completion.gen1_terrain": {
+      "path": "src/pokemon_red_completion/gen1_terrain.py",
+      "scope": "bound",
+      "sha256": "77961e32cdf530ee354906732c30b175d9e156380207c7c3e4c687ae1414c916"
+    },
+    "pokemon_red_completion.gen1_trainer_dialogue": {
+      "path": "src/pokemon_red_completion/gen1_trainer_dialogue.py",
+      "scope": "bound",
+      "sha256": "c746ee33638b73e5c49cad412068322042afc998c3497ca07076b45cf8eac091"
+    },
+    "pokemon_red_completion.gen1_trainer_parties": {
+      "path": "src/pokemon_red_completion/gen1_trainer_parties.py",
+      "scope": "bound",
+      "sha256": "f76d3d1c6f95d6a0fe00a53c65fe885366f2095c0c4358a427c961d929fdeabb"
+    },
+    "pokemon_red_completion.gen1_trainer_sight": {
+      "path": "src/pokemon_red_completion/gen1_trainer_sight.py",
+      "scope": "bound",
+      "sha256": "376c7dea11ef02e387144fb41dd3ad8a9e87f08fea315ff2ebc616767aae45fc"
+    },
+    "pokemon_red_completion.gen1_traversal": {
+      "path": "src/pokemon_red_completion/gen1_traversal.py",
+      "scope": "bound",
+      "sha256": "2dde78a51d9c63e3982a5d14d23b872946d607968775c29e8a0870f14e3798e6"
+    },
+    "pokemon_red_completion.generation_one": {
+      "path": "src/pokemon_red_completion/generation_one.py",
+      "scope": "bound",
+      "sha256": "f8f1e46ad077403e44a686861c024e68fecfc9c0f2cf3d6a479e3f4a4a5b8341"
+    },
+    "pokemon_red_completion.giovanni": {
+      "path": "src/pokemon_red_completion/giovanni.py",
+      "scope": "bound",
+      "sha256": "57107b98ab30f806eb87555e60d7dcde794cc914fc4fc8dc5790de96e8dfdfe5"
+    },
+    "pokemon_red_completion.global_router": {
+      "path": "src/pokemon_red_completion/global_router.py",
+      "scope": "bound",
+      "sha256": "6a198d85a597c10a18986657ee4c04702570e14b330d98d6d64dc5476ada86ec"
+    },
+    "pokemon_red_completion.goal_manager": {
+      "path": "src/pokemon_red_completion/goal_manager.py",
+      "scope": "bound",
+      "sha256": "a423108302f0926bcfa595def623320fab065aedd8c74d6b0c5903c96de6bcd3"
+    },
+    "pokemon_red_completion.goal_manager_composition_qualification": {
+      "path": "src/pokemon_red_completion/goal_manager_composition_qualification.py",
+      "scope": "bound",
+      "sha256": "ec9e21a6313dbb67d3466c95619ec2f4d5a467e0d8949b6ba5b567d4d155fcbc"
+    },
+    "pokemon_red_completion.goal_manager_composition_runtime": {
+      "path": "src/pokemon_red_completion/goal_manager_composition_runtime.py",
+      "scope": "bound",
+      "sha256": "7127dc3c94fa76d6e6aba60243284646516fca54f50ce1121e4d57e4e7a54858"
+    },
+    "pokemon_red_completion.goal_manager_context_catalog": {
+      "path": "src/pokemon_red_completion/goal_manager_context_catalog.py",
+      "scope": "bound",
+      "sha256": "cbe73c5b6aa30ff86e938babdfa638069afa152fb5f86eb29e5120186083053a"
+    },
+    "pokemon_red_completion.goal_manager_model": {
+      "path": "src/pokemon_red_completion/goal_manager_model.py",
+      "scope": "bound",
+      "sha256": "92ba1e9123259592b784d3264afbb9453e3963e76d7ce8a23359d894560d33df"
+    },
+    "pokemon_red_completion.goal_manager_protocol": {
+      "path": "src/pokemon_red_completion/goal_manager_protocol.py",
+      "scope": "bound",
+      "sha256": "5b0399c7f4384da5fcb02ec28da2c74e3f09c588deb263f46c564c7b3dbacbad"
+    },
+    "pokemon_red_completion.goal_manager_runtime": {
+      "path": "src/pokemon_red_completion/goal_manager_runtime.py",
+      "scope": "bound",
+      "sha256": "54a785320d58e37462a3a02a954c084b1a4bb5a06edab8fd9e62125926b3af16"
+    },
+    "pokemon_red_completion.goal_manager_state": {
+      "path": "src/pokemon_red_completion/goal_manager_state.py",
+      "scope": "bound",
+      "sha256": "4d6d8fc2c108005c8da93be3ae0ad9242001304d7f67ad4d0ef010052cf58088"
+    },
+    "pokemon_red_completion.goal_manager_trajectory": {
+      "path": "src/pokemon_red_completion/goal_manager_trajectory.py",
+      "scope": "bound",
+      "sha256": "6f6d2bb3578de0535261feab79e49e6b3b66941787e084214a1930d2a1772eb1"
+    },
+    "pokemon_red_completion.goal_resource_quote": {
+      "path": "src/pokemon_red_completion/goal_resource_quote.py",
+      "scope": "bound",
+      "sha256": "09423c6714bca15bbf5b1bef21d61f382237e5b4beb1f7d8e9ca2158c056103e"
+    },
+    "pokemon_red_completion.goal_search_memory": {
+      "path": "src/pokemon_red_completion/goal_search_memory.py",
+      "scope": "bound",
+      "sha256": "d32cf1de710edc09044c31718b9d447bdefe6da71fb2a7836cf355a667acbd71"
+    },
+    "pokemon_red_completion.hideout": {
+      "path": "src/pokemon_red_completion/hideout.py",
+      "scope": "bound",
+      "sha256": "21d3f94e11aec5f7221fe44e4d1d3c278c2b2e3ad088394985d592c6bd8be297"
+    },
+    "pokemon_red_completion.koga": {
+      "path": "src/pokemon_red_completion/koga.py",
+      "scope": "bound",
+      "sha256": "c8843012c6c1f99ffce46751c1f023e8a390e6083b4be9bc425595129a224675"
+    },
+    "pokemon_red_completion.lance": {
+      "path": "src/pokemon_red_completion/lance.py",
+      "scope": "bound",
+      "sha256": "3179a465052dc44b5a92d07b6498e1aa69bb2888c338c86c578135e919a85257"
+    },
+    "pokemon_red_completion.lavender": {
+      "path": "src/pokemon_red_completion/lavender.py",
+      "scope": "bound",
+      "sha256": "1ba05529ca3096755df85fd59794cb69daefdcceabd7b82bfd0bae56c164d8e4"
+    },
+    "pokemon_red_completion.learned_battle_policy": {
+      "path": "src/pokemon_red_completion/learned_battle_policy.py",
+      "scope": "bound",
+      "sha256": "545629b9ef6df164c0657a6a23164acec9fa313b65278aed447df8beb4eb495e"
+    },
+    "pokemon_red_completion.learned_planner_policy": {
+      "path": "src/pokemon_red_completion/learned_planner_policy.py",
+      "scope": "bound",
+      "sha256": "b2f5c8a64a8200938115371edbd661f13aff2b7844d530185ae6b8916560144c"
+    },
+    "pokemon_red_completion.living_dex_capture_curriculum": {
+      "path": "src/pokemon_red_completion/living_dex_capture_curriculum.py",
+      "scope": "bound",
+      "sha256": "c5744b1d2e88ac731e9341b12d769a84eb89e55ef420ef0dcc903b67e4f2fb2e"
+    },
+    "pokemon_red_completion.living_dex_causal_capacity_schedule": {
+      "path": "src/pokemon_red_completion/living_dex_causal_capacity_schedule.py",
+      "scope": "bound",
+      "sha256": "74c59ed0037af56018b76a49dd43749a0a745b5b8ac43b1091ff99761f5b7a69"
+    },
+    "pokemon_red_completion.living_dex_causal_curriculum": {
+      "path": "src/pokemon_red_completion/living_dex_causal_curriculum.py",
+      "scope": "bound",
+      "sha256": "2a498ac0ecf31888d5dcf8b2528790f07f02ffd7da7f3936e3d0038f277e12d3"
+    },
+    "pokemon_red_completion.living_dex_causal_journal": {
+      "path": "src/pokemon_red_completion/living_dex_causal_journal.py",
+      "scope": "bound",
+      "sha256": "8318b1dd5ea5358613ac2fa831bafafdf3ebe38e75ef0133e75adbb3de55a20b"
+    },
+    "pokemon_red_completion.living_dex_clustered_curriculum": {
+      "path": "src/pokemon_red_completion/living_dex_clustered_curriculum.py",
+      "scope": "bound",
+      "sha256": "8fdf10140eeaa4258c72ee555dcfe271554f8f8714694c896aef5f1196feae65"
+    },
+    "pokemon_red_completion.living_dex_dependency_curriculum": {
+      "path": "src/pokemon_red_completion/living_dex_dependency_curriculum.py",
+      "scope": "bound",
+      "sha256": "4acca8d718af0aff9fb9bff65a573a37c62225c18c9b9c672cf17e553c6f4e79"
+    },
+    "pokemon_red_completion.living_dex_goal_model_record": {
+      "path": "src/pokemon_red_completion/living_dex_goal_model_record.py",
+      "scope": "bound",
+      "sha256": "df53b453a1d677dd89beacbcf14a6ccaa7ac8a13ac9753b4f74a8e72cf3ff8e5"
+    },
+    "pokemon_red_completion.living_dex_goal_policy": {
+      "path": "src/pokemon_red_completion/living_dex_goal_policy.py",
+      "scope": "bound",
+      "sha256": "6b47bf93932a5274e69086df857fa91c5627974f2c857c782b866e3f06562f6f"
+    },
+    "pokemon_red_completion.living_dex_option_value": {
+      "path": "src/pokemon_red_completion/living_dex_option_value.py",
+      "scope": "bound",
+      "sha256": "c2def5becd768a64a2095c4cd29534d64e7959f5d46e4d8839edaa149519b69e"
+    },
+    "pokemon_red_completion.living_dex_player_exploration": {
+      "path": "src/pokemon_red_completion/living_dex_player_exploration.py",
+      "scope": "bound",
+      "sha256": "306a9765635d6a2fc678dae1e6cb5e4defeb329d315c697b725d4fe741c0ec5a"
+    },
+    "pokemon_red_completion.living_dex_policy_codec": {
+      "path": "src/pokemon_red_completion/living_dex_policy_codec.py",
+      "scope": "bound",
+      "sha256": "ea5147f1d45d966756292ad956682ec3167974bc257eaa903d914a38e12099b3"
+    },
+    "pokemon_red_completion.living_dex_targeted_update_capacity": {
+      "path": "src/pokemon_red_completion/living_dex_targeted_update_capacity.py",
+      "scope": "bound",
+      "sha256": "749266ca1e8099c7e7cdb015ade311cb64ea61dcb3cab18fa7e3ff7f33a215a0"
+    },
+    "pokemon_red_completion.local_router": {
+      "path": "src/pokemon_red_completion/local_router.py",
+      "scope": "bound",
+      "sha256": "5733e760f1c5296a4fb247baa8bdacc704922f12db899be12b55d1e3664d9768"
+    },
+    "pokemon_red_completion.lorelei": {
+      "path": "src/pokemon_red_completion/lorelei.py",
+      "scope": "bound",
+      "sha256": "02ab9f7481236fc3f9a8a59dfb75edd439bf0293e000b41ac180307e6ff13ea8"
+    },
+    "pokemon_red_completion.misty_policy": {
+      "path": "src/pokemon_red_completion/misty_policy.py",
+      "scope": "bound",
+      "sha256": "8b005a3bac941f0c581e2a44a9c4096596e408eee7f3f7e59972d0f085f5d23f"
+    },
+    "pokemon_red_completion.navigation": {
+      "path": "src/pokemon_red_completion/navigation.py",
+      "scope": "bound",
+      "sha256": "b72b80165e19ef6c10086cb8185b6d31b8be3120c4293de77a2caa09d46bafcc"
+    },
+    "pokemon_red_completion.objective_skills": {
+      "path": "src/pokemon_red_completion/objective_skills.py",
+      "scope": "bound",
+      "sha256": "a7e3b7c237b05e0a04ce914773a916156dca3dbafcf765ad56acd172fc545ed0"
+    },
+    "pokemon_red_completion.observation": {
+      "path": "src/pokemon_red_completion/observation.py",
+      "scope": "bound",
+      "sha256": "06cd4f020ddb4e219a5a3d91d885a5d0ef34d171f63607658fd3ef79baa08878"
+    },
+    "pokemon_red_completion.opening": {
+      "path": "src/pokemon_red_completion/opening.py",
+      "scope": "bound",
+      "sha256": "e10f2cac3b52194ac0713e49313a224d26a814451e0fddfef246bee64e03bcd9"
+    },
+    "pokemon_red_completion.participation": {
+      "path": "src/pokemon_red_completion/participation.py",
+      "scope": "bound",
+      "sha256": "c6c1e2b1c051466e4cb7cfe8bfe368320248146a128b31d61b10b648bd6af2fb"
+    },
+    "pokemon_red_completion.party": {
+      "path": "src/pokemon_red_completion/party.py",
+      "scope": "bound",
+      "sha256": "d49d624f224edcac1359bca175860436bd4a78fcef125de24df19a42cc419449"
+    },
+    "pokemon_red_completion.party_development_adapter": {
+      "path": "src/pokemon_red_completion/party_development_adapter.py",
+      "scope": "bound",
+      "sha256": "912a403053445a5e3f566f00ef402b918ffc750279c46bc748310bbddb396296"
+    },
+    "pokemon_red_completion.party_development_catalog": {
+      "path": "src/pokemon_red_completion/party_development_catalog.py",
+      "scope": "bound",
+      "sha256": "c4868cf7a8768f8f2c07faf9d1451c16e6f02a428742d39f084697a56504b1d1"
+    },
+    "pokemon_red_completion.party_development_fixed_target_outcomes": {
+      "path": "src/pokemon_red_completion/party_development_fixed_target_outcomes.py",
+      "scope": "static_dependency",
+      "sha256": "d4063467c5f636dcc80f659f988eab42193a1d782fba26e384a9771ec47a96dc"
+    },
+    "pokemon_red_completion.party_development_fixed_target_repeats": {
+      "path": "src/pokemon_red_completion/party_development_fixed_target_repeats.py",
+      "scope": "static_dependency",
+      "sha256": "10ba2ca20c9a6c19958d1593d9e853b59f7e9ffe9bf3d63ad6a4a45d8199a9b6"
+    },
+    "pokemon_red_completion.party_development_inventory": {
+      "path": "src/pokemon_red_completion/party_development_inventory.py",
+      "scope": "bound",
+      "sha256": "2da6f924bc4cbac6f2954242edfd83f35af2706feee735fdf61dac8ca3d1d2b0"
+    },
+    "pokemon_red_completion.party_development_outcome_dataset": {
+      "path": "src/pokemon_red_completion/party_development_outcome_dataset.py",
+      "scope": "bound",
+      "sha256": "4576a2aa33b2db65a8fabc179fc51541851304468f0ecb316eaa5b65d811dd13"
+    },
+    "pokemon_red_completion.party_development_outcome_learning": {
+      "path": "src/pokemon_red_completion/party_development_outcome_learning.py",
+      "scope": "bound",
+      "sha256": "1fc4ab1785b80e55517907e1c844aa5ee5ee8d8500f6134779f4a65daedb36fd"
+    },
+    "pokemon_red_completion.party_development_outcomes": {
+      "path": "src/pokemon_red_completion/party_development_outcomes.py",
+      "scope": "bound",
+      "sha256": "03e34b31c34f522d4c51ae9baff6046482172dfb7219fb7bcc909c2d46ec2bf5"
+    },
+    "pokemon_red_completion.party_development_question_reservations": {
+      "path": "src/pokemon_red_completion/party_development_question_reservations.py",
+      "scope": "bound",
+      "sha256": "396a2d20c2d401746a62b75aa2bd58255b36abdb139aee8930f685ed3b90df83"
+    },
+    "pokemon_red_completion.party_development_rank": {
+      "path": "src/pokemon_red_completion/party_development_rank.py",
+      "scope": "bound",
+      "sha256": "7c5b5aaf12a596aa444f38beba350b8dff3c22b37721bfaa3b587063956a98b2"
+    },
+    "pokemon_red_completion.party_development_venue_priors": {
+      "path": "src/pokemon_red_completion/party_development_venue_priors.py",
+      "scope": "bound",
+      "sha256": "332b83ee5ed114a7cde2d71888958b804881ecab6a08cdb3c6790790ea19bad0"
+    },
+    "pokemon_red_completion.party_preparation": {
+      "path": "src/pokemon_red_completion/party_preparation.py",
+      "scope": "bound",
+      "sha256": "b7738af93b4c41d0af08296004961f84fc2696e675df6f592d47ccdace8ab31d"
+    },
+    "pokemon_red_completion.pewter": {
+      "path": "src/pokemon_red_completion/pewter.py",
+      "scope": "bound",
+      "sha256": "620fc95bb8eee4e59ee5f1971edbfd7ccf35b35b94da3283af265496881a28fa"
+    },
+    "pokemon_red_completion.planner_model": {
+      "path": "src/pokemon_red_completion/planner_model.py",
+      "scope": "bound",
+      "sha256": "6aba7af6373a5ed796399e20cb46031706400099e847efce885913b37cf53e86"
+    },
+    "pokemon_red_completion.planner_semantics": {
+      "path": "src/pokemon_red_completion/planner_semantics.py",
+      "scope": "bound",
+      "sha256": "368a9607d1b611adf2405ec0d3d6cd898a40ef380110ad2618185a8da507080b"
+    },
+    "pokemon_red_completion.planner_trajectory": {
+      "path": "src/pokemon_red_completion/planner_trajectory.py",
+      "scope": "bound",
+      "sha256": "13580c3d8db9ffcb3575b8a1a86670b89c6c40badb0848e3e457956aa0bdc232"
+    },
+    "pokemon_red_completion.play": {
+      "path": "src/pokemon_red_completion/play.py",
+      "scope": "bound",
+      "sha256": "23168b9e9515feff9636f205c5330696b0f3486724aa3cc937f851395910c44f"
+    },
+    "pokemon_red_completion.player_challenge_consequence": {
+      "path": "src/pokemon_red_completion/player_challenge_consequence.py",
+      "scope": "bound",
+      "sha256": "7b327f0df60a6abd18a65303cf76d89b718682f9715d0372d062e8eb53db4d30"
+    },
+    "pokemon_red_completion.player_consequence_projection": {
+      "path": "src/pokemon_red_completion/player_consequence_projection.py",
+      "scope": "bound",
+      "sha256": "70c4258ad0967e2a63829be7a5eb7631691da206fa9032febc4b6048a1567d94"
+    },
+    "pokemon_red_completion.player_option_capture_invocation": {
+      "path": "src/pokemon_red_completion/player_option_capture_invocation.py",
+      "scope": "bound",
+      "sha256": "a030bbdc9814d41ec9d032572505508614cac83047e8ccfeb07887aa6317048b"
+    },
+    "pokemon_red_completion.player_option_challenge": {
+      "path": "src/pokemon_red_completion/player_option_challenge.py",
+      "scope": "bound",
+      "sha256": "d3e1a5b962e301368c880c83e3ebd486c2c88c6055eaf55029bc29b6803725cb"
+    },
+    "pokemon_red_completion.player_option_level_workload": {
+      "path": "src/pokemon_red_completion/player_option_level_workload.py",
+      "scope": "bound",
+      "sha256": "d2a7f359ea94ea0f00adc12519d246ea33a65db151c893d3547644b445f6aa1a"
+    },
+    "pokemon_red_completion.player_option_matchup": {
+      "path": "src/pokemon_red_completion/player_option_matchup.py",
+      "scope": "bound",
+      "sha256": "2f13d959ed11679fed63a25e010dfc9c5b02ee53159518f206f2b60066451a29"
+    },
+    "pokemon_red_completion.player_option_move_change": {
+      "path": "src/pokemon_red_completion/player_option_move_change.py",
+      "scope": "bound",
+      "sha256": "4f88af28697ec8f0bbd2778b1084ae96671f3daa1dbe05acd48399c27ea0aa20"
+    },
+    "pokemon_red_completion.player_option_preparation": {
+      "path": "src/pokemon_red_completion/player_option_preparation.py",
+      "scope": "bound",
+      "sha256": "51a1add174e00f10c0db7a6b3640c2d0280bbcd11e2cabeb7b039bb03bb3e640"
+    },
+    "pokemon_red_completion.player_option_story_unit": {
+      "path": "src/pokemon_red_completion/player_option_story_unit.py",
+      "scope": "bound",
+      "sha256": "b2a0a2da3e8c8745ffc6f1feb6d30e7e4e315c46f22dac5def776585f7a85b0d"
+    },
+    "pokemon_red_completion.player_preparation_party_context": {
+      "path": "src/pokemon_red_completion/player_preparation_party_context.py",
+      "scope": "bound",
+      "sha256": "a8b7663d003d21a61e65e381616a3c83c0b01c0806bdc5799a158fffc1bdd25c"
+    },
+    "pokemon_red_completion.player_readiness": {
+      "path": "src/pokemon_red_completion/player_readiness.py",
+      "scope": "bound",
+      "sha256": "97844cd3bac42c9b38ba27c302e0da6da152355360b1b1f735d179b85c2324ad"
+    },
+    "pokemon_red_completion.player_sequence_collector": {
+      "path": "src/pokemon_red_completion/player_sequence_collector.py",
+      "scope": "static_dependency",
+      "sha256": "d61b1d61610275255e9e1073670d60ea3824398f64f120be9af23a0025741559"
+    },
+    "pokemon_red_completion.player_sequence_policy": {
+      "path": "src/pokemon_red_completion/player_sequence_policy.py",
+      "scope": "bound",
+      "sha256": "968f167ff8d8efe1f85b166e4f3e0394f88ae936d25aa436baf97793d581f162"
+    },
+    "pokemon_red_completion.player_sequence_targets": {
+      "path": "src/pokemon_red_completion/player_sequence_targets.py",
+      "scope": "bound",
+      "sha256": "e1fe174a78d16f60c3322328febccb9daa298dca8c37f27fa0191e1186aa0072"
+    },
+    "pokemon_red_completion.player_sequence_value": {
+      "path": "src/pokemon_red_completion/player_sequence_value.py",
+      "scope": "bound",
+      "sha256": "7a51d0144ef6856bfee212ee14b3f79f3db68625af55f58a895cb8916e997bc6"
+    },
+    "pokemon_red_completion.player_short_sequence": {
+      "path": "src/pokemon_red_completion/player_short_sequence.py",
+      "scope": "bound",
+      "sha256": "725ea9a745d93e581212b42371ab9c9031aaa08c07fc5497f6434dd76cd74ccf"
+    },
+    "pokemon_red_completion.pokedex": {
+      "path": "src/pokemon_red_completion/pokedex.py",
+      "scope": "bound",
+      "sha256": "603a9b074c07f3e7bdd61a31b6b62151258371978dcd39fbd15a28691c1d1c32"
+    },
+    "pokemon_red_completion.post_battle_strategy": {
+      "path": "src/pokemon_red_completion/post_battle_strategy.py",
+      "scope": "bound",
+      "sha256": "02dd46c7dc2c905cb594829a890bd888df08c0e9dedd02aff090bb5ce867a054"
+    },
+    "pokemon_red_completion.post_hideout_strategic_route": {
+      "path": "src/pokemon_red_completion/post_hideout_strategic_route.py",
+      "scope": "bound",
+      "sha256": "af260f6bc48ab090b8a8b1a90ac06d788e5314ce01d400091fe3e120b49ca60d"
+    },
+    "pokemon_red_completion.post_safari_strategic_route": {
+      "path": "src/pokemon_red_completion/post_safari_strategic_route.py",
+      "scope": "bound",
+      "sha256": "3445b225393b24f0bf8321abf077216d0eddbe0b3dc2bb5a4f8a4fe6e00d220f"
+    },
+    "pokemon_red_completion.post_silph_strategic_route": {
+      "path": "src/pokemon_red_completion/post_silph_strategic_route.py",
+      "scope": "bound",
+      "sha256": "1cdc5b12a02571828639de7d0bf0cdb6fe83fdc634ad9e34ad7279c3ec287c8d"
+    },
+    "pokemon_red_completion.preparation_success": {
+      "path": "src/pokemon_red_completion/preparation_success.py",
+      "scope": "bound",
+      "sha256": "072cf0250eb4f768881c714a343440fb42dda93d1057bee3953ba43941e61643"
+    },
+    "pokemon_red_completion.private_artifacts": {
+      "path": "src/pokemon_red_completion/private_artifacts.py",
+      "scope": "bound",
+      "sha256": "3227dd8e1a6e2540bebf81734341f4514c561b2b7ae2e4ef5ff3a5da3c39f7fc"
+    },
+    "pokemon_red_completion.progress_dashboard": {
+      "path": "src/pokemon_red_completion/progress_dashboard.py",
+      "scope": "bound",
+      "sha256": "b8758e721e9caf7df671ad2adeaadc1ce4dc3133b7d0395917c806686ec76330"
+    },
+    "pokemon_red_completion.provenance": {
+      "path": "src/pokemon_red_completion/provenance.py",
+      "scope": "bound",
+      "sha256": "eb868eb35a30fdc8a281251f9d7fa60aabf2b602910c0663c6712c13178ac707"
+    },
+    "pokemon_red_completion.quest": {
+      "path": "src/pokemon_red_completion/quest.py",
+      "scope": "bound",
+      "sha256": "fbb08976cb34290b095f4c3d62431dff62c8536924f7c0f1dc3a8c750eb29802"
+    },
+    "pokemon_red_completion.recorded_branch_history": {
+      "path": "src/pokemon_red_completion/recorded_branch_history.py",
+      "scope": "bound",
+      "sha256": "bc71b018b41dacc64bee1ddb8246506911a370429085ae9fa7bc5f639fe1c113"
+    },
+    "pokemon_red_completion.red_acquisition": {
+      "path": "src/pokemon_red_completion/red_acquisition.py",
+      "scope": "bound",
+      "sha256": "7911b29b871d5f6107cc4cb2d214902945100272f8173c828540468a0c129cdc"
+    },
+    "pokemon_red_completion.red_autonomous_fishing": {
+      "path": "src/pokemon_red_completion/red_autonomous_fishing.py",
+      "scope": "bound",
+      "sha256": "a62db091b6484fd426e57399d9fff763232f43fa0b6d5e7de5537e92bb317909"
+    },
+    "pokemon_red_completion.red_autonomous_league_funding": {
+      "path": "src/pokemon_red_completion/red_autonomous_league_funding.py",
+      "scope": "static_dependency",
+      "sha256": "95a17910b53e332ac814c81fb050c4a43baa18e2337f8962964b5cb1ec78eaed"
+    },
+    "pokemon_red_completion.red_autonomous_player": {
+      "path": "src/pokemon_red_completion/red_autonomous_player.py",
+      "scope": "bound",
+      "sha256": "862c7c33e5d604b4136b3959c518e0548d267ce0e9a726d8ed64dd8e6ab2c2f4"
+    },
+    "pokemon_red_completion.red_autonomous_safari": {
+      "path": "src/pokemon_red_completion/red_autonomous_safari.py",
+      "scope": "static_dependency",
+      "sha256": "703843201c80c976578bc67a2f2290e8d0b28ca489c13e1120350f07170c3d8d"
+    },
+    "pokemon_red_completion.red_badge_corridor": {
+      "path": "src/pokemon_red_completion/red_badge_corridor.py",
+      "scope": "static_dependency",
+      "sha256": "6eef1679f8751371a6f66fa5cc4ed556b07c86407ac8e19a5be9da6053c0d5fe"
+    },
+    "pokemon_red_completion.red_balanced_status_features": {
+      "path": "src/pokemon_red_completion/red_balanced_status_features.py",
+      "scope": "static_dependency",
+      "sha256": "b48be174054d81d558baac288d300fa6db3815ebbaca6e2d18dc52cdfff31d06"
+    },
+    "pokemon_red_completion.red_battle_catalog": {
+      "path": "src/pokemon_red_completion/red_battle_catalog.py",
+      "scope": "bound",
+      "sha256": "21f1ef99eaecc62d4d2e4c7e48373684448bbce348ec5363345c2a62ccad69bc"
+    },
+    "pokemon_red_completion.red_battle_mechanics_boundary": {
+      "path": "src/pokemon_red_completion/red_battle_mechanics_boundary.py",
+      "scope": "bound",
+      "sha256": "7820d71e5ae8020ec28498c67b184ae703189f4f5bbf0b93907cb52f3925165e"
+    },
+    "pokemon_red_completion.red_battle_practice_cartridge": {
+      "path": "src/pokemon_red_completion/red_battle_practice_cartridge.py",
+      "scope": "bound",
+      "sha256": "2f4e2a0ce13377d0989e4bf433a4ef24f0421456328bc61febd2d04c5f8d733c"
+    },
+    "pokemon_red_completion.red_battle_scenario": {
+      "path": "src/pokemon_red_completion/red_battle_scenario.py",
+      "scope": "bound",
+      "sha256": "da3719f0f5115139e73250f851b789cb147a529d4ca9fa4f0cccafcb4b7a1c9b"
+    },
+    "pokemon_red_completion.red_blackout_recovery": {
+      "path": "src/pokemon_red_completion/red_blackout_recovery.py",
+      "scope": "bound",
+      "sha256": "79f8c78755dc76b3f4db52e4a122f3589b7f7c7ef470eea4decd4c207f996462"
+    },
+    "pokemon_red_completion.red_boxed_level_evolution": {
+      "path": "src/pokemon_red_completion/red_boxed_level_evolution.py",
+      "scope": "bound",
+      "sha256": "6c7121e97fdc86892093acc6cfcb6d8c3e3006db81c27ef577dea037d5bac79c"
+    },
+    "pokemon_red_completion.red_boxed_machine_options": {
+      "path": "src/pokemon_red_completion/red_boxed_machine_options.py",
+      "scope": "static_dependency",
+      "sha256": "3f7c9fda9bdd1fba865b2bbd1f2cc48b328f3a3c0e49c80d7c07242a2945bbee"
+    },
+    "pokemon_red_completion.red_capture_access": {
+      "path": "src/pokemon_red_completion/red_capture_access.py",
+      "scope": "static_dependency",
+      "sha256": "d6ef2bcbb7ad803ce31988b6f65d5a35a12474c8f862ae91b624de5990e9435f"
+    },
+    "pokemon_red_completion.red_capture_checkpoint": {
+      "path": "src/pokemon_red_completion/red_capture_checkpoint.py",
+      "scope": "static_dependency",
+      "sha256": "24b6ce45a19a5e391029c982bd81465a78624dde2b10c5367042a36f87dd957b"
+    },
+    "pokemon_red_completion.red_capture_funding_budget": {
+      "path": "src/pokemon_red_completion/red_capture_funding_budget.py",
+      "scope": "bound",
+      "sha256": "dbbe42b32d63f8ce99ab546f23dff40b380240c30aee28aa7be8f568414bab42"
+    },
+    "pokemon_red_completion.red_capture_helper_recovery": {
+      "path": "src/pokemon_red_completion/red_capture_helper_recovery.py",
+      "scope": "static_dependency",
+      "sha256": "fc690dde2a64249009f4e9fd41e8ed83148579d2fe0156c6d3ecf64208c09f05"
+    },
+    "pokemon_red_completion.red_capture_lead": {
+      "path": "src/pokemon_red_completion/red_capture_lead.py",
+      "scope": "bound",
+      "sha256": "adf802c1f51a40467865151b8dca493212d595c62bbc451e94824bc6b178261e"
+    },
+    "pokemon_red_completion.red_capture_party": {
+      "path": "src/pokemon_red_completion/red_capture_party.py",
+      "scope": "static_dependency",
+      "sha256": "6fd6048a40dbfb3c9df01e3239ee141e8d9b25d64cd18300e9fd3b508898198f"
+    },
+    "pokemon_red_completion.red_capture_preparation": {
+      "path": "src/pokemon_red_completion/red_capture_preparation.py",
+      "scope": "bound",
+      "sha256": "68f1a309f9307a02ded775638277dec46f3fce9d33311c9765f7e18c0d9f9b08"
+    },
+    "pokemon_red_completion.red_capture_readiness": {
+      "path": "src/pokemon_red_completion/red_capture_readiness.py",
+      "scope": "bound",
+      "sha256": "c76b612877c5d26507af14fa1a2c2c95643df7796333e3c6e1158d2be3de9f09"
+    },
+    "pokemon_red_completion.red_capture_status_runtime": {
+      "path": "src/pokemon_red_completion/red_capture_status_runtime.py",
+      "scope": "bound",
+      "sha256": "94752be34a5987740c50daf0445977e708250224515499e4b98156b360b1a693"
+    },
+    "pokemon_red_completion.red_capture_support": {
+      "path": "src/pokemon_red_completion/red_capture_support.py",
+      "scope": "bound",
+      "sha256": "ccf9be27100a860850b113e6025593ebd700b086ef6362d4274e8d1fdfdc15e0"
+    },
+    "pokemon_red_completion.red_capture_switch_handoff": {
+      "path": "src/pokemon_red_completion/red_capture_switch_handoff.py",
+      "scope": "bound",
+      "sha256": "f76aef960234ca75ad0b613e4c731797662e8d3e05934ef8d7724f60ba245c82"
+    },
+    "pokemon_red_completion.red_capture_weakening": {
+      "path": "src/pokemon_red_completion/red_capture_weakening.py",
+      "scope": "static_dependency",
+      "sha256": "095d89d8c7ff0b5f4d73bbfa7cffb7b82a8ffb6e77ba4a8fa801b2b6252625a6"
+    },
+    "pokemon_red_completion.red_capture_weakening_runtime": {
+      "path": "src/pokemon_red_completion/red_capture_weakening_runtime.py",
+      "scope": "static_dependency",
+      "sha256": "f1c39cc4351e3df8e9e6b631e847a4722792596b7ebd45fbd37a4bd3eb7ced89"
+    },
+    "pokemon_red_completion.red_challenge_consequence": {
+      "path": "src/pokemon_red_completion/red_challenge_consequence.py",
+      "scope": "static_dependency",
+      "sha256": "e68e03cd44b899110aebb074d8d17ee317e66cd1b99ab5f3b7feb38dd7c222f7"
+    },
+    "pokemon_red_completion.red_champion_story": {
+      "path": "src/pokemon_red_completion/red_champion_story.py",
+      "scope": "bound",
+      "sha256": "a17cc5a9b8c473527f64e1dbaa72a9870e2c393030c07896e8dc5fe0457b2fb1"
+    },
+    "pokemon_red_completion.red_collection": {
+      "path": "src/pokemon_red_completion/red_collection.py",
+      "scope": "bound",
+      "sha256": "bc1fcaf31c4b20c81c5efe2454dc46cdb7885ab4a0e539e474ffb66a8d388fb4"
+    },
+    "pokemon_red_completion.red_collection_campaign_scope": {
+      "path": "src/pokemon_red_completion/red_collection_campaign_scope.py",
+      "scope": "bound",
+      "sha256": "5faa5e08a4bb0b4133e2fda5c73af7893f50a8c93c2dc7ab25d739fa76bacb87"
+    },
+    "pokemon_red_completion.red_collection_fly": {
+      "path": "src/pokemon_red_completion/red_collection_fly.py",
+      "scope": "bound",
+      "sha256": "6c4bfd8d2658f656b910741b9e67d116729c7e2388a6cbfae20b34831dd0866e"
+    },
+    "pokemon_red_completion.red_consequence_choice": {
+      "path": "src/pokemon_red_completion/red_consequence_choice.py",
+      "scope": "bound",
+      "sha256": "f0aade0a00ac353978e2e45a9adc3b53998485fefbe7ff278ec805120450a853"
+    },
+    "pokemon_red_completion.red_costly_search_recurrence": {
+      "path": "src/pokemon_red_completion/red_costly_search_recurrence.py",
+      "scope": "static_dependency",
+      "sha256": "b57a0c4506a4da383cdb1a48027585d2d1774dbcc6d1461873c6ebea14a0e298"
+    },
+    "pokemon_red_completion.red_damage_interaction_head": {
+      "path": "src/pokemon_red_completion/red_damage_interaction_head.py",
+      "scope": "bound",
+      "sha256": "cde4114979ae9871a665c2e56dd2e7e6afb0af404788c36baf2187e34e506f28"
+    },
+    "pokemon_red_completion.red_declared_funding_departure": {
+      "path": "src/pokemon_red_completion/red_declared_funding_departure.py",
+      "scope": "static_dependency",
+      "sha256": "2ba1c370cefb7a9fd57be2610b64eabfb31fe0e846df97352dc776d93affeea4"
+    },
+    "pokemon_red_completion.red_development_preparation_scope": {
+      "path": "src/pokemon_red_completion/red_development_preparation_scope.py",
+      "scope": "bound",
+      "sha256": "bfbfd09943af112711398d49755f38f8d5c6142ba9ddbc32638ffc3d1d5e4983"
+    },
+    "pokemon_red_completion.red_development_story_scope": {
+      "path": "src/pokemon_red_completion/red_development_story_scope.py",
+      "scope": "bound",
+      "sha256": "30be63023e624650a7b35020b9e15010f33b9998c30e492cd74ad457093c127c"
+    },
+    "pokemon_red_completion.red_dig_recovery": {
+      "path": "src/pokemon_red_completion/red_dig_recovery.py",
+      "scope": "static_dependency",
+      "sha256": "926ddd3526619841bb65204056da864bb3febb328c56fc3a75b1f83864119c2c"
+    },
+    "pokemon_red_completion.red_dual_capability_curriculum_runtime": {
+      "path": "src/pokemon_red_completion/red_dual_capability_curriculum_runtime.py",
+      "scope": "bound",
+      "sha256": "24103b02d5e9dbc8c7b2e281b0133101cb64ca8f5c5b6474779717e938856037"
+    },
+    "pokemon_red_completion.red_early_game_skill": {
+      "path": "src/pokemon_red_completion/red_early_game_skill.py",
+      "scope": "static_dependency",
+      "sha256": "593b2efc4c4874ac430ed67cf4bdfd34522a470d00b795a3ec61a54d5baac2c0"
+    },
+    "pokemon_red_completion.red_effect_selector_head": {
+      "path": "src/pokemon_red_completion/red_effect_selector_head.py",
+      "scope": "static_dependency",
+      "sha256": "be15bb65f9834c9907fabf739d7c7ee0dd37e462c674c2432279b8611fe9c35c"
+    },
+    "pokemon_red_completion.red_elixir_plan": {
+      "path": "src/pokemon_red_completion/red_elixir_plan.py",
+      "scope": "bound",
+      "sha256": "0e107c74b1263428cd6b0559b9de45ba91710c74594baa55870ebfdd0ab3f3c4"
+    },
+    "pokemon_red_completion.red_eventless_trainer": {
+      "path": "src/pokemon_red_completion/red_eventless_trainer.py",
+      "scope": "bound",
+      "sha256": "392ede514fcbe59ddec757875eaa0846cfd1a2f9e53fe92393a79ebd804727b2"
+    },
+    "pokemon_red_completion.red_evolution_helper_xp": {
+      "path": "src/pokemon_red_completion/red_evolution_helper_xp.py",
+      "scope": "bound",
+      "sha256": "0e05066a897414bcc947033538137471e78cf9a7da5aeb1cce882d743b6aa24a"
+    },
+    "pokemon_red_completion.red_evolution_stones": {
+      "path": "src/pokemon_red_completion/red_evolution_stones.py",
+      "scope": "bound",
+      "sha256": "34ab5d6723cdb2a755ec2559f49b8a32570a496637b05842ec3095b98fac69ed"
+    },
+    "pokemon_red_completion.red_faint_recovery": {
+      "path": "src/pokemon_red_completion/red_faint_recovery.py",
+      "scope": "bound",
+      "sha256": "b462cd26a0bd55e4a193f875efa71c663968e9b68f5b242ac3deda010cb3d708"
+    },
+    "pokemon_red_completion.red_field_capability_demand": {
+      "path": "src/pokemon_red_completion/red_field_capability_demand.py",
+      "scope": "static_dependency",
+      "sha256": "40c5f98b7ce0f1f059ec745e45684c00b97f1605ebdf842d8ea856d09160e4ce"
+    },
+    "pokemon_red_completion.red_field_carrier": {
+      "path": "src/pokemon_red_completion/red_field_carrier.py",
+      "scope": "static_dependency",
+      "sha256": "a9e5c0f641867760e780f8d971cb482d81907032401935b0bfa8368255139cb2"
+    },
+    "pokemon_red_completion.red_field_carrier_custody": {
+      "path": "src/pokemon_red_completion/red_field_carrier_custody.py",
+      "scope": "static_dependency",
+      "sha256": "49f8ff5058df50ad4904533ab8c56adf8ed0c7cc5ab63dca68682e720e5eb591"
+    },
+    "pokemon_red_completion.red_field_carrier_return_abort": {
+      "path": "src/pokemon_red_completion/red_field_carrier_return_abort.py",
+      "scope": "static_dependency",
+      "sha256": "16cb4cfa438ab09837f97361b29c96fee718e8f2bce925d759c8ca2d16583d4b"
+    },
+    "pokemon_red_completion.red_field_item": {
+      "path": "src/pokemon_red_completion/red_field_item.py",
+      "scope": "static_dependency",
+      "sha256": "f804b53fe34948be3b232853499aafb9398e6471595f198ad83c28c5d67d4826"
+    },
+    "pokemon_red_completion.red_field_pp_restore": {
+      "path": "src/pokemon_red_completion/red_field_pp_restore.py",
+      "scope": "static_dependency",
+      "sha256": "8bb167900184d2b5c1834e21d0981752bb3119cce05c558284c3d0381b49bd54"
+    },
+    "pokemon_red_completion.red_fishing_acquisition": {
+      "path": "src/pokemon_red_completion/red_fishing_acquisition.py",
+      "scope": "bound",
+      "sha256": "6e76892c6d4e6154c67e4c5a86524020ee9731ab4ac39dfb8e82f4241e146cb2"
+    },
+    "pokemon_red_completion.red_fishing_capture": {
+      "path": "src/pokemon_red_completion/red_fishing_capture.py",
+      "scope": "static_dependency",
+      "sha256": "26915b20f919360acfcb64a6822548b0e74dbe8ae02403c88e19e42d42519a4e"
+    },
+    "pokemon_red_completion.red_fishing_survey_history": {
+      "path": "src/pokemon_red_completion/red_fishing_survey_history.py",
+      "scope": "bound",
+      "sha256": "2ca1150af334df18df2d28f3c38618877348040fabae632abff5313079fc145f"
+    },
+    "pokemon_red_completion.red_forced_struggle": {
+      "path": "src/pokemon_red_completion/red_forced_struggle.py",
+      "scope": "bound",
+      "sha256": "54bc364cdac910b21eccd4d6113155511c71b91f1570b30b0c5cd04fd576cf77"
+    },
+    "pokemon_red_completion.red_fossil_acquisition": {
+      "path": "src/pokemon_red_completion/red_fossil_acquisition.py",
+      "scope": "static_dependency",
+      "sha256": "09e148b733c29da800238fc36d12f961310313543b74a4c7267b4329fec6954f"
+    },
+    "pokemon_red_completion.red_full_pokedex_direct_profile": {
+      "path": "src/pokemon_red_completion/red_full_pokedex_direct_profile.py",
+      "scope": "static_dependency",
+      "sha256": "3a42dfc1214929314f70df70613bddc8f1308005e75bed85de1641785e20c1b4"
+    },
+    "pokemon_red_completion.red_funding_approach": {
+      "path": "src/pokemon_red_completion/red_funding_approach.py",
+      "scope": "static_dependency",
+      "sha256": "cd4a7b395aa10da1cf6b1f5a70475868066c0c10976380658ccdb52b765e71a4"
+    },
+    "pokemon_red_completion.red_funding_fly": {
+      "path": "src/pokemon_red_completion/red_funding_fly.py",
+      "scope": "static_dependency",
+      "sha256": "30b74aeeb8cf1649fe632923dc7c700cc3538b21897026b33d4bd9abe3f6e4e1"
+    },
+    "pokemon_red_completion.red_game_corner_execution": {
+      "path": "src/pokemon_red_completion/red_game_corner_execution.py",
+      "scope": "static_dependency",
+      "sha256": "bec16ab9fcdebf4925fb0f6974373d0fb1b5bbdeb5cc92b179c49fc183296c12"
+    },
+    "pokemon_red_completion.red_game_corner_goals": {
+      "path": "src/pokemon_red_completion/red_game_corner_goals.py",
+      "scope": "bound",
+      "sha256": "1f3e55a89b0fd91f609204c1c024b86d59337ae969915d28ef26cec0d59078b0"
+    },
+    "pokemon_red_completion.red_game_corner_resources": {
+      "path": "src/pokemon_red_completion/red_game_corner_resources.py",
+      "scope": "static_dependency",
+      "sha256": "39302ba1f6b43a83ba2996d4cbd83a8b46392c975cd67168300e17e5b9cb44fe"
+    },
+    "pokemon_red_completion.red_goal_boxed_evolution": {
+      "path": "src/pokemon_red_completion/red_goal_boxed_evolution.py",
+      "scope": "bound",
+      "sha256": "cecf5d93ca9811b8ba8d54fcdbba8d45c6be36f73e1812eb8a8d7bf54395715b"
+    },
+    "pokemon_red_completion.red_goal_context": {
+      "path": "src/pokemon_red_completion/red_goal_context.py",
+      "scope": "bound",
+      "sha256": "2c67301f64088245b11e7df8e79938c1954da06c1e3c2e5bc0813497b8721e02"
+    },
+    "pokemon_red_completion.red_goal_context_profile": {
+      "path": "src/pokemon_red_completion/red_goal_context_profile.py",
+      "scope": "bound",
+      "sha256": "138c84962218d5fa1f96450abb4e44f4485e9f0738dd771335b1bb2d60f6eda9"
+    },
+    "pokemon_red_completion.red_goal_manager": {
+      "path": "src/pokemon_red_completion/red_goal_manager.py",
+      "scope": "bound",
+      "sha256": "9cda0e032e17650e0de9747f5f3ee2d59212c06f2cef6ae9030993918a1dea03"
+    },
+    "pokemon_red_completion.red_goal_skills": {
+      "path": "src/pokemon_red_completion/red_goal_skills.py",
+      "scope": "bound",
+      "sha256": "4d6c5a8ff9c8246f784eb089d810eea031d84f6f78337c94233b47988cc2eb7e"
+    },
+    "pokemon_red_completion.red_gym_reward": {
+      "path": "src/pokemon_red_completion/red_gym_reward.py",
+      "scope": "bound",
+      "sha256": "5ea620884e2c4f1694e8e70752f0c9b10b0b96e41afa96fc4a8c3653359a785f"
+    },
+    "pokemon_red_completion.red_income_preparation": {
+      "path": "src/pokemon_red_completion/red_income_preparation.py",
+      "scope": "bound",
+      "sha256": "9eddc1f75a3acf204de50a906fda7901f69974d85089f2b0450db4571cfa0545"
+    },
+    "pokemon_red_completion.red_indoor_collection_departure": {
+      "path": "src/pokemon_red_completion/red_indoor_collection_departure.py",
+      "scope": "static_dependency",
+      "sha256": "94955873f3bc0e014e480d5e8be6767b12600e3147e5bdeef0b371f4e21cd295"
+    },
+    "pokemon_red_completion.red_indoor_departure_plan": {
+      "path": "src/pokemon_red_completion/red_indoor_departure_plan.py",
+      "scope": "static_dependency",
+      "sha256": "ad5e3e276a0a38b04796e2ac9b139b7f72ea74fec9527329e238828149085a98"
+    },
+    "pokemon_red_completion.red_indoor_safari": {
+      "path": "src/pokemon_red_completion/red_indoor_safari.py",
+      "scope": "static_dependency",
+      "sha256": "d317e63ad26677bc3952536e0bb9fc7cc221f4b364fb73f5015bc83b12c16469"
+    },
+    "pokemon_red_completion.red_integrated_play": {
+      "path": "src/pokemon_red_completion/red_integrated_play.py",
+      "scope": "bound",
+      "sha256": "f9a1ac1a7193d5a556f26e18c9b53cbb3e28c463a6d7d6f06b857f9fdd0c554c"
+    },
+    "pokemon_red_completion.red_item_evolution_options": {
+      "path": "src/pokemon_red_completion/red_item_evolution_options.py",
+      "scope": "static_dependency",
+      "sha256": "61d70cea91f17810f917a5b9e93c344ee854b21bc11753c6ae20f231bb4bc55c"
+    },
+    "pokemon_red_completion.red_league_entry": {
+      "path": "src/pokemon_red_completion/red_league_entry.py",
+      "scope": "static_dependency",
+      "sha256": "78d3226e4e830c07d8d3d90050af30cabb35b1a0d0412f8a1d92b52f53d9303e"
+    },
+    "pokemon_red_completion.red_league_field_recovery": {
+      "path": "src/pokemon_red_completion/red_league_field_recovery.py",
+      "scope": "bound",
+      "sha256": "e00e8f816e93fceb2e7ea44ee86ee94670dd24296908d139536542d73d943aac"
+    },
+    "pokemon_red_completion.red_league_funding": {
+      "path": "src/pokemon_red_completion/red_league_funding.py",
+      "scope": "bound",
+      "sha256": "132f5c8850ef66d05537c5e26a755b5dbe31475df6fa49feb7081dba60363dde"
+    },
+    "pokemon_red_completion.red_league_funding_execution": {
+      "path": "src/pokemon_red_completion/red_league_funding_execution.py",
+      "scope": "bound",
+      "sha256": "ceddd3467c6ae907c273b68e96d50af98c128c685639cca699ec8e2feea6941b"
+    },
+    "pokemon_red_completion.red_league_story_chain": {
+      "path": "src/pokemon_red_completion/red_league_story_chain.py",
+      "scope": "bound",
+      "sha256": "54dd08dd3924cbb1746048bea4dd7fd12e2004018dd8808169bba3f036c4c3f1"
+    },
+    "pokemon_red_completion.red_learned_league": {
+      "path": "src/pokemon_red_completion/red_learned_league.py",
+      "scope": "bound",
+      "sha256": "e17c1517a81080cb5e03af6b47205dfd3034b739cdda854a16fe3eb538e7d572"
+    },
+    "pokemon_red_completion.red_learned_trainer": {
+      "path": "src/pokemon_red_completion/red_learned_trainer.py",
+      "scope": "bound",
+      "sha256": "4b720139e248bb2699ceaf2ee0d50ccf4b15dd180de6c5a9484a919eacdf17bc"
+    },
+    "pokemon_red_completion.red_level_evolution_options": {
+      "path": "src/pokemon_red_completion/red_level_evolution_options.py",
+      "scope": "bound",
+      "sha256": "a3fbcdc6e873e2521d471c75a3c30e7d3e62df4df66b6b9291ab340eae24dab0"
+    },
+    "pokemon_red_completion.red_live_fishing": {
+      "path": "src/pokemon_red_completion/red_live_fishing.py",
+      "scope": "bound",
+      "sha256": "d3bb553e1cb6821d0a453c9e6b2dbfe0cbfabcf38b7a9426701cec455925003c"
+    },
+    "pokemon_red_completion.red_live_option_menu": {
+      "path": "src/pokemon_red_completion/red_live_option_menu.py",
+      "scope": "bound",
+      "sha256": "dd5bf6fcad0579f90aefc45e366fdaf9a38dd5221054fe341d5e30e2e99b2a0f"
+    },
+    "pokemon_red_completion.red_live_safari": {
+      "path": "src/pokemon_red_completion/red_live_safari.py",
+      "scope": "static_dependency",
+      "sha256": "77dde7dbc85445164c3448b43792fbf79fa0c07a44ba039c9921a8a278762c1e"
+    },
+    "pokemon_red_completion.red_living_dex_capture_plan": {
+      "path": "src/pokemon_red_completion/red_living_dex_capture_plan.py",
+      "scope": "bound",
+      "sha256": "29132dec9ad8fd487af32ceaac9f1580352f62837469ae34b0c5d5cd079e1348"
+    },
+    "pokemon_red_completion.red_living_dex_causal_adapter": {
+      "path": "src/pokemon_red_completion/red_living_dex_causal_adapter.py",
+      "scope": "bound",
+      "sha256": "af404b0772f5626336fc87679d6ec5c75a99e3d4655ae882536e285778108a2e"
+    },
+    "pokemon_red_completion.red_living_dex_causal_inventory": {
+      "path": "src/pokemon_red_completion/red_living_dex_causal_inventory.py",
+      "scope": "bound",
+      "sha256": "460744546a26d300c9a6744a3887d1deae2afe77faab40abba7d285c2860ef5d"
+    },
+    "pokemon_red_completion.red_living_dex_claim_first_campaign": {
+      "path": "src/pokemon_red_completion/red_living_dex_claim_first_campaign.py",
+      "scope": "bound",
+      "sha256": "b1205167c902821d0b391785de2e2a5a71503679bb3cff5ba6e27dab170ee2d5"
+    },
+    "pokemon_red_completion.red_living_dex_clustered_schedule_plan": {
+      "path": "src/pokemon_red_completion/red_living_dex_clustered_schedule_plan.py",
+      "scope": "bound",
+      "sha256": "bf4fbfa6544d0360d51fe7129a9bfc89eae48c47a7f9a1b2027eb14342788ae2"
+    },
+    "pokemon_red_completion.red_living_dex_dependency_adapter": {
+      "path": "src/pokemon_red_completion/red_living_dex_dependency_adapter.py",
+      "scope": "bound",
+      "sha256": "bfeb431d238ec9f510e409da457913b5764557a803acbabe6d51e38a35cb425a"
+    },
+    "pokemon_red_completion.red_living_dex_dependency_curriculum": {
+      "path": "src/pokemon_red_completion/red_living_dex_dependency_curriculum.py",
+      "scope": "bound",
+      "sha256": "a854d756a8c8c6181323587dce384c81020e06a394a6f2d9e8412c6be4c8c87c"
+    },
+    "pokemon_red_completion.red_living_dex_multifamily_curriculum": {
+      "path": "src/pokemon_red_completion/red_living_dex_multifamily_curriculum.py",
+      "scope": "bound",
+      "sha256": "56ba87d6ca61072425b548ed07077d8a4e383f2bf167c81b695d0014c264a281"
+    },
+    "pokemon_red_completion.red_living_dex_provider_curriculum": {
+      "path": "src/pokemon_red_completion/red_living_dex_provider_curriculum.py",
+      "scope": "bound",
+      "sha256": "1887fea20003b39d96f786e9879d90af411f4e85e96977506ec676cfbe3595c0"
+    },
+    "pokemon_red_completion.red_living_dex_provider_plan": {
+      "path": "src/pokemon_red_completion/red_living_dex_provider_plan.py",
+      "scope": "bound",
+      "sha256": "5b51992bc135c4b90e34480238ce71e2f1c92a808e1d26c2171562015280cd7e"
+    },
+    "pokemon_red_completion.red_living_dex_provider_recipe": {
+      "path": "src/pokemon_red_completion/red_living_dex_provider_recipe.py",
+      "scope": "bound",
+      "sha256": "42becb115027d885e42198aa3ba626128483ea678c1f9007f066bfe945751377"
+    },
+    "pokemon_red_completion.red_living_dex_setup_admission": {
+      "path": "src/pokemon_red_completion/red_living_dex_setup_admission.py",
+      "scope": "bound",
+      "sha256": "4a61e33d0fd196cb18eeebf8cba477e8693d57b0f37f0c06be676a0c9e695cbf"
+    },
+    "pokemon_red_completion.red_living_dex_setup_campaign": {
+      "path": "src/pokemon_red_completion/red_living_dex_setup_campaign.py",
+      "scope": "bound",
+      "sha256": "d6e37141fcb31618becdad27cc2032925dfa504ce4f6cffae37dbb9205a58742"
+    },
+    "pokemon_red_completion.red_living_dex_setup_materialization": {
+      "path": "src/pokemon_red_completion/red_living_dex_setup_materialization.py",
+      "scope": "bound",
+      "sha256": "6e6c921d3286e2c6b040ae2247c71c13de7b53168db42a2619dc243afb53d38e"
+    },
+    "pokemon_red_completion.red_living_dex_setup_policy": {
+      "path": "src/pokemon_red_completion/red_living_dex_setup_policy.py",
+      "scope": "bound",
+      "sha256": "24f24cc58228418309b0a222fd0cc07e2d2cfff32229136de3e6e2acd648d38f"
+    },
+    "pokemon_red_completion.red_living_dex_setup_recipe": {
+      "path": "src/pokemon_red_completion/red_living_dex_setup_recipe.py",
+      "scope": "bound",
+      "sha256": "b5bbe57444e3bf30e4036598db7d33e3965e86a4352d49e65bf3231d599080d2"
+    },
+    "pokemon_red_completion.red_living_dex_setup_recipe_campaign": {
+      "path": "src/pokemon_red_completion/red_living_dex_setup_recipe_campaign.py",
+      "scope": "static_dependency",
+      "sha256": "b33375d207511e23256aad1dd77ae0b11ab31c4a3e2350fca3bb1a016879716e"
+    },
+    "pokemon_red_completion.red_living_dex_setup_source": {
+      "path": "src/pokemon_red_completion/red_living_dex_setup_source.py",
+      "scope": "bound",
+      "sha256": "938aec76c27fb656a60cc944f82c8a8a9e4b1535e97ec61788ec3d0dba9c86af"
+    },
+    "pokemon_red_completion.red_living_dex_setup_trust": {
+      "path": "src/pokemon_red_completion/red_living_dex_setup_trust.py",
+      "scope": "bound",
+      "sha256": "3833584991f69681930deedd2b1c72caecf469530d22019a3542f4bfad59a072"
+    },
+    "pokemon_red_completion.red_living_dex_wild_corridor": {
+      "path": "src/pokemon_red_completion/red_living_dex_wild_corridor.py",
+      "scope": "bound",
+      "sha256": "91c26fc3cf6187938e7729218d78737653e2d116bf5030422e7b68f1f5384343"
+    },
+    "pokemon_red_completion.red_lorelei_story": {
+      "path": "src/pokemon_red_completion/red_lorelei_story.py",
+      "scope": "bound",
+      "sha256": "09c04932e54ad8e0354f5dc9a75aebf3ef2393c431943c6cf317fdf1fce0c39a"
+    },
+    "pokemon_red_completion.red_machine_teaching": {
+      "path": "src/pokemon_red_completion/red_machine_teaching.py",
+      "scope": "bound",
+      "sha256": "8a409c1a9d683e7fc0786df3e3de448694a690b6e02f59839a5152c591e2c9f2"
+    },
+    "pokemon_red_completion.red_mansion_training_recovery": {
+      "path": "src/pokemon_red_completion/red_mansion_training_recovery.py",
+      "scope": "static_dependency",
+      "sha256": "f461ef6151c1947ebdf57876cad3a51310c46b3b16190e7458a532f0fd68fe7d"
+    },
+    "pokemon_red_completion.red_milestone_splits": {
+      "path": "src/pokemon_red_completion/red_milestone_splits.py",
+      "scope": "bound",
+      "sha256": "4d85de7fc82440d01363fb86b84e2536c6b3fe94913927dcf7e6d0837e847c8f"
+    },
+    "pokemon_red_completion.red_movement_recurrence": {
+      "path": "src/pokemon_red_completion/red_movement_recurrence.py",
+      "scope": "static_dependency",
+      "sha256": "a1587bb12e99da6f44213bdd1555b395969398fadf9305a28dc306b80c2dab48"
+    },
+    "pokemon_red_completion.red_native_boxed_evolution": {
+      "path": "src/pokemon_red_completion/red_native_boxed_evolution.py",
+      "scope": "bound",
+      "sha256": "52a031eba8231a223b5961023152be63e155854d59d3cc1ef5b311f8a7059250"
+    },
+    "pokemon_red_completion.red_native_boxed_item_evolution": {
+      "path": "src/pokemon_red_completion/red_native_boxed_item_evolution.py",
+      "scope": "static_dependency",
+      "sha256": "ef109bfc995f978b60b3ef9990992cecf3e2b7bc54d90ca06df6259d934a3d85"
+    },
+    "pokemon_red_completion.red_native_curriculum": {
+      "path": "src/pokemon_red_completion/red_native_curriculum.py",
+      "scope": "bound",
+      "sha256": "953a2a54641ab87c1d7c832d5b4efaf23b8eea4842fc515fffd0ceb2aa10c0d5"
+    },
+    "pokemon_red_completion.red_native_evolution_box_access": {
+      "path": "src/pokemon_red_completion/red_native_evolution_box_access.py",
+      "scope": "static_dependency",
+      "sha256": "4be3a4d746f5ca002b1631b82b162e95dc4fba248d40f9efeecc2bb341bd6901"
+    },
+    "pokemon_red_completion.red_native_player": {
+      "path": "src/pokemon_red_completion/red_native_player.py",
+      "scope": "bound",
+      "sha256": "8a8060cde3051e492ecd246f87573f315b304f6f8036daa5de7393a9cb6f961e"
+    },
+    "pokemon_red_completion.red_native_venue_geometry": {
+      "path": "src/pokemon_red_completion/red_native_venue_geometry.py",
+      "scope": "static_dependency",
+      "sha256": "53a6c897a62a8d5876511514579f38d1ede12d67ecc700aadc1d8eecacbc67ab"
+    },
+    "pokemon_red_completion.red_npc_approach": {
+      "path": "src/pokemon_red_completion/red_npc_approach.py",
+      "scope": "static_dependency",
+      "sha256": "b7d405c362e1f163e8a21919ca905377df49826b90f0a8cb34c379f18559d3fe"
+    },
+    "pokemon_red_completion.red_npc_exchange_learning": {
+      "path": "src/pokemon_red_completion/red_npc_exchange_learning.py",
+      "scope": "static_dependency",
+      "sha256": "caaa7badb403bac51107fa05ea9c14bf060edd051a1e8078a1817e94d555887a"
+    },
+    "pokemon_red_completion.red_npc_trade": {
+      "path": "src/pokemon_red_completion/red_npc_trade.py",
+      "scope": "static_dependency",
+      "sha256": "44e2616fcc2990e52d6f7ad7f7460f270134882added927a49f955d6de2d6e15"
+    },
+    "pokemon_red_completion.red_npc_trade_options": {
+      "path": "src/pokemon_red_completion/red_npc_trade_options.py",
+      "scope": "static_dependency",
+      "sha256": "47bd3c9b985bb0378b2d499da8a4d27d8db0c5f635f131e2d1008162e1446549"
+    },
+    "pokemon_red_completion.red_objective_skills": {
+      "path": "src/pokemon_red_completion/red_objective_skills.py",
+      "scope": "bound",
+      "sha256": "361808ea5536ddd8cbdbaa5c9034ed85a8668f3dad809d830b4f05677abc6af1"
+    },
+    "pokemon_red_completion.red_observed_component_binding": {
+      "path": "src/pokemon_red_completion/red_observed_component_binding.py",
+      "scope": "bound",
+      "sha256": "f03e1e282a63699176d7043b2548c155c842b577e4aad61ae50b1f260d72aec1"
+    },
+    "pokemon_red_completion.red_observed_local_capture": {
+      "path": "src/pokemon_red_completion/red_observed_local_capture.py",
+      "scope": "static_dependency",
+      "sha256": "d7bc8cfb88a7700d2aa21885a1433d5a04063b1e940b905930897b61076c48dc"
+    },
+    "pokemon_red_completion.red_one_off_capture": {
+      "path": "src/pokemon_red_completion/red_one_off_capture.py",
+      "scope": "static_dependency",
+      "sha256": "ffcbc9f15e27f56beec9f3b4094c644a21747e0bc3f39520c107ef348cb370df"
+    },
+    "pokemon_red_completion.red_ordinary_preparation_venue": {
+      "path": "src/pokemon_red_completion/red_ordinary_preparation_venue.py",
+      "scope": "bound",
+      "sha256": "ace51d5a6a70ef986215928aae014235f10f1dad4b9a8c1810edf8704748199c"
+    },
+    "pokemon_red_completion.red_paid_safari_departure": {
+      "path": "src/pokemon_red_completion/red_paid_safari_departure.py",
+      "scope": "static_dependency",
+      "sha256": "b40b21b97fc2e4ca62808f9f43c68ce6bccfb5ee8fd8896bdf11cf490d1bb434"
+    },
+    "pokemon_red_completion.red_paid_safari_patrol": {
+      "path": "src/pokemon_red_completion/red_paid_safari_patrol.py",
+      "scope": "static_dependency",
+      "sha256": "2dc1bdc4d79cef92d4bc1f6da0e41f63f427006bb989c1d4c1085813cb7bb4c8"
+    },
+    "pokemon_red_completion.red_party": {
+      "path": "src/pokemon_red_completion/red_party.py",
+      "scope": "bound",
+      "sha256": "f5d936755189d320cdc69aedf6d307a8c61154eb09e5ab56d22404e6eb3c0df3"
+    },
+    "pokemon_red_completion.red_party_development_adapter": {
+      "path": "src/pokemon_red_completion/red_party_development_adapter.py",
+      "scope": "bound",
+      "sha256": "7af85878bdae6693c6bcd7a3f713f2cebc397d1632ab4524af514dca2f953a78"
+    },
+    "pokemon_red_completion.red_party_item_evolution": {
+      "path": "src/pokemon_red_completion/red_party_item_evolution.py",
+      "scope": "static_dependency",
+      "sha256": "bcd5c07edc5c0d8e2f410eb3f5b9b67207879fc5df478ffaaecb2270481031cd"
+    },
+    "pokemon_red_completion.red_party_pp": {
+      "path": "src/pokemon_red_completion/red_party_pp.py",
+      "scope": "bound",
+      "sha256": "38d35a10f965abb65327f3230feda574b70ffb02a355e15b3c2d3de6aab22e43"
+    },
+    "pokemon_red_completion.red_party_preparation": {
+      "path": "src/pokemon_red_completion/red_party_preparation.py",
+      "scope": "bound",
+      "sha256": "bca2143ac03722bb14b89cf4078edde23da564443d3920b1dff3abb444698dab"
+    },
+    "pokemon_red_completion.red_pc_storage": {
+      "path": "src/pokemon_red_completion/red_pc_storage.py",
+      "scope": "bound",
+      "sha256": "1459045d5240faed887b038fbba46565c9551aa9702e721449da6578ef4633d7"
+    },
+    "pokemon_red_completion.red_player_battle_history": {
+      "path": "src/pokemon_red_completion/red_player_battle_history.py",
+      "scope": "bound",
+      "sha256": "1af9d3ea28b5143030d4755ae29d858836addc73051815e1041dbc3c13c845dc"
+    },
+    "pokemon_red_completion.red_player_bill": {
+      "path": "src/pokemon_red_completion/red_player_bill.py",
+      "scope": "static_dependency",
+      "sha256": "be93eafe40c041a8744d21966d7ec1f8da47c0b27ea8d4fdec1bebf6f0d75bdc"
+    },
+    "pokemon_red_completion.red_player_captain": {
+      "path": "src/pokemon_red_completion/red_player_captain.py",
+      "scope": "static_dependency",
+      "sha256": "43304512a83c9609885499f80482bdd1c5654b511d0ba4701147dadbf6d0bf45"
+    },
+    "pokemon_red_completion.red_player_cash_exposure": {
+      "path": "src/pokemon_red_completion/red_player_cash_exposure.py",
+      "scope": "bound",
+      "sha256": "c269ab3a468b2371603ae94d4dfacc0ff995731ccb66fa9b597a90d8346542f8"
+    },
+    "pokemon_red_completion.red_player_cerulean_branches": {
+      "path": "src/pokemon_red_completion/red_player_cerulean_branches.py",
+      "scope": "static_dependency",
+      "sha256": "9d3099beec900f49e8653b271e3e93dce1c2bd63c82ba568cf1bdbf7a8351e9d"
+    },
+    "pokemon_red_completion.red_player_cerulean_rival": {
+      "path": "src/pokemon_red_completion/red_player_cerulean_rival.py",
+      "scope": "static_dependency",
+      "sha256": "c5bfa23b3218f83f307efacfc527e7d452a6023c715e2449dccc8c4be0663a90"
+    },
+    "pokemon_red_completion.red_player_collection_options": {
+      "path": "src/pokemon_red_completion/red_player_collection_options.py",
+      "scope": "bound",
+      "sha256": "e6f32dcd5caf67a2f3cb74139148e8216b269d6846aeb2f0a4df0ca656cbaa9a"
+    },
+    "pokemon_red_completion.red_player_configuration": {
+      "path": "src/pokemon_red_completion/red_player_configuration.py",
+      "scope": "bound",
+      "sha256": "018355ca38194a082375fcd1d86ec37ff5c3eb166401b47afb249ab950f53534"
+    },
+    "pokemon_red_completion.red_player_continuation": {
+      "path": "src/pokemon_red_completion/red_player_continuation.py",
+      "scope": "bound",
+      "sha256": "e66f0ce47117594df707f03193a6fbd20ef23b6ed8b379deeec1afc15e3afa63"
+    },
+    "pokemon_red_completion.red_player_curriculum": {
+      "path": "src/pokemon_red_completion/red_player_curriculum.py",
+      "scope": "bound",
+      "sha256": "72b5149dced5d01be49f92c660892ad5fd4be36a86b6886dccfbf1520516716a"
+    },
+    "pokemon_red_completion.red_player_cut_lesson": {
+      "path": "src/pokemon_red_completion/red_player_cut_lesson.py",
+      "scope": "static_dependency",
+      "sha256": "18c9c081c2dae899bb7db70fb1bafe1ac990f5a49c238fdafc4f3aa7e99f6b3f"
+    },
+    "pokemon_red_completion.red_player_early_story_options": {
+      "path": "src/pokemon_red_completion/red_player_early_story_options.py",
+      "scope": "static_dependency",
+      "sha256": "be6d1cc2b2ec824c124c4948102d552275a5de5e82bc93418ab14de7e143d74f"
+    },
+    "pokemon_red_completion.red_player_economy": {
+      "path": "src/pokemon_red_completion/red_player_economy.py",
+      "scope": "bound",
+      "sha256": "b5ce1312cd7029edb5a82591e186b166e70a276e5c7d7569925f192050e573df"
+    },
+    "pokemon_red_completion.red_player_engaged_story": {
+      "path": "src/pokemon_red_completion/red_player_engaged_story.py",
+      "scope": "bound",
+      "sha256": "7f3fb6d83f817e263a367bf97c86fcc9366376e3043c71c0b62316f8fa91a8d5"
+    },
+    "pokemon_red_completion.red_player_evolution_lesson": {
+      "path": "src/pokemon_red_completion/red_player_evolution_lesson.py",
+      "scope": "static_dependency",
+      "sha256": "f3843ea01ab4c14338f24ec90882d71aa378ebedfefc66b618a8400763bb46f5"
+    },
+    "pokemon_red_completion.red_player_field_blackout": {
+      "path": "src/pokemon_red_completion/red_player_field_blackout.py",
+      "scope": "static_dependency",
+      "sha256": "68077272a2ee5a4721ccf4d478315bd94b6630238279c1321977af5fb0dd9f3b"
+    },
+    "pokemon_red_completion.red_player_field_goals": {
+      "path": "src/pokemon_red_completion/red_player_field_goals.py",
+      "scope": "bound",
+      "sha256": "9442bde26b31bb609825c4043875a1aa4b9eb4fdc86fcf53fbdc522da20a9a23"
+    },
+    "pokemon_red_completion.red_player_field_item": {
+      "path": "src/pokemon_red_completion/red_player_field_item.py",
+      "scope": "static_dependency",
+      "sha256": "2450e59592e6820403a40418e80d09a5564278eaea5f5fa8255c41718dc48771"
+    },
+    "pokemon_red_completion.red_player_fly": {
+      "path": "src/pokemon_red_completion/red_player_fly.py",
+      "scope": "static_dependency",
+      "sha256": "c1b7518c8d7210efed8d9c972404b8e70df9664bdf7658b5b41e02dd2e2b831b"
+    },
+    "pokemon_red_completion.red_player_forced_motion": {
+      "path": "src/pokemon_red_completion/red_player_forced_motion.py",
+      "scope": "bound",
+      "sha256": "d8f1ba8a5a81f1da60883643efcf3b63c1be7be619d7767256bcdff769338d6f"
+    },
+    "pokemon_red_completion.red_player_fossil": {
+      "path": "src/pokemon_red_completion/red_player_fossil.py",
+      "scope": "static_dependency",
+      "sha256": "414238f83d64b3af735e9b93dda2cb3dcbab1eb5cc110cdab0b2c5e27a381cb8"
+    },
+    "pokemon_red_completion.red_player_gym": {
+      "path": "src/pokemon_red_completion/red_player_gym.py",
+      "scope": "bound",
+      "sha256": "88019ed802404a1c951d3c00e6e41e6ce1a297aefe66a111d0e7005ff194b2e8"
+    },
+    "pokemon_red_completion.red_player_gym_quiz": {
+      "path": "src/pokemon_red_completion/red_player_gym_quiz.py",
+      "scope": "bound",
+      "sha256": "c39873f14d13b95ec6e6e3eb416cd49a08e4189b72ded4c5b3ad74ff3ac12c68"
+    },
+    "pokemon_red_completion.red_player_gym_switches": {
+      "path": "src/pokemon_red_completion/red_player_gym_switches.py",
+      "scope": "static_dependency",
+      "sha256": "f430a6ec997f74d4d43a3d4e8d94a3e08ba689ac664001f2a83095a342409b50"
+    },
+    "pokemon_red_completion.red_player_hideout": {
+      "path": "src/pokemon_red_completion/red_player_hideout.py",
+      "scope": "static_dependency",
+      "sha256": "fd41f33648d7cb42cc616176e290e808a9b09f8579d3bf2d4b68f14adbc393dc"
+    },
+    "pokemon_red_completion.red_player_lab_rival": {
+      "path": "src/pokemon_red_completion/red_player_lab_rival.py",
+      "scope": "static_dependency",
+      "sha256": "317272e143c2c5af651c36508807d0404aed5f32d409f3b936dee9372364526a"
+    },
+    "pokemon_red_completion.red_player_league_options": {
+      "path": "src/pokemon_red_completion/red_player_league_options.py",
+      "scope": "bound",
+      "sha256": "31d61b8d758c81e18cafe7257d277f0cc1bce061171c5feb4d890cf684a75eab"
+    },
+    "pokemon_red_completion.red_player_lesson": {
+      "path": "src/pokemon_red_completion/red_player_lesson.py",
+      "scope": "bound",
+      "sha256": "1e8c8b4ee2967fc600e95acccdc060461167c0a6d24a5ff2831c371beca31058"
+    },
+    "pokemon_red_completion.red_player_lesson_runtime": {
+      "path": "src/pokemon_red_completion/red_player_lesson_runtime.py",
+      "scope": "bound",
+      "sha256": "5b459cdb2b90fcc1c396e6cb210ae5c12a9a349ab88472fde7e9222ea4092796"
+    },
+    "pokemon_red_completion.red_player_mansion": {
+      "path": "src/pokemon_red_completion/red_player_mansion.py",
+      "scope": "static_dependency",
+      "sha256": "75aa62bbfb7c137560169c8bdde874f8b3a848aba61144fb5094199a38340c2d"
+    },
+    "pokemon_red_completion.red_player_matchup": {
+      "path": "src/pokemon_red_completion/red_player_matchup.py",
+      "scope": "static_dependency",
+      "sha256": "c37f8b4556109a00c6a640fc421d622027ed031152d6fcaea6a08e3371fae80d"
+    },
+    "pokemon_red_completion.red_player_member_preparation": {
+      "path": "src/pokemon_red_completion/red_player_member_preparation.py",
+      "scope": "static_dependency",
+      "sha256": "d2137c206ca58aa612c3dd461a3e4817f370c56f963b92181ee58a31bb0c8b69"
+    },
+    "pokemon_red_completion.red_player_model": {
+      "path": "src/pokemon_red_completion/red_player_model.py",
+      "scope": "bound",
+      "sha256": "cd5bca96246988b13c9cebd99d46975d02db9df75333adecfea4b54290ddd21a"
+    },
+    "pokemon_red_completion.red_player_observer": {
+      "path": "src/pokemon_red_completion/red_player_observer.py",
+      "scope": "bound",
+      "sha256": "84b8901f688a8fa993d2ef059bfee47735bd43ab7f7618783cccf3ed8043dc41"
+    },
+    "pokemon_red_completion.red_player_origins": {
+      "path": "src/pokemon_red_completion/red_player_origins.py",
+      "scope": "bound",
+      "sha256": "e1ad39dcda08290044aec9a62f5f6921b5e92fcf97721bbcd2cb56bc3400f17c"
+    },
+    "pokemon_red_completion.red_player_owned_machines": {
+      "path": "src/pokemon_red_completion/red_player_owned_machines.py",
+      "scope": "bound",
+      "sha256": "200149a82911295970131b0b16489f8e9362c69b0828a6e89e815d6b598edae6"
+    },
+    "pokemon_red_completion.red_player_package": {
+      "path": "src/pokemon_red_completion/red_player_package.py",
+      "scope": "bound",
+      "sha256": "d5f45a58850a2fb1558b126d12db55ec152fb44832c00d5f9d03140334e454a0"
+    },
+    "pokemon_red_completion.red_player_party_guard": {
+      "path": "src/pokemon_red_completion/red_player_party_guard.py",
+      "scope": "bound",
+      "sha256": "e1ef1db9e3d9203377e8d4bf8aee924335f702a2a1d1c674dabcf60dcf362d2c"
+    },
+    "pokemon_red_completion.red_player_party_loan": {
+      "path": "src/pokemon_red_completion/red_player_party_loan.py",
+      "scope": "bound",
+      "sha256": "cb695662a48fede414add07bf56f9d65b86473975fc397bb1630e29054df3382"
+    },
+    "pokemon_red_completion.red_player_preparation_binding": {
+      "path": "src/pokemon_red_completion/red_player_preparation_binding.py",
+      "scope": "bound",
+      "sha256": "3c79d8e82db9c435ea85d60533332727debeb8825b358702e3a906bad51e343f"
+    },
+    "pokemon_red_completion.red_player_preparation_history": {
+      "path": "src/pokemon_red_completion/red_player_preparation_history.py",
+      "scope": "static_dependency",
+      "sha256": "9d02ff7230fb328a2657efc77e611848e6d9d62ae93ff04363f41a3cd3f73aea"
+    },
+    "pokemon_red_completion.red_player_resource_lesson": {
+      "path": "src/pokemon_red_completion/red_player_resource_lesson.py",
+      "scope": "bound",
+      "sha256": "a0fd016c4270f288cd36caddd392974f5247e4566aedeebdfaf2cf0c61c84c52"
+    },
+    "pokemon_red_completion.red_player_resource_recording": {
+      "path": "src/pokemon_red_completion/red_player_resource_recording.py",
+      "scope": "static_dependency",
+      "sha256": "1a92d5eb89801d9d36d5c6caef58fccaff90b3707c183badc785f33bb38a63a3"
+    },
+    "pokemon_red_completion.red_player_route22_rival": {
+      "path": "src/pokemon_red_completion/red_player_route22_rival.py",
+      "scope": "static_dependency",
+      "sha256": "30baf72b6c1157e3d26fe6948f8fdb27f70e23f895f037ca59519f86aa9af3f3"
+    },
+    "pokemon_red_completion.red_player_safari_rewards": {
+      "path": "src/pokemon_red_completion/red_player_safari_rewards.py",
+      "scope": "static_dependency",
+      "sha256": "3f5a626ccd65d8e8927a46d280fa095640dd8d225f5a6bb327831d6ee0355d73"
+    },
+    "pokemon_red_completion.red_player_saffron": {
+      "path": "src/pokemon_red_completion/red_player_saffron.py",
+      "scope": "static_dependency",
+      "sha256": "219e6c0f752090a63df62cc9be1f76c405981aa480fff28088f9f476170f94ae"
+    },
+    "pokemon_red_completion.red_player_silph": {
+      "path": "src/pokemon_red_completion/red_player_silph.py",
+      "scope": "static_dependency",
+      "sha256": "691fc7e3cded0f2cc8fb3be6c4719a81063db2e9f6c9c29b3657e5c7a943774d"
+    },
+    "pokemon_red_completion.red_player_static_approach": {
+      "path": "src/pokemon_red_completion/red_player_static_approach.py",
+      "scope": "bound",
+      "sha256": "dfb93e242d48254877ac09ceec026031cac26ed0df50534bf3c7b764e4bc348c"
+    },
+    "pokemon_red_completion.red_player_story_battle": {
+      "path": "src/pokemon_red_completion/red_player_story_battle.py",
+      "scope": "bound",
+      "sha256": "dd17d9349181342e843faa410407120a5b77ce58781006958066297e5f385215"
+    },
+    "pokemon_red_completion.red_player_story_fly": {
+      "path": "src/pokemon_red_completion/red_player_story_fly.py",
+      "scope": "static_dependency",
+      "sha256": "dc29d0439d23e0a5b3ab76a3feb18d6203d94bb6d8f34f5f13ddb7a8519ece7c"
+    },
+    "pokemon_red_completion.red_player_story_menu": {
+      "path": "src/pokemon_red_completion/red_player_story_menu.py",
+      "scope": "bound",
+      "sha256": "c1b651adedd107546a8003fd41ad60e5055ac8dd2f35ec006be9e871b672fbab"
+    },
+    "pokemon_red_completion.red_player_story_obstruction": {
+      "path": "src/pokemon_red_completion/red_player_story_obstruction.py",
+      "scope": "bound",
+      "sha256": "8e096504ada45d5c17ac98bb7fe474426e9ce0572613f759acf18463b05b278c"
+    },
+    "pokemon_red_completion.red_player_story_travel": {
+      "path": "src/pokemon_red_completion/red_player_story_travel.py",
+      "scope": "bound",
+      "sha256": "679a92ba3ce78f38d6ecdac5d65aef910f8c52adba821e3dafd53cd9f3f66d36"
+    },
+    "pokemon_red_completion.red_player_story_unit": {
+      "path": "src/pokemon_red_completion/red_player_story_unit.py",
+      "scope": "static_dependency",
+      "sha256": "23b694db9793cc87741f3d02358c71c190795b5f372b7c62a035db225423b221"
+    },
+    "pokemon_red_completion.red_player_support": {
+      "path": "src/pokemon_red_completion/red_player_support.py",
+      "scope": "bound",
+      "sha256": "6ce4c1823d035a69b0eaae88559818677f1653ebacecefecdf949dd158f7831f"
+    },
+    "pokemon_red_completion.red_player_tower": {
+      "path": "src/pokemon_red_completion/red_player_tower.py",
+      "scope": "bound",
+      "sha256": "5a634a0b524cf55e2438ac745b8f3eb6c57d7418097e8da8ecb984e8b74a6dff"
+    },
+    "pokemon_red_completion.red_player_training_plan": {
+      "path": "src/pokemon_red_completion/red_player_training_plan.py",
+      "scope": "bound",
+      "sha256": "99926dc36ae7a066743a0d33843b0b0e82306d3910e0a6e85a43a0d88eb2beab"
+    },
+    "pokemon_red_completion.red_player_victory_road": {
+      "path": "src/pokemon_red_completion/red_player_victory_road.py",
+      "scope": "static_dependency",
+      "sha256": "b078412c9a0145558bb43dc94d37d374d490ffa12a0a018fa765a4371325006e"
+    },
+    "pokemon_red_completion.red_player_wild_recovery": {
+      "path": "src/pokemon_red_completion/red_player_wild_recovery.py",
+      "scope": "static_dependency",
+      "sha256": "41184eeb01a31f7a3f3a83d1db06b4217bbbb95a0ad287214f146cc29876f952"
+    },
+    "pokemon_red_completion.red_post_battle_strategy": {
+      "path": "src/pokemon_red_completion/red_post_battle_strategy.py",
+      "scope": "bound",
+      "sha256": "7bdfbc12fd29fd0933b7728303611113fd03bd498bccb43f4d02d0737384015f"
+    },
+    "pokemon_red_completion.red_postgame": {
+      "path": "src/pokemon_red_completion/red_postgame.py",
+      "scope": "static_dependency",
+      "sha256": "c773ef97e4238e87a5ebd5ef8121eaf3160b8fa691be49a100368c8f596c95ab"
+    },
+    "pokemon_red_completion.red_pp_observation": {
+      "path": "src/pokemon_red_completion/red_pp_observation.py",
+      "scope": "bound",
+      "sha256": "0c3c9d021d0ddc8e4267ba4c1903cfdbbd986428a82dcdd6cd891e5f5d899374"
+    },
+    "pokemon_red_completion.red_prepared_evolution_options": {
+      "path": "src/pokemon_red_completion/red_prepared_evolution_options.py",
+      "scope": "static_dependency",
+      "sha256": "e5da6f8930f4be9ff7802ebb1c61fb36b0e8bff28e5b94ee163c9b35b26e755f"
+    },
+    "pokemon_red_completion.red_press_observation": {
+      "path": "src/pokemon_red_completion/red_press_observation.py",
+      "scope": "static_dependency",
+      "sha256": "6369dd582b6a835c0198073fd51666a462239b3c3bb367f19d63fc7c837aee2f"
+    },
+    "pokemon_red_completion.red_production_train_admission": {
+      "path": "src/pokemon_red_completion/red_production_train_admission.py",
+      "scope": "static_dependency",
+      "sha256": "b2db59efc24126ebbec13a6d7b501416a9b1433ba5022079f24d9f49d7f72b24"
+    },
+    "pokemon_red_completion.red_production_train_inference": {
+      "path": "src/pokemon_red_completion/red_production_train_inference.py",
+      "scope": "static_dependency",
+      "sha256": "56aa5d145821646ed9a6527ab141ca507984b0969b85ba8c06186ed0f5085b5b"
+    },
+    "pokemon_red_completion.red_production_train_readback": {
+      "path": "src/pokemon_red_completion/red_production_train_readback.py",
+      "scope": "static_dependency",
+      "sha256": "913e8ae059d516d9873173e38d643f50ca114f8f2f973011ef12767c23751828"
+    },
+    "pokemon_red_completion.red_production_train_source": {
+      "path": "src/pokemon_red_completion/red_production_train_source.py",
+      "scope": "static_dependency",
+      "sha256": "5c47bba137a03cde6534421a94c62ac1ce13134263eec5a3775d4d1cc12e6009"
+    },
+    "pokemon_red_completion.red_recorded_selection_authority": {
+      "path": "src/pokemon_red_completion/red_recorded_selection_authority.py",
+      "scope": "bound",
+      "sha256": "6a00e3f9bf3372a94c931cc3c28079fc03d41f92a5778f11efae3daed4bf9e29"
+    },
+    "pokemon_red_completion.red_recovery_intermission": {
+      "path": "src/pokemon_red_completion/red_recovery_intermission.py",
+      "scope": "bound",
+      "sha256": "e9505451d4e06d927c3c2314398af0578dd131ac28d5aed0a40b6425878e58ca"
+    },
+    "pokemon_red_completion.red_regional_acquisition": {
+      "path": "src/pokemon_red_completion/red_regional_acquisition.py",
+      "scope": "bound",
+      "sha256": "4807b7dce27a4adb4b5e1e95badb6e14444e1fe63ae982919c2ab0b637871186"
+    },
+    "pokemon_red_completion.red_regional_trainer_funding": {
+      "path": "src/pokemon_red_completion/red_regional_trainer_funding.py",
+      "scope": "bound",
+      "sha256": "5363cbb7663a44eb85445878c43b0c2121254e81c53f3d6f96be71cbe406fe89"
+    },
+    "pokemon_red_completion.red_registered_observation": {
+      "path": "src/pokemon_red_completion/red_registered_observation.py",
+      "scope": "bound",
+      "sha256": "4416902a43ef358e7aaf1a130d8682a666c9db335ee638e05b7290153da78e50"
+    },
+    "pokemon_red_completion.red_registered_outcome": {
+      "path": "src/pokemon_red_completion/red_registered_outcome.py",
+      "scope": "bound",
+      "sha256": "1017e9e2f614e1791cb2571436319944efd70383c1ef9050a1d46f577e384684"
+    },
+    "pokemon_red_completion.red_registration_policy": {
+      "path": "src/pokemon_red_completion/red_registration_policy.py",
+      "scope": "bound",
+      "sha256": "8c31b890e5b8be255a284c7e8cde73ecea3175db2a163a00d7e3bb82ad981930"
+    },
+    "pokemon_red_completion.red_resource_economy": {
+      "path": "src/pokemon_red_completion/red_resource_economy.py",
+      "scope": "bound",
+      "sha256": "3dcd7db73867d7fb9539f7ae106b12545845fb63709f29408f5cf7c8b5f3b7e6"
+    },
+    "pokemon_red_completion.red_resource_goal_router": {
+      "path": "src/pokemon_red_completion/red_resource_goal_router.py",
+      "scope": "bound",
+      "sha256": "48f561430271a2f4dc84f26252219f48489877f30be998a326c321d4f193045c"
+    },
+    "pokemon_red_completion.red_routed_capture_items": {
+      "path": "src/pokemon_red_completion/red_routed_capture_items.py",
+      "scope": "static_dependency",
+      "sha256": "bdfb1df33a2c5d8438f5f5c989b76da30e6d73e0bc7f70e8899d97a69a9585ae"
+    },
+    "pokemon_red_completion.red_routed_capture_storage": {
+      "path": "src/pokemon_red_completion/red_routed_capture_storage.py",
+      "scope": "static_dependency",
+      "sha256": "ae4f7756fd43ce835d6db3efe69040b0d671b12301f189a11ba104e7d912e07d"
+    },
+    "pokemon_red_completion.red_routed_capture_support": {
+      "path": "src/pokemon_red_completion/red_routed_capture_support.py",
+      "scope": "static_dependency",
+      "sha256": "9aba92a58bcad05947170076a19865f7240767d6df80c99b8cd06b28ee2cc1ab"
+    },
+    "pokemon_red_completion.red_routed_recovery": {
+      "path": "src/pokemon_red_completion/red_routed_recovery.py",
+      "scope": "bound",
+      "sha256": "4282c795d6fd6a6218a3c15f2bef0a12dca9c3f0c0992f5a837f43d70b56d95e"
+    },
+    "pokemon_red_completion.red_routed_semantic_goal": {
+      "path": "src/pokemon_red_completion/red_routed_semantic_goal.py",
+      "scope": "bound",
+      "sha256": "a017f98c995fd25a510e8cd9c9a3541205ccea3ce4f5d37267e7ee784c316719"
+    },
+    "pokemon_red_completion.red_routed_static_capture": {
+      "path": "src/pokemon_red_completion/red_routed_static_capture.py",
+      "scope": "bound",
+      "sha256": "f3ff76000ca0751dc5b98b1cee901c21be085ddf0399a821639d7902dc7428e4"
+    },
+    "pokemon_red_completion.red_routed_storage_relief": {
+      "path": "src/pokemon_red_completion/red_routed_storage_relief.py",
+      "scope": "static_dependency",
+      "sha256": "09403eef840d51870a5d9d3acbab134630366c10f3cc48ad3da82cd179755c89"
+    },
+    "pokemon_red_completion.red_routed_trainer_funding": {
+      "path": "src/pokemon_red_completion/red_routed_trainer_funding.py",
+      "scope": "bound",
+      "sha256": "e86eca2be743ff4721a01baca9b4c8dd2deae0a0198e609aa388c3f2974f999f"
+    },
+    "pokemon_red_completion.red_run_spectator": {
+      "path": "src/pokemon_red_completion/red_run_spectator.py",
+      "scope": "bound",
+      "sha256": "1e249241c3c06e965dba9ab74f4dff5985e34a26e6269295cf56c2c2a06011e2"
+    },
+    "pokemon_red_completion.red_sabrina_continuation": {
+      "path": "src/pokemon_red_completion/red_sabrina_continuation.py",
+      "scope": "static_dependency",
+      "sha256": "193484715f9de3b8d5fca4ea06c9058ed3d024eb5a45156868e9c3b0c200bd41"
+    },
+    "pokemon_red_completion.red_safari_acquisition": {
+      "path": "src/pokemon_red_completion/red_safari_acquisition.py",
+      "scope": "bound",
+      "sha256": "28c034eae32eba2c66008e5047af53cc52d51c6815cce86102a5daef4646bc61"
+    },
+    "pokemon_red_completion.red_safari_exit": {
+      "path": "src/pokemon_red_completion/red_safari_exit.py",
+      "scope": "static_dependency",
+      "sha256": "b8e13a5d8af5f57b9b64ec667d90d4e46955a3cdca5c4ae5ba28f3c2bfa147ce"
+    },
+    "pokemon_red_completion.red_safari_fishing": {
+      "path": "src/pokemon_red_completion/red_safari_fishing.py",
+      "scope": "static_dependency",
+      "sha256": "af45403b9781d9b1c59f3be2890d368969d857c401eb8c6fa906247e08cfb60f"
+    },
+    "pokemon_red_completion.red_safari_funding_budget": {
+      "path": "src/pokemon_red_completion/red_safari_funding_budget.py",
+      "scope": "static_dependency",
+      "sha256": "49566ebd7332751b21071082429937b826c6cb5ebfab09894884d63f2565bb3b"
+    },
+    "pokemon_red_completion.red_safari_objective_route": {
+      "path": "src/pokemon_red_completion/red_safari_objective_route.py",
+      "scope": "static_dependency",
+      "sha256": "e0fb13a711722f892f11fe1e51187cf9492f5a5efc12706860a9466156c22c5d"
+    },
+    "pokemon_red_completion.red_safari_training_setup": {
+      "path": "src/pokemon_red_completion/red_safari_training_setup.py",
+      "scope": "bound",
+      "sha256": "2f38822266d1d691ffba1fb736a8b95a4857e65b5485e41521d38fb46e832482"
+    },
+    "pokemon_red_completion.red_scoped_train_composition": {
+      "path": "src/pokemon_red_completion/red_scoped_train_composition.py",
+      "scope": "static_dependency",
+      "sha256": "91066cc6a1cc666d47c6d69055cdd890f7a09d39fcd53fbfe6b128760c2182fa"
+    },
+    "pokemon_red_completion.red_scoped_training_battlers": {
+      "path": "src/pokemon_red_completion/red_scoped_training_battlers.py",
+      "scope": "bound",
+      "sha256": "f438dde1c4682c9f7fce772af9248ff4a856577f65e591ea0418963001cdf0e0"
+    },
+    "pokemon_red_completion.red_scripted_gift": {
+      "path": "src/pokemon_red_completion/red_scripted_gift.py",
+      "scope": "static_dependency",
+      "sha256": "e4cca9b5e18e6515d5710f7da5f5cc42da477848d1ed3f98ee8062994ea9cc48"
+    },
+    "pokemon_red_completion.red_scripted_rival": {
+      "path": "src/pokemon_red_completion/red_scripted_rival.py",
+      "scope": "static_dependency",
+      "sha256": "099e8484d14f1835d09b0a81506f8e61f6f1c75e87157bb92903fe6a9c6d4879"
+    },
+    "pokemon_red_completion.red_scripted_story_trainer": {
+      "path": "src/pokemon_red_completion/red_scripted_story_trainer.py",
+      "scope": "static_dependency",
+      "sha256": "794848b7e3318fa4c9d09f3317679949ba5f2554f764ed211798582e582f4067"
+    },
+    "pokemon_red_completion.red_sequence_native_audit": {
+      "path": "src/pokemon_red_completion/red_sequence_native_audit.py",
+      "scope": "bound",
+      "sha256": "95275732ee8441791096ce15479b0d352e862fe1a4d1b29675bc4d6ce1621213"
+    },
+    "pokemon_red_completion.red_sequence_receipts": {
+      "path": "src/pokemon_red_completion/red_sequence_receipts.py",
+      "scope": "bound",
+      "sha256": "13e9a065f68ca084d0e978a6c984ccff68fc53ccb1aad36efd63f1139a897a6c"
+    },
+    "pokemon_red_completion.red_silph_continuation": {
+      "path": "src/pokemon_red_completion/red_silph_continuation.py",
+      "scope": "static_dependency",
+      "sha256": "ed736ff3a0bd50b37855aed9128a6b48030c91daa207856b52ac1bb2e0f46d2c"
+    },
+    "pokemon_red_completion.red_silph_learned_phase": {
+      "path": "src/pokemon_red_completion/red_silph_learned_phase.py",
+      "scope": "static_dependency",
+      "sha256": "6c65482e7f53b83d8d0398967b1a5475b0ff74aae9518fbc7b418b1fb631a319"
+    },
+    "pokemon_red_completion.red_silph_reward": {
+      "path": "src/pokemon_red_completion/red_silph_reward.py",
+      "scope": "static_dependency",
+      "sha256": "fc756a37b98db2f2abe6318ae2b0a759ce11558d1ece56e9b89636f38a0900a1"
+    },
+    "pokemon_red_completion.red_snorlax_capture": {
+      "path": "src/pokemon_red_completion/red_snorlax_capture.py",
+      "scope": "static_dependency",
+      "sha256": "5d90ef7b83436b220c52d403079bb31922e2e80a75c5cd11b5db5e3db5dfc4be"
+    },
+    "pokemon_red_completion.red_spectator_feed": {
+      "path": "src/pokemon_red_completion/red_spectator_feed.py",
+      "scope": "bound",
+      "sha256": "1592e56fe60beb2fd767909989b99b1a40b5c54141e2c8b8786c91a001b06391"
+    },
+    "pokemon_red_completion.red_static_capture": {
+      "path": "src/pokemon_red_completion/red_static_capture.py",
+      "scope": "static_dependency",
+      "sha256": "b8a076188a007e7a6f32d795ace230c904e2374f4ef9fcc79856b817123457ce"
+    },
+    "pokemon_red_completion.red_static_capture_goal": {
+      "path": "src/pokemon_red_completion/red_static_capture_goal.py",
+      "scope": "static_dependency",
+      "sha256": "8158378a5fadfbb0deee52a18dc4c54ad630b8c458081705575c4011993941a9"
+    },
+    "pokemon_red_completion.red_static_capture_runtime": {
+      "path": "src/pokemon_red_completion/red_static_capture_runtime.py",
+      "scope": "static_dependency",
+      "sha256": "19370df185915e326fde5313a42cc98bc90ed64f79b0230fd2ea8a87718abd50"
+    },
+    "pokemon_red_completion.red_status_battle_features": {
+      "path": "src/pokemon_red_completion/red_status_battle_features.py",
+      "scope": "bound",
+      "sha256": "e1ab85bac57afab01b74d50aabf3a7904a2e87455947ac28c4a091945f46536b"
+    },
+    "pokemon_red_completion.red_story_battle": {
+      "path": "src/pokemon_red_completion/red_story_battle.py",
+      "scope": "bound",
+      "sha256": "0b346d6e50ced169a2e263e6ee6187279bf0ffefbeefe28d53ee54127f2ed7a7"
+    },
+    "pokemon_red_completion.red_story_branch_value": {
+      "path": "src/pokemon_red_completion/red_story_branch_value.py",
+      "scope": "static_dependency",
+      "sha256": "163976f87b42336a71b1762cfd7aed52ca15667ba9e346c1bc88ca47d0ff813a"
+    },
+    "pokemon_red_completion.red_story_copy": {
+      "path": "src/pokemon_red_completion/red_story_copy.py",
+      "scope": "static_dependency",
+      "sha256": "705c4d0888a358eed4aaccf5da1c4093d520b2bafa9bb9484188372a8a562ed6"
+    },
+    "pokemon_red_completion.red_story_field_recovery": {
+      "path": "src/pokemon_red_completion/red_story_field_recovery.py",
+      "scope": "bound",
+      "sha256": "b83818c7fbb9ccd0ea027b6f0c2279237cdcb78501bf261f52ce02e1fc6ab453"
+    },
+    "pokemon_red_completion.red_story_funding": {
+      "path": "src/pokemon_red_completion/red_story_funding.py",
+      "scope": "bound",
+      "sha256": "0725da74b73a990d4fb98528cdda90babd90a7f715bd596db7ad3a023c6ce9db"
+    },
+    "pokemon_red_completion.red_story_item_storage": {
+      "path": "src/pokemon_red_completion/red_story_item_storage.py",
+      "scope": "bound",
+      "sha256": "16885a88a1a571aa47525351a5c97214b43655ba51b7d5bddeaa97eaa72b39fc"
+    },
+    "pokemon_red_completion.red_story_kind_commitment": {
+      "path": "src/pokemon_red_completion/red_story_kind_commitment.py",
+      "scope": "static_dependency",
+      "sha256": "d8d0647499a87d93b350ea24b59ee65870832f659c7092dcd16865c65ad51bef"
+    },
+    "pokemon_red_completion.red_story_map_frontier": {
+      "path": "src/pokemon_red_completion/red_story_map_frontier.py",
+      "scope": "bound",
+      "sha256": "7070bf09444fbb348c56ad60df144530843bff80c73f6abc1e21504b78e72c9e"
+    },
+    "pokemon_red_completion.red_story_sight_entry": {
+      "path": "src/pokemon_red_completion/red_story_sight_entry.py",
+      "scope": "bound",
+      "sha256": "c9a7ce3fcaea9952ae1771d6746bef1172f91f669b9da0079c0b0e6a90daa167"
+    },
+    "pokemon_red_completion.red_super_rod_support": {
+      "path": "src/pokemon_red_completion/red_super_rod_support.py",
+      "scope": "static_dependency",
+      "sha256": "12a490972fe245d48bb2fd1d23631722d251c376f278692c112333aac9b9a7bf"
+    },
+    "pokemon_red_completion.red_survey_faint_settlement": {
+      "path": "src/pokemon_red_completion/red_survey_faint_settlement.py",
+      "scope": "bound",
+      "sha256": "3b3d55db87ec825f99a509442167ed0be98e0aee71722cc800b8a7ae06f3fd1e"
+    },
+    "pokemon_red_completion.red_team_training": {
+      "path": "src/pokemon_red_completion/red_team_training.py",
+      "scope": "bound",
+      "sha256": "6d40b73e72c1b6213b3f26e3f4ff3a7ea712efe2d3075f0a4b362a1e89c42772"
+    },
+    "pokemon_red_completion.red_trade_dependency_options": {
+      "path": "src/pokemon_red_completion/red_trade_dependency_options.py",
+      "scope": "bound",
+      "sha256": "765269f83b3ba93e948fc21cfa9fefe10ec5200006c95b4eb143bfd4d1604f70"
+    },
+    "pokemon_red_completion.red_trade_evolution_dependency": {
+      "path": "src/pokemon_red_completion/red_trade_evolution_dependency.py",
+      "scope": "static_dependency",
+      "sha256": "4d3dcf500d72f08f5ab7a8ed0c461d7db9a7461f22a2607925e18681619e04d1"
+    },
+    "pokemon_red_completion.red_train_lorelei": {
+      "path": "src/pokemon_red_completion/red_train_lorelei.py",
+      "scope": "static_dependency",
+      "sha256": "1f2e25e285cfb7062b2cc869be4657cb5b17a9bff7f9f5e1473c58b5e5a67000"
+    },
+    "pokemon_red_completion.red_trainer_battle_lifecycle": {
+      "path": "src/pokemon_red_completion/red_trainer_battle_lifecycle.py",
+      "scope": "bound",
+      "sha256": "092130f560adb44acee259124d00de28b5e2d467a6e8fbf7503fbfe05a18f5f7"
+    },
+    "pokemon_red_completion.red_trainer_control": {
+      "path": "src/pokemon_red_completion/red_trainer_control.py",
+      "scope": "bound",
+      "sha256": "8a7b40f380de5d5cfcc69db20aa0be342055321e7aef5ac2cf44b86c90000ccc"
+    },
+    "pokemon_red_completion.red_trainer_damage": {
+      "path": "src/pokemon_red_completion/red_trainer_damage.py",
+      "scope": "bound",
+      "sha256": "1fbac55d92ea2944283a01d76e90d543d92f625000ab4465d8cc075b0ca9a38d"
+    },
+    "pokemon_red_completion.red_trainer_evolution": {
+      "path": "src/pokemon_red_completion/red_trainer_evolution.py",
+      "scope": "bound",
+      "sha256": "c8a3eb45f6f03ee35aec11e4369e149af57392815fdd9084889c0e11893b5eeb"
+    },
+    "pokemon_red_completion.red_trainer_funding": {
+      "path": "src/pokemon_red_completion/red_trainer_funding.py",
+      "scope": "bound",
+      "sha256": "bca0c530ab47c77c693c6cc126ceb6991744a503b79728c24fe4c7ea2d5334a0"
+    },
+    "pokemon_red_completion.red_trainer_funding_battle": {
+      "path": "src/pokemon_red_completion/red_trainer_funding_battle.py",
+      "scope": "bound",
+      "sha256": "2938e57c6cdac00d590021813455f76ba8b522e9ef790b37a0de083d47e01fe4"
+    },
+    "pokemon_red_completion.red_trainer_healing": {
+      "path": "src/pokemon_red_completion/red_trainer_healing.py",
+      "scope": "bound",
+      "sha256": "c07a1f9717aaf0849a3678f9f067c3757fe33a7ae075c7bdf39af4e122f36931"
+    },
+    "pokemon_red_completion.red_trainer_party": {
+      "path": "src/pokemon_red_completion/red_trainer_party.py",
+      "scope": "bound",
+      "sha256": "4b1bb0a0ea907f9d183362b5b52e983d7648821f1620b9ab6cf28a9529d9ad45"
+    },
+    "pokemon_red_completion.red_trainer_practice_episode": {
+      "path": "src/pokemon_red_completion/red_trainer_practice_episode.py",
+      "scope": "bound",
+      "sha256": "098822e63a637500f9f824cffb3dfdfde3651585e6cea83b383c9aea72260628"
+    },
+    "pokemon_red_completion.red_trainer_practice_features": {
+      "path": "src/pokemon_red_completion/red_trainer_practice_features.py",
+      "scope": "bound",
+      "sha256": "bff200957961bc2ce3fe8b1ce7302665037d795037d08ec720e40761d8fc73a4"
+    },
+    "pokemon_red_completion.red_trainer_practice_fit": {
+      "path": "src/pokemon_red_completion/red_trainer_practice_fit.py",
+      "scope": "bound",
+      "sha256": "857f1ab69e1521ad3598b21ede39f1961d674c8fcb2c8bfafc769c2be0a115dc"
+    },
+    "pokemon_red_completion.red_trainer_practice_head": {
+      "path": "src/pokemon_red_completion/red_trainer_practice_head.py",
+      "scope": "bound",
+      "sha256": "390eed71c0be4147f384c7d87009764af0af6d3f7f19697df284961f7bce0014"
+    },
+    "pokemon_red_completion.red_trainer_practice_log": {
+      "path": "src/pokemon_red_completion/red_trainer_practice_log.py",
+      "scope": "bound",
+      "sha256": "8c20c0d8e61a9c74162aa2e725d169c114c3ac1fee382355739b147525eafb27"
+    },
+    "pokemon_red_completion.red_trainer_practice_outcome_policy": {
+      "path": "src/pokemon_red_completion/red_trainer_practice_outcome_policy.py",
+      "scope": "bound",
+      "sha256": "bbf8e5a74edb5dfb75424cae271486c267965f49ae1a9b1b24934214b999f88e"
+    },
+    "pokemon_red_completion.red_trainer_proposed_control": {
+      "path": "src/pokemon_red_completion/red_trainer_proposed_control.py",
+      "scope": "bound",
+      "sha256": "0e30191ce02fd1311f895a29929aad9a06b6d216f077933eb3a646248c3937bd"
+    },
+    "pokemon_red_completion.red_trainer_risk": {
+      "path": "src/pokemon_red_completion/red_trainer_risk.py",
+      "scope": "bound",
+      "sha256": "31a7aa31a746236be5ea1fcc9096947fd56699dea17a4275da1f95a850926bfd"
+    },
+    "pokemon_red_completion.red_trainer_story": {
+      "path": "src/pokemon_red_completion/red_trainer_story.py",
+      "scope": "bound",
+      "sha256": "9bce8e46aa25d72948418c98c2c763a2db269a4153124b5358c63184820ae562"
+    },
+    "pokemon_red_completion.red_trainer_survival": {
+      "path": "src/pokemon_red_completion/red_trainer_survival.py",
+      "scope": "bound",
+      "sha256": "2d35a682e926faf80af8b62a9357c2958dbf4a872136cd05471278b1f8f125a8"
+    },
+    "pokemon_red_completion.red_training_ground_route": {
+      "path": "src/pokemon_red_completion/red_training_ground_route.py",
+      "scope": "bound",
+      "sha256": "2596b8ddc4610f65868ce794fb585ef5f717a6b98459b7ff0a7f73aa1e9c76a6"
+    },
+    "pokemon_red_completion.red_training_transitions": {
+      "path": "src/pokemon_red_completion/red_training_transitions.py",
+      "scope": "bound",
+      "sha256": "5d4f4faabd1af94f163d441d8c2002ce1de002666854718ea63a9259426f41b0"
+    },
+    "pokemon_red_completion.red_trajectory": {
+      "path": "src/pokemon_red_completion/red_trajectory.py",
+      "scope": "bound",
+      "sha256": "2370d275111d2920201a9b8402a685b3ca968d0c0df811ba9e11ef6f2bb353e6"
+    },
+    "pokemon_red_completion.red_travel_capture": {
+      "path": "src/pokemon_red_completion/red_travel_capture.py",
+      "scope": "static_dependency",
+      "sha256": "b8f51acfbdf8cb6d96add1aeffa84fab3450a01adb204b33172885458cc27837"
+    },
+    "pokemon_red_completion.red_travel_capture_runtime": {
+      "path": "src/pokemon_red_completion/red_travel_capture_runtime.py",
+      "scope": "static_dependency",
+      "sha256": "aaece692754928e2002a2e3feef3697d1573c0a19a6a303cd7d387ad6f49f28e"
+    },
+    "pokemon_red_completion.red_wild_preparation": {
+      "path": "src/pokemon_red_completion/red_wild_preparation.py",
+      "scope": "bound",
+      "sha256": "2b8ffbf43b8d3e85af1f5baef8b818511bee225cb525c9a3c2721e88e1ba15cb"
+    },
+    "pokemon_red_completion.referee": {
+      "path": "src/pokemon_red_completion/referee.py",
+      "scope": "bound",
+      "sha256": "431e2bc541c1fc613f8c47a224870bed01af7cdb91b2d2223006ea517a012f78"
+    },
+    "pokemon_red_completion.registered_checkpoint": {
+      "path": "src/pokemon_red_completion/registered_checkpoint.py",
+      "scope": "bound",
+      "sha256": "7be6521b684fac71495b6a07f6f2b8f5068fc62ec8bbe515c0f45040de43e395"
+    },
+    "pokemon_red_completion.registered_collection": {
+      "path": "src/pokemon_red_completion/registered_collection.py",
+      "scope": "bound",
+      "sha256": "aaef7b700d25821b59a3c651b852c7a722092342f8f7bd9a759d82abbf559dc0"
+    },
+    "pokemon_red_completion.registration_memory": {
+      "path": "src/pokemon_red_completion/registration_memory.py",
+      "scope": "bound",
+      "sha256": "0ad12a8646ff9637b10fdae5d88d748bd58b707a1af1f96d41d4a3b17567a5cf"
+    },
+    "pokemon_red_completion.resource_economy_observation": {
+      "path": "src/pokemon_red_completion/resource_economy_observation.py",
+      "scope": "bound",
+      "sha256": "924c6d565ebe4e497349febae8ee50507d726a6b7c9a384ff54858ea62d175ff"
+    },
+    "pokemon_red_completion.rom": {
+      "path": "src/pokemon_red_completion/rom.py",
+      "scope": "bound",
+      "sha256": "145ef5b56eae4582b6039e48ee62d29f17b43a25a9af8ee3ca41853900726c34"
+    },
+    "pokemon_red_completion.route": {
+      "path": "src/pokemon_red_completion/route.py",
+      "scope": "bound",
+      "sha256": "ee4e3bd0dba5cbe529a0b049eb4bb23df361431455ab0edc1fd4403b484aaf56"
+    },
+    "pokemon_red_completion.route_1_wild": {
+      "path": "src/pokemon_red_completion/route_1_wild.py",
+      "scope": "bound",
+      "sha256": "9a5b7dc3a8616df44a0a790e1df655bbcdd2450d22bf0ab7f88eeab82a391c41"
+    },
+    "pokemon_red_completion.route_evidence": {
+      "path": "src/pokemon_red_completion/route_evidence.py",
+      "scope": "static_dependency",
+      "sha256": "a9b45f542bd35be61787da7fd663349299592535f16bda7386112bdb3673063c"
+    },
+    "pokemon_red_completion.route_executor": {
+      "path": "src/pokemon_red_completion/route_executor.py",
+      "scope": "bound",
+      "sha256": "c230eb3de3a9b6ee8682751bed837ef2348e37989b543e2beaa2ba7f6b719fe9"
+    },
+    "pokemon_red_completion.route_plan": {
+      "path": "src/pokemon_red_completion/route_plan.py",
+      "scope": "bound",
+      "sha256": "c19c3dd934e5cfbab0babbd421cb79b119bec22e3165e2f710902c516f563d1d"
+    },
+    "pokemon_red_completion.routed_semantic_goal": {
+      "path": "src/pokemon_red_completion/routed_semantic_goal.py",
+      "scope": "bound",
+      "sha256": "9783ccd007ef9e8671768396d6283fca4858dbdd4dcd7a4a36fbcfa70c587c08"
+    },
+    "pokemon_red_completion.run_dashboard_view": {
+      "path": "src/pokemon_red_completion/run_dashboard_view.py",
+      "scope": "static_dependency",
+      "sha256": "9361d0079b2db9ffc2e1b3e844469db82f86860b66903bd744ca8938dc64c002"
+    },
+    "pokemon_red_completion.runtime_identity": {
+      "path": "src/pokemon_red_completion/runtime_identity.py",
+      "scope": "bound",
+      "sha256": "facad858bb9955bd67a1e76fca3a4dc91be908fbbeab6fea6259d87470dd322f"
+    },
+    "pokemon_red_completion.sabrina": {
+      "path": "src/pokemon_red_completion/sabrina.py",
+      "scope": "bound",
+      "sha256": "447fb7e845af5949541eb4a571736764c561c987d81e25c4c600dda655b5cb1a"
+    },
+    "pokemon_red_completion.safari": {
+      "path": "src/pokemon_red_completion/safari.py",
+      "scope": "bound",
+      "sha256": "46c3ef7d997f266d680c6493687c271c0b63d7d71671e9d343dcf974e12df055"
+    },
+    "pokemon_red_completion.saffron": {
+      "path": "src/pokemon_red_completion/saffron.py",
+      "scope": "bound",
+      "sha256": "31ca7b74a1117591cce852be2327b02ad09e311b2b90fc98a6be358c325fd7a8"
+    },
+    "pokemon_red_completion.scenario_lab": {
+      "path": "src/pokemon_red_completion/scenario_lab.py",
+      "scope": "bound",
+      "sha256": "6e62f332c5f4075b28ae373dcc7e37618dbd2361954f950e48584354ac6b5ea1"
+    },
+    "pokemon_red_completion.scenario_outcomes": {
+      "path": "src/pokemon_red_completion/scenario_outcomes.py",
+      "scope": "bound",
+      "sha256": "133c114ce3e6a41ef35e882da4a2cc540a90971aef5b40985fdc2ff76ce61899"
+    },
+    "pokemon_red_completion.semantic_traversal": {
+      "path": "src/pokemon_red_completion/semantic_traversal.py",
+      "scope": "bound",
+      "sha256": "751e17003a3ccb40501ea62317efd474e0208dd5420c5630b93588cf1e7d014b"
+    },
+    "pokemon_red_completion.silph": {
+      "path": "src/pokemon_red_completion/silph.py",
+      "scope": "bound",
+      "sha256": "e5d8ae2a68d4d192cdccf2fc86e806e50bfebe4e305868c3593ef08139191681"
+    },
+    "pokemon_red_completion.ss_anne": {
+      "path": "src/pokemon_red_completion/ss_anne.py",
+      "scope": "bound",
+      "sha256": "2af2601edf56c0b974ba5a6c8eb8897a3023a6901453bd8d8b01253dc96ef56b"
+    },
+    "pokemon_red_completion.storage_preparation": {
+      "path": "src/pokemon_red_completion/storage_preparation.py",
+      "scope": "static_dependency",
+      "sha256": "7687ee0395662d7dabbcd783ea0556d3bb8aafc4e444e4a005c46a129dee9a58"
+    },
+    "pokemon_red_completion.story_supply": {
+      "path": "src/pokemon_red_completion/story_supply.py",
+      "scope": "bound",
+      "sha256": "3844c33d10079f33b3cce74798409f2027ef436ed27854278c9a92ba162faf90"
+    },
+    "pokemon_red_completion.strategic_navigation": {
+      "path": "src/pokemon_red_completion/strategic_navigation.py",
+      "scope": "bound",
+      "sha256": "1ac36901cb4415207b9fd7b4723b580dcfedd8cd5616686d84471a3cba34dfc2"
+    },
+    "pokemon_red_completion.strategic_navigation_binding": {
+      "path": "src/pokemon_red_completion/strategic_navigation_binding.py",
+      "scope": "bound",
+      "sha256": "6dab0b70423dc855aca112b435920f98c6c0110cfff14cfacc6c8c0a403033fc"
+    },
+    "pokemon_red_completion.strategic_navigation_dataset": {
+      "path": "src/pokemon_red_completion/strategic_navigation_dataset.py",
+      "scope": "bound",
+      "sha256": "d449c96020e43276a367ea75d1d638c1a4235dbef321a2b8912fac0e9583f747"
+    },
+    "pokemon_red_completion.strategic_navigation_protocol": {
+      "path": "src/pokemon_red_completion/strategic_navigation_protocol.py",
+      "scope": "bound",
+      "sha256": "24cab8cd9b8d3e2411c292ec7ebef2822aabfea2deffa44dbc71291b28e335d0"
+    },
+    "pokemon_red_completion.strategic_navigation_runtime": {
+      "path": "src/pokemon_red_completion/strategic_navigation_runtime.py",
+      "scope": "bound",
+      "sha256": "86fc22e37eb873590d737fd065d55561060b63cd4890ca757f4a30bb5b61667a"
+    },
+    "pokemon_red_completion.strategic_navigation_scenario_routes": {
+      "path": "src/pokemon_red_completion/strategic_navigation_scenario_routes.py",
+      "scope": "bound",
+      "sha256": "0a4462cdcfd1555066ebe14d39dd71c58e245cf5ad2ceea54ac238e5ff5e437d"
+    },
+    "pokemon_red_completion.strategic_navigation_scenario_runtime": {
+      "path": "src/pokemon_red_completion/strategic_navigation_scenario_runtime.py",
+      "scope": "bound",
+      "sha256": "ed67275e1faeb956d2c18aedf35204f7428e532242f3b0014e365b65522b0d2a"
+    },
+    "pokemon_red_completion.strategic_navigation_scenarios": {
+      "path": "src/pokemon_red_completion/strategic_navigation_scenarios.py",
+      "scope": "bound",
+      "sha256": "c4bd0dc021ab1074d2368f84d010631c6e25564a53d87c873221f52ca30e198f"
+    },
+    "pokemon_red_completion.strategic_navigation_trajectory": {
+      "path": "src/pokemon_red_completion/strategic_navigation_trajectory.py",
+      "scope": "bound",
+      "sha256": "8eee4e3a523531c8c397f9416a8d72bf50f789e60d0d8f7c09ac21dfa514fd2d"
+    },
+    "pokemon_red_completion.strength": {
+      "path": "src/pokemon_red_completion/strength.py",
+      "scope": "bound",
+      "sha256": "ef3c32f22519dfaf7869d712d53432d5cab59d0941cafc980403bf7404a979a0"
+    },
+    "pokemon_red_completion.surge": {
+      "path": "src/pokemon_red_completion/surge.py",
+      "scope": "bound",
+      "sha256": "088f9ae0a2f764c6408f2261ab39adbd5226e57f67f3d1bb28bf54dd6a647e49"
+    },
+    "pokemon_red_completion.team_training": {
+      "path": "src/pokemon_red_completion/team_training.py",
+      "scope": "bound",
+      "sha256": "e9883d573ed74db9d707973d5419cd8b455da6c1b894a47f78da8fdb4d43aaf5"
+    },
+    "pokemon_red_completion.tower": {
+      "path": "src/pokemon_red_completion/tower.py",
+      "scope": "bound",
+      "sha256": "c749543d1ea4df5406d97d1ec9d4d7f21eb18f61b83bcdb25b89cb42dcc77154"
+    },
+    "pokemon_red_completion.training": {
+      "path": "src/pokemon_red_completion/training.py",
+      "scope": "bound",
+      "sha256": "8e8bfe56e94a9827388f11273d133e07c374e534d581d4ba6818e6a884614491"
+    },
+    "pokemon_red_completion.training_candidate_dataset": {
+      "path": "src/pokemon_red_completion/training_candidate_dataset.py",
+      "scope": "bound",
+      "sha256": "2857ecb66f6fb5f79798b38dc7882ebe0398a6854eafeac3d3e70a342136ec45"
+    },
+    "pokemon_red_completion.training_candidate_model": {
+      "path": "src/pokemon_red_completion/training_candidate_model.py",
+      "scope": "bound",
+      "sha256": "9d9b9b3b14a7feaaff051617f527f3e619666abdbe3371e295f4344110dbecab"
+    },
+    "pokemon_red_completion.training_candidate_rank": {
+      "path": "src/pokemon_red_completion/training_candidate_rank.py",
+      "scope": "bound",
+      "sha256": "7ecc8ef2992e4192c2f18b5b626998d23ed35d104bbb00bf460a39518c55e87b"
+    },
+    "pokemon_red_completion.training_control": {
+      "path": "src/pokemon_red_completion/training_control.py",
+      "scope": "bound",
+      "sha256": "83245c96973937e755fe109ac5248d774d010a5dc6eb7187220aed37e1de2e59"
+    },
+    "pokemon_red_completion.training_venue": {
+      "path": "src/pokemon_red_completion/training_venue.py",
+      "scope": "bound",
+      "sha256": "d0c4bc8ffd87eb4fa7f98a1ab613c3ca4577ab12ac308366533476f6ce3a5f22"
+    },
+    "pokemon_red_completion.trajectory": {
+      "path": "src/pokemon_red_completion/trajectory.py",
+      "scope": "bound",
+      "sha256": "50985a01e3b496510fee29e18e3e3532266a52ea0a41bc4ee6076968ec198bb7"
+    },
+    "pokemon_red_completion.trajectory_io": {
+      "path": "src/pokemon_red_completion/trajectory_io.py",
+      "scope": "bound",
+      "sha256": "ab635f43150a8e7b0c7295d3237064dc6203dad622d51c217d656708a6de90a3"
+    },
+    "pokemon_red_completion.vermilion": {
+      "path": "src/pokemon_red_completion/vermilion.py",
+      "scope": "bound",
+      "sha256": "f6a4a3672bf689edde2fb687af915f810a08a6ffa1a1a39c373023b555149b36"
+    },
+    "pokemon_red_completion.victory_road": {
+      "path": "src/pokemon_red_completion/victory_road.py",
+      "scope": "bound",
+      "sha256": "5997e050ef99a68bb829c931e707bb3151aee30450045e0ad7513112deeeb250"
+    },
+    "pokemon_red_completion.wild_party_flee": {
+      "path": "src/pokemon_red_completion/wild_party_flee.py",
+      "scope": "bound",
+      "sha256": "52f5e0550b4dcca983eeef245034ab98b2d6b1edcaefc06fcbdc08d155b01c07"
+    },
+    "pokemon_red_completion.wild_training_objective": {
+      "path": "src/pokemon_red_completion/wild_training_objective.py",
+      "scope": "bound",
+      "sha256": "16e62e31d963cbec831f5bb2481a5d467ba34b4989a6c797ab635ee4b8b6f479"
+    },
+    "red_mixed_bird_collection_20261009": {
+      "path": "runtime_helpers/red_mixed_bird_collection_20261009.py",
+      "scope": "bound",
+      "sha256": "5faf22714dbd5123974b822e36598c5e93b5877100ee999424f4837622679255"
+    },
+    "red_whole_player_inventory_20261006": {
+      "path": "runtime_helpers/red_whole_player_inventory_20261006.py",
+      "scope": "bound",
+      "sha256": "8cc6d34b57d0378f1658eb5c4ea5e2eebdc462e8aa38b28e5c74ce50685079fe"
+    },
+    "run_configured_red_player": {
+      "path": "scripts/run_configured_red_player.py",
+      "scope": "bound",
+      "sha256": "f75015b66c57c19c5a6e80451b3a57aef9e159bf2532b494d60ae92157784d40"
+    },
+    "run_fresh_red_player": {
+      "path": "scripts/run_fresh_red_player.py",
+      "scope": "bound",
+      "sha256": "daa228d845f3e29de40d7ac8eadd80a7ec168bf5c9405d3078b4d3a0b177e086"
+    }
+  },
+  "limitation": "Private emulator input, fitted models, native saves, training data and installation helpers are required for native campaign reproduction.",
+  "native_recipe_sha256": "b75589bc4d7444134d5496a4b76fbd91da59789a0460e359eaa61c2ac6d964e7",
+  "schema": "pokemon.red.public-frozen-source.v1",
+  "source_count": 505
+}

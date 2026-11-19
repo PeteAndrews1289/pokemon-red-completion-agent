@@ -144,10 +144,10 @@ def bind_observed_local_capture(
         )
 
     try:
-        live_world = router.world.with_current_blocks(current_blocks)
+        live_world = router.world.with_current_observation(router.runtime.reader)
     except Exception as exc:
         raise RedObservedLocalCaptureError(
-            "failed to derive world with current map blocks"
+            "failed to derive world with current terrain and occupancy"
         ) from exc
 
     if source_map not in live_world.terrain or source_map not in live_world.local_graphs:
@@ -235,6 +235,7 @@ def bind_observed_local_capture(
         prepare_capture_storage=False,
         prepare_capture_escort=False,
         include_recovery_offers=False,
+        route_plan_cache=None,
     )
 
     binding_set = ephemeral_router.enumerate(observation)

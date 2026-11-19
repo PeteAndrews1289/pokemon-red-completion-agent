@@ -27,12 +27,14 @@ from pokemon_red_completion.red_damage_interaction_head import (
 )
 from pokemon_red_completion.red_status_battle_features import move_schema
 from pokemon_red_completion.red_trainer_practice_features import (
+    project_switch_for_head,
     CONTROL_FEATURE_NAMES_V2,
     CONTROL_SCHEMA_ID,
     MOVE_FEATURE_NAMES,
     MOVE_SCHEMA_ID,
     SWITCH_FEATURE_NAMES_V2,
     SWITCH_SCHEMA_ID,
+    switch_schema,
     project_trainer_control_features,
     project_trainer_move_features,
     project_trainer_switch_features,
@@ -44,6 +46,11 @@ from pokemon_red_completion.red_trainer_practice_head import (
 )
 from pokemon_red_completion.red_trainer_proposed_control import (
     PROPOSED_CONTROL_NAMES,
+    OBSERVED_COMPONENT_CONTROL_SCHEMA,
+    OBSERVED_COMPONENT_CONTROL_NAMES,
+    PROPOSED_CONTROL_SCHEMAS,
+    OBSERVED_EFFECT_CONTROL_SCHEMA,
+    OBSERVED_EFFECT_CONTROL_NAMES,
     PROPOSED_CONTROL_SCHEMA,
     proposed_control,
 )
@@ -94,7 +101,7 @@ class TrainerPracticeThreeHeadModel:
         expected = (
             (self.move, *move_schema(self.move.schema_id)),
             (self.control, *control_schema(self.control.schema_id)),
-            (self.switch, SWITCH_SCHEMA_ID, SWITCH_FEATURE_NAMES_V2),
+            (self.switch, *switch_schema(self.switch.schema_id)),
         )
         if any(
             head.schema_id != schema or head.feature_names != names
@@ -114,7 +121,7 @@ class TrainerPracticeThreeHeadModel:
         if self.control_target_mode not in {"best_component", "fitted_components"}:
             raise TrainerPracticeFitError("control target mode differs")
         if (
-            self.control.schema_id == PROPOSED_CONTROL_SCHEMA
+            self.control.schema_id in PROPOSED_CONTROL_SCHEMAS
             and self.control_target_mode != "fitted_components"
         ):
             raise TrainerPracticeFitError("proposed control requires fitted-component targets")
@@ -168,8 +175,8 @@ class TrainerPracticeThreeHeadModel:
             )
             switch = TrainerHeadModel.from_dict(
                 switch_data,
-                schema_id=SWITCH_SCHEMA_ID,
-                feature_names=SWITCH_FEATURE_NAMES_V2,
+                schema_id=switch_schema(switch_data.get("schema_id"))[0],
+                feature_names=switch_schema(switch_data.get("schema_id"))[1],
             )
             capture_ids = value["train_capture_ids"]
             root_ids = value["train_root_ids"]
@@ -222,7 +229,7 @@ def fit_trainer_practice_three_heads(
 ) -> TrainerPracticeThreeHeadModel:
     control_schema(control_input_schema)
     if (
-        control_input_schema == PROPOSED_CONTROL_SCHEMA
+        control_input_schema in PROPOSED_CONTROL_SCHEMAS
         and control_target_mode != "fitted_components"
     ):
         raise TrainerPracticeFitError("proposed control requires fitted-component targets")
@@ -332,6 +339,10 @@ def control_schema(schema: object) -> tuple[str, tuple[str, ...]]:
         return CONTROL_ACTION_SCHEMA_ID, CONTROL_ACTION_FEATURE_NAMES
     if schema == PROPOSED_CONTROL_SCHEMA:
         return PROPOSED_CONTROL_SCHEMA, PROPOSED_CONTROL_NAMES
+    if schema == OBSERVED_EFFECT_CONTROL_SCHEMA:
+        return OBSERVED_EFFECT_CONTROL_SCHEMA, OBSERVED_EFFECT_CONTROL_NAMES
+    if schema == OBSERVED_COMPONENT_CONTROL_SCHEMA:
+        return OBSERVED_COMPONENT_CONTROL_SCHEMA, OBSERVED_COMPONENT_CONTROL_NAMES
     raise TrainerPracticeFitError("unknown trainer control schema")
 
 
@@ -427,7 +438,7 @@ def _append_examples(
                 ).tolist()
             )
             rows = control_action_candidates(common)
-            if control_input_schema == PROPOSED_CONTROL_SCHEMA:
+            if control_input_schema in PROPOSED_CONTROL_SCHEMAS:
                 if control_components is None:
                     raise TrainerPracticeFitError("proposed control components missing")
                 moves = tuple(
@@ -442,6 +453,7 @@ def _append_examples(
                 )
                 rows = proposed_control(
                     observation,
+                    control_schema=control_input_schema,
                     catalog=catalog,
                     move_head=control_components[0],
                     switch_head=control_components[1],
@@ -468,7 +480,7 @@ def _append_examples(
                             raise TrainerPracticeFitError("selected move input is missing")
                         projection = project_trainer_move_features(observation, base)
                     else:
-                        projection = project_trainer_switch_features(observation, catalog)
+                        projection = project_switch_for_head(observation, catalog, component)
                     candidates = _rows_for_refs(
                         [refs[i] for i in eligible],
                         projection.candidate_slots,

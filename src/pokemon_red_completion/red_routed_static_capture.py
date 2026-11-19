@@ -80,6 +80,27 @@ def _prepared_route_recovery_report(runtime, actions, loss, counters):
     )
 
 
+def _static_transit_escort_plan(observation):
+    """Prefer higher observed Speed for native Run on prepared transport."""
+    from .party import StatusCondition
+    from .red_capture_lead import RedCaptureLeadPlan
+
+    party = getattr(observation, "party", None)
+    stats = getattr(observation.raw, "party_stats", None)
+    if party is None or stats is None or len(stats) != party.size:
+        return None
+    healthy = (
+        index for index, member in enumerate(party.members)
+        if member.status is StatusCondition.HEALTHY and not member.is_fainted
+        and member.hp_ratio >= 0.5
+    )
+    # Native party stats store Attack, Defense, Speed and Special in this order.
+    best = max(healthy, key=lambda index: (stats[index][2], -index), default=0)
+    if best == 0 or stats[best][2] <= stats[0][2]:
+        return None
+    return RedCaptureLeadPlan(best, party)
+
+
 def prepared_static_acquisition_binding(
     runtime,
     actions,
@@ -136,8 +157,19 @@ def prepared_static_acquisition_binding(
         ):
             raise RuntimeError("prepared acquisition source changed or was already attempted")
         used = True
+        from .observation import ItemId
+        from .red_capture_preparation import prepare_observed_lead
         from .red_routed_recovery import SettledNativeFieldRecovery
 
+        # Master Ball transport does not depend on a catcher or status lead.
+        bag = getattr(observation.raw, "bag_items", None) or ()
+        escort = (_static_transit_escort_plan(observation)
+                  if dict(bag).get(int(ItemId.MASTER_BALL)) == 1 else None)
+        if escort is not None:
+            party_reader = runtime.adapter.party_guard.reader
+            original_order = party_reader.preparation_specimen_refs()
+            prepare_observed_lead(runtime, actions, escort, label="prepared static travel escort")
+            escorted_order = party_reader.preparation_specimen_refs()
         try:
             inner = execute_prepared(target)
         except SettledNativeFieldRecovery as loss:
@@ -156,6 +188,22 @@ def prepared_static_acquisition_binding(
             return report
         if not isinstance(inner, GoalExecutionReport):
             raise TypeError("prepared acquisition needs a native execution report")
+        escort_evidence = {}
+        if escort is not None:
+            from .red_capture_lead import RedCaptureLeadPlan
+
+            current = runtime.adapter.observe()
+            if party_reader.preparation_specimen_refs()[:len(escorted_order)] != escorted_order:
+                raise ValueError("prepared static travel escort identity changed")
+            restore = RedCaptureLeadPlan(escort.target_index, current.party)
+            prepare_observed_lead(runtime, actions, restore, label="restore static travel party order")
+            if party_reader.preparation_specimen_refs()[:len(original_order)] != original_order:
+                raise ValueError("prepared static travel party order was not restored")
+            escort_evidence = dict(transit_escort=dict(
+                native_swap=True, original_order_restored=True, learned=False,
+                original_lead_level=escort.party.lead.level,
+                escort_level=escort.target_member.level,
+            ))
         report = GoalExecutionReport(
             actions.actions_executed - counters[0],
             runtime.emulator.frame_count - counters[1],
@@ -165,6 +213,7 @@ def prepared_static_acquisition_binding(
                 learned_preparation=False,
                 learned_ball_selection=False,
                 transport_and_return="declared mechanical support",
+                **escort_evidence,
             ),
         )
         terminal = runtime.emulator.save_state_bytes()

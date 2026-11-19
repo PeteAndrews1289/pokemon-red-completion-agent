@@ -28,7 +28,12 @@ class EmulationJob:
 
 
 def file_digest(path: Path) -> str:
-    return sha256(path.read_bytes()).hexdigest()
+    """Hash pinned inputs with bounded memory, including large native journals."""
+    digest = sha256()
+    with path.open("rb") as stream:
+        while chunk := stream.read(1024 * 1024):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def _record(path: Path, value: Any) -> None:

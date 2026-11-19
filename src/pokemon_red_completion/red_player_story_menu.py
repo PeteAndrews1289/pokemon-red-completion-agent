@@ -117,6 +117,76 @@ class DeclaredCashDemand:
         )
 
 
+class SafeStopSuppression:
+    """Runner-owned finite hold on goal kinds after a qualified safe stop.
+
+    It only withholds already-observed executors of the held kinds for a
+    bounded number of menu observations. It never adds, reorders or edits an
+    executor, never touches control recovery, and never empties a menu: if
+    every executor is held, the menu is returned unchanged.
+    """
+
+    MAXIMUM_MENUS = 16
+
+    def __init__(self):
+        self.remaining = {}
+        self.withheld_menus = 0
+        self.withheld_executors = 0
+
+    def hold(self, kind, menus):
+        if (
+            not isinstance(kind, GoalKind)
+            or kind is GoalKind.RECOVER_CONTROL
+            or type(menus) is not int
+            or not 1 <= menus <= self.MAXIMUM_MENUS
+        ):
+            raise ValueError("safe-stop hold needs one ordinary goal kind and a finite span")
+        self.remaining[kind] = max(self.remaining.get(kind, 0), menus)
+
+    def public_dict(self):
+        return dict(
+            schema="pokemon.red.safe-stop-suppression.v1",
+            remaining={kind.value: n for kind, n in sorted(
+                self.remaining.items(), key=lambda row: row[0].value)},
+            withheld_menus=self.withheld_menus,
+            withheld_executors=self.withheld_executors,
+        )
+
+    def apply(self, ordinary, extra):
+        if not self.remaining or any(
+            b.kind is GoalKind.RECOVER_CONTROL for b in ordinary.bindings
+        ):
+            return ordinary, extra
+        held = frozenset(self.remaining)
+        for kind in tuple(self.remaining):
+            self.remaining[kind] -= 1
+            if self.remaining[kind] <= 0:
+                del self.remaining[kind]
+        kept = tuple(b for b in ordinary.bindings if b.kind not in held)
+        kept_extra = tuple(s for s in extra if s.binding.kind not in held)
+        withheld = len(ordinary.bindings) - len(kept) + len(extra) - len(kept_extra)
+        if not withheld or (not kept and not kept_extra):
+            return ordinary, extra
+        removed = {b.binding_ref for b in ordinary.bindings if b.kind in held}
+        opportunities = tuple(
+            GoalOpportunity(
+                o.binding_ref,
+                o.kind,
+                GoalAvailability.UNAVAILABLE,
+                unavailable_reason=GoalUnavailableReason.TEMPORARILY_BLOCKED,
+            )
+            if o.binding_ref in removed
+            else o
+            for o in ordinary.opportunities
+        )
+        self.withheld_menus += 1
+        self.withheld_executors += withheld
+        return (
+            GoalBindingSet(opportunities, kept, ordinary.allow_resource_variants),
+            kept_extra,
+        )
+
+
 class NativeStoryBranchInventory:
     """Keep the native player's callbacks on one freshly observed menu.
 
@@ -189,6 +259,7 @@ class NativeStoryBranchInventory:
         self.reuse_local_route_queries = reuse_local_route_queries
         self.last_route_reuse_counts = None
         self._observed = None
+        self.safe_stop_suppression = None
 
     def enumerate(self, runtime, actions, observation):
         """Optional per-menu pure-route reuse; never retained during execution."""
@@ -415,6 +486,10 @@ class NativeStoryBranchInventory:
                 )
             if runtime.emulator.save_state_bytes() != state:
                 raise ValueError("empty-menu recovery observer changed native state")
+        if self.safe_stop_suppression is not None:
+            if not isinstance(self.safe_stop_suppression, SafeStopSuppression):
+                raise TypeError("safe-stop hold must be the typed runner suppression")
+            ordinary, extra = self.safe_stop_suppression.apply(ordinary, extra)
         self._observed = (
             runtime,
             state,

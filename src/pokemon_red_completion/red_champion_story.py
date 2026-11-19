@@ -57,6 +57,17 @@ class RedChampionStoryError(RuntimeError):
     """A qualified final-story attempt left its declared contract."""
 
 
+def locked_league_without_revival(raw: RawGameState) -> bool:
+    """The native tournament boundary leaves a living party and no revive stock."""
+    return (
+        raw.map_id in {MapId.LORELEIS_ROOM, MapId.BRUNOS_ROOM, MapId.AGATHAS_ROOM, MapId.LANCES_ROOM}
+        and raw.battle_state == 0
+        and raw.party_hp is not None and any(raw.party_hp) and 0 in raw.party_hp
+        and raw.bag_items is not None
+        and not any(item in (0x35, 0x36) and count for item, count in raw.bag_items)
+    )
+
+
 def _live_champion_rematch_ready(raw: RawGameState) -> bool:
     return (
         raw.event_flags is not None
@@ -86,6 +97,7 @@ class RedCartridgeChampionSkill:
     recovery_controller: str = "critical-inclusive"
     rematch: bool = False
     maximum_level_deficit: int = 5
+    allow_uncovered_later: bool = False
     objective_id: str = field(default="defeat_champion", init=False)
     specialist: Specialist = field(default=Specialist.BATTLE, init=False)
     expected_facts: frozenset[str] = field(
@@ -130,7 +142,8 @@ class RedCartridgeChampionSkill:
             owner = self._learned_controller()
             allowed = (
                 type(owner) is ScopedAssistedChampionController
-                and owner.battler.source_partition is ScenarioPartition.DEVELOPMENT
+                and (owner.battler.source_partition is ScenarioPartition.DEVELOPMENT
+                     or _funding_train_level_screen(owner))
                 and self.maximum_level_deficit == owner.declared_level_deficit
             )
         if (
@@ -179,6 +192,14 @@ class RedCartridgeChampionSkill:
         if learned is not None and self.maximum_full_restores:
             raise RedChampionStoryError("learned League qualification is zero-item")
         require_story_recovery_stock(before.raw, self.maximum_full_restores)
+        from .scenario_lab import ScenarioPartition
+        if type(self.allow_uncovered_later) is not bool or (self.allow_uncovered_later and (
+            not self.rematch or learned is None
+            or self.recovery_controller != "scoped-assisted-champion-development"
+            or learned.battler.source_partition is not ScenarioPartition.DEVELOPMENT
+            or not locked_league_without_revival(before.raw)
+        )):
+            raise RedChampionStoryError("partial Champion coverage requires the locked development boundary")
         reader = self.runtime.reader
         historical_boundary = (
             "league:lance_defeated" in before.game_state.facts
@@ -214,6 +235,7 @@ class RedCartridgeChampionSkill:
                 minimum_hp_ratio=0.0,
                 allow_fainted_reserves=True,
                 maximum_level_deficit=self.maximum_level_deficit,
+                allow_uncovered_later=self.allow_uncovered_later,
                 **(
                     {"allow_status": True}
                     if getattr(
@@ -301,6 +323,7 @@ class RedCartridgeChampionSkill:
             or self._prepared_controller != self.recovery_controller
             or self._prepared_rematch != self.rematch
             or self._prepared_level_deficit != self.maximum_level_deficit
+            or self.allow_uncovered_later != prepared.party.allow_uncovered_later
             or self._prepared_learned_controller is not self._learned_controller()
             or self._prepared_story_binding
             != getattr(self._prepared_learned_controller, "binding_identity", None)
@@ -573,3 +596,8 @@ class RedCartridgeChampionSkill:
                 actions.execute(MacroAction(MacroActionKind.CONFIRM))
             actions.execute(MacroAction(MacroActionKind.WAIT, repeat=12))
         raise RedChampionStoryError("final epilogue exhausted its bound")
+
+
+def _funding_train_level_screen(owner):
+    from .red_trainer_story import _funding_train_level_screen as authenticated
+    return authenticated(owner)

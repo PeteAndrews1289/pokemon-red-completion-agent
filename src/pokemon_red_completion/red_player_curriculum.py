@@ -7,6 +7,34 @@ from .provenance import canonical_sha256
 from .red_goal_skills import _raw_party_fully_restored
 
 
+def validate_full_red_curriculum_plan(plan):
+    """Bind a full-run plan to Red's exact local route, not just a denominator.
+
+    Generic DEVELOPMENT curricula may still declare a story subset. Call this
+    at full-run admission; its assertions never choose a gameplay action.
+    """
+    from .red_collection import RED_SOLO_COLLECTION_CONTRACT
+
+    if not isinstance(plan, dict):
+        raise ValueError("full Red completion needs a plan dictionary")
+    species = plan.get("required_species")
+    expected = frozenset(RED_SOLO_COLLECTION_CONTRACT.target_species)
+    if (
+        type(species) is not list
+        or any(type(s) is not str for s in species)
+        or len(species) != len(expected)
+        or frozenset(species) != expected
+    ):
+        raise ValueError("full Red completion needs the exact declared 124 local species")
+    objectives = plan.get("objectives")
+    if (
+        type(objectives) is not list
+        or any(type(s) is not str for s in objectives)
+        or not {"defeat_champion", "enter_hall_of_fame"} <= set(objectives)
+    ):
+        raise ValueError("full Red completion needs Champion and Hall-of-Fame objectives")
+
+
 @dataclass(frozen=True)
 class PlayerCurriculumCompletion:
     curriculum_sha256: str

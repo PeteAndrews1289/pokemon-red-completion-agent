@@ -279,3 +279,101 @@ def package_read_guard(manifest, **kwargs):
 def packaged_backend_identity(manifest):
     return canonical_sha256({name: pin for name, pin in manifest["pins"].items()
         if Path(name).parent.name == "helpers" and name.endswith(".py")})
+
+def retained_metadata_closure(source, manifest, history_output):
+    """Enumerate exact retained inputs for the ordinary continuation helpers.
+
+    Ancestry keeps the existing ordered packaged-history relocation and the
+    existing top-level node metadata scope. The source context alone contributes
+    its live authenticated story-defeat witness and exact ordered event chain. This
+    prepares prospective pins; it never broadens the runtime read guard.
+    """
+    from .red_player_preparation_history import retained_story_preparation_inputs
+
+    roots = tuple((Path(a), Path(b)) for a, b in manifest["roots"])
+    history_output = Path(history_output).resolve()
+
+    def resolve(path):
+        path = Path(path)
+        if path.is_relative_to(history_output):
+            return path
+        for original, frozen in roots:
+            if path.is_relative_to(original):
+                return frozen / path.relative_to(original)
+        return path
+
+    source_node = Path(source)
+    alias = resolve(source_node)
+    starts = [source_node]
+    if alias != source_node and alias.is_dir():
+        # Outer continuation resolves actual_parent, including the initial
+        # source itself. Both exact physical paths must be admitted before input.
+        for name in ("terminal.state", "CONTEXT.json"):
+            original, mapped = source_node / name, alias / name
+            if original.is_file() and (
+                not mapped.is_file() or original.read_bytes() != mapped.read_bytes()
+            ):
+                raise ValueError("retained source relocation bytes differ")
+        starts.append(alias)
+    files, nodes, complete = set(), [], set()
+    for start in starts:
+        node, seen = start, set()
+        while True:
+            if node in seen:
+                raise ValueError("cyclic exact continuation ancestry")
+            if node in complete:
+                break
+            seen.add(node)
+            metadata = sorted(path for path in node.iterdir()
+                if path.is_file() and (path.suffix == ".json" or path.name == "terminal.state"))
+            files.update(metadata)
+            typed = []
+            context_path = node / "CONTEXT.json"
+            if node in starts and context_path.is_file():
+                context = json.loads(context_path.read_bytes())
+                typed = retained_story_preparation_inputs(context.get("preparation_story_loss"))
+                files.update(typed)
+            nodes.append(dict(path=str(node), files=[str(path) for path in metadata],
+                              retained_story_preparation_inputs=[str(path) for path in typed]))
+            for name in ("native/native-costs.json", "native/terminal.state"):
+                path = node / name
+                if path.is_file():
+                    files.add(path)
+            plan_path = node / "PLAN.json"
+            if not plan_path.is_file():
+                # Historical initial checkpoints have no PLAN, but the child's
+                # source hash still authenticates their bytes during assembly.
+                break
+            declaration = json.loads(plan_path.read_bytes())
+            if declaration.get("raw_failed_export_retained"):
+                guard = resolve(declaration["original_guard_parent"])
+                files.update(path for path in guard.iterdir()
+                    if path.is_file() and (path.suffix == ".json" or path.name == "terminal.state"))
+            prior = declaration.get("actual_parent")
+            if prior is None:
+                break
+            node = resolve(prior)
+        complete.update(seen)
+    return sorted(files), nodes
+
+
+def validate_retained_metadata_inputs(source, manifest, history_output, protected):
+    """Fail before assembly if required retained inputs lack an exact pin.
+
+    Existing package/environment pins and prospective protected inputs are the
+    complete admission set. Missing files, changed bytes and conflicting pins
+    fail closed. No read permission, context value or budget is changed.
+    """
+    paths, nodes = retained_metadata_closure(source, manifest, history_output)
+    pins = {}
+    for collection in (manifest["pins"], manifest["environment_pins"], protected):
+        for name, expected in collection.items():
+            if name in pins and pins[name] != expected:
+                raise ValueError("conflicting retained metadata input pin")
+            pins[name] = expected
+    missing = [str(path) for path in paths if str(path) not in pins]
+    if missing:
+        raise ValueError("retained metadata inputs omitted from prospective pins: "
+                         + ", ".join(missing))
+    verify_pins({str(path): pins[str(path)] for path in paths})
+    return paths, nodes

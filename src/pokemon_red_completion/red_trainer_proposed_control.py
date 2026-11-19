@@ -21,6 +21,8 @@ from pokemon_red_completion.red_trainer_practice_features import (
     _visible_stats,
     project_trainer_control_features,
     project_trainer_switch_features,
+    project_switch_for_head,
+    no_nonstatus_pp,
 )
 from pokemon_red_completion.red_trainer_practice_head import TrainerHeadModel
 
@@ -57,6 +59,48 @@ PROPOSED_CONTROL_NAMES = (
 )
 
 
+OBSERVED_EFFECT_CONTROL_SCHEMA = "pokemon.core.battle.control.proposed-observed-effect.v2"
+OBSERVED_EFFECT_STATE_NAMES = (*PROPOSED_STATE_NAMES, "proposal.stat_effect_at_cap")
+OBSERVED_EFFECT_CONTROL_NAMES = (
+    "action.attack_or_decline", "action.switch",
+    *(f"attack_or_decline.{name}" for name in OBSERVED_EFFECT_STATE_NAMES),
+    *(f"switch.{name}" for name in OBSERVED_EFFECT_STATE_NAMES),
+)
+OBSERVED_COMPONENT_CONTROL_SCHEMA = "pokemon.core.battle.control.proposed-observed-components.v3"
+OBSERVED_COMPONENT_STATE_NAMES = (*OBSERVED_EFFECT_STATE_NAMES, "proposal.switch_no_nonstatus_pp")
+OBSERVED_COMPONENT_CONTROL_NAMES = (
+    "action.attack_or_decline", "action.switch",
+    *(f"attack_or_decline.{name}" for name in OBSERVED_COMPONENT_STATE_NAMES),
+    *(f"switch.{name}" for name in OBSERVED_COMPONENT_STATE_NAMES),
+)
+PROPOSED_CONTROL_SCHEMAS = (PROPOSED_CONTROL_SCHEMA, OBSERVED_EFFECT_CONTROL_SCHEMA, OBSERVED_COMPONENT_CONTROL_SCHEMA)
+
+
+def expand_observed_component_control(head):
+    import numpy as np
+    if head.schema_id!=OBSERVED_EFFECT_CONTROL_SCHEMA or head.feature_names!=OBSERVED_EFFECT_CONTROL_NAMES:
+        raise ValueError("component extension needs the retained effect control")
+    old={n:i for i,n in enumerate(head.feature_names)}
+    weights=np.zeros((len(OBSERVED_COMPONENT_CONTROL_NAMES),head.weights1.shape[1]))
+    for i,n in enumerate(OBSERVED_COMPONENT_CONTROL_NAMES):
+        if n in old:weights[i]=head.weights1[old[n]]
+    return TrainerHeadModel(OBSERVED_COMPONENT_CONTROL_SCHEMA,OBSERVED_COMPONENT_CONTROL_NAMES,
+        weights,head.bias1.copy(),head.weights2.copy(),head.training_seed,head.training_objective)
+
+
+def expand_observed_effect_control(head):
+    """Zero extension preserves all old parameters and inactive-input scores."""
+    import numpy as np
+    if head.schema_id != PROPOSED_CONTROL_SCHEMA or head.feature_names != PROPOSED_CONTROL_NAMES:
+        raise ValueError("observed-effect extension needs the original proposed control")
+    old = {name:i for i,name in enumerate(head.feature_names)}
+    weights = np.zeros((len(OBSERVED_EFFECT_CONTROL_NAMES), head.weights1.shape[1]))
+    for i,name in enumerate(OBSERVED_EFFECT_CONTROL_NAMES):
+        if name in old:weights[i] = head.weights1[old[name]]
+    return TrainerHeadModel(OBSERVED_EFFECT_CONTROL_SCHEMA, OBSERVED_EFFECT_CONTROL_NAMES,
+        weights, head.bias1.copy(), head.weights2.copy(), head.training_seed, head.training_objective)
+
+
 @dataclass(frozen=True, slots=True)
 class ProposedControl:
     move_slot: int | None
@@ -73,9 +117,10 @@ def proposed_control(
     move_batch: BattleFeatureBatch | None,
     move_slots: tuple[int, ...],
     switch_slots: tuple[int, ...],
+    control_schema: str = PROPOSED_CONTROL_SCHEMA,
 ) -> ProposedControl:
     """Use exactly the supplied legal child inventories at fit and play time."""
-    switches = project_trainer_switch_features(observation, catalog)
+    switches = project_switch_for_head(observation, catalog, switch_head)
     if not switch_slots or len(set(switch_slots)) != len(switch_slots):
         raise ValueError("proposed control needs unique legal reserves")
     switch_rows = tuple(
@@ -111,7 +156,21 @@ def proposed_control(
     )
     damage = estimated_finishing_features(observation, move_row)
     state = (*common, float(move_slot is None), *damage, *move_values, *switch_values)
-    if len(state) != len(PROPOSED_STATE_NAMES) or any(
+    if control_schema not in PROPOSED_CONTROL_SCHEMAS:
+        raise ValueError("unknown proposed control schema")
+    expected_names = PROPOSED_STATE_NAMES
+    if control_schema in (OBSERVED_EFFECT_CONTROL_SCHEMA, OBSERVED_COMPONENT_CONTROL_SCHEMA):
+        from .red_battle_mechanics_boundary import capped_stat_slots
+        capped = bool(move_slot is not None and move_row is not None
+            and move_row[MOVE_FEATURE_NAMES.index("move.category.status")] == 1
+            and capped_stat_slots(
+            observation, catalog, (move_slot,)))
+        state = (*state, float(capped))
+        expected_names = OBSERVED_EFFECT_STATE_NAMES
+    if control_schema == OBSERVED_COMPONENT_CONTROL_SCHEMA:
+        state = (*state, no_nonstatus_pp(observation,catalog,switch_slots[switch_index]))
+        expected_names = OBSERVED_COMPONENT_STATE_NAMES
+    if len(state) != len(expected_names) or any(
         not math.isfinite(x) or not -1 <= x <= 1 for x in state
     ):
         raise ValueError("proposed control feature range differs")

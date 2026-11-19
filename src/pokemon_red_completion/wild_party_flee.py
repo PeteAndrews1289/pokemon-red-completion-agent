@@ -1,11 +1,14 @@
 """Resource-verified incidental escape when party slot one has fainted."""
 
+from contextlib import nullcontext
+
 from .actions import MacroAction, MacroActionKind
 from .battle_runtime import note_observed_battle_exit
 from .observation import (
     BattleMenuPhase,
     EventFlag,
     MapId,
+    NativeWildRoarWitness,
     NativeWildTeleportWitness,
     event_flag_is_set,
 )
@@ -229,8 +232,16 @@ def validate_flee_party(
     allow_status_changes=False,
     allow_native_purified_transition=False,
     allow_native_purified_healing=False,
+    consumed_static_event_flags=None,
 ):
-    """Preserve complete resources; new native faints need explicit permission."""
+    """Preserve complete resources; new native faints need explicit permission.
+
+    ``consumed_static_event_flags`` is the one exact post-exit event vector a
+    declared consumed one-off may leave once the battle has ended. It never
+    admits any other event change, and never applies while the battle is live.
+    """
+    if consumed_static_event_flags is not None and type(consumed_static_event_flags) is not bytes:
+        raise TypeError("consumed static event vector must be exact bytes")
     if type(allow_new_faints) is not bool:
         raise TypeError("native faint allowance must be boolean")
     if type(allow_status_changes) is not bool:
@@ -296,6 +307,14 @@ def validate_flee_party(
                 is not None
             ):
                 continue
+            if (
+                field == "event_flags"
+                and consumed_static_event_flags is not None
+                and raw.battle_state == 0
+                and new is not None
+                and bytes(new) == consumed_static_event_flags
+            ):
+                continue
             raise ValueError("escape protected state changed")
 
 
@@ -314,10 +333,13 @@ def flee_with_fainted_lead(
     allow_opponent_ko_exit=False,
     allow_native_purified_transition=False,
     allow_native_purified_healing=False,
+    consumed_static_event_flags=None,
 ):
     """RUN support; no attacks/items, with disclosed compulsory replacements."""
     if type(stabilization_frames) is not int or stabilization_frames <= 0:
         raise ValueError("escape needs positive stabilization frames")
+    if consumed_static_event_flags is not None and type(consumed_static_event_flags) is not bytes:
+        raise TypeError("consumed static event vector must be exact bytes")
     if type(allow_opponent_ko_exit) is not bool:
         raise TypeError("ordinary opponent KO closure requires an explicit boolean")
     if type(allow_native_purified_transition) is not bool:
@@ -350,10 +372,10 @@ def flee_with_fainted_lead(
     dismissals = 0
     next_mon_choices = 0
     forced_switch_slots = []
-    teleport_witness = None
+    exit_witness = None
 
     def check(raw):
-        nonlocal teleport_witness
+        nonlocal exit_witness
         if (
             raw.map_id != expected_map_id
             or raw.battle_state not in (0, 1)
@@ -368,6 +390,11 @@ def flee_with_fainted_lead(
                 allow_status_changes=allow_status_changes,
                 allow_native_purified_transition=allow_native_purified_transition,
                 allow_native_purified_healing=allow_native_purified_healing,
+                **(
+                    {"consumed_static_event_flags": consumed_static_event_flags}
+                    if consumed_static_event_flags is not None
+                    else {}
+                ),
             )
             event = (
                 purified_zone_escape_event(encounter, raw, allow_healing=True)
@@ -383,9 +410,13 @@ def flee_with_fainted_lead(
         except ValueError as exc:
             raise error_type(f"{route_name}: {exc}") from exc
 
-        observe_teleport = getattr(reader, "read_live_wild_teleport_witness", None)
-        observed = observe_teleport(raw) if callable(observe_teleport) else None
-        if type(observed) is NativeWildTeleportWitness and (
+        method = (
+            "read_live_wild_roar_witness" if raw.enemy_species_id == 33
+            else "read_live_wild_teleport_witness"
+        )
+        observe_exit = getattr(reader, method, None)
+        observed = observe_exit(raw) if callable(observe_exit) else None
+        if type(observed) in (NativeWildTeleportWitness, NativeWildRoarWitness) and (
             observed.map_id,
             observed.player_x,
             observed.player_y,
@@ -398,11 +429,36 @@ def flee_with_fainted_lead(
             encounter.enemy_species_id,
             encounter.enemy_level,
         ):
-            teleport_witness = observed
+            exit_witness = observed
+
+    observe_ticks = getattr(emulator, "observe_native_ticks", None)
+    read_frame = getattr(reader, "read_live_wild_roar_frame", None)
+    scope = nullcontext
+    if encounter.enemy_species_id == 33 and callable(observe_ticks) and callable(read_frame):
+        def observed_frame():
+            nonlocal exit_witness
+            if exit_witness is not None:
+                return
+            witness = read_frame()
+            if type(witness) is NativeWildRoarWitness and (
+                witness.map_id, witness.player_x, witness.player_y,
+                witness.enemy_species_id, witness.enemy_level,
+            ) == (
+                encounter.map_id, encounter.player_x, encounter.player_y,
+                encounter.enemy_species_id, encounter.enemy_level,
+            ):
+                exit_witness = witness
+                record = getattr(executor, "record_diagnostic_event", None)
+                if callable(record):
+                    record("native_wild_roar_frame", witness.public_dict())
+
+        def scope():
+            return observe_ticks(observed_frame)
 
     def pulse(kind, value=None, frames=120):
-        executor.execute(MacroAction(kind, value))
-        executor.execute(MacroAction(MacroActionKind.WAIT, repeat=frames))
+        with scope():
+            executor.execute(MacroAction(kind, value))
+            executor.execute(MacroAction(MacroActionKind.WAIT, repeat=frames))
 
     check(encounter)
     for _ in range(128):
@@ -428,6 +484,19 @@ def flee_with_fainted_lead(
                 healing["individual_xp_box_dex_custody_verified"] = True
             else:
                 healing = None
+            witnessed_exit = None
+            if (
+                exit_witness is not None
+                and raw.battle_result == 0
+                and raw.enemy_hp == exit_witness.enemy_hp
+                and (
+                    raw.map_id, raw.player_x, raw.player_y, raw.enemy_species_id, raw.enemy_level,
+                ) == (
+                    exit_witness.map_id, exit_witness.player_x, exit_witness.player_y,
+                    exit_witness.enemy_species_id, exit_witness.enemy_level,
+                )
+            ):
+                witnessed_exit = exit_witness
             evidence = Route1WildFleeEvidence(
                 initial_battle_state=1,
                 final_battle_state=raw.battle_state,
@@ -477,29 +546,18 @@ def flee_with_fainted_lead(
                 forced_switch_slots=tuple(forced_switch_slots),
                 native_purified_healing=healing,
                 native_opponent_teleport_exit=(
-                    teleport_witness
-                    if teleport_witness is not None
-                    and raw.battle_result == 0
-                    and raw.enemy_hp == teleport_witness.enemy_hp
-                    and (
-                        raw.map_id,
-                        raw.player_x,
-                        raw.player_y,
-                        raw.enemy_species_id,
-                        raw.enemy_level,
-                    )
-                    == (
-                        teleport_witness.map_id,
-                        teleport_witness.player_x,
-                        teleport_witness.player_y,
-                        teleport_witness.enemy_species_id,
-                        teleport_witness.enemy_level,
-                    )
-                    else None
+                    witnessed_exit if type(witnessed_exit) is NativeWildTeleportWitness else None
+                ),
+                native_opponent_roar_exit=(
+                    witnessed_exit if type(witnessed_exit) is NativeWildRoarWitness else None
                 ),
             )
             if not evidence.verified:
                 raise error_type("party escape terminal did not verify")
+            if type(witnessed_exit) is NativeWildRoarWitness:
+                record = getattr(executor, "record_diagnostic_event", None)
+                if callable(record):
+                    record("native_wild_roar_exit", evidence.public_dict())
             note_observed_battle_exit()
             return evidence
         if allow_opponent_ko_exit and raw.enemy_hp == 0:

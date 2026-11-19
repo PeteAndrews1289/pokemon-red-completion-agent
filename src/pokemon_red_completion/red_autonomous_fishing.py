@@ -114,16 +114,46 @@ def autonomous_fishing_prerequisite_option(
             raise ValueError("fishing prerequisite is stale or consumed")
         used = True
         a0, f0 = actions.actions_executed, runtime.emulator.frame_count
-        result = RedRoutedSuperRodSupport(
-            actions,
-            runtime.reader,
-            runtime.emulator,
-            world,
-            maximum_controller_actions=maximum_actions,
-            maximum_emulator_frames=maximum_frames,
-            interruption_handler_wrapper=interruption_handler_wrapper,
-            maximum_gift_confirm_pulses=64,
-        ).execute()
+        from .red_integrated_play import native_delivery_trainer_recovery_evidence
+        from .red_player_engaged_story import SettledNativeTrainerRecovery
+
+        try:
+            result = RedRoutedSuperRodSupport(
+                actions,
+                runtime.reader,
+                runtime.emulator,
+                world,
+                maximum_controller_actions=maximum_actions,
+                maximum_emulator_frames=maximum_frames,
+                interruption_handler_wrapper=interruption_handler_wrapper,
+                maximum_gift_confirm_pulses=64,
+            ).execute()
+        except SettledNativeTrainerRecovery as interrupted:
+            after = runtime.reader.read()
+            terminal = runtime.emulator.save_state_bytes()
+            evidence = dict(
+                schema="pokemon.red.native-delivery-recovery.v1", delivery="super-rod",
+                selected_kind=GoalKind.RESUPPLY.value, source_sha256=sha256(source).hexdigest(),
+                terminal_sha256=sha256(terminal).hexdigest(), source_cash=raw.player_money,
+                objective_completed=False, reward=None, native_trainer_recovery=dict(interrupted.evidence),
+            )
+            a, f = actions.actions_executed - a0, runtime.emulator.frame_count - f0
+            if (
+                after.bag_items != raw.bag_items or after.badge_bits != raw.badge_bits
+                or not set(dex_before) <= set(runtime.reader.read_pokedex_state().owned_species)
+                or after.battle_state or not runtime.reader.read_input_readiness().ready
+                or runtime.reader.read_bottom_dialogue_box_visible()
+                or observe_red_super_rod_support(runtime.reader).acquired
+                or not native_delivery_trainer_recovery_evidence(
+                    evidence, kind=GoalKind.RESUPPLY, source_sha256=sha256(source).hexdigest(),
+                    terminal_sha256=sha256(terminal).hexdigest(), cash=after.player_money,
+                    party_hp=after.party_hp, actions=a, frames=f,
+                )
+            ):
+                raise
+            runtime.adapter.party_guard.verify_active_roster_restored()
+            receipt = GoalExecutionReport(a, f, evidence)
+            return receipt
         after = runtime.reader.read()
         if (
             not observe_red_super_rod_support(runtime.reader).acquired
@@ -151,6 +181,13 @@ def autonomous_fishing_prerequisite_option(
         return receipt
 
     def verify(report):
+        if (receipt is not None and report is receipt
+            and report.evidence.get("native_trainer_recovery") is not None
+            and runtime.emulator.save_state_bytes() == terminal
+            and runtime.reader.read().battle_state == 0
+            and runtime.reader.read_input_readiness().ready
+            and not runtime.reader.read_bottom_dialogue_box_visible()):
+            return GoalVerification.failed(GoalFailureReason.RECOVERY_REQUIRED)
         return (
             GoalVerification.succeeded()
             if receipt is not None

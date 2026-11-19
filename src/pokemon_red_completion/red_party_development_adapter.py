@@ -582,6 +582,9 @@ def build_native_evolution_venue_menu(
     excluded_helper_species: frozenset[int] = frozenset(),
     allow_guarded_escapes: bool = False,
     resources: bool = True,
+    geometry_quotes=None,
+    allow_direct_evolution: bool = False,
+    include_matchup_context: bool = False,
 ) -> BoundPartyDevelopmentMenu[GrindingArea]:
     """Bind the executor's safe shared-XP inventory to the existing V3 scorer.
 
@@ -597,9 +600,13 @@ def build_native_evolution_venue_menu(
     from pokemon_red_completion.red_team_training import (
         collection_escape_escort,
         collection_finisher,
+        collection_trainee_should_fight_directly,
     )
 
-    if type(resources) is not bool or type(allow_guarded_escapes) is not bool:
+    if any(
+        type(value) is not bool
+        for value in (resources, allow_guarded_escapes, allow_direct_evolution, include_matchup_context)
+    ):
         raise RedPartyDevelopmentAdapterError("native venue gates require explicit booleans")
     if (
         not isinstance(venues, tuple)
@@ -632,8 +639,18 @@ def build_native_evolution_venue_menu(
     escaped = (
         native_context.MANSION_VOLATILE_ENEMY_SPECIES | native_context.MANSION_ESCORT_ENEMY_SPECIES
     )
+    if geometry_quotes is not None:
+        from .red_native_venue_geometry import NativeVenueGeometryQuote
+
+        if type(geometry_quotes) is not tuple or len(geometry_quotes) != len(venues):
+            raise RedPartyDevelopmentAdapterError("geometry inventory differs")
+        for venue, geometry in zip(venues, geometry_quotes, strict=True):
+            if type(geometry) is not NativeVenueGeometryQuote:
+                raise RedPartyDevelopmentAdapterError("typed native geometry required")
+            geometry.require_binding(observation.raw, venue)
     workloads = []
-    for venue in venues:
+    matchups = []
+    for venue_index, venue in enumerate(venues):
         if (
             venue.native_transport_ready is not None
             and venue.native_transport_ready(observation.party) is not True
@@ -644,6 +661,13 @@ def build_native_evolution_venue_menu(
             raise RedPartyDevelopmentAdapterError(
                 "native venue lacks one complete grass encounter table"
             )
+        if include_matchup_context:
+            stats = getattr(observation.raw, "party_stats", None)
+            if stats is not None and (type(stats) is not tuple or len(stats) != observation.party.size):
+                raise RedPartyDevelopmentAdapterError("venue matchup stat census differs")
+            matchups.append(observe_red_venue_matchup_context(
+                trainee, encounter_slots=blocks[0].slots, weights=_RED_ENCOUNTER_SLOT_WEIGHTS,
+                raw_stats=None if stats is None else stats[trainee.slot - 1], escaped_species=escaped))
         useful_weight = 0
         weighted_xp = 0
         for (level, species), weight in zip(
@@ -680,15 +704,31 @@ def build_native_evolution_venue_menu(
             if species in escaped:
                 continue
             useful_weight += weight
-            # Nominal unboosted two-participant projection, not an outcome label.
-            # Gen I divides base XP before multiplication; direct wins/traded
-            # bonuses can change actual gains. All measured task costs stay native.
-            # https://github.com/pret/pokered/blob/master/engine/battle/experience.asm
-            nominal_xp = (cartridge.species(species).base_experience // 2) * level // 7
+            # Nominal unboosted XP, not an outcome label. Match the executor's
+            # current direct-fight gates per encounter, including supported PP.
+            # Later damage, PP depletion or traded bonuses can change real gains.
+            # Gen I divides base XP before multiplying by the opponent level.
+            participants = (
+                1
+                if collection_trainee_should_fight_directly(
+                    trainee,
+                    enemy_level=level,
+                    enemy_species=species,
+                    policy=policy,
+                    allow_direct_evolution=allow_direct_evolution,
+                )
+                else 2
+            )
+            nominal_xp = (cartridge.species(species).base_experience // participants) * level // 7
             weighted_xp += weight * nominal_xp
         denominator = sum(_RED_ENCOUNTER_SLOT_WEIGHTS)
         workloads.append(
-            VenueTrainingWorkload(useful_weight / denominator, weighted_xp / denominator)
+            VenueTrainingWorkload(
+                useful_weight / denominator,
+                weighted_xp / denominator,
+                None if geometry_quotes is None else geometry_quotes[venue_index].travel_steps,
+                None if geometry_quotes is None else geometry_quotes[venue_index].recovery_steps,
+            )
         )
 
     collection = observation.collection_observation
@@ -785,6 +825,8 @@ def build_native_evolution_venue_menu(
         include_workload=True,
         level_workloads=(level_workload,) * len(areas),
         venue_workloads=tuple(workloads),
+        include_matchup_context=include_matchup_context,
+        venue_matchups=tuple(matchups) if include_matchup_context else None,
     )
     snapshot_sha256 = canonical_sha256(
         dict(
@@ -795,7 +837,17 @@ def build_native_evolution_venue_menu(
             excluded_helpers=sorted(excluded_helper_species),
             resources_checked=resources,
             candidates=candidates.public_dict(),
-            nominal_yield="unboosted-two-participant-wild-v1",
+            nominal_yield=(
+                "unboosted-guarded-recipient-wild-v2"
+                if allow_direct_evolution
+                else "unboosted-two-participant-wild-v1"
+            ),
+            **({"allow_direct_evolution": True} if allow_direct_evolution else {}),
+            **(
+                {"route_geometry": [q.public_dict() for q in geometry_quotes]}
+                if geometry_quotes is not None
+                else {}
+            ),
         )
     )
     return BoundPartyDevelopmentMenu(
@@ -807,6 +859,47 @@ def build_native_evolution_venue_menu(
         venue_priors=(VenueOperationalPrior(),) * len(areas),
         venue_prior_feature_mode=VenuePriorFeatureMode.MASKED_UNCALIBRATED,
     )
+
+
+def observe_red_venue_matchup_context(trainee, *, encounter_slots, weights, raw_stats=None, escaped_species=frozenset(), collection_attack_filter=True):
+    """Project existing move/type mechanics before selection; no outcome forecast.
+
+    By default filter attacks exactly as the collection executor does. Ordinary
+    learned-K preparation explicitly projects all known damaging moves; this
+    is a mechanics feature, not a prediction of which move K will choose. Charge defensive
+    exposure on escape-only encounters without pretending they yield attacks.
+    Concrete species/moves remain private inputs to the shared matchup projector.
+    """
+    from math import fsum
+    from .battle_matchups import project_party_matchups
+    from .party_development_rank import VenueMatchupContext
+    from .red_battle_catalog import RED_BATTLE_CATALOG, pokemon_red_move_ref, pokemon_red_species_ref
+    from .red_team_training import COLLECTION_UNSUPPORTED_MOVE_EFFECTS
+    if type(collection_attack_filter) is not bool:
+        raise RedPartyDevelopmentAdapterError("attack feature filtering requires an explicit protocol")
+    if len(encounter_slots) != len(weights) or not weights or any(type(w) is not int or w <= 0 for w in weights):
+        raise RedPartyDevelopmentAdapterError("venue matchup encounter weights differ")
+    if trainee.hp <= 0:
+        return None
+    moves = []
+    for known in trainee.known_moves:
+        move = RED_BATTLE_CATALOG.resolve_move(pokemon_red_move_ref(known.move_id))
+        if move.power > 0 and (not collection_attack_filter or not move.effect_flags.intersection(COLLECTION_UNSUPPORTED_MOVE_EFFECTS)):
+            moves.append(dict(move_ref=pokemon_red_move_ref(known.move_id), pp=known.current_pp))
+    member = dict(species_ref=pokemon_red_species_ref(trainee.species_id), level=trainee.level,
+                  hp=trainee.hp, max_hp=trainee.max_hp,
+                  status=None if trainee.status is StatusCondition.HEALTHY else trainee.status.value, moves=moves)
+    rows = []
+    for (level, species), weight in zip(encounter_slots, weights, strict=True):
+        profile, = project_party_matchups(dict(features=dict(party=dict(members=[member]), battle=dict(
+            opponent_species_ref=pokemon_red_species_ref(species), opponent_level=level))), RED_BATTLE_CATALOG)
+        rows.append((weight, profile, species in escaped_species))
+    total = sum(weights)
+    def average(field, *, attacks=False):
+        return fsum(w * (0.0 if attacks and escaped else getattr(p, field)) for w, p, escaped in rows) / total
+    return VenueMatchupContext(average("offensive_power", attacks=True), average("offensive_type_margin", attacks=True),
+                              average("defensive_resistance"), average("usable_move_fraction", attacks=True),
+                              trainee.max_hp, raw_stats)
 
 
 def observe_red_evolution_workload(

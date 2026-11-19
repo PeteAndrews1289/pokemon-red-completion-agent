@@ -245,6 +245,11 @@ def prepare_nonlethal_capture(
                 learned=False,
             )
         )
+        # A legal opponent reply may faint the weakener. Retain the measured
+        # damage and PP above, then hand the forced-switch boundary back to the
+        # capture lifecycle instead of requiring another MAIN/attack turn.
+        if after.battler_hp == 0:
+            return result("weakener_fainted")
         if after.enemy_hp > raw.enemy_hp:
             return result("target_healed")
     return result("attempt_limit")

@@ -5,6 +5,7 @@ continuation. Missing interaction capabilities are reported, never substituted
 with the legacy teacher registry. This first command is strictly zero-input.
 """
 
+from pokemon_red_completion.red_training_ground_route import ground_route_capability_projector
 import json
 import sys
 from contextlib import nullcontext
@@ -14,6 +15,10 @@ from pathlib import Path
 
 import player_coherent_session as shared
 import red_configured_league_player_20261006 as d
+
+# The configured history owner supplies the authenticated unfinished defeat.
+# Keep the helper's advertised capability tied to the actual callback below.
+PREPARATION_LOSS_OBSERVER_SUPPORTED = True
 from red_eevee_gift_20261004 import eevee_gift_bindings, gift_route_world
 from red_mixed_static_options_20261009 import postgame_native_oneoff_bindings
 from red_remaining_acquisitions_20261004 import amber_bindings
@@ -276,7 +281,7 @@ def player_nurse_binding(runtime, actions, *, route, home, include_rewards, bind
     """Use the existing dynamic-lift contract before generic ground recovery."""
     if (
         bindings is not None
-        and getattr(runtime, "collection_dig_departure", False)
+        and (include_rewards or getattr(runtime, "collection_dig_departure", False))
         and not _raw_party_fully_restored(runtime.reader.read())
     ):
         from pokemon_red_completion.red_dig_recovery import bind_dig_recovery
@@ -294,6 +299,7 @@ def player_nurse_binding(runtime, actions, *, route, home, include_rewards, bind
             Gen1TraversalObserver(runtime.reader).observe(),
             prepare_escort=lambda: None,
             require_pp_restore=True,
+            require_full_pp_restore=True,
         )
         nurse = next(
             (
@@ -732,6 +738,72 @@ def story_static_income_peers(runtime, actions, world, *, battler):
         and b.resource_quote.expected_income > 0
         and b.resource_quote.purchase_cost == 0
     )
+
+
+def safari_admission_income_peers(runtime, actions, world, *, battler, route=None, cartridge=None):
+    """Offer existing legitimate income for one observed unpaid admission.
+
+    Sufficient ball stock is independent of admission cash. This exposes a
+    resource alternative; the learner retains the complete choice authority.
+    """
+    from pokemon_red_completion.red_autonomous_safari import autonomous_safari_funding_quote
+    observation = runtime.adapter.observe()
+    raw = observation.raw
+    if raw.player_money is None or raw.player_money >= 500:
+        return ()
+    budget = autonomous_safari_funding_quote(runtime, observation, world)
+    if budget is None and route is not None and cartridge is not None:
+        # Reuse the existing disclosed Surf-recipient mechanics, not a goal order.
+        compatible = sorted((-level, slot) for slot, (species, level) in enumerate(
+            zip(raw.party_species_ids or (), raw.party_levels or ()), 1)
+            if 57 in cartridge.species(species).tmhm_moves)
+        if compatible:
+            _, slot = compatible[0]
+            moves = raw.party_moves[slot - 1]
+            legal = [i for i, move in enumerate(moves, 1) if move not in {15,19,57,70,148}]
+            if legal:
+                from pokemon_red_completion.red_player_safari_rewards import safari_reward_admission_funding_budget
+                replaced = moves.index(0) + 1 if 0 in moves else max(legal)
+                budget = safari_reward_admission_funding_budget(runtime, actions,
+                    route=route, party_slot=slot, replace_slot=replaced)
+                sink = getattr(runtime, 'trainer_funding_event_sink', None)
+                if sink is not None:
+                    sink(dict(phase='admission_funding_demand', event='reward_approach_quote',
+                        map_id=raw.map_id, cash=raw.player_money,
+                        supported=budget is not None, target_cash=None if budget is None else budget.target_cash))
+    if budget is None or budget.shortfall <= 0:
+        return ()
+    if (not isinstance(battler, FrozenTrainerBattler)
+            or battler.model_sha256 != FROZEN_K_SHA256
+            or battler.qualification_sha256 != K_QUALIFICATION_SHA256):
+        return ()
+    configured = replace(runtime,
+        profile=bind_ordinary_trainer_funding_profile(supply_profile(runtime.profile,early_supply=True)),
+        trainer_battle_runner=battler.run,
+        trainer_battle_model_sha256=battler.model_sha256,
+        trainer_battle_qualification_sha256=battler.qualification_sha256,
+        trainer_funding_recovery=True,trainer_funding_ledges=True,
+        trainer_funding_surf=True,trainer_funding_indoor_departure=True)
+    def income(gate):
+        inventory = RedResourceGoalRouter(configured,actions,world,
+            quote_resource_costs=True,prepare_capture_party=False,prepare_capture_escort=False,
+            include_recovery_offers=False,trainer_funding=True,regional_trainer_funding=True,
+            observed_trainer_funding=True,trainer_funding_target_cash=budget.target_cash,
+            funding_gate_transit=gate
+            ).enumerate_routed_kinds(observation,frozenset({GoalKind.RESUPPLY}))
+        return tuple(b for b in inventory.bindings if b.kind is GoalKind.RESUPPLY
+            and b.resource_quote is not None and b.resource_quote.expected_income > 0
+            and b.resource_quote.purchase_cost == 0)
+    gate = _postgame_funding_gate_transit(configured,world)
+    ordinary = income(gate)
+    if ordinary:
+        return ordinary
+    if gate is not None:
+        general = income(None)
+        if general:
+            return general
+    fly_gate = _postgame_funding_gate_transit(configured,world,include_legal_fly=True)
+    return () if fly_gate is None or fly_gate == gate else income(fly_gate)
 
 
 def pre_champion_medicine_income_peers(runtime, actions, world):
@@ -1339,6 +1411,27 @@ def income_with_existing_reserve(runtime, actions, route, binding):
     )
 
 
+def qualified_income_without_optional_reserve(binding, enhanced):
+    """Keep an already native-qualified learned attempt when optional stock fails.
+
+    This adds no purchase, sale, credit, battle guarantee or alternative actor.
+    The caller has already required the live learned controller and obtained
+    the ordinary native route/party/PP-qualified executor and verifier.
+    """
+    if enhanced is not None:
+        return enhanced
+    quote = binding.resource_quote
+    if (
+        quote is not None
+        and quote.purchase_cost == 0
+        and quote.funding_proceeds == 0
+        and quote.reserves == ()
+        and quote.expected_income > 0
+    ):
+        return binding
+    return None
+
+
 def postgame_league_income_peer(runtime, actions, *, route):
     """Reuse learned renewable income only against a real resource shortfall."""
     from overnight_red_player_20261004 import status_capable_k_preparation
@@ -1393,7 +1486,8 @@ def postgame_league_income_peer(runtime, actions, *, route):
     if binding is None:
         return None
     if reuse is not None:
-        return income_with_existing_reserve(runtime, actions, route, binding)
+        enhanced = income_with_existing_reserve(runtime, actions, route, binding)
+        return qualified_income_without_optional_reserve(binding, enhanced)
     selected_execute = binding.execute
 
     def execute():
@@ -1429,7 +1523,7 @@ def postgame_league_frontier_peer(runtime, actions, *, route):
     from pokemon_red_completion.goal_resource_quote import GoalResourceQuote
     from pokemon_red_completion.red_champion_story import RedCartridgeChampionSkill
     from pokemon_red_completion.red_league_funding import _ROOMS, _room_quote
-    from pokemon_red_completion.red_league_funding_execution import _run_battle
+    from pokemon_red_completion.red_league_funding_execution import _run_battle, RedLeagueFundingBattleLoss
     from pokemon_red_completion.red_learned_league import learned_league_controller
     from pokemon_red_completion.red_trainer_story import RedCartridgeLoreleiSkill
 
@@ -1508,17 +1602,33 @@ def postgame_league_frontier_peer(runtime, actions, *, route):
             raise ValueError("earned League frontier is stale or consumed")
         consumed = True
         first_actions, first_frames = actions.actions_executed, runtime.emulator.frame_count
-        with status_capable_k_preparation(runtime) if reuse is None else nullcontext():
-            battle = _run_battle(
-                runtime,
-                actions,
-                route.route_world,
-                target.objective_id,
-                quote.expected_victory_money,
-                "frozen-k-development",
-                0,
-                **({"development_reuse": reuse} if reuse is not None else {}),
-            )
+        try:
+            with status_capable_k_preparation(runtime) if reuse is None else nullcontext():
+                battle = _run_battle(
+                    runtime,
+                    actions,
+                    route.route_world,
+                    target.objective_id,
+                    quote.expected_victory_money,
+                    "frozen-k-development",
+                    0,
+                    **({"development_reuse": reuse} if reuse is not None else {}),
+                )
+        except RedLeagueFundingBattleLoss as loss:
+            cert=loss.certificate
+            terminal=runtime.emulator.save_state_bytes()
+            if (cert.get("objective_id")!=target.objective_id or cert.get("terminal_sha256")!=sha256(terminal).hexdigest()
+                    or cert.get("money_before_battle")!=raw.player_money
+                    or cert.get("ending_money")!=runtime.reader.read().player_money
+                    or cert["ending_money"]!=raw.player_money//2 or not _field_ready(runtime)):
+                raise
+            runtime.adapter.party_guard.verify_active_roster_restored()
+            committed=GoalExecutionReport(actions.actions_executed-first_actions,
+                runtime.emulator.frame_count-first_frames,
+                dict(status="lost",no_income_credit=True,native_league_funding_loss=cert,
+                     native_error_chain=[dict(error_type=type(loss).__name__,error=str(loss)),
+                                         dict(error_type=type(loss.__cause__).__name__,error=str(loss.__cause__))]))
+            return committed
         evidence = dict(
             partial_league_income=True,
             learned_battle_authority=True,
@@ -1541,6 +1651,10 @@ def postgame_league_frontier_peer(runtime, actions, *, route):
         return committed
 
     def verify(report):
+        if (committed is not None and report is committed and report.evidence.get("status")=="lost"
+                and runtime.emulator.save_state_bytes()==terminal and _field_ready(runtime)
+                and runtime.reader.read().player_money==raw.player_money//2):
+            return GoalVerification.failed(GoalFailureReason.RESOURCE_LOST)
         if (
             committed is None
             or report is not committed
@@ -1618,34 +1732,29 @@ def progression_capture_supplement(binding, situation, *, opens_passage):
     return supplemental_live_option(binding, candidate)
 
 
+def postgame_corner_reserve_cost(runtime):
+    """Retain the same declared medicine liquidity already quoted by funding.
+
+    This is existing explicit DEVELOPMENT support,not learned budgeting.
+    Ordinary/disabled profiles preserve the historical zero-reserve default.
+    """
+    controller = getattr(runtime, 'league_battle_controller', None)
+    if getattr(controller, 'income_owned_stock_bootstrap', False) is not True:
+        return 0
+    raw = runtime.reader.read()
+    if raw.badge_bits != 255 or raw.bag_items is None:
+        return 0
+    return income_reserve_cost(raw, targets=(2, 3, 1))
+
+
 def postgame_corner_options(runtime, actions, observed, world):
     """Expose actual case, affordable coins and prize peers, not a phase order."""
     if runtime.reader.read().badge_bits != 255:
         return ()
     actual = runtime.adapter.observe()
-    cash_reserve = 0
-    if (
-        getattr(
-            getattr(runtime, "league_battle_controller", None),
-            "income_owned_stock_bootstrap",
-            False,
-        )
-        is True
-    ):
-        targets = measured_income_bootstrap_targets(runtime)
-        cash_reserve = income_reserve_cost(
-            actual.raw, targets=(4, 6, 2) if targets is None else targets
-        )
-    kwargs = dict(
-        situation=observed.situation,
-        model_feature_version=5,
-        maximum_actions=20000,
-        maximum_frames=2000000,
-        cash_reserve=cash_reserve,
-    )
-    return game_corner_options(
-        runtime, actual, actions, world, **kwargs
-    ) + game_corner_coin_options(runtime, actual, actions, world, **kwargs)
+    cash_reserve = postgame_corner_reserve_cost(runtime)
+    kwargs = dict(situation=observed.situation, model_feature_version=5, maximum_actions=20000, maximum_frames=2000000, cash_reserve=cash_reserve)
+    return game_corner_options(runtime, actual, actions, world, allow_fly_transport=True, **kwargs) + game_corner_coin_options(runtime, actual, actions, world, **kwargs)
 
 
 def postgame_acquisition_options(
@@ -1657,6 +1766,8 @@ def postgame_acquisition_options(
     bird_capture_loan=None,
     snorlax_capture_loan=None,
     bird_runtime=None,
+    carrier_route=None,
+    carrier_preparation=None,
 ):
     """Reuse native gift/Amber receipts as peers of ordinary capture/evolution.
 
@@ -1676,7 +1787,7 @@ def postgame_acquisition_options(
 
     bindings = (
         eevee_gift_bindings(runtime, actual, actions, world)
-        + amber_bindings(runtime, actual, actions, world)
+        + amber_bindings(runtime, actual, actions, world, carrier_route=carrier_route, carrier_preparation=carrier_preparation)
         + postgame_native_oneoff_bindings(runtime, actual, actions, world)
         + routed_dojo_gift_bindings(runtime, actual, actions, world)
         + routed_bird_bindings(
@@ -2030,13 +2141,21 @@ def assembly(
     include_matchup_observation=False,
     include_preparation_party_context=False,
     training_admission=None,
-    preparation_encounter_quantum=None,
+    scoped_train_composition=None, preparation_encounter_quantum=None,
+    production_train_scope=None,
+    ordinary_preparation_venue_policy=None,
 ):
     from pokemon_red_completion.red_player_preparation_binding import preparation_encounter_limits
 
     preparation_battles, preparation_recoveries = preparation_encounter_limits(
         preparation_encounter_quantum
     )
+    if ordinary_preparation_venue_policy is not None:
+        if training_admission is not None:
+            raise ValueError("ordinary venue model cannot use the single-map production TRAIN admission")
+        from pokemon_red_completion.red_ordinary_preparation_venue import OrdinaryPreparationVenuePolicy
+        if type(ordinary_preparation_venue_policy) is not OrdinaryPreparationVenuePolicy:
+            raise ValueError("ordinary preparation venue policy requires its separate typed authority")
     if type(include_matchup_observation) is not bool:
         raise ValueError("Matchup observation requires an explicit boolean")
     if type(include_preparation_party_context) is not bool or (
@@ -2062,6 +2181,21 @@ def assembly(
         if type(training_admission) is not ProductionTrainAdmission:
             raise ValueError("typed production TRAIN admission required")
         training_admission.require_work_order(Path(plan_path).read_bytes())
+    if scoped_train_composition is not None:
+        from pokemon_red_completion.red_scoped_train_composition import ScopedTrainComposition
+        if type(scoped_train_composition) is not ScopedTrainComposition or training_admission is not None:
+            raise ValueError('explicit scoped TRAIN composition cannot mix production admission')
+        scoped_train_composition.require_source((parent/'terminal.state').read_bytes(),
+            (parent/'CONTEXT.json').read_bytes(),Path(plan_path).read_bytes(),
+            origin_sha=origin_sha,origin_id=origin_id)
+    if production_train_scope is not None:
+        from pokemon_red_completion.red_scoped_train_composition import ProductionSequenceTrainScope
+        if (type(production_train_scope) is not ProductionSequenceTrainScope
+                or training_admission is not None or scoped_train_composition is not None):
+            raise ValueError("production TRAIN sequence cannot mix backend scopes")
+        production_train_scope.require_assembly(payload=(parent/"terminal.state").read_bytes(),
+            context_bytes=(parent/"CONTEXT.json").read_bytes(),work_order_bytes=Path(plan_path).read_bytes(),
+            origin_sha=origin_sha,origin_id=origin_id)
     context = d.prior.doc(parent / "CONTEXT.json")
     payload = (parent / "terminal.state").read_bytes()
     if training_admission is not None:
@@ -2082,7 +2216,7 @@ def assembly(
         payload,
         output,
         origin_sha=origin,
-        partition="development" if training_admission is None else "train",
+        partition="development" if training_admission is None and scoped_train_composition is None and production_train_scope is None else "train",
         origin_id=ROOT.name if origin_id is None else origin_id,
         objective_ids=context["lesson"]["completed_objectives"],
         protect_party_species=protect_party_species,
@@ -2138,6 +2272,17 @@ def assembly(
         records[0] += 1
         _record(output / f"observed-{records[0]:04d}.json", dict(name=name, value=value))
 
+    def learned_league_components():
+        path = c.BASE / (
+            "red-isolated-player-package-20261009-v1/"
+            "assisted-exploration-recovery/diagnostics/"
+            "agatha-control-reuse-20261010-v1/control52-model.json"
+        )
+        pin = "111ef28dd505a61c6c8b3c0c7521d0d395119afba6f3b0e090a86095a03a4ad2"
+        from pokemon_red_completion.red_observed_component_binding import load_observed_league_components
+        path,pin=load_observed_league_components(declared.read_bytes(),path,pin)
+        return path,pin
+
     def configure_income_reuse(controller):
         from pokemon_red_completion.red_league_funding_execution import ScopedLeagueIncomeReuse
         from pokemon_red_completion.red_player_model import load_player_goal_model_record_bytes
@@ -2150,8 +2295,9 @@ def assembly(
         goal = load_player_goal_model_record_bytes(
             model_bytes, expected_model_sha256=declared_income_goal_model_sha256(declaration)
         ).model
+        _,income_model_sha256=learned_league_components()
         controller.income_reuse = ScopedLeagueIncomeReuse(
-            "111ef28dd505a61c6c8b3c0c7521d0d395119afba6f3b0e090a86095a03a4ad2",
+            income_model_sha256,
             c.digest(declared),
             bind_income_runtime,
             lambda objective: holder["observe_history"](),
@@ -2164,6 +2310,7 @@ def assembly(
             type(bootstrap) is not bool
             or bootstrap
             and declaration.get("partition") != "development"
+            and production_train_scope is None
         ):
             raise ValueError(
                 "Owned-stock income bootstrap requires explicit DEVELOPMENT permission"
@@ -2174,6 +2321,12 @@ def assembly(
 
     def factory(controller):
         rt = factory0(controller)
+        if production_train_scope is not None:
+            from pokemon_red_completion.scenario_lab import ScenarioPartition
+            actor=holder["actor"]
+            if actor.source_partition is not ScenarioPartition.TRAIN:
+                raise ValueError("production TRAIN actor lost its partition")
+            actor.train_funding_diagnostic=True
         if include_supply:
             rt = replace(
                 rt,
@@ -2190,6 +2343,7 @@ def assembly(
                 discovery_rom=rom,
                 add_capture_preparation_support=not include_early_preparation,
                 include_fly_transport=True,
+                include_dig_departure=True,
             )
             if {"defeat_champion", "enter_hall_of_fame"} <= set(
                 context["lesson"]["completed_objectives"]
@@ -2254,17 +2408,17 @@ def assembly(
         if include_rewards and rt.league_battle_controller is not None:
             configure_income_reuse(rt.league_battle_controller)
         holder["postgame_income_controller"] = rt.league_battle_controller
+        if scoped_train_composition is not None:
+            pools = scoped_train_composition.bind(holder['actor'], source=source,
+                output=output/'scoped-native-train', initial=restored.battle)
+            holder['scoped_native_train_group'] = pools
+            holder['actor'] = pools.wild
+            holder['history'] = NativeBattlerHistory(holder['actor'],initial=restored.battle)
         return rt
 
     def bind_income_runtime(runtime, actions, world, objective_id):
-        path = c.BASE / (
-            "red-isolated-player-package-20261009-v1/"
-            "assisted-exploration-recovery/diagnostics/"
-            "agatha-control-reuse-20261010-v1/control52-model.json"
-        )
-        pin = "111ef28dd505a61c6c8b3c0c7521d0d395119afba6f3b0e090a86095a03a4ad2"
-        if c.digest(path) != pin:
-            raise ValueError("Income reuse learned component changed")
+        path,pin=learned_league_components()
+        if c.digest(path)!=pin:raise ValueError("Income reuse learned component changed")
         prototype = replace(
             holder["actor"],
             model=TrainerPracticeThreeHeadModel.from_dict(d.prior.doc(path)),
@@ -2281,6 +2435,8 @@ def assembly(
             work_order=declared.read_bytes(),
             include_champion=True,
             development_retry_reentry=True,
+            **({"train_admission": production_train_scope.funding_admission}
+               if production_train_scope is not None else {}),
         )
         if composed is None or composed[2].objective_id != objective_id:
             raise ValueError("Income reuse has no exact observed League room")
@@ -2401,6 +2557,8 @@ def assembly(
         return holder["scoped_actors"][objective][0]
 
     def preparation_actor(map_id, *, _bind_pool=True):
+        if scoped_train_composition is not None:
+            return holder['actor']
         if training_admission is not None and map_id != training_admission.wild_map_id:
             raise ValueError("production TRAIN preparation requires its exact admitted venue")
         # Optional exact existing battler reuse, not a supplied training choice.
@@ -2467,7 +2625,11 @@ def assembly(
             progress = next(
                 (o.id for o in available if league_native_prerequisite(target, o.id)), None
             )
-            if progress is None:
+            rematch = progress is None and training_admission is None and (
+                {"defeat_champion", "enter_hall_of_fame"}
+                <= set(runtime.adapter.graph.completed_ids(runtime.adapter.observe().game_state))
+            )
+            if progress is None and not rematch:
                 return None
             league(target.objective_id, runtime, actions, None, allow_engaged=True)
             actor = holder["scoped_actors"][target.objective_id][0]
@@ -2478,6 +2640,7 @@ def assembly(
                 battler=actor,
                 objective_id=target.objective_id,
                 progress_objective_ref=progress,
+                allow_postgame_collection=rematch,
             )
         return engaged_story_binding(
             runtime,
@@ -2492,6 +2655,8 @@ def assembly(
     def tower_trainer_actor(runtime):
         # Existing explicit Tower DEVELOPMENT admission, never a wild actor
         # qualification. The native adapters still validate actual contracts.
+        if scoped_train_composition is not None:
+            return holder['scoped_native_train_group']
         if not include_rewards or not 143 <= runtime.reader.read().map_id <= 148:
             return holder["actor"]
         objective = "rescue_fuji"
@@ -2529,6 +2694,8 @@ def assembly(
         return holder["scoped_actors"][objective][0]
 
     def gym_trainer_actor(contract):
+        if scoped_train_composition is not None:
+            return holder['scoped_native_train_group'].story(contract)
         key = gym_obstruction_scope_key(contract) if include_rewards else None
         if key is None:
             return holder["actor"]
@@ -2569,6 +2736,8 @@ def assembly(
         return actor
 
     def silph_card_key_actor(contract):
+        if scoped_train_composition is not None:
+            return holder['scoped_native_train_group'].story(contract)
         if not include_rewards:
             raise ValueError("Silph phase is not enabled")
         key = (
@@ -2698,13 +2867,8 @@ def assembly(
         if native_objective not in holder["scoped_league_runtimes"]:
             # Provisional League-only recombination of existing trained heads. Goal selection,
             # early/gym/Silph/wild actors and the frozen damage head are unchanged.
-            path = c.BASE / (
-                "red-isolated-player-package-20261009-v1/"
-                "assisted-exploration-recovery/diagnostics/"
-                "agatha-control-reuse-20261010-v1/control52-model.json"
-            )
-            pin = "111ef28dd505a61c6c8b3c0c7521d0d395119afba6f3b0e090a86095a03a4ad2"
-            assert c.digest(path) == pin
+            path,pin=learned_league_components()
+            assert c.digest(path)==pin
             prototype = replace(
                 holder["actor"],
                 model=TrainerPracticeThreeHeadModel.from_dict(d.prior.doc(path)),
@@ -2720,6 +2884,8 @@ def assembly(
                 include_champion=True,
                 development_retry_reentry=True,
                 allow_engaged=allow_engaged,
+                **({"train_admission": production_train_scope.funding_admission}
+                   if production_train_scope is not None else {}),
             )
             if composed is None:
                 return None
@@ -2798,6 +2964,8 @@ def assembly(
 
     def leader_actor(reward, runtime, *, _bind_pool=True):
         """Same prospective scoped actor for a selected or retained leader."""
+        if scoped_train_composition is not None:
+            return holder['scoped_native_train_group'].story(reward.contract(rom,runtime.reader.read()))
         if (
             training_admission is not None
             and reward.objective_id != training_admission.objective_id
@@ -2891,7 +3059,7 @@ def assembly(
             if retained is not None:
                 return control_inventory(retained)
         if include_early_preparation:
-            retained = retained_early_trainer_binding(rt, actions, rom=rom, battler=holder["actor"])
+            retained = retained_early_trainer_binding(rt, actions, rom=rom, battler=holder.get('scoped_native_train_group', holder['actor']))
             if retained is not None:
                 return control_inventory(retained)
         if rt.reader.read().battle_state == 2 and rt.reader.read().map_id == int(c.MapId.ROUTE_22):
@@ -2904,7 +3072,7 @@ def assembly(
                 rom=rom,
                 pending_trainer_factory=(
                     lambda: retained_early_trainer_binding(
-                        rt, actions, rom=rom, battler=holder["actor"]
+                        rt, actions, rom=rom, battler=holder.get('scoped_native_train_group', holder['actor'])
                     )
                 )
                 if include_early_preparation
@@ -2938,7 +3106,9 @@ def assembly(
                 route.route_world, cartridge_route_world, raw
             ).with_current_observation(rt.reader),
         )
-        holder["plan"] = refresh_preparation_roster(rt.emulator, holder["plan"], evolution_rom=rom)
+        holder["plan"] = refresh_preparation_roster(
+            rt.emulator, holder["plan"], evolution_rom=rom,
+            party_guard=getattr(rt.adapter, "party_guard", None))
         resource_runtime = observed_resource_runtime(rt)
 
         def learned_transport_handler(inner, spec):
@@ -2951,7 +3121,7 @@ def assembly(
                 inner,
                 rt.reader,
                 lambda: retained_early_trainer_binding(
-                    rt, actions, rom=rom, battler=holder["actor"]
+                    rt, actions, rom=rom, battler=holder.get('scoped_native_train_group', holder['actor'])
                 ),
                 maximum_trainers=32,
             )
@@ -2999,6 +3169,7 @@ def assembly(
                 reserved_slots=3 if earned_capacity else 2,
                 include_indigo_lobby=earned_capacity,
                 allow_spare_tm_storage=earned_capacity,
+                allow_dig_departure=True,
             )
             if include_rewards
             else None
@@ -3113,7 +3284,7 @@ def assembly(
             # admitted actor before the probe constructs any eager controller.
             # The default DEVELOPMENT path retains its historical two passes.
             probe_actor = (
-                holder["actor"] if training_admission is None else leader_actor(reward, runtime)
+                holder["actor"] if training_admission is None and scoped_train_composition is None else leader_actor(reward, runtime)
             )
             if include_rewards and reward.objective_id == "defeat_surge":
                 switch = surge_switch_option(
@@ -3284,7 +3455,9 @@ def assembly(
                     allow_surf=include_rewards,
                     record=record,
                 )
-                row = silph_card_key_story_option(runtime, executor, observed, **kwargs)
+                row = silph_card_key_story_option(
+                    runtime, executor, observed, combat_levels=levels, **kwargs
+                )
                 return (
                     row
                     if row is not None or not include_silph_continuation
@@ -3350,7 +3523,7 @@ def assembly(
             observers.update(
                 {
                     "receive_pokedex": early_errand,
-                    "help_bill": lambda *args: bill_story_option(*args, **early),
+                    "help_bill": lambda *args: bill_story_option(*args, **early, **({'trainer_battler_for_contract': holder['scoped_native_train_group'].story} if scoped_train_composition is not None else {})),
                     "obtain_cut": lambda *args: cut_story_option(*args, **early),
                     "rescue_fuji": lambda *args: fuji_story_option(
                         *args, **early, trainer_battler=tower_trainer_actor(args[0])
@@ -3482,6 +3655,8 @@ def assembly(
         return result
 
     def history(*, checkpoint_error_type=None, checkpoint_error=None):
+        if scoped_train_composition is not None:
+            return holder['scoped_native_train_group'].history()
         actors = {"wild": (holder["actor"], holder["history"]), **holder["scoped_actors"]}
         changed = []
         for name, (actor, observe) in actors.items():
@@ -3529,6 +3704,8 @@ def assembly(
         # observed loss. No target, trainee, training or recovery is selected.
         latest = holder["observe_history"]()
         lost = latest if latest is not None and latest.result.value == "lost" else None
+        if "observe_preparation_loss" in holder:
+            lost = holder["observe_preparation_loss"](rt, observation, latest)
         if not observation.input_ready:
             return ()
         raw = rt.reader.read()
@@ -3604,7 +3781,17 @@ def assembly(
         elif lost is not None:
             opponent_levels = lost.opponent_levels
         else:
-            return ()
+            from pokemon_red_completion.red_income_preparation import qualified_income_preparation_levels
+            opponent_levels = qualified_income_preparation_levels(
+                rt, actions, route.route_world,
+                missing_reserve_cost=income_reserve_cost,
+                collection_cash_target=postgame_collection_funding_target_cash,
+                bootstrap_targets=measured_income_bootstrap_targets,
+                ordinary_income_peers=pre_champion_medicine_income_peers,
+                party_ready=_raw_party_fully_restored,
+            )
+            if opponent_levels is None:
+                return ()
         opponent_levels = retained_preparation_opposition(opponent_levels, lost)
         centers = frozenset(
             {int(c.MapId.INDIGO_PLATEAU_LOBBY)}
@@ -3623,11 +3810,7 @@ def assembly(
         # Geometric reachability must not advertise grass behind an uncleared
         # bridge as a currently executable dose. This changes availability,
         # never chooses story instead of training or bypasses a trainer.
-        start = Gen1TraversalObserver(
-            rt.reader,
-            capability_projector=cut_capabilities,
-            hazard_projector=Gen1TrainerSightProjector(rom, rt.reader, full_event_offsets=True),
-        ).observe()
+        start = Gen1TraversalObserver(rt.reader, capability_projector=ground_route_capability_projector(route, rt.emulator), hazard_projector=Gen1TrainerSightProjector(rom, rt.reader, full_event_offsets=True)).observe()
         venues = []
         tables = wild_tables(rom, medium="grass")
         if target is not None and home == int(c.MapId.INDIGO_PLATEAU_LOBBY):
@@ -3684,7 +3867,10 @@ def assembly(
             rom,
             route.route_world,
             raw,
-            {int(map_id_for_wild_source(source_id)) for source_id in sources},
+            # This noncombat approach can cross maps before the venue itself.
+            # Reuse the existing conservative projection for every future map;
+            # current-map objects/sight and defeated native events remain live.
+            route.route_world.local_graphs,
         )
         for source_id in sources:
             map_id = int(map_id_for_wild_source(source_id))
@@ -3759,6 +3945,30 @@ def assembly(
             )
         if not venues:
             return ()
+        if ordinary_preparation_venue_policy is not None:
+            from pokemon_red_completion.red_ordinary_preparation_venue import OrdinaryPreparationVenue
+            from pokemon_red_completion.red_player_member_preparation import learned_member_preparation_options
+            typed_venues = tuple(OrdinaryPreparationVenue(v[2], v[3], v[4]) for v in venues)
+            rows = learned_member_preparation_options(rt, actions, plan=holder['plan'],
+                opponent_levels=opponent_levels,
+                forecast_ref='actual-cartridge-frontier' if preview is not None else 'observed-native-story-loss' if lost is not None else 'quoted-renewable-income-opposition',
+                route=replace(route, route_world=quote_world), venues=typed_venues,
+                battler_for_map=preparation_actor, venue_policy=ordinary_preparation_venue_policy,
+                maximum_level_gains=(1, 3), reference_mode='strongest',
+                allow_above_reference=lost is not None, observed_defeat=lost,
+                record=record, hideout_timing=HideoutTiming(),
+                maximum_battles=preparation_battles, maximum_recoveries=preparation_recoveries,
+                repeat_health_limited_zero_progress=True, prepare_transport_escort=True,
+                restore_exhausted_partial=True)
+            holder['preparation_inventory'] = dict(opponent_levels=opponent_levels,
+                options=len(rows), automatic_training=False, venue_selection_learned=len(venues) > 1,
+                venue_model_sha256=ordinary_preparation_venue_policy.model_sha256,
+                venue_support='all existing legal routed bindings per unchanged member/target',
+                reachable_venues=len(venues), expected_recipient_xp_known=False,
+                evolution_qualification_transferred=False,
+                maximum_battles_per_selected_dose=preparation_battles,
+                maximum_recoveries_per_dose=preparation_recoveries)
+            return rows
         _, _, corridor, source_id, home, levels = min(venues, key=lambda v: v[:2])
         selected_battler = preparation_actor(corridor.map_id)
         rows = []
@@ -3772,7 +3982,7 @@ def assembly(
                     forecast_ref=(
                         "actual-cartridge-frontier"
                         if preview is not None
-                        else "observed-native-story-loss"
+                        else "observed-native-story-loss" if lost is not None else "quoted-renewable-income-opposition"
                     ),
                     home_map=home,
                     route=replace(route, route_world=quote_world),
@@ -3834,7 +4044,7 @@ def assembly(
                             inner,
                             rt.reader,
                             lambda: retained_early_trainer_binding(
-                                rt, actions, rom=rom, battler=holder["actor"]
+                                rt, actions, rom=rom, battler=holder.get('scoped_native_train_group', holder['actor'])
                             ),
                             maximum_trainers=32,
                         )
@@ -3847,6 +4057,7 @@ def assembly(
         rows.extend(
             story_static_income_peers(rt, actions, route.route_world, battler=holder["actor"])
         )
+        rows.extend(safari_admission_income_peers(rt,actions,route.route_world,battler=holder['actor'],route=route,cartridge=cartridge))
         rows.extend(pre_champion_medicine_income_peers(rt, actions, route.route_world))
         if not deferred:
             rows.extend(
@@ -3887,7 +4098,7 @@ def assembly(
                         inner,
                         rt.reader,
                         lambda: retained_early_trainer_binding(
-                            rt, actions, rom=rom, battler=holder["actor"]
+                            rt, actions, rom=rom, battler=holder.get('scoped_native_train_group', holder['actor'])
                         ),
                         maximum_trainers=32,
                     )
@@ -4016,7 +4227,7 @@ def assembly(
                 inner,
                 rt.reader,
                 lambda: retained_early_trainer_binding(
-                    rt, actions, rom=rom, battler=holder["actor"]
+                    rt, actions, rom=rom, battler=holder.get('scoped_native_train_group', holder['actor'])
                 ),
                 maximum_trainers=32,
             )
@@ -4024,7 +4235,7 @@ def assembly(
         from red_remaining_acquisitions_20261004 import existing_remaining_acquisitions
 
         with (
-            existing_remaining_acquisitions(include_shared_player=True)
+            existing_remaining_acquisitions(include_shared_player=True, allow_alternate_trade_transport=True)
             if earned_eight_badges
             else nullcontext()
         ):
@@ -4073,12 +4284,16 @@ def assembly(
                 bird_capture_loan=bird_capture_loan,
                 snorlax_capture_loan=snorlax_capture_loan,
                 bird_runtime=bird_runtime,
+                carrier_route=route, carrier_preparation=holder["plan"],
             )
             + (() if progression is None else (progression,))
         )
 
     def field_dependencies(rt, actions, observed):
-        return fly_dependency_options(rt, actions, route=route)
+        postgame = ("enter_hall_of_fame" in rt.adapter.graph.completed_ids(observed.game_state)
+            and rt.registration_policy is not None
+            and not rt.registration_policy.targets <= rt.registration_policy.goal_registered(observed.collection_observation))
+        return fly_dependency_options(rt, actions, route=route, include_cut_lesson=postgame)
 
     def matchup_observer(rt, bindings, supplements, boundary):
         from pokemon_red_completion.red_player_matchup import project_current_trainer_matchups

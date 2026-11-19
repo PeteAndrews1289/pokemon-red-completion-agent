@@ -14,6 +14,7 @@ from .blaine import BlaineChapterError, _pulse
 from .gen1_route_runtime import Gen1TraversalObserver
 from .gen1_trainer_sight import Gen1TrainerSightProjector
 from .gen1_traversal import cut_capabilities
+from .gen1_terrain import mansion_first_floor_door_blocks, terrain_with_block
 from .goal_manager import GoalFailureReason, GoalKind
 from .goal_manager_runtime import ExecutableGoalBinding, GoalExecutionReport, GoalVerification
 from .observation import EventFlag, ItemId, MapId, event_flag_is_set
@@ -148,8 +149,46 @@ def mansion_exit_option(runtime, actions, _, *, route):
     )
 
 
+def mansion_first_floor_world(world, raw):
+    """Project only off-map first-floor doors from the observed switch phase.
+
+    The current map remains authoritative live RAM. Outside Mansion, unknown
+    events and every other map retain existing behavior. Both open and closed
+    replacements come from the same cartridge script; this adds no objective
+    preference and does not certify a route or change native state.
+    """
+    first_floor = int(MapId.POKEMON_MANSION_1F)
+    if (
+        raw.map_id not in MANSION_MAPS
+        or raw.map_id == first_floor
+        or raw.event_flags is None
+        or len(raw.event_flags) * 8 <= int(EventFlag.MANSION_SWITCH_ON)
+    ):
+        return world
+    switch = event_flag_is_set(raw.event_flags, int(EventFlag.MANSION_SWITCH_ON))
+    changed = world.terrain[first_floor]
+    if changed.blocks is None:
+        raise ValueError("Mansion door projection requires explicit source blocks")
+    for at, block_id in mansion_first_floor_door_blocks(world.rom, switch_on=switch):
+        if changed.blocks[at[0]][at[1]] == block_id:
+            continue
+        changed = terrain_with_block(
+            world.rom, changed, at, block_id, world.tilesets,
+            water_set_ids=world.water_tilesets,
+        )
+    if changed is world.terrain[first_floor]:
+        return world
+    return replace(
+        world,
+        terrain={**world.terrain, first_floor: changed},
+        local_graphs={**world.local_graphs, first_floor: world._graph_for_terrain(changed)},
+    )
+
+
 def mansion_secret_key_option(runtime, actions, _, *, route):
     """Prefer a real reachable key; otherwise expose the observed puzzle step."""
+    if _field_ready(runtime):
+        route = replace(route, route_world=mansion_first_floor_world(route.route_world, runtime.reader.read()))
     # The observed third floor owns its statue/drop phase. A cold route quote
     # through an unobserved first-floor door is not an alternative completed
     # passage and must not send the player back down the wrong staircase.

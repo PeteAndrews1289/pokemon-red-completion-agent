@@ -614,3 +614,208 @@ class ProductionTrainAdmission:
             or actor.diagnostic_tower_productive_stay is not False
         ):
             raise ValueError("production TRAIN actor source/settings differs")
+
+
+# Finite reuse of exact historical TRAIN fixtures for the actual production
+# League funding component. This is source/actor admission, never fit admission.
+LEAGUE_TRAIN_SCHEMA = 'pokemon.red.production-league-funding-train.v1'
+LEAGUE_TRAIN_MODEL = '111ef28dd505a61c6c8b3c0c7521d0d395119afba6f3b0e090a86095a03a4ad2'
+LEAGUE_TRAIN_CONTENT = '333b78ccc60ac4bb9a078fa391d38be953a687d2cd4a8402fa823eff3ab9546a'
+LEAGUE_TRAIN_SOURCES = {
+    '04ceddd3119f1f43909eb9e0403e4990d2e0134c82da3ebd18dc8a714e88314a': ('lower-full', '3590e3252e430b232f15a07ed480afe1d61905e06cbbbfe53f1ff6d3fa5748b5', '4a7b0ffa84ae00e8c87764114c2cdeba26fe0c3028c7464fe3fc6302e044fad9'),
+    '03ad8eafd9a4f548a6ed2e04a53ab81018da5226f90b94d0953fba54a3787e57': ('prepared-full', '1a66dbd1cd1a0fb7041d0d2fdcc4faa2812a68c7945a7e9a4ebfe403154eab87', 'a19319fb65e4caa2f04384a8dc8cf045f10cffd03cb09ac7432c4de5d8193266'),
+}
+_LEAGUE_TRAIN_TOKEN = object()
+
+
+
+LEAGUE_TRAIN_RESOURCE_SCHEMA = 'pokemon.red.production-league-funding-train.v2'
+LEAGUE_TRAIN_RESOURCE_SETUPS = {'03670ee91d95f8ce1779bc20bcb15b129ef143718c6f806de8e06335ff5a809a': {'parent_state_sha256': '04ceddd3119f1f43909eb9e0403e4990d2e0134c82da3ebd18dc8a714e88314a', 'setup_sha256': '983d97fb5df09fb3e632405fa0b698eacf847b89a4ce9c4f081bf78f8f70d15e'}, 'afa4be6c6657ddf2cf10aae9c04fd89523c1a8d8eac6136515adf03d99a13ecc': {'parent_state_sha256': '03ad8eafd9a4f548a6ed2e04a53ab81018da5226f90b94d0953fba54a3787e57', 'setup_sha256': '4cc9d1dc931f0bde4357da2b3c6124e535259296a30759a381be5b60112665d9'}}
+LEAGUE_TRAIN_SOURCES.update({'03670ee91d95f8ce1779bc20bcb15b129ef143718c6f806de8e06335ff5a809a': ('lower-full', '34cbb50111b0a7475c7b4f223ed7c463707318a3318ea2b1e31197ef5a4a7a82', 'ed16aa643bb511309c7f7da30dd7379f3fef658237d78ade4a6204e0e4003869'), 'afa4be6c6657ddf2cf10aae9c04fd89523c1a8d8eac6136515adf03d99a13ecc': ('prepared-full', 'f301e5e9b22571e3ef61fbfc2372eecbb1cfc3f91ba6b30af01dbc4c817e59af', '53c1a1cc6ed08c079d8faba52936ca57acfe74ac289e5b5f78477affa0ca242c')})
+
+NATIVE_FUNDING_CHECKPOINT_SCHEMA = 'pokemon.red.production-league-funding-native-checkpoint-train.v3'
+NATIVE_FUNDING_CHECKPOINT_AUTH = '1ad40b0ef6a0422487649a3c0392580121d7b42dbb2d92e7aa58d93166111d06'
+NATIVE_FUNDING_CHECKPOINTS = {
+    'lower-full-fund-now-v6': ('03670ee91d95f8ce1779bc20bcb15b129ef143718c6f806de8e06335ff5a809a',
+        '3ed4e539d54e265825fcacb05640bcebd6cc77c2e3d88a5be89ade03d903a420'),
+    'prepared-full-fund-now-v6': ('afa4be6c6657ddf2cf10aae9c04fd89523c1a8d8eac6136515adf03d99a13ecc',
+        'e17fec18ed0aa864c0103d4d3378835de3becc5a741feb527cd62a798c9aae6e'),
+}
+
+
+def retained_funding_checkpoint_declaration(*, case_id, source_state, authority_bytes, result_bytes):
+    """Reopen two already independently audited native TRAIN funding terminals.
+
+    The receipt pins full native source/terminal readbacks, journals and the
+    original assigned TRAIN lineage. Failed League outcomes and every old cost
+    remain in the parent; this is no new origin, actor renewal or fitting grant.
+    No arbitrary descendant, DEVELOPMENT source or edited state is accepted.
+    """
+    if (case_id not in NATIVE_FUNDING_CHECKPOINTS
+            or any(type(x) is not bytes for x in (source_state,authority_bytes,result_bytes))
+            or sha256(authority_bytes).hexdigest()!=NATIVE_FUNDING_CHECKPOINT_AUTH):
+        raise ValueError('retained funding checkpoint requires its exact native authority')
+    authority=json.loads(authority_bytes)
+    rows=[r for r in authority['rows'] if r['case']==case_id]
+    if len(rows)!=1 or authority.get('passed') is not True:
+        raise ValueError('retained funding checkpoint native census differs')
+    row=rows[0]
+    if sha256(result_bytes).hexdigest()!=row['result']['sha256']:
+        raise ValueError('retained funding checkpoint result bytes changed')
+    result=json.loads(result_bytes);phase=result['phase_results'][0]
+    parent,terminal=NATIVE_FUNDING_CHECKPOINTS[case_id]
+    if (sha256(result_bytes).hexdigest()!=row['result']['sha256']
+            or sha256(source_state).hexdigest()!=terminal
+            or row['partition']!='train' or row['teacher_selected'] is not True
+            or phase['ordinal']!=0 or phase['before_sha256']!=parent
+            or phase['after_state']['sha256']!=terminal
+            or row['phases'][0]['before_state']['sha256']!=parent
+            or row['phases'][0]['after_state']['sha256']!=terminal
+            or result.get('guest_closed') is not True
+            or result.get('original_source_unchanged') is not True
+            or phase['after']['battle_state']!=0
+            or phase['after']['input_ready'] is not True
+            or phase['after']['buttons_released'] is not True):
+        raise ValueError('retained funding checkpoint source/result/native boundary differs')
+    return dict(schema=NATIVE_FUNDING_CHECKPOINT_SCHEMA,source_state_sha256=terminal,
+        source_origin_sha256=SOURCE_ORIGIN,model_sha256=LEAGUE_TRAIN_MODEL,
+        model_content_sha256=LEAGUE_TRAIN_CONTENT,native_checkpoint_case=case_id,
+        native_checkpoint_parent_state_sha256=parent,
+        native_checkpoint_authority_sha256=NATIVE_FUNDING_CHECKPOINT_AUTH,
+        native_checkpoint_result_sha256=sha256(result_bytes).hexdigest(),
+        native_checkpoint_ordinal=0,prior_failures_and_costs_retained=True)
+
+
+@dataclass(frozen=True, init=False)
+class LeagueFundingTrainAdmission:
+    """Exact original TRAIN bytes/work order for unchanged111ef funding actors.
+
+    Fixture eligibility remains historical and correlated, not complete fresh
+    genesis. No arbitrary sources, DEVELOPMENT relabeling, controller fallback,
+    model promotion, data admission or changed battle settings follow from this.
+    """
+    _bytes: bytes
+
+    def __init__(self, document, *, _token=None):
+        if _token is not _LEAGUE_TRAIN_TOKEN:
+            raise ValueError('funding TRAIN admission needs actual source/work-order bytes')
+        object.__setattr__(self, '_bytes', json.dumps(document, sort_keys=True, separators=(',', ':')).encode())
+
+    @classmethod
+    def authenticate(cls, *, source_state, envelope_bytes, progress_bytes,
+                     setup_bytes, original_train_plan_bytes, work_order_bytes,
+                     source_commit, model_bytes, resource_parent_state=None):
+        payloads=(source_state,envelope_bytes,progress_bytes,setup_bytes,original_train_plan_bytes,work_order_bytes,model_bytes)
+        if any(type(x) is not bytes for x in payloads) or not _digest(source_commit,40):
+            raise ValueError('funding TRAIN requires immutable authentic bytes')
+        state=sha256(source_state).hexdigest();registered=LEAGUE_TRAIN_SOURCES.get(state)
+        if registered is None or tuple(sha256(x).hexdigest()for x in (envelope_bytes,progress_bytes))!=registered[1:]:
+            raise ValueError('funding TRAIN source is not an exact retained TRAIN fixture')
+        envelope,progress,setup,original,work=map(json.loads,(envelope_bytes,progress_bytes,setup_bytes,original_train_plan_bytes,work_order_bytes))
+        resource=LEAGUE_TRAIN_RESOURCE_SETUPS.get(state)
+        if resource is None:
+            if resource_parent_state is not None:
+                raise ValueError('original TRAIN source cannot claim a resource parent')
+            original_state=state
+        else:
+            original_state=resource['parent_state_sha256']
+            if (type(resource_parent_state)is not bytes
+                    or sha256(resource_parent_state).hexdigest()!=original_state
+                    or sha256(setup_bytes).hexdigest()!=resource['setup_sha256']
+                    or setup.get('resource_parent_state_sha256')!=original_state
+                    or setup.get('intervention')!='cash8_remove_ordinary_balls_only'
+                    or setup.get('all_other_WRAM_unchanged')is not True
+                    or setup.get('party_XP_HP_PP_events_dex_unchanged')is not True
+                    or setup.get('inputs')!=0 or setup.get('frames')!=0):
+                raise ValueError('resource TRAIN source requires exact original parent and setup bytes')
+        declaration=dict(schema=LEAGUE_TRAIN_SCHEMA if resource is None else LEAGUE_TRAIN_RESOURCE_SCHEMA,source_state_sha256=state,
+            source_envelope_sha256=registered[1],assisted_progress_sha256=registered[2],
+            setup_sha256=sha256(setup_bytes).hexdigest(),source_origin_sha256=SOURCE_ORIGIN,
+            model_sha256=LEAGUE_TRAIN_MODEL,model_content_sha256=LEAGUE_TRAIN_CONTENT,
+            original_train_plan_sha256=sha256(original_train_plan_bytes).hexdigest())
+        if resource is not None:declaration['resource_parent_state_sha256']=original_state
+        if (progress.get('partition')!='train' or progress.get('campaign_eligible')is not False
+                or progress.get('envelope')!=envelope or envelope.get('state_sha256')!=state
+                or progress.get('state_sha256')!=state or setup.get('source_sha256')!=SOURCE_ORIGIN
+                or progress.get('setup_receipt_sha256')!=declaration['setup_sha256']
+                or original.get('partition')!='train' or original.get('development_outcomes')!=0
+                or original.get('conditions',{}).get(registered[0],{}).get('source_sha256')!=original_state
+                or work.get('partition')!='train' or work.get('teacher_actions_allowed')is not True
+                or work.get('league_funding_train_component')!=declaration
+                or sha256(model_bytes).hexdigest()!=LEAGUE_TRAIN_MODEL
+                or canonical_sha256(json.loads(model_bytes))!=LEAGUE_TRAIN_CONTENT):
+            raise ValueError('funding TRAIN provenance/model/declaration differs')
+        doc=dict(declaration,source_commit=source_commit,work_order_sha256=sha256(work_order_bytes).hexdigest(),
+                 source_partition='train',fit_admission=False,complete_genesis=False,new_independent_origin=False)
+        return cls(doc,_token=_LEAGUE_TRAIN_TOKEN)
+
+    def document(self):
+        return json.loads(self._bytes)
+
+    @classmethod
+    def authenticate_retained_checkpoint(cls, *, case_id, source_state, authority_bytes,
+            result_bytes, work_order_bytes, source_commit, model_bytes):
+        declaration=retained_funding_checkpoint_declaration(case_id=case_id,source_state=source_state,
+            authority_bytes=authority_bytes,result_bytes=result_bytes)
+        if (type(work_order_bytes) is not bytes or type(model_bytes) is not bytes
+                or not _digest(source_commit,40) or sha256(model_bytes).hexdigest()!=LEAGUE_TRAIN_MODEL
+                or canonical_sha256(json.loads(model_bytes))!=LEAGUE_TRAIN_CONTENT):
+            raise ValueError('retained funding checkpoint needs the exact existing model/work bytes')
+        work=json.loads(work_order_bytes)
+        if (work.get('partition')!='train' or work.get('teacher_actions_allowed') is not True
+                or work.get('league_funding_train_component')!=declaration):
+            raise ValueError('retained funding checkpoint work declaration differs')
+        return cls(dict(declaration,source_commit=source_commit,
+            work_order_sha256=sha256(work_order_bytes).hexdigest(),source_partition='train',
+            fit_admission=False,complete_genesis=False,new_independent_origin=False),_token=_LEAGUE_TRAIN_TOKEN)
+
+    @property
+    def source_state_sha256(self):return self.document()['source_state_sha256']
+    @property
+    def source_origin_sha256(self):return SOURCE_ORIGIN
+    @property
+    def source_commit(self):return self.document()['source_commit']
+    @property
+    def work_order_sha256(self):return self.document()['work_order_sha256']
+    @property
+    def root_lineage_id(self):return 'red-goal-root-'+SOURCE_ORIGIN
+    @property
+    def identity(self):return canonical_sha256(self.document())
+
+    def require_work_order(self, payload):
+        if type(payload)is not bytes or sha256(payload).hexdigest()!=self.work_order_sha256:
+            raise ValueError('funding TRAIN work order changed')
+        work=json.loads(payload);d=self.document()
+        if d['schema']==NATIVE_FUNDING_CHECKPOINT_SCHEMA:
+            declared={k:v for k,v in d.items() if k not in {'source_commit','work_order_sha256',
+                'source_partition','fit_admission','complete_genesis','new_independent_origin'}}
+            if (work.get('partition')!='train' or work.get('teacher_actions_allowed') is not True
+                    or work.get('league_funding_train_component')!=declared):
+                raise ValueError('retained funding checkpoint work declaration differs')
+            return
+        keys=('schema','source_state_sha256','source_envelope_sha256','assisted_progress_sha256','setup_sha256','source_origin_sha256','model_sha256','model_content_sha256','original_train_plan_sha256')
+        if 'resource_parent_state_sha256'in d:keys+=('resource_parent_state_sha256',)
+        if work.get('partition')!='train' or work.get('teacher_actions_allowed')is not True or work.get('league_funding_train_component')!={k:d[k]for k in keys}:
+            raise ValueError('funding TRAIN work declaration differs')
+
+    def require_scope(self, scope, role):
+        from .red_player_league_options import LEAGUE_PLAYER_TARGETS,CHAMPION_PLAYER_TARGET
+        targets={x.objective_id:x for x in (*LEAGUE_PLAYER_TARGETS,CHAMPION_PLAYER_TARGET)}
+        contract=scope.contract;target=targets.get(getattr(contract,'objective_id',None))
+        if (role!='story' or target is None or scope.source_state_sha256!=self.source_state_sha256
+                or scope.root_lineage_id!=self.root_lineage_id or scope.work_order_sha256!=self.work_order_sha256
+                or scope.model_sha256!=LEAGUE_TRAIN_MODEL or scope.model_content_sha256!=LEAGUE_TRAIN_CONTENT
+                or contract.map_id!=int(target.room) or contract.defeated_event!=int(target.event)
+                or contract.victory_items or contract.victory_badge_bits or scope.gym_reward is not None
+                or scope.allow_learned_tactics is not True or scope.diagnostic_status_entry is not True
+                or scope.screen_capped_status_moves is not True or scope.diagnostic_stay_when_productive
+                or scope.diagnostic_prompt_stay or scope.diagnostic_status_release):
+            raise ValueError('funding TRAIN scope source/model/native room/settings differ')
+
+    def require_actor(self, actor, scope, role):
+        self.require_scope(scope,role)
+        if (actor.source_partition is not ScenarioPartition.TRAIN or actor.source_commit!=self.source_commit
+                or actor.source_state_sha256!=self.source_state_sha256 or actor.root_lineage_id!=self.root_lineage_id
+                or actor.pp_depleted_switch_screen is not True or actor.mechanics_aware_tower_choices is not False
+                or actor.diagnostic_tower_productive_stay is not False):
+            raise ValueError('funding TRAIN actor source/settings differ')

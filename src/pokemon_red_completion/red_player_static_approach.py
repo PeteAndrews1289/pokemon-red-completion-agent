@@ -10,6 +10,8 @@ from .goal_manager import GoalFailureReason, GoalKind
 from .goal_manager_runtime import ExecutableGoalBinding, GoalExecutionReport, GoalVerification
 from .observation import MapId, event_flag_is_set
 from .player_option_challenge import OptionChallenge
+from .player_option_story_unit import OptionStoryUnit
+from .provenance import canonical_sha256
 from .red_player_field_goals import _field_ready
 from .red_player_story_battle import story_battle_binding
 from .red_player_story_obstruction import blocking_story_trainers
@@ -305,5 +307,8 @@ def _static_approach_option(
         execute,
         verify,
         story_objective_ref=objective_id,
+        story_approach_only=True,
+        story_unit=OptionStoryUnit("movement", True),
+        movement_endpoint_sha256=canonical_sha256(dict(map=destination, at=list(at))),
     )
     return binding, OptionChallenge(False, False, 0.0, 0.0, 0.0)

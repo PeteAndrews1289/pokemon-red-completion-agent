@@ -35,7 +35,7 @@ from pokemon_red_completion.goal_manager_trajectory import (
 from pokemon_red_completion.goal_resource_quote import GoalResourceQuote
 from pokemon_red_completion.goal_search_memory import GoalSearchHistory
 
-from .player_option_story_unit import OptionStoryUnit
+from .player_option_story_unit import OptionStoryUnit, StoryRouteQuote
 
 
 class GoalManagerRuntimeError(RuntimeError):
@@ -272,8 +272,40 @@ class ExecutableGoalBinding:
     story_approach_only: bool = False
     cash_outcome: GoalCashOutcome | None = None
     story_unit: OptionStoryUnit | None = None
+    # Private quoted endpoint; policy receives only observed recurrence.
+    movement_endpoint_sha256: str | None = None
+    # Private executor-planned remaining route to its own story endpoint. Read
+    # only by the opt-in story-branch head; never part of legacy V16 vectors.
+    story_route_quote: StoryRouteQuote | None = None
+    # An adapter-private transition follows its validated executor through travel.
+    level_evolution_transition: tuple[str, str] | None = None
+    level_evolution_boxed_ref: str | None = None
 
     def __post_init__(self) -> None:
+        transition = self.level_evolution_transition
+        if transition is not None and (
+            self.kind is not GoalKind.EVOLVE_SPECIES or type(transition) is not tuple
+            or len(transition) != 2 or any(type(x) is not str or not x for x in transition)
+            or transition[0] == transition[1]
+        ):
+            raise GoalManagerRuntimeError("level evolution observation requires distinct bound species")
+        if self.level_evolution_boxed_ref is not None and (
+            transition is None or type(self.level_evolution_boxed_ref) is not str or not self.level_evolution_boxed_ref
+        ):
+            raise GoalManagerRuntimeError("boxed evolution observation requires a bound trainee")
+        if self.story_route_quote is not None and (
+            type(self.story_route_quote) is not StoryRouteQuote
+            or self.kind is not GoalKind.ADVANCE_STORY
+            or self.story_objective_ref is None
+        ):
+            raise GoalManagerRuntimeError("story route quote requires a bound story executor")
+        if self.movement_endpoint_sha256 is not None and (
+            type(self.movement_endpoint_sha256) is not str
+            or re.fullmatch(r"[0-9a-f]{64}", self.movement_endpoint_sha256) is None
+            or self.story_unit != OptionStoryUnit("movement", True)
+            or self.kind is not GoalKind.ADVANCE_STORY
+        ):
+            raise GoalManagerRuntimeError("movement endpoint requires certified approach")
         if self.story_unit is not None and (
             type(self.story_unit) is not OptionStoryUnit
             or self.kind is not GoalKind.ADVANCE_STORY

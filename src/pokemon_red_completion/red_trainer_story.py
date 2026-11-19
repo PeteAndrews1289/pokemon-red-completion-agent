@@ -44,7 +44,7 @@ from .observation import (
 from .quest import Specialist
 from .red_dual_capability_curriculum_runtime import dependency_specimen_ledger
 from .red_goal_manager import RedGoalObservation
-from .red_lorelei_story import story_league_controller
+from .red_lorelei_story import FrozenLoreleiStoryController, story_league_controller
 from .red_pc_storage import face_pc_boundary
 from .red_routed_recovery import RecoveryRouteInterruptionHandler
 from .red_trainer_control import RedTrainerPartyController
@@ -150,6 +150,7 @@ class RedCartridgeLoreleiSkill:
     rematch: bool = False
     allow_scripted_reentry: bool = False
     maximum_level_deficit: int = 5
+    allow_uncovered_later: bool = False
     development_retry_reentry: bool = False
     specialist: Specialist = field(default=Specialist.BATTLE, init=False)
     expected_facts: frozenset[str] = field(
@@ -243,7 +244,8 @@ class RedCartridgeLoreleiSkill:
             if (
                 not admitted_screen
                 or owner is None
-                or owner.battler.source_partition is not ScenarioPartition.DEVELOPMENT
+                or (owner.battler.source_partition is not ScenarioPartition.DEVELOPMENT
+                    and not _funding_train_level_screen(owner))
             ):
                 raise RedTrainerStoryError(
                     "level-screen override requires admitted development scope"
@@ -264,7 +266,8 @@ class RedCartridgeLoreleiSkill:
             if (
                 self.objective_id != "defeat_lorelei" or self.rematch is not True
                 or type(owner) is not ScopedAssistedLeagueRetryController
-                or owner.battler.source_partition is not ScenarioPartition.DEVELOPMENT
+                or (owner.battler.source_partition is not ScenarioPartition.DEVELOPMENT
+                    and not _funding_train_level_screen(owner))
                 or self.recovery_controller != owner.controller_name
             ):
                 raise RedTrainerStoryError(
@@ -450,6 +453,15 @@ class RedCartridgeLoreleiSkill:
         quote = self._quote(trainer.trainer_class, trainer.trainer_set)
         if learned is not None and hasattr(learned, "require_cartridge_target"):
             learned.require_cartridge_target(trainer, quote)
+        from .red_champion_story import locked_league_without_revival
+        from .scenario_lab import ScenarioPartition
+        if type(self.allow_uncovered_later) is not bool or (self.allow_uncovered_later and (
+            not self.rematch or learned is None
+            or self.recovery_controller != "scoped-assisted-league-retry-development"
+            or learned.battler.source_partition is not ScenarioPartition.DEVELOPMENT
+            or not locked_league_without_revival(raw)
+        )):
+            raise RedTrainerStoryError("partial Elite Four coverage requires the locked development boundary")
         preparation = (
             plan_trainer_party(observation.party, quote, minimum_hp_ratio=0.0,
                                allow_fainted_reserves=True,
@@ -457,7 +469,8 @@ class RedCartridgeLoreleiSkill:
                                    getattr(getattr(learned, "battler", None),
                                            "development_story_scope", None),
                                    "diagnostic_status_entry", False),
-                               maximum_level_deficit=self.maximum_level_deficit)
+                               maximum_level_deficit=self.maximum_level_deficit,
+                               allow_uncovered_later=self.allow_uncovered_later)
             if learned is not None and learned.recovery_contract == "league-profit-recovery-v1"
             else
             plan_trainer_party(observation.party, quote, minimum_hp_ratio=0.0)
@@ -560,6 +573,36 @@ class RedCartridgeLoreleiSkill:
         """Read the already-bound opening swap without planning or input."""
         return None if self._prepared is None else self._prepared[2].lead
 
+    def _run_prepared_battle(self, controller, reader, actions, **kwargs):
+        """Keep an exact unfinished League battle as a typed local-bound censor."""
+        from .red_lorelei_story import (
+            FrozenLoreleiStoryController, LoreleiStoryBattleStopped,
+        )
+
+        try:
+            return run_prepared_trainer_funding(reader, actions, **kwargs)
+        except LoreleiStoryBattleStopped as stopped:
+            if (
+                not isinstance(controller, FrozenLoreleiStoryController)
+                or controller is not self._prepared_learned_controller
+                or self._prepared_story_binding != controller.binding_identity
+                or controller.contract.objective_id != self.objective_id
+                or controller.last_completion is None
+            ):
+                raise
+            from .red_player_story_battle import (
+                StoryBattleDecisionBudgetReached, raise_if_story_battle_budget_reached,
+            )
+
+            try:
+                raise_if_story_battle_budget_reached(
+                    controller.last_completion, controller, self.runtime,
+                    controller.contract, actions,
+                )
+            except StoryBattleDecisionBudgetReached as budget:
+                raise budget from stopped
+            raise
+
     def execute(self) -> ObjectiveSkillExecution:
         from .red_resource_goal_router import _ROUTE_LIMITS
 
@@ -581,7 +624,8 @@ class RedCartridgeLoreleiSkill:
                 or self._prepared_reentry != (
                     self.allow_scripted_reentry or self.development_retry_reentry)):
             raise RedTrainerStoryError("story origin or battle authority changed before input")
-        if self._prepared_level_deficit != self.maximum_level_deficit:
+        if (self._prepared_level_deficit != self.maximum_level_deficit
+                or self.allow_uncovered_later != preparation.allow_uncovered_later):
             raise RedTrainerStoryError("prepared level-screen declaration changed before input")
         if self._prepared_blocks is not None and (
             self.runtime.reader.read_current_map_blocks() != self._prepared_blocks
@@ -730,8 +774,14 @@ class RedCartridgeLoreleiSkill:
         if not self._scripted_triggers:
             face_pc_boundary(actions, reader, target.interaction_facing.value)
         controller = self._battle_controller(reader)
-        receipt = run_prepared_trainer_funding(
-            reader, actions, target=target, validate_target=require_target,
+        battle_start = self.runtime.adapter.observe()
+        evolution_guard = None
+        if isinstance(controller, FrozenLoreleiStoryController):
+            from .red_trainer_evolution import RedTrainerEvolutionGuard
+
+            evolution_guard = RedTrainerEvolutionGuard.from_rom(world.rom, self.runtime.emulator)
+        receipt = self._run_prepared_battle(
+            controller, reader, actions, target=target, validate_target=require_target,
             move_slot_policy=recovery_guard._safe_trainer_move,
             timing=BattleRuntimeTiming(max_runtime_pulses=1600),
             intent=BattleIntent(
@@ -746,6 +796,8 @@ class RedCartridgeLoreleiSkill:
             validate_scripted_dialogue=scripted_dialogue,
             maximum_full_restores=self.maximum_full_restores,
             prospective_story_recovery=bool(self.maximum_full_restores),
+            **({"league_evolution_rom": world.rom}
+               if isinstance(controller, FrozenLoreleiStoryController) else {}),
         )
         spent = (
             controller.heals_claimed if self.maximum_full_restores else 0
@@ -760,10 +812,16 @@ class RedCartridgeLoreleiSkill:
                 projected_events=self._lobby_events,
                 lobby_reset_verified=getattr(traversal,"verified",False))
         ) if self.rematch else self.expected_facts.issubset(after.game_state.facts)
+        from .red_routed_trainer_funding import _funding_evolution_ledger
+
+        ledger = _funding_evolution_ledger(
+            evolution_guard, battle_start, after,
+            tuple(battle_start.raw.party_species_ids or ()),
+            dependency_specimen_ledger(before.collection_observation),
+        )
         if (
             not after.input_ready or after.raw.battle_state
-            or dependency_specimen_ledger(after.collection_observation)
-            != dependency_specimen_ledger(before.collection_observation)
+            or ledger is None
             or not event_verified
             or after.raw.badge_bits != before.raw.badge_bits
             or after.raw.bag_items != expected_bag
@@ -801,3 +859,20 @@ class RedCartridgeLoreleiSkill:
                  else "damage-aware" if self.maximum_full_restores else "ordinary"
              )},
         )
+
+
+def _funding_train_level_screen(owner):
+    """Recognize only the existing exact funding controller's authenticated TRAIN scope."""
+    from .red_lorelei_story import ScopedAssistedLeagueRetryController, ScopedAssistedChampionController
+    from .red_production_train_admission import LeagueFundingTrainAdmission
+    from .scenario_lab import ScenarioPartition
+    if type(owner) not in (ScopedAssistedLeagueRetryController, ScopedAssistedChampionController):
+        return False
+    actor=owner.battler
+    scope=getattr(actor,'development_story_scope',None)
+    admission=getattr(scope,'train_admission',None)
+    if actor.source_partition is not ScenarioPartition.TRAIN or type(admission) is not LeagueFundingTrainAdmission:
+        return False
+    admission.require_actor(actor,scope,'story')
+    owner.require_identity()
+    return True

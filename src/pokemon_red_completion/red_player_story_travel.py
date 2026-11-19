@@ -11,7 +11,7 @@ from .global_router import GlobalRouterError, find_macro_path
 from .goal_manager import GoalFailureReason, GoalKind
 from .goal_manager_runtime import ExecutableGoalBinding, GoalExecutionReport, GoalVerification
 from .observation import EventFlag, ItemId, MapId, event_flag_is_set, semantic_facts
-from .player_option_story_unit import OptionStoryUnit
+from .player_option_story_unit import OptionStoryUnit, planned_route_quote
 from .provenance import canonical_sha256
 from .red_player_cash_exposure import certified_cash_safe_transition
 from .red_player_field_goals import _field_ready
@@ -84,6 +84,12 @@ def story_destination_map(objective_id, raw):
             # the now-empty Tower. Arrival still cannot claim the flute.
             destination = int(MapId.MR_FUJIS_HOUSE)
     return destination
+
+
+class StoryIntermediateBoundaryUnavailable(ValueError):
+    """A quoted regional endpoint does not belong to this walking corridor."""
+
+    reason_code = "story_intermediate_boundary_off_corridor"
 
 
 def story_travel_binding(
@@ -246,17 +252,34 @@ def story_travel_binding(
                 last_outside=start.last_outside_map,
             )
             if intermediate_map not in corridor.maps:
-                raise ValueError("intermediate boundary is not on the planned story route")
-        plan = route.route_world.plan_feasible_to_map(
-            start,
-            destination,
-            **({"goal_at": at} if frontier or exact_at is not None else {}),
-        )
+                raise StoryIntermediateBoundaryUnavailable("intermediate boundary is not on the planned story route")
+        try:
+            plan = route.route_world.plan_feasible_to_map(
+                start,
+                destination,
+                **({"goal_at": at} if frontier or exact_at is not None else {}),
+            )
+        except RoutePlanningError:
+            if intermediate_map is None or not stop_at_map_boundary:
+                raise
+            # A closed shortest corridor can hide a legal longer route to the
+            # same prerequisite. Reuse the existing capability-aware frontier
+            # only for relevance, then quote its next boundary with REAL
+            # occupancy and hazards. Never execute a relaxed/full-route preview.
+            destination, at = story_frontier_target(route.route_world, start, destination)
+            plan = route.route_world.plan_feasible_to_map(start, destination, goal_at=at)
     except (RoutePlanningError, GlobalRouterError):
         return None
     if exact_at is not None and (plan.terminal_map != destination or plan.terminal_at != exact_at):
         return None
     terminal_at = plan.terminal_at
+    # The full plan targets this objective's own endpoint only when it is not
+    # a frontier/intermediate leg; otherwise the remaining route stays unknown.
+    route_quote = (
+        planned_route_quote(raw.map_id, plan)
+        if not frontier and intermediate_map is None and destination == final_destination
+        else None
+    )
     if stop_at_map_boundary:
         # Trainer projections are observed on the CURRENT map. Re-enumerate
         # immediately after a warp/connection, before entering unseen lanes.
@@ -277,16 +300,33 @@ def story_travel_binding(
     )
     used = False
     terminal = None
+    field_recovery = None
 
     def execute():
-        nonlocal used, terminal
+        nonlocal used, terminal, field_recovery
         if used or runtime.emulator.save_state_bytes() != state or not _field_ready(runtime):
             raise ValueError("story travel is stale or consumed")
         used = True
         a, f = actions.actions_executed, runtime.emulator.frame_count
-        replace(cash_route or route, destination_map=destination, destination_at=terminal_at)(
-            actions, runtime.reader, runtime.emulator
-        )
+        from .red_routed_recovery import SettledNativeFieldRecovery
+        selected_route = replace(cash_route or route, destination_map=destination, destination_at=terminal_at)
+        if isinstance(selected_route, RedVermilionGroundTransition) and selected_route.allow_field_faint_dialogue:
+            selected_route = replace(selected_route, stop_on_native_field_faint=True)
+        try:
+            selected_route(actions, runtime.reader, runtime.emulator)
+        except SettledNativeFieldRecovery as recovery:
+            from .red_story_field_recovery import certify_story_field_recovery
+            field_recovery = certify_story_field_recovery(
+                recovery, raw, runtime.reader.read(), state,
+                runtime.emulator.save_state_bytes(), objective_id,
+            )
+        if field_recovery is not None:
+            if not _field_ready(runtime):
+                raise RuntimeError("native story field recovery did not settle control")
+            terminal = runtime.emulator.save_state_bytes()
+            return GoalExecutionReport(
+                actions.actions_executed - a, runtime.emulator.frame_count - f, field_recovery
+            )
         after = runtime.reader.read()
         if (
             not _field_ready(runtime)
@@ -320,6 +360,14 @@ def story_travel_binding(
         )
 
     def verify(report):
+        if field_recovery is not None:
+            if (
+                dict(report.evidence) != field_recovery
+                or runtime.emulator.save_state_bytes() != terminal
+                or not _field_ready(runtime)
+            ):
+                return GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
+            return GoalVerification.failed(GoalFailureReason.RECOVERY_REQUIRED)
         after, snapshot = capture_player_lesson_snapshot(runtime)
         if (
             terminal is None
@@ -361,4 +409,7 @@ def story_travel_binding(
         story_objective_ref=objective_id,
         story_approach_only=not completes_objective,
         story_unit=OptionStoryUnit("movement", not completes_objective),
+        movement_endpoint_sha256=(canonical_sha256(dict(map=destination, at=list(terminal_at)))
+                                  if not completes_objective else None),
+        story_route_quote=route_quote,
     )

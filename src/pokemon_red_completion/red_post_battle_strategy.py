@@ -87,7 +87,11 @@ def _model_struggle_evidence(row, before, slot, *, wild, roster_faints):
         or proposal.get("schema") != "pokemon.red.model-struggle-proposal.v1"
         or proposal.get("semantic_action") != "pokemon.core:battle:struggle"
         or proposal.get("public_move_ref") != "pokemon.red.gb.us.rev0:move:165"
-        or proposal.get("source_visible_pp") != [0, 0, 0, 0]
+        # One visible entry per known move: a three-move member reports three
+        # zeros. The four-slot party proof above already shows no PP remains.
+        or not isinstance(proposal.get("source_visible_pp"), list)
+        or not 1 <= len(proposal["source_visible_pp"]) <= 4
+        or any(type(pp) is not int or pp != 0 for pp in proposal["source_visible_pp"])
         or proposal.get("projection_pp") != [0.0]
         or proposal.get("ordinary_move_legal_mask") != [False]
         or proposal.get("observation_modified") is not False

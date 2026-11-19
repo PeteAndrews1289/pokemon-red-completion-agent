@@ -660,12 +660,27 @@ class Gen1FieldMovePort:
 def fly_story_events_preserved(
     before: RawGameState, after: RawGameState, destination: int, *, departure: bool
 ) -> bool:
-    """Permit only the native seven-badge Viridian arrival unlock.
+    """Permit exact native Cinnabar resets and the seven-badge Viridian unlock.
 
     pret/pokered 1e960340, ViridianCityCheckGymOpenScript sets this single
     event on map entry iff the badge byte is exactly all except Earth.
-    Departure, other towns, event clearing and unrelated changes stay closed.
+    Cinnabar permits only its two script resets; unrelated changes stay closed.
     """
+    # CinnabarIsland_Script (pret/pokered 1e960340) resets these two
+    # ephemeral mechanisms on map entry. Requiring total event equality rejects
+    # an earned flight out of Mansion after using its switch. Departure and
+    # every other event remain protected; this never writes native flags.
+    if not departure and destination == MapId.CINNABAR_ISLAND and after.map_id == destination:
+        if (before.event_flags is None or after.event_flags is None
+                or before.badge_bits != after.badge_bits):
+            return False
+        expected = bytearray(before.event_flags)
+        for flag in (EventFlag.MANSION_SWITCH_ON, EventFlag.LAB_STILL_REVIVING_FOSSIL):
+            event = int(flag)
+            if len(expected) <= event // 8:
+                return False
+            expected[event // 8] &= ~(1 << (event % 8))
+        return bytes(expected) == after.event_flags
     if before.event_flags == after.event_flags:
         return before.event_flags is not None
     if (

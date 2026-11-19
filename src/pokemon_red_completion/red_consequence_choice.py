@@ -19,6 +19,7 @@ from .player_challenge_consequence import (
     consequence_feature_versions_compatible,
     supports_consequence_preparation,
 )
+from .player_option_story_unit import OptionStoryUnit
 from .provenance import canonical_sha256
 from .red_live_option_menu import (
     RedLiveOptionChoice,
@@ -97,6 +98,8 @@ def branch_recovery_identity(
     defer_unbound_preparation=False,
     allow_singleton_parent_support=False,
     associate_unique_combat=False,
+    explore_outside_scope: bool = False,
+    explore_on_movement_recurrence: bool = False,
 ):
     """Private dispatch context binds authority,never enters model features."""
     if any(
@@ -133,13 +136,32 @@ def branch_recovery_identity(
         raise ValueError(
             "unique combat association requires unmasked greedy preparation refinement"
         )
+    if (
+        type(explore_outside_scope) is not bool
+        or explore_outside_scope
+        and (
+            not greedy_selection or not refine_preparation
+            or defer_unbound_preparation or allow_singleton_parent_support
+        )
+    ):
+        raise ValueError("out-of-scope exploration requires unmasked preparation refinement")
+    if (type(explore_on_movement_recurrence) is not bool
+            or explore_on_movement_recurrence and (
+                not greedy_selection or not refine_preparation
+                or defer_unbound_preparation or allow_singleton_parent_support
+                or explore_outside_scope)):
+        raise ValueError("recurrence escape requires unmasked greedy refinement without broad exploration")
     plural = type(objective_ref) is tuple
     if plural and not greedy_selection:
         raise ValueError("plural branch recovery requires declared highest-score selection")
     return canonical_sha256(
         dict(
             schema=(
-                "pokemon.red.branch-recovery-policy.v7"
+                "pokemon.red.branch-recovery-policy.v9"
+                if explore_on_movement_recurrence
+                else "pokemon.red.branch-recovery-policy.v8"
+                if explore_outside_scope
+                else "pokemon.red.branch-recovery-policy.v7"
                 if associate_unique_combat
                 else "pokemon.red.branch-recovery-policy.v6"
                 if allow_singleton_parent_support
@@ -161,7 +183,11 @@ def branch_recovery_identity(
                 else {"objective_ref": objective_ref}
             ),
             **(
-                {"parent_selection_rule": "maximum_score_with_seeded_ties"}
+                {"parent_selection_rule": (
+                    "greedy_unless_selected_movement_endpoint_revisited" if explore_on_movement_recurrence
+                    else "greedy_in_scope_else_existing_exploration" if explore_outside_scope
+                    else "maximum_score_with_seeded_ties"
+                )}
                 if greedy_selection
                 else {}
             ),
@@ -169,6 +195,8 @@ def branch_recovery_identity(
             **({"defer_unbound_preparation": True} if defer_unbound_preparation else {}),
             **({"allow_singleton_parent_support": True} if allow_singleton_parent_support else {}),
             **({"associate_unique_combat": True} if associate_unique_combat else {}),
+            **({"explore_outside_scope": True} if explore_outside_scope else {}),
+            **({"explore_on_movement_recurrence": True} if explore_on_movement_recurrence else {}),
         )
     )
 
@@ -186,9 +214,28 @@ def validate_greedy_branch_recovery_scope(
     defer_unbound_preparation=False,
     allow_singleton_parent_support=False,
     associate_unique_combat=False,
+    explore_outside_scope: bool = False,
+    explore_on_movement_recurrence: bool = False,
     train_inference_scope=None,
+    train_selector_scope=None,
 ):
     """Default-off composition admission, not a new choice policy or feature."""
+    selector_inference = False
+    if train_selector_scope is not None:
+        if train_inference_scope is not None or not allow or greedy_selection is not True:
+            raise ValueError("scoped TRAIN selector cannot mix inference witnesses")
+        from .red_scoped_train_composition import validate_train_selector_scope
+
+        selector_inference = validate_train_selector_scope(
+            train_selector_scope, source=source, model=model, head=head,
+            objective_ref=objective_ref, challenge_ref=challenge_ref,
+            flags=dict(greedy_selection=greedy_selection, refine_preparation=refine_preparation,
+                       defer_unbound_preparation=defer_unbound_preparation,
+                       allow_singleton_parent_support=allow_singleton_parent_support,
+                       associate_unique_combat=associate_unique_combat,
+                       explore_outside_scope=explore_outside_scope,
+                       explore_on_movement_recurrence=explore_on_movement_recurrence),
+        )
     if type(allow) is not bool:
         raise ValueError("greedy branch recovery permission must be boolean")
     if (
@@ -218,12 +265,31 @@ def validate_greedy_branch_recovery_scope(
             or not refine_preparation
             or defer_unbound_preparation
             or allow_singleton_parent_support
-            or source.get("partition") != "development"
+            or (source.get("partition") != "development" and not selector_inference)
             or train_inference_scope is not None
         )
     ):
         raise ValueError("unique combat association requires explicit unmasked DEVELOPMENT scope")
-    train_inference = False
+    if (
+        type(explore_outside_scope) is not bool
+        or explore_outside_scope
+        and (
+            not allow or greedy_selection is not True or not refine_preparation
+            or defer_unbound_preparation or allow_singleton_parent_support
+            or source.get("partition") != "development"
+            or train_inference_scope is not None
+        )
+    ):
+        raise ValueError("out-of-scope exploration requires explicit DEVELOPMENT composition")
+    if (type(explore_on_movement_recurrence) is not bool
+            or explore_on_movement_recurrence and (
+                not allow or greedy_selection is not True or not refine_preparation
+                or defer_unbound_preparation or allow_singleton_parent_support
+                or explore_outside_scope
+                or (source.get("partition") != "development" and not selector_inference)
+                or train_inference_scope is not None)):
+        raise ValueError("recurrence escape requires explicit DEVELOPMENT composition")
+    train_inference = selector_inference
     if train_inference_scope is not None:
         from .red_production_train_inference import validate_train_consequence_inference
 
@@ -274,6 +340,8 @@ def validate_greedy_branch_recovery_scope(
         defer_unbound_preparation=defer_unbound_preparation,
         allow_singleton_parent_support=allow_singleton_parent_support,
         associate_unique_combat=associate_unique_combat,
+        explore_outside_scope=explore_outside_scope,
+        explore_on_movement_recurrence=explore_on_movement_recurrence,
     )
     return True if train_inference else None
 
@@ -410,6 +478,9 @@ class BranchRecoveryDecision:
     allow_singleton_parent_support: bool = False
     associate_unique_combat: bool = False
     unique_combat_witness: UniqueObservedCombatWitness | None = None
+    explore_outside_scope: bool = False
+    explore_on_movement_recurrence: bool = False
+    recurrence_parent: RedLiveOptionChoice | None = None
 
     @property
     def identity(self):
@@ -422,15 +493,40 @@ class BranchRecoveryDecision:
             defer_unbound_preparation=self.defer_unbound_preparation,
             allow_singleton_parent_support=self.allow_singleton_parent_support,
             associate_unique_combat=self.associate_unique_combat,
+            explore_outside_scope=self.explore_outside_scope,
+            explore_on_movement_recurrence=self.explore_on_movement_recurrence,
         )
 
     def validate(self, choice):
+        escaped = self.recurrence_parent is not None
+        if escaped:
+            prior = self.recurrence_parent
+            if (not self.explore_on_movement_recurrence
+                    or type(prior) is not RedLiveOptionChoice
+                    or not _selected_movement_recurrence(prior)
+                    or prior.options is not choice.options
+                    or prior.seed != choice.seed
+                    or prior.model_sha256 != self.parent.model_sha256
+                    or prior.scores != self.parent.scores
+                    or prior.branch_recovery is not None
+                    or prior.consequence_head_sha256 is not None):
+                raise ValueError("recurrence escape witness differs")
+        elif self.explore_on_movement_recurrence and _selected_movement_recurrence(self.parent):
+            raise ValueError("recurrence escape witness is missing")
+        parent_greedy = self.greedy_selection and not escaped and not (
+            self.explore_outside_scope is True
+            and not _branch_scope_available(
+                choice.options, branch_recovery_objectives(self.objective_ref)
+            )
+        )
         if (
             type(self.greedy_selection) is not bool
             or type(self.refine_preparation) is not bool
             or type(self.defer_unbound_preparation) is not bool
             or type(self.allow_singleton_parent_support) is not bool
             or type(self.associate_unique_combat) is not bool
+            or type(self.explore_outside_scope) is not bool
+            or type(self.explore_on_movement_recurrence) is not bool
             or type(self.parent) is not RedLiveOptionChoice
             or self.parent.branch_recovery is not None
             or self.parent.sequence_policy is not None
@@ -447,11 +543,11 @@ class BranchRecoveryDecision:
             or choice.sequence_policy is not None
             or choice.consequence_head_sha256 is not None
             or (
-                self.greedy_selection
+                parent_greedy
                 and self.parent.mode is RedLiveOptionSelectionMode.MODEL_EXPLORATION
             )
             or (
-                not self.greedy_selection
+                not parent_greedy
                 and self.parent.mode is RedLiveOptionSelectionMode.MODEL_GREEDY
             )
         ):
@@ -546,7 +642,7 @@ class BranchRecoveryDecision:
                 RedLiveOptionSelectionMode.FORCED_SINGLETON_SUPPORT
                 if forced_parent
                 else RedLiveOptionSelectionMode.MODEL_GREEDY
-                if self.greedy_selection
+                if parent_greedy
                 else RedLiveOptionSelectionMode.MODEL_EXPLORATION
             )
             or choice.mode is not RedLiveOptionSelectionMode.MODEL_EXPLORATION
@@ -594,7 +690,7 @@ class BranchRecoveryDecision:
                     RedLiveOptionSelectionMode.MODEL_GREEDY,
                 }
             )
-            + int(self.child is not None),
+            + int(self.child is not None) + int(self.recurrence_parent is not None),
             **(
                 {"declared_branch_count": len(self.objective_ref)}
                 if type(self.objective_ref) is tuple
@@ -605,6 +701,9 @@ class BranchRecoveryDecision:
                     "parent_selection_rule": (
                         "forced_singleton_support"
                         if self.parent.mode is RedLiveOptionSelectionMode.FORCED_SINGLETON_SUPPORT
+                        else "ordinary_exploration"
+                        if (self.explore_outside_scope or self.recurrence_parent is not None)
+                        and self.parent.mode is RedLiveOptionSelectionMode.MODEL_EXPLORATION
                         else "maximum_score_with_seeded_ties"
                     )
                 }
@@ -618,7 +717,7 @@ class BranchRecoveryDecision:
                         if self.parent.mode is RedLiveOptionSelectionMode.FORCED_SINGLETON_SUPPORT
                         else self.parent.mode.value
                     ),
-                    "parent_model_queries": int(
+                    "parent_model_queries": int(self.recurrence_parent is not None) + int(
                         self.parent.mode
                         in {
                             RedLiveOptionSelectionMode.MODEL_EXPLORATION,
@@ -631,13 +730,25 @@ class BranchRecoveryDecision:
                 if self.allow_singleton_parent_support
                 else {}
             ),
+            **({"explore_on_movement_recurrence": True,
+                "recurrence_triggered": self.recurrence_parent is not None,
+                "recurrence_parent": None if self.recurrence_parent is None
+                else self.recurrence_parent.public_dict(),
+                "recurrence_rule": "greedy-selected-observed-unchanged-endpoint-v1"}
+               if self.explore_on_movement_recurrence else {}),
             **({"refine_preparation": True} if self.refine_preparation else {}),
+            **({"explore_outside_scope": True,
+                **({"parent_authority": self.parent.mode.value}
+                   if not self.associate_unique_combat else {}),
+                "child_scope_available": _branch_scope_available(
+                    self.parent.options, branch_recovery_objectives(self.objective_ref)
+                )} if self.explore_outside_scope else {}),
             **({"defer_unbound_preparation": True} if self.defer_unbound_preparation else {}),
             **(
                 {
                     "associate_unique_combat": True,
                     "parent_authority": self.parent.mode.value,
-                    "parent_model_queries": int(
+                    "parent_model_queries": int(self.recurrence_parent is not None) + int(
                         self.parent.mode
                         in {
                             RedLiveOptionSelectionMode.MODEL_EXPLORATION,
@@ -675,6 +786,13 @@ def _branch_scope_available(options, scope):
     )
 
 
+def _selected_movement_recurrence(choice):
+    """Use an observed endpoint revisit, never a target identity or goal priority."""
+    return (choice.mode is RedLiveOptionSelectionMode.MODEL_GREEDY
+            and choice.selected_binding.story_unit == OptionStoryUnit("movement", True)
+            and choice.options.menu.candidates[choice.selected_candidate_index].movement_revisit is True)
+
+
 def select_branch_recovery_live_option(
     model,
     options,
@@ -687,6 +805,8 @@ def select_branch_recovery_live_option(
     defer_unbound_preparation=False,
     allow_singleton_parent_support=False,
     associate_unique_combat=False,
+    explore_outside_scope: bool = False,
+    explore_on_movement_recurrence: bool = False,
     source_state_sha256=None,
 ):
     """Let the parent choose first; refine its selected declared combat branch.
@@ -713,6 +833,8 @@ def select_branch_recovery_live_option(
         defer_unbound_preparation=defer_unbound_preparation,
         allow_singleton_parent_support=allow_singleton_parent_support,
         associate_unique_combat=associate_unique_combat,
+        explore_outside_scope=explore_outside_scope,
+        explore_on_movement_recurrence=explore_on_movement_recurrence,
     )
     scope = branch_recovery_objectives(objective_ref)
     scope_available = _branch_scope_available(options, scope)
@@ -727,16 +849,27 @@ def select_branch_recovery_live_option(
         and len(non_doses) < len(options.menu.available_indices)
     )
     defer_for_scope = defer_unbound_preparation and (scope_available or singleton_validation)
-    parent = _select_preparation_parent(
-        model,
-        options,
-        seed=seed,
-        greedy_selection=greedy_selection,
-        defer_unbound_preparation=defer_for_scope,
-        allow_singleton_parent_support=allow_singleton_parent_support
-        and (scope_available or singleton_validation),
-        scope=scope,
-    )
+    if explore_outside_scope and not scope_available:
+        parent = select_red_live_option(
+            model, options, seed=seed, allow_earning_exploration=True
+        )
+    else:
+        parent = _select_preparation_parent(
+            model,
+            options,
+            seed=seed,
+            greedy_selection=greedy_selection,
+            defer_unbound_preparation=defer_for_scope,
+            allow_singleton_parent_support=allow_singleton_parent_support
+            and (scope_available or singleton_validation),
+            scope=scope,
+        )
+    recurrence_parent = None
+    if explore_on_movement_recurrence and _selected_movement_recurrence(parent):
+        recurrence_parent = parent
+        parent = select_red_live_option(
+            model, options, seed=seed, allow_earning_exploration=True
+        )
     _selected = parent.selected_binding
     witness = (
         _selected_unique_combat_witness(parent, scope, source_state_sha256)
@@ -829,7 +962,10 @@ def select_branch_recovery_live_option(
         defer_unbound_preparation=defer_unbound_preparation,
         allow_singleton_parent_support=allow_singleton_parent_support,
         associate_unique_combat=associate_unique_combat,
+        explore_outside_scope=explore_outside_scope,
+        explore_on_movement_recurrence=explore_on_movement_recurrence,
         unique_combat_witness=witness if child is not None else None,
+        recurrence_parent=recurrence_parent,
     )
     if child is None:
         return replace(
@@ -842,6 +978,9 @@ def select_branch_recovery_live_option(
             ),
             model_sha256=identity,
             branch_recovery=receipt,
+            # The outer receipt is a composite; the exact baseline sampling
+            # authority remains on its unchanged nested parent decision.
+            kind_balanced_exploration=False,
         )
     child_by_ref = {b.binding_ref: i for i, b in enumerate(child.options.bindings)}
     at = next(i for i, b in enumerate(options.bindings) if b is child.selected_binding)

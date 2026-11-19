@@ -764,6 +764,8 @@ def _declared_loan_control_support(
         if raw.battle_state == 1
         else "pokemon.red:retained-loan-return:"
         if raw.battle_state == 0 and observation.input_ready
+        else "pokemon.red:retained-motion:"
+        if raw.battle_state == 0 and not observation.input_ready
         else None
     )
     if (
@@ -1129,6 +1131,146 @@ def native_action_record_id(kind: str, declaration: str, ordinal: int) -> str:
     return f"rnl-{kind}-{sha256(legacy.encode('ascii')).hexdigest()}"
 
 
+PLAYER_DIAGNOSTIC_RECORD_KIND = "red_native_player_diagnostic"
+PLAYER_DIAGNOSTIC_JOURNAL_SCHEMA = "pokemon.red.player-diagnostic-journal.v1"
+
+
+def _diagnostic_coverage_row(row):
+    """The only fields ``summarize_player_diagnostic_events`` reads, with the same lookup results."""
+    kind, payload = row["kind"], row.get("payload", {})
+    compact = {}
+    if kind == "capture_throw_completed":
+        for key in ("source", "outcome", "measured_cost"):
+            if key in payload:
+                compact[key] = payload[key]
+        if "conditions" in payload:
+            conditions = payload["conditions"]
+            if isinstance(conditions, Mapping):
+                compact["conditions"] = (
+                    {"ball_id": conditions["ball_id"]} if "ball_id" in conditions else {}
+                )
+            else:
+                compact["conditions"] = conditions
+    elif kind in {"survey_action_returned", "survey_action_failed"}:
+        if "operation" in payload:
+            compact["operation"] = payload["operation"]
+        if payload.get("operation") == "seek_encounter" and "diagnostic_review" in payload:
+            review = payload["diagnostic_review"]
+            if isinstance(review, Mapping):
+                compact["diagnostic_review"] = (
+                    {
+                        "measured": (
+                            {"eligible_search_steps": review["measured"]["eligible_search_steps"]}
+                            if isinstance(review["measured"], Mapping)
+                            and "eligible_search_steps" in review["measured"]
+                            else {}
+                            if isinstance(review["measured"], Mapping)
+                            else review["measured"]
+                        )
+                    }
+                    if "measured" in review
+                    else {}
+                )
+            else:
+                compact["diagnostic_review"] = review
+    elif kind == "fishing_cast_observed":
+        for key in ("selected_target_seen", "outcome"):
+            if key in payload:
+                compact[key] = payload[key]
+    return dict(kind=kind, ordinal=row.get("ordinal"), payload=compact)
+
+
+class JournalBackedDiagnosticEvents:
+    """Diagnostic events of one recorder already sealed in authenticated storage.
+
+    Memory keeps only record ids, kinds and the small view the coverage summary reads;
+    full rows are read back from the journal when iterated or indexed. The journal stores
+    canonical JSON (string keys, finite JSON values), so a row read back serializes to the
+    same JSON as the row that was recorded. Used for flat and packed journals.
+    """
+
+    __slots__ = ("_store", "_ids", "_kinds", "_coverage")
+
+    def __init__(self, store):
+        self._store = store
+        self._ids, self._kinds, self._coverage = [], [], []
+
+    def append_sealed(self, record_id, row):
+        self._ids.append(record_id)
+        self._kinds.append(row["kind"])
+        self._coverage.append(_diagnostic_coverage_row(row))
+
+    def __len__(self):
+        return len(self._ids)
+
+    def _load(self, record_id):
+        record = self._store.find_sealed_record(
+            record_id, expected_kind=PLAYER_DIAGNOSTIC_RECORD_KIND
+        )
+        if record is None:
+            raise RuntimeError("sealed native diagnostic event is missing from the journal")
+        return json.loads(record.read_bytes())
+
+    def __getitem__(self, index):
+        if isinstance(index, slice):
+            return [self._load(record_id) for record_id in self._ids[index]]
+        return self._load(self._ids[index])
+
+    def __iter__(self):
+        for record_id in tuple(self._ids):
+            yield self._load(record_id)
+
+    def kinds(self):
+        return tuple(self._kinds)
+
+    def coverage_rows(self):
+        return tuple(self._coverage)
+
+
+def write_streamed_player_diagnostic_journal(path, events):
+    """Write ``diagnostic-events.json`` one event at a time.
+
+    The bytes equal ``json.dumps(document, sort_keys=True, indent=2) + "\\n"`` of the
+    materialized document (the ordinary writer), with the same exclusive-create and
+    fsync discipline, but no more than one event row is held in memory.
+    """
+    import os
+
+    sentinel = "\x00streamed-native-diagnostic-events\x00"
+    document = dict(
+        schema=PLAYER_DIAGNOSTIC_JOURNAL_SCHEMA,
+        diagnostic_only=True,
+        automatic_fit=False,
+        events=sentinel,
+        coverage=summarize_player_diagnostic_events(events.coverage_rows()),
+    )
+    text = json.dumps(document, sort_keys=True, indent=2) + "\n"
+    marker = json.dumps(sentinel)
+    if text.count(marker) != 1:
+        raise RuntimeError("diagnostic journal placeholder is not unique")
+    head, tail = text.split(marker)
+    with path.open("xb") as handle:
+        handle.write(head.encode())
+        if len(events) == 0:
+            handle.write(b"[]")
+        else:
+            handle.write(b"[")
+            for index, row in enumerate(events):
+                rendered = json.dumps(row, sort_keys=True, indent=2)
+                handle.write(
+                    ((",\n" if index else "\n") + "\n".join("    " + line for line in rendered.split("\n"))).encode()
+                )
+            handle.write(b"\n  ]")
+        handle.write(tail.encode())
+        handle.flush()
+        os.fsync(handle.fileno())
+    descriptor = os.open(path.parent, os.O_RDONLY)
+    try:
+        os.fsync(descriptor)
+    finally:
+        os.close(descriptor)
+
+
 class _RecordedActions:
     def __init__(self, controller, store, declaration, maximum_actions, *, timing=None):
         self.controller, self.store = controller, store
@@ -1138,9 +1280,21 @@ class _RecordedActions:
             timing=DEFAULT_NEW_GAME_TIMING.controller_timing() if timing is None else timing,
         )
         self.trace = []
-        self.diagnostic_events = []
         self.diagnostic_journal_seconds = 0.0
         self.enabled = False
+        # Only packed journals record per-press observations (a line, not a file).
+        # Reads are Work-RAM only: no tick, press or state change.
+        self.observe_presses = getattr(store, "records_press_observations", False) is True
+        self.press_observations = 0
+        # Authenticated flat and packed journals already seal every full event.
+        # Keep only ids and coverage fields in memory; lazy reads use the same
+        # verifier. This does not change packed-only per-press observations.
+        journal_backed_diagnostics = self.observe_presses or (
+            getattr(store, "supports_journal_backed_diagnostics", False) is True
+        )
+        self.diagnostic_events = (
+            JournalBackedDiagnosticEvents(store) if journal_backed_diagnostics else []
+        )
 
     def record_diagnostic_event(self, kind, payload):
         """Use the existing sealed journal, never a lesson or policy input."""
@@ -1161,11 +1315,14 @@ class _RecordedActions:
         started = monotonic()
         self.store.publish_sealed_record(
             "rnp-diagnostic-" + identity,
-            kind="red_native_player_diagnostic",
+            kind=PLAYER_DIAGNOSTIC_RECORD_KIND,
             record=row,
         )
         self.diagnostic_journal_seconds += monotonic() - started
-        self.diagnostic_events.append(row)
+        if isinstance(self.diagnostic_events, JournalBackedDiagnosticEvents):
+            self.diagnostic_events.append_sealed("rnp-diagnostic-" + identity, row)
+        else:
+            self.diagnostic_events.append(row)
 
     def execute(self, action):
         if not self.enabled:
@@ -1189,6 +1346,7 @@ class _RecordedActions:
                 repeat=action.repeat,
             ),
         )
+        before_view = self._press_view() if self.observe_presses else None
         succeeded = False
         self.controller.input_enabled = True
         try:
@@ -1209,6 +1367,34 @@ class _RecordedActions:
                 kind="red_native_lesson_trace",
                 record=row,
             )
+            if self.observe_presses:
+                self._publish_press_observation(action, row, before_view)
+
+    def _press_view(self):
+        from .red_press_observation import read_view
+
+        return read_view(getattr(self.controller, "read_u8", None))
+
+    def _publish_press_observation(self, action, row, before_view):
+        from .red_press_observation import PRESS_OBSERVATION_KIND, press_observation, read_screen
+
+        ordinal = row["ordinal"]
+        self.store.publish_sealed_record(
+            "rno-" + canonical_sha256(dict(declaration=self.declaration, ordinal=ordinal)),
+            kind=PRESS_OBSERVATION_KIND,
+            record=press_observation(
+                declaration=self.declaration,
+                ordinal=ordinal,
+                action=action,
+                before_frame=row["before_frame"],
+                after_frame=row["after_frame"],
+                succeeded=row["succeeded"],
+                before=before_view,
+                after=self._press_view(),
+                screen_after=read_screen(getattr(self.controller, "read_u8", None)),
+            ),
+        )
+        self.press_observations += 1
 
 
 def record_native_player_lesson(
