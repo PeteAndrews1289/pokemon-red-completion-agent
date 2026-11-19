@@ -12,6 +12,8 @@ Together, those campaigns spent 63.3% of active time **after** the Hall of Fame.
 
 **The next delivery test is one unchanged run from power-on to Champion and 124.** A fifth, solo attempt exposed a stopping error before Brock. Its only Pokémon fainted from poison while walking to heal. We repaired the handoff to the game's blackout sequence, verified it from both sides on copies, then resumed that same save. The solo attempt counts as externally assisted. [Solo campaign and repair](docs/work-sessions/solo-field-blackout-2026-11-19.md)
 
+The solo reached the Hall of Fame in **83:23:08 on Red’s clock** and **2:22:09 of active play**. The quickest of the four previous Hall of Fame splits was **71:16:47 in-game**. The owner parked the solo at 26 registrations and set a six-hour in-game target. A first fitted battle policy won all four held-out practice fights in 14.0% less combined game time. Erika and Blaine each took the same time under both policies. [Measured training results](docs/work-sessions/hall-of-fame-speed-2026-11-19.md)
+
 ## How it works
 
 The observation layer reads semantic game state. A local policy chooses among available goals. Reusable skills perform legal navigation, menu and battle actions. A separate verifier checks the result and records its costs. Failures, cash losses and restores remain in the history. Fitting happens offline on eligible training examples. Experience points earned by a Pokémon are a game outcome. [Architecture](docs/architecture.md) · [Completion contract](docs/completion-contract.md)

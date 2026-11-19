@@ -8,7 +8,7 @@ Pete saw the player pay to enter the Safari Zone, leave with work unfinished and
 
 ## Four finishes told four different stories
 
-All four same-seed campaigns reached Champion, the Hall of Fame and 124 on their own saves. All four needed repairs or host continuations. Three reached the Hall of Fame within 25 seconds of each other. The fourth needed 5h 06m and suffered 19 Silph rival losses before winning. Later, Run 3 took 165 minutes for registrations 75–100. Run 2 took 75 minutes. The four spent 63.3% of their combined active time after the Hall of Fame. [Four-run results and all splits](work-sessions/four-run-splits-2026-11-19.md)
+All four same-seed campaigns reached Champion, the Hall of Fame and 124 on their own saves. All four needed repairs or host continuations. Three reached the Hall of Fame within 25 seconds of each other in active wall time. The fourth needed 5h 06m and suffered 19 Silph rival losses before winning. Later, Run 3 took 165 minutes for registrations 75–100. Run 2 took 75 minutes. The four spent 63.3% of their combined active time after the Hall of Fame. [Four-run results and all splits](work-sessions/four-run-splits-2026-11-19.md)
 
 ## What one blackout taught us
 
@@ -16,4 +16,4 @@ The team brought the four repair histories together and checked 22 native cases 
 
 ## What comes next
 
-One unchanged fresh player still has to complete Red without an external repair. After that, the splits give a way to compare speed fairly across candidates and seeds. The code preserves earlier failures, and campaign observations stay outside the fitting corpus. Later transfer goals include an unfamiliar compatible Red modification, Crystal and at least Emerald. [Delivery roadmap](model-first-roadmap.md) · [Earlier chapters](chronicle/README.md)
+The solo reached the Hall of Fame at 83:23:08 on the cartridge. Pete set a six-hour story target and parked the save. The first speed-trained battle weights saved 1m 26s across four held-out practice wins and tied the original weights on Erika and Blaine. An earlier whole-badge comparison suggests a larger opportunity. Fighting Blaine immediately took 5m 21s, while preparing first took 1h 11m 23s. Both earned the badge. Farfetch’d gained 4,577 XP and made zero attacks against Blaine. Completing one uninterrupted run and transferring beyond Red remain project goals. [Speed training results](work-sessions/hall-of-fame-speed-2026-11-19.md) · [Delivery roadmap](model-first-roadmap.md) · [Earlier chapters](chronicle/README.md)
